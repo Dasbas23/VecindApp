@@ -99,7 +99,7 @@ function UseCaseDiagram() {
 
         {/* Legend */}
         <rect x={W - 175} y={H - 95} width={165} height={80} rx={4} fill="white" stroke="#E5E7EB" strokeWidth={1} />
-        <text x={W - 165} y={H - 78} fontSize={9} fill="#374151" fontWeight={700}>LEYENDA</text>
+        <text x={W - 165} y={H - 78} fontSize={9} fill="#374151" fontWeight={700}>LEYE  NDA</text>
         <line x1={W-165} y1={H-66} x2={W-140} y2={H-66} stroke="#F59E0B" strokeWidth={1.5} strokeDasharray="4,2" />
         <text x={W-135} y={H-62} fontSize={8} fill="#374151">«extend» (opcional)</text>
         <line x1={W-165} y1={H-50} x2={W-140} y2={H-50} stroke="#10B981" strokeWidth={1.5} strokeDasharray="4,2" />
