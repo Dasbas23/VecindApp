@@ -1,0 +1,6 @@
+10.03.2026 : 
+	Ayer Claude me preparó unos diagramas para entregarlos y poder recibir feedback. Como quiero desarrollar la app por mi cuenta y por mucho que me de las cosas hechas, quiero utilizarlo más bien de guía y así hacerlo un poco a mi estilo. Sí es cierto que sin ayuda de los LLM andaría bastante más perdido. 
+- He clonado el repositorio de Git en el PC del trabajo para poder trabajar desde los dos lados.
+	. Problema -> En AndroidStudio no se me actualizaba la carpeta .gradle porque no se descargaba.
+	. Solución -> He descargado los archivos manualmente y los he pegado (carpeta sin descomprimir) en la carpeta correspondiente. ¡hay que eliminar los archivos anteriores!
+- He creado el diagrama de casos de uso en `draw.io` 
