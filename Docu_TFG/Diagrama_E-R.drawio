@@ -1,10 +1,10 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" version="29.6.1">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.1 Chrome/142.0.7444.265 Electron/39.8.0 Safari/537.36" version="29.6.1">
   <diagram id="ER-VecindApp" name="Entidad-Relación">
-    <mxGraphModel dx="1425" dy="761" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1426" dy="841" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="USUARIO" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;fillColor=#b0e3e6;strokeColor=#0e8088;fontSize=13;fontFamily=Verdana;perimeter=rectanglePerimeter;movable=1;" value="USUARIO" vertex="1">
+        <mxCell id="USUARIO" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=1;fontStyle=1;align=center;resizeLast=1;html=1;fillColor=#b0e3e6;strokeColor=#0e8088;fontSize=13;fontFamily=Verdana;perimeter=rectanglePerimeter;movable=1;fillStyle=auto;swimlaneFillColor=default;" value="USUARIO" vertex="1">
           <mxGeometry height="250" width="240" x="120" y="70" as="geometry" />
         </mxCell>
         <mxCell id="USUARIO-r0" parent="USUARIO" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;fontFamily=Verdana;" value="" vertex="1">
@@ -98,7 +98,7 @@
             <mxRectangle height="30" width="200" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="SERVICIO" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;fillColor=#fad7ac;strokeColor=#b46504;fontSize=13;fontFamily=Verdana;shadow=0;columnLines=1;" value="SERVICIO" vertex="1">
+        <mxCell id="SERVICIO" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=1;fontStyle=1;align=center;resizeLast=1;html=1;fillColor=#fad7ac;strokeColor=#b46504;fontSize=13;fontFamily=Verdana;shadow=0;columnLines=1;" value="SERVICIO" vertex="1">
           <mxGeometry height="340" width="260" x="620" y="60" as="geometry" />
         </mxCell>
         <mxCell id="SERVICIO-r0" parent="SERVICIO" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;fontFamily=Verdana;" value="" vertex="1">
@@ -231,7 +231,7 @@
             <mxRectangle height="30" width="220" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="TRANSACCION" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;fillColor=#cdeb8b;strokeColor=#36393d;fontSize=13;fontFamily=Verdana;" value="TRANSACCION" vertex="1">
+        <mxCell id="TRANSACCION" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=1;fontStyle=1;align=center;resizeLast=1;html=1;fillColor=#cdeb8b;strokeColor=#009900;fontSize=13;fontFamily=Verdana;" value="TRANSACCION" vertex="1">
           <mxGeometry height="250" width="260" x="100" y="460" as="geometry" />
         </mxCell>
         <mxCell id="TRANS-r0" parent="TRANSACCION" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;fontFamily=Verdana;" value="" vertex="1">
@@ -325,7 +325,7 @@
             <mxRectangle height="30" width="220" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="VALORACION" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;fillColor=#d0cee2;strokeColor=#56517e;fontSize=13;fontFamily=Verdana;noLabel=0;" value="VALORACION" vertex="1">
+        <mxCell id="VALORACION" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=1;fontStyle=1;align=center;resizeLast=1;html=1;fillColor=#d0cee2;strokeColor=#56517e;fontSize=13;fontFamily=Verdana;noLabel=0;" value="VALORACION" vertex="1">
           <mxGeometry height="250" width="260" x="620" y="450" as="geometry" />
         </mxCell>
         <mxCell id="VAL-r0" parent="VALORACION" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;fontFamily=Verdana;" value="" vertex="1">

@@ -5,7 +5,8 @@
 	+ Solución -> He descargado los archivos manualmente y los he pegado (carpeta sin descomprimir) en la carpeta correspondiente. ¡hay que eliminar los archivos anteriores!
 ⇢ He creado el diagrama de casos de uso en `draw.io`. Ha quedado bastante decente. Me he basado en el diagrama que me ha generado una IA, en este caso Claude, pero lo he hecho yo desde cero usando la herramienta mencionada.
 ⇢ No encuentro mis memorias del día 2026.03.05_06 :(
-	+ Solución: Volver a escribir todo de nuevo pero no recuerdo los problemas con los que me encontré. [SIN HACER, SEGUIRÉ BUSCANDO] 
+	▼ Problema: Volver a escribir todo de nuevo pero no recuerdo los problemas con los que me encontré. [SIN HACER, SEGUIRÉ BUSCANDO]
+	+ Solución: Los he encontrado debajo del ordenador. Los tenía escritos a mano, pero recordaba que itenté digitalizarlos con DocEngie. [SOLUCIONADO] 
 ⇢ He creado el diagrama de Entidad-Relación en base a lo que me ha sugerido la IA:
 	▼ Problema: Claude había generado el diagrama con un archivo .jsx de React muy chulo pero no quiero que parezca que haya sido hecho por IA. Además no encontraba la manera de usar esto y modificarlo a mi gusto. 
 	+ Solución: He creado un esqueleto de diagrama sin datos reales y le he pedido a Gemini/Claude que me lo termine de completar pasándole todo el archivo de React como fuente de datos.
@@ -13,3 +14,7 @@
 		 ▼ Problema: Mi razonamiento inicial fue: "si la línea ya une las dos tablas, poner la FK dentro sobra". Pero al pensar en la implementación real en código (Room/SQLite), me daba cuenta de que si no estaban explícitas, la base de datos no iba a saber cómo enlazarlas. Además, me rayaba ver 4 flechas saliendo hacia la misma tabla USUARIO.
 		+ Solución -> He comprendido que estaba mezclando el modelo conceptual con el físico. En el físico SÍ hay que ponerlas. Además, he asimilado el concepto de "Multiplicidad de Roles": las 4 flechas apuntan al mismo id_usuario, pero cada una tiene un rol distinto en la historia (comprador, vendedor, valorador, valorado). Esto me evita crear tablas redundantes y mantiene la BD normalizada. Me lo apunto para lucirme explicándolo en la memoria del TFG.
 ⇢ Hacer un git push con la actualización del día.
+
+↪11.03.2026 :
+	Tras encontrar mis memorias escritas del día 6, que daba por perdidas, me pongo con el diagrama de clases. He ido haciendo iteraciones sobre el esqueleto de un diagrama con 10 clases hasta dejarlo a mi gusto.
+	▼ Problema: 
