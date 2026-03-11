@@ -1,0 +1,198 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0" version="21.0.0">
+  <diagram id="vecindapp_class_diag" name="Diagrama de Clases">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1250" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- LEYENDA -->
+        <mxCell id="leyenda_clases" value="&lt;div style=&quot;text-align: left; padding: 10px; font-size: 11px; color: #374151;&quot;&gt;&lt;b&gt;ARQUITECTURA (Capas):&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;color:#BE185D;&quot;&gt;■ ViewModels (UI / Presentación)&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;color:#92400E;&quot;&gt;■ UseCases (Domain / Negocio)&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;color:#374151;&quot;&gt;■ Repositories (Data / Datos)&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;color:#1E3A5F;&quot;&gt;■ Entities (Model / Base de Datos Room)&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;color:#065F46;&quot;&gt;■ Workers (Background Jobs)&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#E2E8F0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="660" width="240" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== CAPA: VIEWMODELS ==================== -->
+        <!-- EscaparateViewModel -->
+        <mxCell id="C_EVM" value="&amp;laquo;view model&amp;raquo;&lt;br&gt;&lt;b&gt;EscaparateViewModel&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=42;fillColor=#FFF1F2;fontColor=#BE185D;strokeColor=#BE185D;align=center;html=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="250" height="136" as="geometry" />
+        </mxCell>
+        <mxCell id="C_EVM_A" value="- _servicios: MutableStateFlow&#xa;- _filtroCategoria: StateFlow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;fontColor=#374151;" vertex="1" parent="C_EVM">
+          <mxGeometry y="42" width="250" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="C_EVM_L" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#BE185D;" vertex="1" parent="C_EVM">
+          <mxGeometry y="78" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="C_EVM_M" value="+ cargarServicios()&#xa;+ filtrar(categoria)&#xa;+ aceptarServicio(sId, uId)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;fontColor=#0F172A;" vertex="1" parent="C_EVM">
+          <mxGeometry y="86" width="250" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- PerfilViewModel -->
+        <mxCell id="C_PVM" value="&amp;laquo;view model&amp;raquo;&lt;br&gt;&lt;b&gt;PerfilViewModel&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=42;fillColor=#FFF1F2;fontColor=#BE185D;strokeColor=#BE185D;align=center;html=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="240" width="250" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="C_PVM_A" value="- _usuario: MutableStateFlow&#xa;- _nivel: StateFlow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;fontColor=#374151;" vertex="1" parent="C_PVM">
+          <mxGeometry y="42" width="250" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="C_PVM_L" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#BE185D;" vertex="1" parent="C_PVM">
+          <mxGeometry y="78" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="C_PVM_M" value="+ cargarPerfil(userId)&#xa;+ actualizarNivel()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;fontColor=#0F172A;" vertex="1" parent="C_PVM">
+          <mxGeometry y="86" width="250" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- CaducidadWorker -->
+        <mxCell id="C_WRK" value="&amp;laquo;worker&amp;raquo;&lt;br&gt;&lt;b&gt;CaducidadWorker&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=42;fillColor=#ECFDF5;fontColor=#065F46;strokeColor=#065F46;align=center;html=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="440" width="250" height="136" as="geometry" />
+        </mxCell>
+        <mxCell id="C_WRK_A" value="- context: Context&#xa;- params: WorkerParameters" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;fontColor=#374151;" vertex="1" parent="C_WRK">
+          <mxGeometry y="42" width="250" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="C_WRK_L" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#065F46;" vertex="1" parent="C_WRK">
+          <mxGeometry y="78" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="C_WRK_M" value="+ doWork(): Result&#xa;  // revisa caducidades&#xa;  // lanza notificación local" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;fontColor=#0F172A;" vertex="1" parent="C_WRK">
+          <mxGeometry y="86" width="250" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== CAPA: USE CASES ==================== -->
+        <!-- TransaccionUseCase -->
+        <mxCell id="C_TUC" value="&amp;laquo;use case&amp;raquo;&lt;br&gt;&lt;b&gt;TransaccionUseCase&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=42;fillColor=#FFFBEB;fontColor=#92400E;strokeColor=#92400E;align=center;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="60" width="260" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="C_TUC_A" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;fontColor=#374151;" vertex="1" parent="C_TUC">
+          <mxGeometry y="42" width="260" height="0" as="geometry" />
+        </mxCell>
+        <mxCell id="C_TUC_L" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#92400E;" vertex="1" parent="C_TUC">
+          <mxGeometry y="42" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="C_TUC_M" value="+ ejecutar(compradorId, ...): Result&#xa;  // valida saldo, debita, acredita&#xa;  // @Transaction atómico" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;fontColor=#0F172A;" vertex="1" parent="C_TUC">
+          <mxGeometry y="50" width="260" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== CAPA: REPOSITORIES ==================== -->
+        <!-- UsuarioRepository -->
+        <mxCell id="C_UREP" value="&amp;laquo;repository&amp;raquo;&lt;br&gt;&lt;b&gt;UsuarioRepository&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=42;fillColor=#F9FAFB;fontColor=#374151;strokeColor=#374151;align=center;html=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="60" width="260" height="128" as="geometry" />
+        </mxCell>
+        <mxCell id="C_UREP_A" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;" vertex="1" parent="C_UREP">
+          <mxGeometry y="42" width="260" height="0" as="geometry" />
+        </mxCell>
+        <mxCell id="C_UREP_L" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#374151;" vertex="1" parent="C_UREP">
+          <mxGeometry y="42" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="C_UREP_M" value="+ getAll(): Flow&lt;List&lt;Usuario&gt;&gt;&#xa;+ getById(id: Int): Usuario?&#xa;+ insert(u: Usuario): Long&#xa;+ update(u: Usuario)&#xa;+ updateSaldo(id: Int, saldo: Double)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;fontColor=#0F172A;" vertex="1" parent="C_UREP">
+          <mxGeometry y="50" width="260" height="78" as="geometry" />
+        </mxCell>
+
+        <!-- ServicioRepository -->
+        <mxCell id="C_SREP" value="&amp;laquo;repository&amp;raquo;&lt;br&gt;&lt;b&gt;ServicioRepository&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=42;fillColor=#F9FAFB;fontColor=#374151;strokeColor=#374151;align=center;html=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="240" width="260" height="128" as="geometry" />
+        </mxCell>
+        <mxCell id="C_SREP_A" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;" vertex="1" parent="C_SREP">
+          <mxGeometry y="42" width="260" height="0" as="geometry" />
+        </mxCell>
+        <mxCell id="C_SREP_L" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#374151;" vertex="1" parent="C_SREP">
+          <mxGeometry y="42" width="260" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="C_SREP_M" value="+ getActivos(): Flow&lt;List&lt;Servicio&gt;&gt;&#xa;+ getByCategoria(c): Flow&lt;List&lt;Servicio&gt;&gt;&#xa;+ insert(s: Servicio): Long&#xa;+ update(s: Servicio)&#xa;+ cambiarEstado(id, estado)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;fontColor=#0F172A;" vertex="1" parent="C_SREP">
+          <mxGeometry y="50" width="260" height="78" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== CAPA: ENTITIES (Model) ==================== -->
+        <!-- Usuario -->
+        <mxCell id="C_ENT_U" value="&amp;laquo;entity&amp;raquo;&lt;br&gt;&lt;b&gt;Usuario&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=42;fillColor=#EFF6FF;fontColor=#1E3A5F;strokeColor=#1E3A5F;align=center;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="60" width="250" height="192" as="geometry" />
+        </mxCell>
+        <mxCell id="C_ENT_U_A" value="- idUsuario: Int&#xa;- nombre: String&#xa;- barrio: String&#xa;- avatarPath: String?&#xa;- saldoHoras: Double&#xa;- intercambiosTotal: Int&#xa;- nivel: NivelVecino&#xa;- fechaRegistro: Long" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;fontColor=#374151;" vertex="1" parent="C_ENT_U">
+          <mxGeometry y="42" width="250" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="C_ENT_U_L" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#1E3A5F;" vertex="1" parent="C_ENT_U">
+          <mxGeometry y="162" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="C_ENT_U_M" value="+ calcularNivel(): NivelVecino" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;fontColor=#0F172A;" vertex="1" parent="C_ENT_U">
+          <mxGeometry y="170" width="250" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- Servicio -->
+        <mxCell id="C_ENT_S" value="&amp;laquo;entity&amp;raquo;&lt;br&gt;&lt;b&gt;Servicio&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=42;fillColor=#DBEAFE;fontColor=#1D4ED8;strokeColor=#1D4ED8;align=center;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="280" width="250" height="234" as="geometry" />
+        </mxCell>
+        <mxCell id="C_ENT_S_A" value="- idServicio: Int&#xa;- idUsuarioFk: Int&#xa;- titulo: String&#xa;- descripcion: String?&#xa;- categoria: CategoriaServicio&#xa;- pictogramaId: String&#xa;- costeHoras: Double&#xa;- estado: EstadoServicio&#xa;- fechaPublicacion: Long&#xa;- fechaCaducidad: Long?" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;fontColor=#374151;" vertex="1" parent="C_ENT_S">
+          <mxGeometry y="42" width="250" height="148" as="geometry" />
+        </mxCell>
+        <mxCell id="C_ENT_S_L" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#1D4ED8;" vertex="1" parent="C_ENT_S">
+          <mxGeometry y="190" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="C_ENT_S_M" value="+ estaActivo(): Boolean&#xa;+ estaVencido(): Boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;fontColor=#0F172A;" vertex="1" parent="C_ENT_S">
+          <mxGeometry y="198" width="250" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- Transaccion -->
+        <mxCell id="C_ENT_T" value="&amp;laquo;entity&amp;raquo;&lt;br&gt;&lt;b&gt;Transaccion&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=42;fillColor=#F0FDFA;fontColor=#0F766E;strokeColor=#0F766E;align=center;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="540" width="250" height="178" as="geometry" />
+        </mxCell>
+        <mxCell id="C_ENT_T_A" value="- idTransaccion: Int&#xa;- idCompradorFk: Int&#xa;- idVendedorFk: Int&#xa;- idServicioFk: Int&#xa;- horasTransferidas: Double&#xa;- estado: EstadoTransaccion&#xa;- timestamp: Long" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;fontColor=#374151;" vertex="1" parent="C_ENT_T">
+          <mxGeometry y="42" width="250" height="106" as="geometry" />
+        </mxCell>
+        <mxCell id="C_ENT_T_L" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#0F766E;" vertex="1" parent="C_ENT_T">
+          <mxGeometry y="148" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="C_ENT_T_M" value="+ estaCompletada(): Boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;fontColor=#0F172A;" vertex="1" parent="C_ENT_T">
+          <mxGeometry y="156" width="250" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- Valoracion -->
+        <mxCell id="C_ENT_V" value="&amp;laquo;entity&amp;raquo;&lt;br&gt;&lt;b&gt;Valoracion&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=42;fillColor=#F5F3FF;fontColor=#7C3AED;strokeColor=#7C3AED;align=center;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="740" width="250" height="178" as="geometry" />
+        </mxCell>
+        <mxCell id="C_ENT_V_A" value="- idValoracion: Int&#xa;- idTransaccionFk: Int&#xa;- idValoradorFk: Int&#xa;- idValoradoFk: Int&#xa;- pictogramasJson: String&#xa;- comentario: String?&#xa;- timestamp: Long" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;fontColor=#374151;" vertex="1" parent="C_ENT_V">
+          <mxGeometry y="42" width="250" height="106" as="geometry" />
+        </mxCell>
+        <mxCell id="C_ENT_V_L" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#7C3AED;" vertex="1" parent="C_ENT_V">
+          <mxGeometry y="148" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="C_ENT_V_M" value="+ getPictogramasList(): List&lt;String&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontFamily=monospace;fontSize=11;fontColor=#0F172A;" vertex="1" parent="C_ENT_V">
+          <mxGeometry y="156" width="250" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== RELACIONES (Dependencies) ==================== -->
+        <!-- EVM -> TUC -->
+        <mxCell id="rel_evm_tuc" value="calls" style="endArrow=open;dashed=1;html=1;strokeColor=#9CA3AF;fontSize=10;fontColor=#6B7280;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="C_EVM" target="C_TUC">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- TUC -> UREP -->
+        <mxCell id="rel_tuc_urep" value="calls" style="endArrow=open;dashed=1;html=1;strokeColor=#9CA3AF;fontSize=10;fontColor=#6B7280;exitX=1;exitY=0.25;entryX=0;entryY=0.5;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="C_TUC" target="C_UREP">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- TUC -> SREP -->
+        <mxCell id="rel_tuc_srep" value="calls" style="endArrow=open;dashed=1;html=1;strokeColor=#9CA3AF;fontSize=10;fontColor=#6B7280;exitX=1;exitY=0.75;entryX=0;entryY=0.5;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="C_TUC" target="C_SREP">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- PVM -> UREP -->
+        <mxCell id="rel_pvm_urep" value="calls" style="endArrow=open;dashed=1;html=1;strokeColor=#9CA3AF;fontSize=10;fontColor=#6B7280;exitX=1;exitY=0.5;entryX=0;entryY=0.75;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="C_PVM" target="C_UREP">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="320" y="301" />
+              <mxPoint x="320" y="210" />
+              <mxPoint x="650" y="210" />
+              <mxPoint x="650" y="156" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- UREP -> USUARIO -->
+        <mxCell id="rel_urep_usu" value="uses" style="endArrow=open;dashed=1;html=1;strokeColor=#9CA3AF;fontSize=10;fontColor=#6B7280;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="C_UREP" target="C_ENT_U">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- SREP -> SERVICIO -->
+        <mxCell id="rel_srep_ser" value="uses" style="endArrow=open;dashed=1;html=1;strokeColor=#9CA3AF;fontSize=10;fontColor=#6B7280;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="C_SREP" target="C_ENT_S">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
