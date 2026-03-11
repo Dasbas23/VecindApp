@@ -1,3 +1,21 @@
+↪06.03.2026 : 
+	He empezado con cierta incertidumbre ya que me han concedido el APTO. Como no sé muy bien por dónde empezar, he empezado por preguntar a Gemini y a Claude. He decidido que quiero un estilo moderno pero que sea sencillo e intuitivo. Ya veremos cómo hacerlo... 
+	Se piden varios bocetos para inspirarme en Gemini con Nano banana. Estoy viendo un vídeo de "Programador X" en YT para ver cómo empezar. Hace hincapié en la escalabilidad y el diseño, es casi que lo más importante. Una de las conclusiones que he sacado es que voy a utilizar una metodología ágil "SCRUM" con "Kanban" para tener un seguimiento y control, sprints de 1 semana.
+⇢ Poner botón para activar el TTS parece ser una buena idea.
+⇢ Me he descargado la App "Nextdoor" para ver un poco su funcionamiento.
+⇢ VecindApp:
+	↳ Aplicación de asignaturas al proyecto.
+	↳ BBDD / Acceso a datos => Manipularemos y gestionaremos las bases de datos mediante Room. Permite acceder a BBDD sin problemas y al mismo tiempo garantizan la tecnología SQLite.
+		↳ Permite verificación en tiempo de compilación de las consultas SQL.
+		↳ Anotaciones de conveniencia que minimiza el cód. estándar repetitivo y propenso a errores.
+		↳ Rutas de migración de bases de datos optimizadas.
+		↳ Se recomienda usar Room en documentación Android.
+	↳ Defensa de TTS: TalkBack es para personas con ceguera total. TTS sintetiza en tiempo real la voz a partir de texto. En esta app será útil para personas con baja visión. Personas que no pueden leer por distintas circunstancias o analfabetas.
+	↳ Puede que ARASAAC haga que la app se vea como infantil, así que habrá que utilizar aquellas imágenes más "maduras".
+⇢ Diseño Funcional: MVP
+	↳ Como usuario quiero poder buscar/ver las distintas ofertas (y solicitudes) que se brindan por parte de los usuarios.
+	↳ Quiero poder publicar una alerta de ayuda y también quiero poder publicar una solicitud.
+
 ↪10.03.2026 : 
 	Ayer Claude me preparó unos diagramas para entregarlos y poder recibir feedback. Como quiero desarrollar la app por mi cuenta y por mucho que me de las cosas hechas, quiero utilizarlo más bien de guía y así hacerlo un poco a mi estilo. Sí es cierto que sin ayuda de los LLM andaría bastante más perdido. 
 ⇢ He clonado el repositorio de Git en el PC del trabajo para poder trabajar desde los dos lados.
