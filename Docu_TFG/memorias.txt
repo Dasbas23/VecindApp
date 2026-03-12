@@ -35,4 +35,8 @@
 
 ↪11.03.2026 :
 	Tras encontrar mis memorias escritas del día 6, que daba por perdidas, me pongo con el diagrama de clases. He ido haciendo iteraciones sobre el esqueleto de un diagrama con 10 clases hasta dejarlo a mi gusto.
-	▼ Problema: 
+	▼ Problema: Al importar el código XML generado por la IA en draw.io, los títulos de las clases no se renderizaban bien  y al tocar cualquier cosa se descuajeringaban de lugar las tablas.
+	+ Solución 1: Había que añadir la propiedad "html=1;" en el estilo de cada swimlane (contenedor de la clase) para que diagrams.net interpretara correctamente el código HTML de los títulos. He tenido que pedirle nuevamente a la IA que utilizara una template que había creado yo sombre como lo quería pero el trabajo tedioso de completarlo, se lo ha llevado la IA.
+
+↪12.03.2026 :
+	Terminar de maquetar el diagrama de clases y ententer su funcionamiento. 
