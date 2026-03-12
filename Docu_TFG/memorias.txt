@@ -24,7 +24,7 @@
 ⇢ He creado el diagrama de casos de uso en `draw.io`. Ha quedado bastante decente. Me he basado en el diagrama que me ha generado una IA, en este caso Claude, pero lo he hecho yo desde cero usando la herramienta mencionada.
 ⇢ No encuentro mis memorias del día 2026.03.05_06 :(
 	▼ Problema: Volver a escribir todo de nuevo pero no recuerdo los problemas con los que me encontré. [SIN HACER, SEGUIRÉ BUSCANDO]
-	+ Solución: Los he encontrado debajo del ordenador. Los tenía escritos a mano, pero recordaba que itenté digitalizarlos con DocEngie. [SOLUCIONADO] 
+	+ Solución: Los he encontrado debajo del ordenador. Los tenía escritos a mano, pero recordaba que itenté digitalizarlos con DocEngie. [SOLUCIONADO] Resulta que NanoBanana ha leido mi foto de maravilla y la ha maquetado en texto plano tal y como he venido haciendolo yo. 
 ⇢ He creado el diagrama de Entidad-Relación en base a lo que me ha sugerido la IA:
 	▼ Problema: Claude había generado el diagrama con un archivo .jsx de React muy chulo pero no quiero que parezca que haya sido hecho por IA. Además no encontraba la manera de usar esto y modificarlo a mi gusto. 
 	+ Solución: He creado un esqueleto de diagrama sin datos reales y le he pedido a Gemini/Claude que me lo termine de completar pasándole todo el archivo de React como fuente de datos.
@@ -39,4 +39,13 @@
 	+ Solución 1: Había que añadir la propiedad "html=1;" en el estilo de cada swimlane (contenedor de la clase) para que diagrams.net interpretara correctamente el código HTML de los títulos. He tenido que pedirle nuevamente a la IA que utilizara una template que había creado yo sombre como lo quería pero el trabajo tedioso de completarlo, se lo ha llevado la IA.
 
 ↪12.03.2026 :
-	Terminar de maquetar el diagrama de clases y ententer su funcionamiento. 
+	Terminar de maquetar el diagrama de clases y ententer su funcionamiento: Tras añadir las clases que faltaban (DetalleViewModel, TransaccionRepository y ValoracionRepository), el diagrama queda cerrado con 13 clases en total estructuradas en 5 capas. 
+	▼ Problema 1: Tenía una confusión  importante entre "Android Jetpack" y "Jetpack Compose" y pensaba que tendría que volver refolmular cassi todo.
+	+ Solución 1: Tras revisar la propuesta ("Generaré entornos gráficos basados en XML"), he aclarado que lo que no debo usar es Compose (que es la librería UI). El resto de la familia Android Jetpack (Room, ViewModel, WorkManager) es el estándar nativo y perfectamente válido. Gracias a haber elegido Clean Architecture, el único cambio que he tenido que hacer es modificar el diagrama para que la Vista sea "XML / Activity" en lugar de "Compose". Todo el núcleo lógico se mantiene intacto.
+	▼ Problema 2: En mi esquema mental inicial, creía que los repositorios podían alimentarse o llamarse entre sí (por ejemplo, ServicioRepository pidiendo datos a UsuarioRepository), eso no es correcto.
+	+ Solución 2: He investigado y averiguado que los repositorios deben ser estancos y no hablar entre ellos para no romper la arquitectura. Si se necesita cruzar información, debe ser el UseCase (o el ViewModel) quien orqueste las llamadas por separado(Quiere decir que por ejemplo ViewModel puede llamar a UsuarioRepository y también a ServicioRepository). He corregido las flechas en el diagrama redirecionandolas de manera que ahora ya apuntan bien (como la de PerfilViewModel hacia UsuarioRepository).
+⇢ Preparar la presentación para poder entregar los diagramas y recibir feedback (del día 13 al 16).
+⇢ Próximos pasos en el desarrollo:
+	↳ Verme unos pocos vídeos de @AristiDevs para comprender mejor el paradigma de MVVM con Clean Architecture aplicado a código real.
+	↳ Continuar creando la estructura de carpetas (paquetes) del proyecto en Android Studio.
+	↳ Ponerme con el diseño de la base de datos (Entidades de Room) o con el diseño de las interfaces en XML.
