@@ -49,3 +49,37 @@
 	↳ Verme unos pocos vídeos de @AristiDevs para comprender mejor el paradigma de MVVM con Clean Architecture aplicado a código real.
 	↳ Continuar creando la estructura de carpetas (paquetes) del proyecto en Android Studio.
 	↳ Ponerme con el diseño de la base de datos (Entidades de Room) o con el diseño de las interfaces en XML.
+
+↪13.03.2026 : 
+	No me ha cundido mucho hoy. Se ha abierto el plazo para la entrega del Feedback y me la he estado leyendo las condiciones.
+		↳ He pedido otro informe a Claude , basado en el de Gemini y me reafirma que no existe nada parecido a mi idea publicado hasta la fecha. Nada que combine la accesibilidad con ARASAAC y bancos dehoras vecinales.
+⇢He preparado ClaudeCode en mi PC para que me ayude a futuro con la programación de la app.
+
+↪14.03.2026 :
+	He empezado la mañana un poco disperso. Creo que al ser mi primer trabajo "cientifico" no sé muy bien por donde tirar y me está costando centrarme.
+	▼ Problema: No se muy bien como maquetar la introducción en conctredo la moativación y el abstract.
+	+ Solución: He pedido ayuda a Irene y me ha explicado como lo está haciendo ellas así que todo lo que me ha dicho ella me ha servido para tener una mejor visión de como he de esctructurar toda la información para que posteriormente sea ententible y no sea un "revuelto" de ideas sin estructura.
+		↳  Aplicar el consejo de Irene: He reestructurado el "Estado del Arte" y la "Introducción". Ahora empiezo explicando qué son los Bancos de Tiempo y el sistema ARASAAC (el contexto) antes de pasar a la motivación y a criticar otras apps del mercado. Le da un enfoque mucho más académico y profesional.
+
+↪15.03.2026 :
+	Por la mañana he estado redactado el "Abstract" y el "Estado del arte" y me ha  ido quedando muy  bien. Estoy basntante contento por como está quedando. 
+		↪Pienso que podría invesigar y ahondar aun más pero es muy probable que no reciba demasiada importancia toda esta ivestigación por parte del profesorado.
+⇢ Por la tarde he seguido ivestigando para terminar el estado del arte y lo he dejado bien bien. Creo que lo he defendido muy bien. Ahh y también una tabla comparativa de plataformas 
+⇢ He creado tablas para el punto 4 "Tecnologías y herramientas utilizadas en el proyecto " 
+⇢ He añadido los tres diagramas para poder proceder con la entrega del Feedback explicando un poco de que trata cada uno en más detalle para poder defender que se han hecho bien pensados.
+	▼ Problema: A lo largo de la edición me he dado cuenta de que los borradores que me ha creado la IA son demasiado "cultos" por así llamarlo así llamarlo. 
+	▼ Problema 2 : En cuanto a las fuentes veo que lo que me hecho la IA tiene altas probabilidades que sea una inventada o que esté desactualizado como ha pasado con las tablas del punto 4.  He visto que la bibliografía es un poco tiquismiquis con el formato en Word, al menos en su versión web...
+	+ Solución: He tenido que reforlmular en distinas ocasiones párrafos entero porque creo que se notaba demasiado que estaban hechos por IA y he tenido que hacer que sonasen "más inculto" por miedo a que parezca IA y también por miedo a que salga PLAGIO porque pienso que la IA a veces coge información de los sitos web tal cuál está y me la cita, pero claro yo por ahora no he citado todo
+		↳ Tengo que repasar las fuentes y dejarlas bien en el punto 12.
+	+ Solución 2: En cuantto a las fuentes, he tenido que ir repasando una a una todas la citas y ver que estaba bien y que no para así estar seguro en el momento de dejarlo escrito o quitarlo. Asi que bueno la mayoría era información buena pero las citas de las fuentes es algo que tengo que dejar bien pulido para antes de la entrega.
+Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré mañana. Lo cierto es que me está gustando hacer las memorias aunque es algo complicado pero creo que me ayuda a poder organizarme los pensamientos a la hora de plasmar tanto conocimiento que estoy adquiriendo y creo que a futuro también me vendrá genial para poder repasarlo y volver a tener la oportunidad de volver a realizar tremendo documento técnico. 
+
+
+--- SÍMBOLOGÍA---
+Día nuevo:        ↪
+Paso / Tarea:     ⇢
+Subpaso / Detalle: ↳
+Problema:         ▼
+Solución:         +
+------------------------------------
+		
