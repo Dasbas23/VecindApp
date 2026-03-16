@@ -74,6 +74,13 @@
 	+ Solución 2: En cuantto a las fuentes, he tenido que ir repasando una a una todas la citas y ver que estaba bien y que no para así estar seguro en el momento de dejarlo escrito o quitarlo. Asi que bueno la mayoría era información buena pero las citas de las fuentes es algo que tengo que dejar bien pulido para antes de la entrega.
 Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré mañana. Lo cierto es que me está gustando hacer las memorias aunque es algo complicado pero creo que me ayuda a poder organizarme los pensamientos a la hora de plasmar tanto conocimiento que estoy adquiriendo y creo que a futuro también me vendrá genial para poder repasarlo y volver a tener la oportunidad de volver a realizar tremendo documento técnico. 
 
+↪16.03.2026 :
+	Comienzo el día añadiendo el punto 3 "Metodología usada" a la entrega para el feedback. 
+		↳ Se ha copiado texto literal del libro "Entornos de Desarrollo".Se ha añadido una imagen representativa de SCRUM gerneada por NanoBanana(he añadido observacion "generada con IA")   ¿Debería citarlo en las fuentes? ¿De que manera? ¿Debería citar las IA como herramientas de uso en bibliografía o en metodología?
+⇢ He añadido para la entrega del feedback el punto 6.1 "Requisitos funcionales" divididos en subpuntos [a,b,c,d] con tablas de 3 columnas [RF, descripcion , Estado]
+	↳ He separado cada módulo en decenas (RF01 para modulo A, RF10 para el módulo B) para que si tengo que añadir más cosas no tenga que correr +1 en toda la lista de RF. Me he quedado con la duda de si añadir o no la columna [prioridad]. No obstante se lo he incluido como comentario en el titulo del 6.1 para ver si el profesro contesta. [PENDIENTE RESPUESTA]
+	▼ Problema: He mandado el borrador sin poder repasarlo mucho con las imágenes que cortaban el texto por donde no debían.
+	+ Solución : (fail) A la entrega final próxima he de estar más pendiente.
 
 --- SÍMBOLOGÍA---
 Día nuevo:        ↪
