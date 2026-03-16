@@ -81,6 +81,15 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 	↳ He separado cada módulo en decenas (RF01 para modulo A, RF10 para el módulo B) para que si tengo que añadir más cosas no tenga que correr +1 en toda la lista de RF. Me he quedado con la duda de si añadir o no la columna [prioridad]. No obstante se lo he incluido como comentario en el titulo del 6.1 para ver si el profesro contesta. [PENDIENTE RESPUESTA]
 	▼ Problema: He mandado el borrador sin poder repasarlo mucho con las imágenes que cortaban el texto por donde no debían.
 	+ Solución : (fail) A la entrega final próxima he de estar más pendiente.
+⇢ He creado la estructura de carpetas
+	▼ Problema: Me había confundido con la estructura de carpetas y había llamado a todas como en este ejemplo (data -> data.db / data.entities / data.repository)
+	+ Solución : Renombrarlas todas, que han sido pocas... menos mal!
+⇢ Sync Gradle… pffff menuda odisea. Gemini se le ha trabado en varias ocasiones. Claude me lo ha podido sacar a la primera.
+	▼ Problema: El problema era que l intentar usar `kotlin("kapt")` en los plugins, Gradle petaba dando el error "Plugin not found". El motivo es que no tenía la versión definida en el nuevo catálogo de versiones (libs.versions.toml), por lo que Gradle no sabía de dónde descargarlo.
+	+ Solución: En vez de pelearme para arreglar KAPT, he decidido actualizar el proyecto y migrar directamente a KSP (Kotlin Symbol Processing), que es la herramienta moderna que lo sustituye. Para hacerlo funcionar, declaré el plugin KSP con su versión en el archivo .toml, lo registré en el build.gradle del proyecto general (Top-level) con `apply false`, y finalmente cambié los `kapt(...)` de las dependencias de Room por `ksp(...)` en el módulo de la app. Como beneficio extra, KSP es bastante más rápido compilando código Kotlin, ¡así que la app compilará mejor! Tras la modificacion de esas líneas ha compilado todo bien. Espero que en ordenador del trabajo funcione bien a la primera y no tenga que tocar nada raro.
+
+
+
 
 --- SÍMBOLOGÍA---
 Día nuevo:        ↪
@@ -89,4 +98,5 @@ Subpaso / Detalle: ↳
 Problema:         ▼
 Solución:         +
 ------------------------------------
+Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir haciendo cosas en el trabajo en el documento VecindApp_Especificaciones_Tecnicas.docx guardado en mi drive secundario en punto 7. Planificación de Desarrolo para intentar seguir el calendario y rellenando con lo que realmente he ido haciendo. Así de esta manera queda más concentrado y no tengo que leerme todas las memorias.
 		

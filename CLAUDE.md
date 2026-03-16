@@ -37,9 +37,9 @@ app/src/main/java/com/example/vecindapp/
 
 ## Key Libraries
 
-- Room 2.6.1 (persistence)
-- Navigation Component 2.7.7
-- ViewModel + LiveData 2.7.0
+- Room 2.8.4 (persistence)
+- Navigation Component 2.9.7
+- ViewModel + LiveData 2.10.0
 - MPAndroidChart v3.1.0 (bar charts)
 - Glide 4.16.0 (avatar images)
 - WorkManager 2.9.0 (background tasks)
