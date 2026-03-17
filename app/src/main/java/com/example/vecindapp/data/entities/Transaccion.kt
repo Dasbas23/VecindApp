@@ -7,6 +7,33 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.vecindapp.domain.model.EstadoTransaccion
 
+/**
+ * Entidad Room que representa una transacción de horas entre dos vecinos.
+ *
+ * Se crea cuando un comprador solicita un [Servicio]. El flujo normal es:
+ * [EstadoTransaccion.PENDIENTE] → [EstadoTransaccion.ACEPTADA] →
+ * [EstadoTransaccion.COMPLETADA]. Al completarse, las horas se debitan
+ * del comprador y se acreditan al vendedor de forma atómica (`@Transaction`).
+ *
+ * Tabla SQLite: `transaccion`
+ *
+ * Relaciones:
+ * - [idCompradorFk] → [Usuario.idUsuario] (vecino que solicita el servicio).
+ * - [idVendedorFk]  → [Usuario.idUsuario] (vecino que ofrece el servicio).
+ * - [idServicioFk]  → [Servicio.idServicio] (servicio objeto del intercambio).
+ * - Todas con `ON DELETE CASCADE`.
+ *
+ * @property idTransaccion    Clave primaria autoincremental.
+ * @property idCompradorFk    FK → [Usuario]. Vecino que solicita y paga horas.
+ * @property idVendedorFk     FK → [Usuario]. Vecino que presta el servicio y recibe horas.
+ * @property idServicioFk     FK → [Servicio]. Servicio asociado a esta transacción.
+ * @property horasTransferidas Cantidad de horas intercambiadas.
+ * @property estado           Estado actual dentro del flujo de la transacción.
+ * @property timestamp        Timestamp (millis) de creación de la transacción.
+ *
+ * @see EstadoTransaccion
+ * @see com.example.vecindapp.data.db.TransaccionDao
+ */
 @Entity(
     tableName = "transaccion",
     foreignKeys = [
@@ -58,5 +85,10 @@ data class Transaccion(
     @ColumnInfo(name = "timestamp")
     val timestamp: Long = System.currentTimeMillis()
 ) {
+    /**
+     * Comprueba si la transacción ha finalizado con éxito.
+     *
+     * @return `true` si el estado es [EstadoTransaccion.COMPLETADA].
+     */
     fun estaCompletada(): Boolean = estado == EstadoTransaccion.COMPLETADA
 }
