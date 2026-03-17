@@ -88,6 +88,10 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 	▼ Problema: El problema era que l intentar usar `kotlin("kapt")` en los plugins, Gradle petaba dando el error "Plugin not found". El motivo es que no tenía la versión definida en el nuevo catálogo de versiones (libs.versions.toml), por lo que Gradle no sabía de dónde descargarlo.
 	+ Solución: En vez de pelearme para arreglar KAPT, he decidido actualizar el proyecto y migrar directamente a KSP (Kotlin Symbol Processing), que es la herramienta moderna que lo sustituye. Para hacerlo funcionar, declaré el plugin KSP con su versión en el archivo .toml, lo registré en el build.gradle del proyecto general (Top-level) con `apply false`, y finalmente cambié los `kapt(...)` de las dependencias de Room por `ksp(...)` en el módulo de la app. Como beneficio extra, KSP es bastante más rápido compilando código Kotlin, ¡así que la app compilará mejor! Tras la modificacion de esas líneas ha compilado  bien. Espero que en ordenador del trabajo funcione bien a la primera y no tenga que tocar nada raro.
 
+↪17.03.2026 : 
+	Se da comienzo con el Sprint2 bbdd+escaparate, donde haré el módulo de servicios CRUD completo y el recyclerview del escaparate.
+⇢ Lo primero es renombrar la rama main → desarrollo y después una nueva rama sprint2
+
 
 
 
