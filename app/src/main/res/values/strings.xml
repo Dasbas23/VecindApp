@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">VecindApp</string>
+    <!-- ═══ Escaparate ═══ -->
+    <string name="titulo_escaparate">Escaparate</string>
+    <string name="escaparate_vacio">No hay servicios disponibles</string>
+    <string name="formato_coste_horas">%.1f h</string>
+    <string name="desc_pictograma">Pictograma del servicio</string>
 </resources>
