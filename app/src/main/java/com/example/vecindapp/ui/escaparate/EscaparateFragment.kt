@@ -12,8 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vecindapp.R
-import com.example.vecindapp.data.db.AppDatabase
-import com.example.vecindapp.data.repository.ServicioRepositoryImpl
+import com.example.vecindapp.VecindAppApplication
 
 /**
  * Fragment principal del escaparate de servicios.
@@ -39,9 +38,8 @@ class EscaparateFragment : Fragment() {
 
     /** ViewModel con inyección manual mediante Factory. */
     private val viewModel: EscaparateViewModel by viewModels {
-        val db = AppDatabase.getInstance(requireContext())
-        val repo = ServicioRepositoryImpl(db.servicioDao())
-        EscaparateViewModel.Factory(repo)
+        val app = requireActivity().application as VecindAppApplication
+        EscaparateViewModel.Factory(app.servicioRepository)
     }
 
     /** Adapter del RecyclerView. */
