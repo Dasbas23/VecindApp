@@ -68,4 +68,16 @@ interface UsuarioDao {
      */
     @Query("SELECT * FROM usuario WHERE id_usuario = :id")
     suspend fun getByIdOnce(id: Int): Usuario?
+
+    /**
+     * Actualiza directamente el saldo de horas de un usuario.
+     *
+     * Operación atómica que evita tener que cargar el objeto completo.
+     * Utilizada tras completar una transacción (débito/crédito).
+     *
+     * @param id    Clave primaria del usuario.
+     * @param saldo Nuevo saldo de horas.
+     */
+    @Query("UPDATE usuario SET saldo_horas = :saldo WHERE id_usuario = :id")
+    suspend fun updateSaldo(id: Int, saldo: Double)
 }

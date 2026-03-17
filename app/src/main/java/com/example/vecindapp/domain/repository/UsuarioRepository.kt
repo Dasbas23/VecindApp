@@ -52,4 +52,12 @@ interface UsuarioRepository {
      * @return El [Usuario] o `null` si no existe.
      */
     suspend fun getByIdOnce(id: Int): Usuario?
+
+    /**
+     * Actualiza directamente el saldo de horas de un usuario.
+     *
+     * @param id    Clave primaria del usuario.
+     * @param saldo Nuevo saldo de horas.
+     */
+    suspend fun updateSaldo(id: Int, saldo: Double)
 }

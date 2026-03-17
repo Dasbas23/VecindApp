@@ -41,4 +41,7 @@ class ServicioRepositoryImpl(
 
     override fun getByCategoria(categoria: String): Flow<List<Servicio>> =
         servicioDao.getByCategoria(categoria)
+
+    override suspend fun cambiarEstado(id: Int, estado: String) =
+        servicioDao.cambiarEstado(id, estado)
 }

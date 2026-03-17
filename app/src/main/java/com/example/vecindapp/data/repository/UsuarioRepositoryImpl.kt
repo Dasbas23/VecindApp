@@ -39,4 +39,7 @@ class UsuarioRepositoryImpl(
 
     override suspend fun getByIdOnce(id: Int): Usuario? =
         usuarioDao.getByIdOnce(id)
+
+    override suspend fun updateSaldo(id: Int, saldo: Double) =
+        usuarioDao.updateSaldo(id, saldo)
 }

@@ -90,4 +90,16 @@ interface ServicioDao {
      */
     @Query("SELECT * FROM servicio WHERE categoria = :categoria AND estado = 'ACTIVO' ORDER BY fecha_publicacion DESC")
     fun getByCategoria(categoria: String): Flow<List<Servicio>>
+
+    /**
+     * Cambia el estado de un servicio directamente en la BBDD.
+     *
+     * Operación atómica que evita cargar el objeto completo.
+     * Utilizada al reservar, completar o caducar un servicio.
+     *
+     * @param id     Clave primaria del servicio.
+     * @param estado Nuevo estado como String (debe coincidir con [EstadoServicio.name]).
+     */
+    @Query("UPDATE servicio SET estado = :estado WHERE id_servicio = :id")
+    suspend fun cambiarEstado(id: Int, estado: String)
 }

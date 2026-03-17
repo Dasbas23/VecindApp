@@ -67,4 +67,12 @@ interface ServicioRepository {
      * @return [Flow] reactivo con los servicios filtrados.
      */
     fun getByCategoria(categoria: String): Flow<List<Servicio>>
+
+    /**
+     * Cambia el estado de un servicio directamente.
+     *
+     * @param id     Clave primaria del servicio.
+     * @param estado Nuevo estado como String.
+     */
+    suspend fun cambiarEstado(id: Int, estado: String)
 }
