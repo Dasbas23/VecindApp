@@ -82,4 +82,26 @@ data class Valoracion(
 
     @ColumnInfo(name = "timestamp")
     val timestamp: Long = System.currentTimeMillis()
-)
+
+) {
+    /**
+     * Deserializa el campo [pictogramasJson] y devuelve la lista
+     * de identificadores de pictogramas ARASAAC seleccionados.
+     *
+     * El JSON almacenado tiene formato de array simple:
+     * `["pictograma_01", "pictograma_02", ...]`
+     *
+     * @return Lista de IDs de pictogramas o lista vacía si el JSON es inválido.
+     */
+    fun getPictogramasList(): List<String> {
+        return try {
+            pictogramasJson
+                .removeSurrounding("[", "]")
+                .split(",")
+                .map { it.trim().removeSurrounding("\"") }
+                .filter { it.isNotBlank() }
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+}
