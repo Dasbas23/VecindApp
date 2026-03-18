@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    nav_graph.xml
+    Grafo de navegación de VecindApp.
+
+    Define todos los destinos (fragments) de la app y las acciones
+    de navegación entre ellos. El Navigation Component usa este archivo
+    para saber cómo moverse entre pantallas.
+
+    Destinos principales (BottomNav):
+      - escaparateFragment (pantalla de inicio)
+      - historialFragment
+      - perfilFragment
+
+    Destinos secundarios (se navega desde otros fragments):
+      - crearServicioFragment (desde escaparate, botón FAB '+')
+-->
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/escaparateFragment">
+
+    <!-- ═══ Pestañas principales (BottomNav) ═══ -->
+
+    <fragment
+        android:id="@+id/escaparateFragment"
+        android:name="com.example.vecindapp.ui.escaparate.EscaparateFragment"
+        android:label="@string/nav_escaparate"
+        tools:layout="@layout/fragment_escaparate">
+
+        <!-- Navegar al formulario de crear servicio -->
+        <action
+            android:id="@+id/action_escaparate_to_crearServicio"
+            app:destination="@id/crearServicioFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/historialFragment"
+        android:name="com.example.vecindapp.ui.historial.HistorialFragment"
+        android:label="@string/nav_historial"
+        tools:layout="@layout/fragment_historial" />
+
+    <fragment
+        android:id="@+id/perfilFragment"
+        android:name="com.example.vecindapp.ui.perfil.PerfilFragment"
+        android:label="@string/nav_perfil"
+        tools:layout="@layout/fragment_perfil" />
+
+    <!-- ═══ Destinos secundarios ═══ -->
+
+    <fragment
+        android:id="@+id/crearServicioFragment"
+        android:name="com.example.vecindapp.ui.servicio.CrearServicioFragment"
+        android:label="@string/titulo_crear_servicio"
+        tools:layout="@layout/fragment_crear_servicio" />
+
+</navigation>

@@ -5,4 +5,13 @@
     <string name="escaparate_vacio">No hay servicios disponibles</string>
     <string name="formato_coste_horas">%.1f h</string>
     <string name="desc_pictograma">Pictograma del servicio</string>
+    <string name="desc_crear_servicio">Crear nuevo servicio</string>
+
+    <!-- ═══ Navegación ═══ -->
+    <string name="nav_escaparate">Escaparate</string>
+    <string name="nav_historial">Historial</string>
+    <string name="nav_perfil">Perfil</string>
+
+    <!-- ═══ Crear Servicio ═══ -->
+    <string name="titulo_crear_servicio">Nuevo servicio</string>
 </resources>

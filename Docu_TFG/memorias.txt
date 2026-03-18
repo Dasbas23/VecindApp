@@ -101,8 +101,22 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 ⇢Se crea un README.md como buen proyecto que estoy haciendo. Claude me lo ha dejado bastante majo. 
 ⇢Se crean los Repository bien documentados con KDoc.
 	▼ Problema : Me doy cuenta de que en algún repository hay métodos implementados demás, que no estaban contemplados en el diagrama de clases. También me doy cuenta de que faltan métodos por implementar y que a su vez repercuten en algun DAO.
-	+ Solución : Se pide a Claude que me lo repase y que me explique que pasa si hay métodos demás (En verdad son muy útiles y me habría dado cuenta más tarde) [Tendré que volver a rehacer el diagrama de clases]. 
-	
+	+ Solución : Se pide a Claude que me lo repase y que me explique que pasa si hay métodos demás (En verdad son muy útiles y me habría dado cuenta más tarde) [Tendré que volver a rehacer el diagrama de clases].
+⇢ Se implementa el patrón de Inyección de Dependencias Manual.
+	↳ Se crea la clase `VecindAppApplication` que hereda de Application. Esto actúa como contenedor central (Singleton) instanciando la BBDD y los Repositorios de forma perezosa (`by lazy`) una única vez al arrancar la app, evitando duplicidades de memoria. Se registra en el AndroidManifest.xml.
+⇢ Se desarrolla la capa UI (Front-end) del Escaparate.
+	↳ Se crea `EscaparateViewModel` utilizando `StateFlow` para observar la lista de servicios activos de forma reactiva desde Room. Se gestiona el ciclo de vida con `viewModelScope.launch`.
+	↳ Se diseña `item_servicio.xml` usando MaterialCardView para representar cada oferta.
+	↳ Se implementa `ServicioAdapter` heredando de `ListAdapter` y utilizando `DiffUtil.ItemCallback` (algoritmo de Eugene W. Myers). Esto optimiza el rendimiento del RecyclerView repintando solo los elementos que sufren cambios, en lugar de recargar toda la lista.
+	▼ Problema: El IDE marcaba warnings por usar `launchWhenStarted` en el Fragment, ya que está obsoleto (deprecated).
+	+ Solución: Se refactoriza el código sustituyéndolo por un simple `launch` combinado con `repeatOnLifecycle(Lifecycle.State.STARTED)`, que es la recomendación actual de Google para observar flujos de forma segura según el ciclo de vida de la vista.
+ 
+18.0.2026 : 
+	Hoy no me ha cundido mucho porque por la mañana, en el trabajo, no he tenido la oportunidad de leer y entender bien la capa de UI. Además la tarde la he tenido liada con otras cosas asi que para hoy a última hora me he puesto un rato con:
+	↳ Implementacion de Navigation Component (`nav_graph.xml`) para que `MainActivity` cargue el `EscaparateFragment` al inicio.
+	↳ Desarrollar la operación "Create" del CRUD: Formulario de alta de servicio y navegación desde el Floating Action Button.
+
+***Comletar día 18 y repasar el feat de ayer!
 
 
 --- SÍMBOLOGÍA---
