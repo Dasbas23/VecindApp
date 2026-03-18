@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
+import kotlinx.coroutines.launch
 
 /**
  * Fragment principal del escaparate de servicios.
@@ -87,7 +88,7 @@ class EscaparateFragment : Fragment() {
      * reanude al volver, evitando actualizaciones innecesarias.
      */
     private fun observarServicios() {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.servicios.collect { lista ->
                     adapter.submitList(lista)
