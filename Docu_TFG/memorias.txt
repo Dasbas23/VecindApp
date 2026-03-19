@@ -128,9 +128,22 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 
 ↪19.03.2026 :
 	Hoy comienzo el día con muchas ganas de trabajar. Creo que podré adelantar el final del srpint2 a lo largo del día y empezar a ponerme con el sprint3 para tener la semana que viene más tiempo para leer los libros de las asignaturas.
-	▼ Problema : He tenido movida con los certificados SSL  en el PC del trabajo porque 
-**Tarea para esta tarde**
-	Mi tarea para esta tarde será probar el flujo pulsar '+', rellenar el formulario, darle a "Guardar" y ver la tarjeta aparecer en el escaparate
+	▼ Problema : He tenido movida con los certificados SSL  en el PC del trabajo porque el PC del trabajo no compilaba. Gradle lanzaba un error `PKIX path building failed` al intentar descargar `room-compiler`. Esto ocurría porque el firewall corporativo (Zscaler) interceptaba la conexión SSL y Java no reconocía su certificado, bloqueando la descarga por seguridad.
+	+ Solución 1: Extraje el certificado de Zscaler en formato `.der`, lo importé usando `keytool` al almacén de certificados local (`cacerts`) y configuré el `gradle.properties` global para que usara este trustStore modificado. Tras reiniciar el daemon de Gradle y hacer un Rebuild, compiló perfectamente.
+⇢ Se diseña e implementa el formulario de "Crear Servicio" (`fragment_crear_servicio.xml` y `CrearServicioViewModel`).
+⇢ Se diseña e implementa la pantalla de "Detalle del Servicio" permitiendo la Edición y el Borrado.
+	▼ Problema 2: Al realizar pruebas funcionales, la operación "Create" daba error en la base de datos (Foreign Key constraint failed).
+	+ Solución 2: El servicio intentaba asociarse a un usuario que no existía. Se implementa `SeedDatabaseCallback` en `AppDatabase` para generar un usuario por defecto (ID=1) al crear la base de datos. Tras reinstalar la app, el guardado funciona correctamente.
+	▼ Problema 3: El RecyclerView del escaparate no mostraba tarjetas.  Mediante logs y debugging se descubrió que el LayoutManager y 
+  el Adapter se estaban asignando dentro del lambda del onClick en vez de fuera, por lo que nunca se ejecutaban.
+	+ Solución 3: Mover las asignaciones de layoutManager y adapter fuera del lambda del constructor de ServicioAdapter. Las tarjetas comenzaron a renderizarse inmediatamente.
+⇢ Gestión de ramas (Git Workflow): Se creó una rama paralela `bugfix/escaparate` para aislar la corrección del problema del RecyclerView. Una vez solucionado, se fusionó limpiamente en la rama del sprint.
+⇢ FIN DEL SPRINT 2: Se realiza un `git merge --no-ff` de la rama `sprint2` hacia la rama `desarrollo` con el mensaje "feat: CRUD completo - Crear, Detalle, Editar, Eliminar servicios", dejando un historial claro y documentado.
+
+ 
+
+
+
 
 
 --- SÍMBOLOGÍA---

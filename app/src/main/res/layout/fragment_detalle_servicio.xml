@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    fragment_detalle_servicio.xml
-    Pantalla de detalle de un servicio. Muestra toda la información
-    y permite al propietario editar o eliminar el servicio.
+    fragment_detalle_servicio.xml (ACTUALIZADO)
+    Añadido: botón "Solicitar servicio" para crear una transacción.
+    Los botones Editar/Eliminar son para el propietario.
+    El botón Solicitar es para otros vecinos.
 -->
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -120,18 +121,33 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- ═══ Botón Solicitar (para otros vecinos) ═══ -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSolicitar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/btn_solicitar"
+            app:layout_constraintTop_toBottomOf="@id/tvFechaDetalle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="invisible"/>
+
+        <!-- ═══ Botones del propietario ═══ -->
+
         <!-- Botón Editar -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEditar"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="@string/btn_editar"
-            app:layout_constraintTop_toBottomOf="@id/tvFechaDetalle"
+            app:layout_constraintTop_toBottomOf="@id/btnSolicitar"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnEliminar" />
+            app:layout_constraintEnd_toStartOf="@id/btnEliminar"
+            android:visibility="invisible"/>
 
         <!-- Botón Eliminar -->
         <com.google.android.material.button.MaterialButton
@@ -139,13 +155,14 @@
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:layout_marginStart="8dp"
             android:text="@string/btn_eliminar"
             app:backgroundTint="#D32F2F"
-            app:layout_constraintTop_toBottomOf="@id/tvFechaDetalle"
+            app:layout_constraintTop_toBottomOf="@id/btnSolicitar"
             app:layout_constraintStart_toEndOf="@id/btnEditar"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="invisible"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

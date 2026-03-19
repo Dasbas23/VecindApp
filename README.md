@@ -8,19 +8,31 @@
 
 ---
 
+## Estado del Proyecto
+
+| Sprint | Estado     | Contenido |
+|--------|------------|-----------|
+| Sprint 1 | Completado | Estructura base y diagramas |
+| Sprint 2 | Completado | BBDD Room + CRUD servicios + escaparate |
+| Sprint 3 | En proceso | Transacciones (solicitar, aceptar, completar, débito/crédito) |
+| Sprint 4 | Pendiente  | Perfil y valoraciones con pictogramas ARASAAC |
+| Sprint 5 | Pendiente  | Historial y estadísticas (MPAndroidChart) |
+| Sprint 6 | Pendiente  | Accesibilidad, TTS, Glide, WorkManager y pulido visual |
+
+---
+
 ## Descripción
 
-VecindApp es una App Android que funciona como un banco de tiempo vecinal donde los usuarios 
+VecindApp es una App Android que funciona como un banco de tiempo vecinal donde los usuarios
 publican servicios que ofrecen (pasear al perro, dar clases, hacer recados...)
-y los "pagan" con horas en lugar de dinero. La app opera offline y guarda los datos en local con 
-Room/SQLite. Incluye accesibilidad mediante Text-To-Speecch y una interfaz accesible. Prioriza la
+y los "pagan" con horas en lugar de dinero. La app opera offline y guarda los datos en local con
+Room/SQLite. Incluye accesibilidad mediante Text-To-Speech y una interfaz accesible. Prioriza la
 accesibilidad cognitiva incorporando pictogramas del sistema ARASAAC
 y lectura en voz alta mediante el motor TTS nativo de Android.
 
 ## Arquitectura
 
-El proyecto sigue el patrón **MVVM + Clean Architecture** organizado
-en 5 capas:
+El proyecto sigue el patrón **MVVM + Clean Architecture** organizado en 5 capas:
 
 ```
 app/src/main/java/com/example/vecindapp/
@@ -93,12 +105,12 @@ app/src/main/java/com/example/vecindapp/
 - Commits y documentación en **español**.
 - Documentación KDoc en todas las clases públicas.
 
-## Rama de desarrollo
+## Ramas
 
-| Rama                       | Contenido                              |
-|----------------------------|----------------------------------------|
-| `desarrollo`               | Rama principal de integración          |
-| `sprint2/bbdd+escaparate`  | BBDD Room + CRUD servicios + escaparate|
+| Rama                      | Contenido                               |
+|---------------------------|-----------------------------------------|
+| `desarrollo`              | Rama principal de integración           |
+| `sprint2/bbdd+escaparate` | BBDD Room + CRUD servicios + escaparate |
 
 ## Autor
 
