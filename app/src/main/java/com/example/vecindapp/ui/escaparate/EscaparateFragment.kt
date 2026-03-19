@@ -81,12 +81,10 @@ class EscaparateFragment : Fragment() {
                 putInt("servicioId", servicio.idServicio)
             }
             findNavController().navigate(R.id.action_escaparate_to_detalle, bundle)
-            rvEscaparate.layoutManager = LinearLayoutManager(requireContext())
-            rvEscaparate.adapter = adapter
-            android.util.Log.d("ESCAPARATE", "RV adapter: ${rvEscaparate.adapter}")
-            android.util.Log.d("ESCAPARATE", "RV layoutManager: ${rvEscaparate.layoutManager}")
-            android.util.Log.d("ESCAPARATE", "RV mismo adapter? ${rvEscaparate.adapter === adapter}")
         }
+        // Fuera del lambda, donde siempre debería haber estado
+        rvEscaparate.layoutManager = LinearLayoutManager(requireContext())
+        rvEscaparate.adapter = adapter
     }
 
     /**
