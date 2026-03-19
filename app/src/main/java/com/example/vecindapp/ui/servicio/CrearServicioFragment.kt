@@ -84,7 +84,7 @@ class CrearServicioFragment : Fragment() {
      * Usa un [ArrayAdapter] sencillo que muestra el nombre de cada categoría.
      */
     private fun configurarSpinner() {
-        val categorias = CategoriaServicio.values().map { it.name }
+        val categorias = CategoriaServicio.entries.map { it.name }
         val adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
@@ -102,7 +102,7 @@ class CrearServicioFragment : Fragment() {
         btnGuardar.setOnClickListener {
             val titulo = etTitulo.text.toString()
             val descripcion = etDescripcion.text.toString()
-            val categoria = CategoriaServicio.values()[spinnerCategoria.selectedItemPosition]
+            val categoria = CategoriaServicio.entries[spinnerCategoria.selectedItemPosition]
             val coste = etCoste.text.toString()
 
             viewModel.guardarServicio(titulo, descripcion, categoria, coste)
