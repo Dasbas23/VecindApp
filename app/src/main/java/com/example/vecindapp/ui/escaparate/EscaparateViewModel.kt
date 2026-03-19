@@ -52,11 +52,11 @@ class EscaparateViewModel(
             servicioRepository.getActivos()
                 .catch { e -> e.printStackTrace() }
                 .collect { lista ->
+                    android.util.Log.d("ESCAPARATE", "Servicios recibidos: ${lista.size}")
                     _servicios.value = lista
                 }
         }
     }
-
     /**
      * Filtra los servicios del escaparate por una categoría concreta.
      *

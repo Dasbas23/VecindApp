@@ -83,6 +83,9 @@ class EscaparateFragment : Fragment() {
             findNavController().navigate(R.id.action_escaparate_to_detalle, bundle)
             rvEscaparate.layoutManager = LinearLayoutManager(requireContext())
             rvEscaparate.adapter = adapter
+            android.util.Log.d("ESCAPARATE", "RV adapter: ${rvEscaparate.adapter}")
+            android.util.Log.d("ESCAPARATE", "RV layoutManager: ${rvEscaparate.layoutManager}")
+            android.util.Log.d("ESCAPARATE", "RV mismo adapter? ${rvEscaparate.adapter === adapter}")
         }
     }
 
@@ -108,16 +111,10 @@ class EscaparateFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.servicios.collect { lista ->
-                    adapter.submitList(lista)
+                    adapter.submitList(lista.toMutableList())
 
-                    // Mostrar/ocultar mensaje de lista vacía
-                    if (lista.isEmpty()) {
-                        rvEscaparate.visibility = View.GONE
-                        tvVacio.visibility = View.VISIBLE
-                    } else {
-                        rvEscaparate.visibility = View.VISIBLE
-                        tvVacio.visibility = View.GONE
-                    }
+                    // Solo toglear el mensaje de vacío, el RV siempre visible
+                    tvVacio.visibility = if (lista.isEmpty()) View.VISIBLE else View.GONE
                 }
             }
         }

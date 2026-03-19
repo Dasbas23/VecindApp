@@ -33,15 +33,16 @@ class ServicioAdapter(
 ) : ListAdapter<Servicio, ServicioAdapter.ServicioViewHolder>(ServicioDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServicioViewHolder {
+        android.util.Log.d("ESCAPARATE", "onCreateViewHolder llamado")
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_servicio, parent, false)
         return ServicioViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ServicioViewHolder, position: Int) {
+        android.util.Log.d("ESCAPARATE", "onBindViewHolder posicion: $position, item: ${getItem(position).titulo}")
         holder.bind(getItem(position))
     }
-
     /**
      * ViewHolder que representa una tarjeta individual de servicio.
      *

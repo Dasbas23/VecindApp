@@ -69,6 +69,10 @@ class CrearServicioViewModel(
             _error.value = "Introduce un coste válido (mayor que 0)"
             return
         }
+        if (coste > 8.0) {
+            _error.value = "El máximo por servicio es de 8 horas"
+            return
+        }
 
         // Crear el servicio
         val servicio = Servicio(

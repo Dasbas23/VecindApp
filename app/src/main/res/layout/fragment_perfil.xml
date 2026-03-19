@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    fragment_historial.xml
-    Layout placeholder para la pantalla de historial.
+    fragment_perfil.xml
+    Layout placeholder para la pantalla de perfil.
     Se desarrollará en un sprint posterior.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,7 +13,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/nav_historial"
+        android:text="@string/nav_perfil"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
