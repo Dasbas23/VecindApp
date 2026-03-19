@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    dialog_editar_servicio.xml
+    Layout del AlertDialog para editar un servicio.
+    Campos editables: título, descripción, coste.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/etEditarTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_titulo"
+        android:inputType="textCapSentences"
+        android:maxLength="60" />
+
+    <EditText
+        android:id="@+id/etEditarDescripcion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/hint_descripcion"
+        android:inputType="textMultiLine|textCapSentences"
+        android:minLines="3"
+        android:gravity="top"
+        android:maxLength="300" />
+
+    <EditText
+        android:id="@+id/etEditarCoste"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/hint_coste"
+        android:inputType="numberDecimal" />
+
+</LinearLayout>

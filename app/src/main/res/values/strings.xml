@@ -1,3 +1,41 @@
 <resources>
     <string name="app_name">VecindApp</string>
+    <!-- ═══ Escaparate ═══ -->
+    <string name="titulo_escaparate">Escaparate</string>
+    <string name="escaparate_vacio">No hay servicios disponibles</string>
+    <string name="formato_coste_horas">%.1f h</string>
+    <string name="desc_pictograma">Pictograma del servicio</string>
+    <string name="desc_crear_servicio">Crear nuevo servicio</string>
+
+    <!-- ═══ Navegación ═══ -->
+    <string name="nav_escaparate">Escaparate</string>
+    <string name="nav_historial">Historial</string>
+    <string name="nav_perfil">Perfil</string>
+
+    <!-- ═══ Crear Servicio ═══ -->
+    <string name="titulo_crear_servicio">Nuevo servicio</string>
+
+    <!-- ═══ Crear Servicio (formulario) ═══ -->
+    <string name="hint_titulo">Título del servicio</string>
+    <string name="hint_descripcion">Descripción (opcional)</string>
+    <string name="label_categoria">Categoría</string>
+    <string name="hint_coste">Coste en horas</string>
+    <string name="btn_guardar">Guardar servicio</string>
+    <string name="servicio_guardado">Servicio publicado correctamente</string>
+
+    <!-- ═══ Detalle Servicio ═══ -->
+    <string name="label_descripcion_detalle">Descripción</string>
+    <string name="sin_descripcion">Sin descripción</string>
+    <string name="formato_estado">Estado: %s</string>
+    <string name="formato_fecha_publicacion">Publicado el %s</string>
+    <string name="btn_editar">Editar</string>
+    <string name="btn_eliminar">Eliminar</string>
+    <string name="btn_cancelar">Cancelar</string>
+    <string name="titulo_editar_servicio">Editar servicio</string>
+    <string name="titulo_confirmar_eliminar">Eliminar servicio</string>
+    <string name="mensaje_confirmar_eliminar">¿Estás seguro de que quieres eliminar este servicio?</string>
+    <string name="servicio_eliminado">Servicio eliminado</string>
+    <string name="servicio_actualizado">Servicio actualizado</string>
+    <string name="error_titulo_vacio">El título no puede estar vacío</string>
+    <string name="error_coste_invalido">Introduce un coste válido</string>
 </resources>

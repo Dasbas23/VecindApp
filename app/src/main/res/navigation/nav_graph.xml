@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    nav_graph.xml (ACTUALIZADO)
+    Añadido: detalleServicioFragment con argumento servicioId.
+    Añadida: action desde escaparate hacia detalle.
+-->
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/escaparateFragment">
+
+    <!-- ═══ Pestañas principales (BottomNav) ═══ -->
+
+    <fragment
+        android:id="@+id/escaparateFragment"
+        android:name="com.example.vecindapp.ui.escaparate.EscaparateFragment"
+        android:label="@string/nav_escaparate"
+        tools:layout="@layout/fragment_escaparate">
+
+        <!-- Navegar al formulario de crear servicio -->
+        <action
+            android:id="@+id/action_escaparate_to_crearServicio"
+            app:destination="@id/crearServicioFragment" />
+
+        <!-- Navegar al detalle de un servicio -->
+        <action
+            android:id="@+id/action_escaparate_to_detalle"
+            app:destination="@id/detalleServicioFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/historialFragment"
+        android:name="com.example.vecindapp.ui.historial.HistorialFragment"
+        android:label="@string/nav_historial"
+        tools:layout="@layout/fragment_historial" />
+
+    <fragment
+        android:id="@+id/perfilFragment"
+        android:name="com.example.vecindapp.ui.perfil.PerfilFragment"
+        android:label="@string/nav_perfil"
+        tools:layout="@layout/fragment_perfil" />
+
+    <!-- ═══ Destinos secundarios ═══ -->
+
+    <fragment
+        android:id="@+id/crearServicioFragment"
+        android:name="com.example.vecindapp.ui.servicio.CrearServicioFragment"
+        android:label="@string/titulo_crear_servicio"
+        tools:layout="@layout/fragment_crear_servicio" />
+
+    <fragment
+        android:id="@+id/detalleServicioFragment"
+        android:name="com.example.vecindapp.ui.servicio.DetalleServicioFragment"
+        android:label="Detalle"
+        tools:layout="@layout/fragment_detalle_servicio">
+
+        <!-- Argumento: ID del servicio a mostrar -->
+        <argument
+            android:name="servicioId"
+            app:argType="integer" />
+    </fragment>
+
+</navigation>

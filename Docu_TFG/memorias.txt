@@ -91,8 +91,46 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 ↪17.03.2026 : 
 	Se da comienzo con el Sprint2 bbdd+escaparate, donde haré el módulo de servicios CRUD completo y el recyclerview del escaparate.
 ⇢ Lo primero es renombrar la rama main → desarrollo y después una nueva rama sprint2
+	↳ Cambiar el nombre a rama. Eliminar la rama "master" em local y en remoto habiendo puedo como default la rama "desarrollo" antes de eliminar.	
+⇢ Se crean las entities y las  DAO para cada entidad.
+	↳ Las DAO son las interfaces que le indican a Room que operaciones puede hacer con cada tabla. Recuerdo haberlo leído en el libro para el examen pero no sabía como implementarlas y he tenido que pedirle a Claude que me las explique. Cierto es que me ha hecho las demás clases también pero las he tenido que repasar y  he visto que se ha dejado algún método de los que tenía en el diagrama de clases.
+		▼ Problema : Al revisar el código generado por la IA, me di cuenta de que se había dejado un método por implementar en la entidad Valoracion (`getPictogramasList()`) que sí estaba contemplado en mi diagrama de clases para parsear el JSON de los pictogramas.
+		+ Solución : Le avisé a la IA del error y me pasó la función exacta para añadirla manualmente. Me he dado cuenta de que es imprescindible revisar el código generado contrastándolo con los diagramas propios para que no se pierda la coherencia del diseño inicial.
+⇢ Se pide a Claude que me documente con KDoc cada una de las clases
+	↳ Me he dado cuenta que en muchas ocasiones yo miro los builtins de python o de cualquier cosa que me llama la atención así que he pensado que a futuro me vendrá bien a mi mismo saber/recodrdar que hace caca cllase o método y por el motivo que sea esto lo voy a mejorar o escalo a un nivel superior. 
+⇢Se crea un README.md como buen proyecto que estoy haciendo. Claude me lo ha dejado bastante majo. 
+⇢Se crean los Repository bien documentados con KDoc.
+	▼ Problema : Me doy cuenta de que en algún repository hay métodos implementados demás, que no estaban contemplados en el diagrama de clases. También me doy cuenta de que faltan métodos por implementar y que a su vez repercuten en algun DAO.
+	+ Solución : Se pide a Claude que me lo repase y que me explique que pasa si hay métodos demás (En verdad son muy útiles y me habría dado cuenta más tarde) [Tendré que volver a rehacer el diagrama de clases].
+⇢ Se implementa el patrón de Inyección de Dependencias Manual.
+	↳ Se crea la clase `VecindAppApplication` que hereda de Application. Esto actúa como contenedor central (Singleton) instanciando la BBDD y los Repositorios de forma perezosa (`by lazy`) una única vez al arrancar la app, evitando duplicidades de memoria. Se registra en el AndroidManifest.xml.
+⇢ Se desarrolla la capa UI (Front-end) del Escaparate.
+	↳ Se crea `EscaparateViewModel` utilizando `StateFlow` para observar la lista de servicios activos de forma reactiva desde Room. Se gestiona el ciclo de vida con `viewModelScope.launch`.
+	↳ Se diseña `item_servicio.xml` usando MaterialCardView para representar cada oferta.
+	↳ Se implementa `ServicioAdapter` heredando de `ListAdapter` y utilizando `DiffUtil.ItemCallback` (algoritmo de Eugene W. Myers). Esto optimiza el rendimiento del RecyclerView repintando solo los elementos que sufren cambios, en lugar de recargar toda la lista.
+	▼ Problema: El IDE marcaba warnings por usar `launchWhenStarted` en el Fragment, ya que está obsoleto (deprecated).
+	+ Solución: Se refactoriza el código sustituyéndolo por un simple `launch` combinado con `repeatOnLifecycle(Lifecycle.State.STARTED)`, que es la recomendación actual de Google para observar flujos de forma segura según el ciclo de vida de la vista.
+ 
+↪18.03.2026 : 
+	Hoy no me ha cundido mucho porque por la mañana, en el trabajo, no he tenido la oportunidad de leer y entender bien la capa de UI. Además la tarde la he tenido liada con otras cosas asi que para hoy a última hora me he puesto un rato con:
+	↳ Implementacion de Navigation Component (`nav_graph.xml`) para que `MainActivity` cargue el `EscaparateFragment` al inicio.
+	↳ Desarrollar la operación "Create" del CRUD: Formulario de alta de servicio y navegación desde el Floating Action Button.
 
+⇢ Se implementa Navigation Component (nav_graph.xml, BottomNavigationView, menu_bottom_nav.xml).
+↳ Se crean Fragments placeholder para Historial, Perfil y CrearServicio.
+↳ Se añade el FAB (botón '+') al escaparate para navegar al formulario de crear servicio.
+	▼ Problema 1: El nav_graph.xml lo había puesto en res/nav_graph/ en vez de res/navigation/. Gradle no reconocía la carpeta.
+	+ Solución: Mover el archivo a la carpeta correcta res/navigation/.
+	▼ Problema 2: Quedaban archivos de Compose del template original (ui/theme/Color.kt) que daban error de imports.
+	+ Solución: Eliminar la carpeta ui/theme/ entera ya que el proyecto usa XML puro.
+	▼ Problema 3: Al arrancar la app petaba con "You need to use a Theme.AppCompat theme". El tema del template no era compatible con AppCompatActivity.
+	+ Solución: Cambiar el parent del tema en themes.xml a Theme.MaterialComponents.Light.NoActionBar.
 
+↪19.03.2026 :
+	Hoy comienzo el día con muchas ganas de trabajar. Creo que podré adelantar el final del srpint2 a lo largo del día y empezar a ponerme con el sprint3 para tener la semana que viene más tiempo para leer los libros de las asignaturas.
+	▼ Problema : He tenido movida con los certificados SSL  en el PC del trabajo porque 
+**Tarea para esta tarde**
+	Mi tarea para esta tarde será probar el flujo pulsar '+', rellenar el formulario, darle a "Guardar" y ver la tarjeta aparecer en el escaparate
 
 
 --- SÍMBOLOGÍA---
