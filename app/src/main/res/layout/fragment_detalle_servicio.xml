@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    fragment_detalle_servicio.xml
+    Pantalla de detalle de un servicio. Muestra toda la información
+    y permite al propietario editar o eliminar el servicio.
+-->
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Pictograma grande -->
+        <ImageView
+            android:id="@+id/ivPictogramaDetalle"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:contentDescription="@string/desc_pictograma"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- Título -->
+        <TextView
+            android:id="@+id/tvTituloDetalle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@id/ivPictogramaDetalle"
+            app:layout_constraintStart_toEndOf="@id/ivPictogramaDetalle"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Categoría -->
+        <TextView
+            android:id="@+id/tvCategoriaDetalle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/tvTituloDetalle"
+            app:layout_constraintStart_toEndOf="@id/ivPictogramaDetalle"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Coste -->
+        <TextView
+            android:id="@+id/tvCosteDetalle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/tvCategoriaDetalle"
+            app:layout_constraintStart_toEndOf="@id/ivPictogramaDetalle"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Separador -->
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintTop_toBottomOf="@id/ivPictogramaDetalle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Label descripción -->
+        <TextView
+            android:id="@+id/tvLabelDescripcion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/label_descripcion_detalle"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Descripción del servicio -->
+        <TextView
+            android:id="@+id/tvDescripcionDetalle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/tvLabelDescripcion"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Estado -->
+        <TextView
+            android:id="@+id/tvEstadoDetalle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/tvDescripcionDetalle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Fecha de publicación -->
+        <TextView
+            android:id="@+id/tvFechaDetalle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@id/tvEstadoDetalle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Botón Editar -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEditar"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/btn_editar"
+            app:layout_constraintTop_toBottomOf="@id/tvFechaDetalle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnEliminar" />
+
+        <!-- Botón Eliminar -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEliminar"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/btn_eliminar"
+            app:backgroundTint="#D32F2F"
+            app:layout_constraintTop_toBottomOf="@id/tvFechaDetalle"
+            app:layout_constraintStart_toEndOf="@id/btnEditar"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

@@ -77,13 +77,13 @@ class EscaparateFragment : Fragment() {
      */
     private fun configurarRecyclerView() {
         adapter = ServicioAdapter { servicio ->
-            // TODO: Navegar al detalle del servicio
-            // findNavController().navigate(
-            //     EscaparateFragmentDirections.actionEscaparateToDetalle(servicio.idServicio)
-            // )
+            val bundle = Bundle().apply {
+                putInt("servicioId", servicio.idServicio)
+            }
+            findNavController().navigate(R.id.action_escaparate_to_detalle, bundle)
+            rvEscaparate.layoutManager = LinearLayoutManager(requireContext())
+            rvEscaparate.adapter = adapter
         }
-        rvEscaparate.layoutManager = LinearLayoutManager(requireContext())
-        rvEscaparate.adapter = adapter
     }
 
     /**

@@ -76,7 +76,8 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "vecindapp_db"
                 )
-                    .fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigration(false)
+                    .addCallback(SeedDatabaseCallback())
                     .build()
                 INSTANCE = instance
                 instance

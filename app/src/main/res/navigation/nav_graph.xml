@@ -1,19 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    nav_graph.xml
-    Grafo de navegación de VecindApp.
-
-    Define todos los destinos (fragments) de la app y las acciones
-    de navegación entre ellos. El Navigation Component usa este archivo
-    para saber cómo moverse entre pantallas.
-
-    Destinos principales (BottomNav):
-      - escaparateFragment (pantalla de inicio)
-      - historialFragment
-      - perfilFragment
-
-    Destinos secundarios (se navega desde otros fragments):
-      - crearServicioFragment (desde escaparate, botón FAB '+')
+    nav_graph.xml (ACTUALIZADO)
+    Añadido: detalleServicioFragment con argumento servicioId.
+    Añadida: action desde escaparate hacia detalle.
 -->
 <navigation
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -34,6 +23,11 @@
         <action
             android:id="@+id/action_escaparate_to_crearServicio"
             app:destination="@id/crearServicioFragment" />
+
+        <!-- Navegar al detalle de un servicio -->
+        <action
+            android:id="@+id/action_escaparate_to_detalle"
+            app:destination="@id/detalleServicioFragment" />
     </fragment>
 
     <fragment
@@ -55,5 +49,17 @@
         android:name="com.example.vecindapp.ui.servicio.CrearServicioFragment"
         android:label="@string/titulo_crear_servicio"
         tools:layout="@layout/fragment_crear_servicio" />
+
+    <fragment
+        android:id="@+id/detalleServicioFragment"
+        android:name="com.example.vecindapp.ui.servicio.DetalleServicioFragment"
+        android:label="Detalle"
+        tools:layout="@layout/fragment_detalle_servicio">
+
+        <!-- Argumento: ID del servicio a mostrar -->
+        <argument
+            android:name="servicioId"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>

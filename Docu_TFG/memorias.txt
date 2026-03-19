@@ -111,12 +111,26 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 	▼ Problema: El IDE marcaba warnings por usar `launchWhenStarted` en el Fragment, ya que está obsoleto (deprecated).
 	+ Solución: Se refactoriza el código sustituyéndolo por un simple `launch` combinado con `repeatOnLifecycle(Lifecycle.State.STARTED)`, que es la recomendación actual de Google para observar flujos de forma segura según el ciclo de vida de la vista.
  
-18.0.2026 : 
+↪18.03.2026 : 
 	Hoy no me ha cundido mucho porque por la mañana, en el trabajo, no he tenido la oportunidad de leer y entender bien la capa de UI. Además la tarde la he tenido liada con otras cosas asi que para hoy a última hora me he puesto un rato con:
 	↳ Implementacion de Navigation Component (`nav_graph.xml`) para que `MainActivity` cargue el `EscaparateFragment` al inicio.
 	↳ Desarrollar la operación "Create" del CRUD: Formulario de alta de servicio y navegación desde el Floating Action Button.
 
-***Comletar día 18 y repasar el feat de ayer!
+⇢ Se implementa Navigation Component (nav_graph.xml, BottomNavigationView, menu_bottom_nav.xml).
+↳ Se crean Fragments placeholder para Historial, Perfil y CrearServicio.
+↳ Se añade el FAB (botón '+') al escaparate para navegar al formulario de crear servicio.
+	▼ Problema 1: El nav_graph.xml lo había puesto en res/nav_graph/ en vez de res/navigation/. Gradle no reconocía la carpeta.
+	+ Solución: Mover el archivo a la carpeta correcta res/navigation/.
+	▼ Problema 2: Quedaban archivos de Compose del template original (ui/theme/Color.kt) que daban error de imports.
+	+ Solución: Eliminar la carpeta ui/theme/ entera ya que el proyecto usa XML puro.
+	▼ Problema 3: Al arrancar la app petaba con "You need to use a Theme.AppCompat theme". El tema del template no era compatible con AppCompatActivity.
+	+ Solución: Cambiar el parent del tema en themes.xml a Theme.MaterialComponents.Light.NoActionBar.
+
+↪19.03.2026 :
+	Hoy comienzo el día con muchas ganas de trabajar. Creo que podré adelantar el final del srpint2 a lo largo del día y empezar a ponerme con el sprint3 para tener la semana que viene más tiempo para leer los libros de las asignaturas.
+	▼ Problema : He tenido movida con los certificados SSL  en el PC del trabajo porque 
+**Tarea para esta tarde**
+	Mi tarea para esta tarde será probar el flujo pulsar '+', rellenar el formulario, darle a "Guardar" y ver la tarjeta aparecer en el escaparate
 
 
 --- SÍMBOLOGÍA---
