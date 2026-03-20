@@ -139,8 +139,13 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 	+ Solución 3: Mover las asignaciones de layoutManager y adapter fuera del lambda del constructor de ServicioAdapter. Las tarjetas comenzaron a renderizarse inmediatamente.
 ⇢ Gestión de ramas (Git Workflow): Se creó una rama paralela `bugfix/escaparate` para aislar la corrección del problema del RecyclerView. Una vez solucionado, se fusionó limpiamente en la rama del sprint.
 ⇢ FIN DEL SPRINT 2: Se realiza un `git merge --no-ff` de la rama `sprint2` hacia la rama `desarrollo` con el mensaje "feat: CRUD completo - Crear, Detalle, Editar, Eliminar servicios", dejando un historial claro y documentado.
-
- 
+⇢ !!!SE DA COMIENTO AL SPRINT 3: Módulo de transacciones!!!
+⇢ Implementar , en pantalla del detalle de cada tarjeta funcionalidad para el botón "solicitar servicio".
+	↳ Agrego un segundo usuario "María" en la SeedDB y un servicio a su nombre para simular entorno real donde solicitar un servicio que no es del mismo usuario con el que estas falsamente registrado. 
+⇢ Pruebas funcionales: 
+	↳ Se comprueba que el servicio creado desde la Seed se muestra correctamente en el escaparate. Al hacer clic sobre él se muestra el detalle y "solicitar servicio" funciona correctamente al hacer clic sobre el botón. El diálogo también funciona correctamente  y también el 'escape' al pulsar fuera del cuadro del dialogo. Al volver al escaparate ya no se ve el servicio debido a que ahora en en escaparate sólo se muestran los servicios activos. ..
+	▼ Problema: Se ve que cuando entras al layout detalles se muestran brevemente todos los botones y rápidamente se ocultan quedando sólamente el boton "solicitar servicio", lo que hace que la app tenga poco nivel. 
+	+ Solución : He corregido poniendo android:visibility="invisible" porque si pongo "gone" tendré problemas a futuro para dejarlos bonitos.
 
 
 
