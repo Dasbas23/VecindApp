@@ -1,4 +1,4 @@
-↪06.03.2026 : 
+↪ 06.03.2026 : 
 	He empezado con cierta incertidumbre ya que me han concedido el APTO. Como no sé muy bien por dónde empezar, he empezado por preguntar a Gemini y a Claude. He decidido que quiero un estilo moderno pero que sea sencillo e intuitivo. Ya veremos cómo hacerlo... 
 	Se piden varios bocetos para inspirarme en Gemini con Nano banana. Estoy viendo un vídeo de "Programador X" en YT para ver cómo empezar. Hace hincapié en la escalabilidad y el diseño, es casi que lo más importante. Una de las conclusiones que he sacado es que voy a utilizar una metodología ágil "SCRUM" con "Kanban" para tener un seguimiento y control, sprints de 1 semana.
 ⇢ Poner botón para activar el TTS parece ser una buena idea.
@@ -16,7 +16,7 @@
 	↳ Como usuario quiero poder buscar/ver las distintas ofertas (y solicitudes) que se brindan por parte de los usuarios.
 	↳ Quiero poder publicar una alerta de ayuda y también quiero poder publicar una solicitud.
 
-↪10.03.2026 : 
+↪ 10.03.2026 : 
 	Ayer Claude me preparó unos diagramas para entregarlos y poder recibir feedback. Como quiero desarrollar la app por mi cuenta y por mucho que me de las cosas hechas, quiero utilizarlo más bien de guía y así hacerlo un poco a mi estilo. Sí es cierto que sin ayuda de los LLM andaría bastante más perdido. 
 ⇢ He clonado el repositorio de Git en el PC del trabajo para poder trabajar desde los dos lados.
 	▼ Problema -> En AndroidStudio no se me actualizaba la carpeta .gradle porque no se descargaba.
@@ -33,12 +33,12 @@
 		+ Solución -> He comprendido que estaba mezclando el modelo conceptual con el físico. En el físico SÍ hay que ponerlas. Además, he asimilado el concepto de "Multiplicidad de Roles": las 4 flechas apuntan al mismo id_usuario, pero cada una tiene un rol distinto en la historia (comprador, vendedor, valorador, valorado). Esto me evita crear tablas redundantes y mantiene la BD normalizada. Me lo apunto para lucirme explicándolo en la memoria del TFG.
 ⇢ Hacer un git push con la actualización del día.
 
-↪11.03.2026 :
+↪ 11.03.2026 :
 	Tras encontrar mis memorias escritas del día 6, que daba por perdidas, me pongo con el diagrama de clases. He ido haciendo iteraciones sobre el esqueleto de un diagrama con 10 clases hasta dejarlo a mi gusto.
 	▼ Problema: Al importar el código XML generado por la IA en draw.io, los títulos de las clases no se renderizaban bien  y al tocar cualquier cosa se descuajeringaban de lugar las tablas.
 	+ Solución 1: Había que añadir la propiedad "html=1;" en el estilo de cada swimlane (contenedor de la clase) para que diagrams.net interpretara correctamente el código HTML de los títulos. He tenido que pedirle nuevamente a la IA que utilizara una template que había creado yo sombre como lo quería pero el trabajo tedioso de completarlo, se lo ha llevado la IA.
 
-↪12.03.2026 :
+↪ 12.03.2026 :
 	Terminar de maquetar el diagrama de clases y ententer su funcionamiento: Tras añadir las clases que faltaban (DetalleViewModel, TransaccionRepository y ValoracionRepository), el diagrama queda cerrado con 13 clases en total estructuradas en 5 capas. 
 	▼ Problema 1: Tenía una confusión  importante entre "Android Jetpack" y "Jetpack Compose" y pensaba que tendría que volver refolmular cassi todo.
 	+ Solución 1: Tras revisar la propuesta ("Generaré entornos gráficos basados en XML"), he aclarado que lo que no debo usar es Compose (que es la librería UI). El resto de la familia Android Jetpack (Room, ViewModel, WorkManager) es el estándar nativo y perfectamente válido. Gracias a haber elegido Clean Architecture, el único cambio que he tenido que hacer es modificar el diagrama para que la Vista sea "XML / Activity" en lugar de "Compose". Todo el núcleo lógico se mantiene intacto.
@@ -50,18 +50,18 @@
 	↳ Continuar creando la estructura de carpetas (paquetes) del proyecto en Android Studio.
 	↳ Ponerme con el diseño de la base de datos (Entidades de Room) o con el diseño de las interfaces en XML.
 
-↪13.03.2026 : 
+↪ 13.03.2026 : 
 	No me ha cundido mucho hoy. Se ha abierto el plazo para la entrega del Feedback y me la he estado leyendo las condiciones.
 		↳ He pedido otro informe a Claude , basado en el de Gemini y me reafirma que no existe nada parecido a mi idea publicado hasta la fecha. Nada que combine la accesibilidad con ARASAAC y bancos dehoras vecinales.
 ⇢He preparado ClaudeCode en mi PC para que me ayude a futuro con la programación de la app.
-
-↪14.03.2026 :
+ 
+↪ 14.03.2026 :
 	He empezado la mañana un poco disperso. Creo que al ser mi primer trabajo "cientifico" no sé muy bien por donde tirar y me está costando centrarme.
 	▼ Problema: No se muy bien como maquetar la introducción en conctredo la moativación y el abstract.
 	+ Solución: He pedido ayuda a Irene y me ha explicado como lo está haciendo ellas así que todo lo que me ha dicho ella me ha servido para tener una mejor visión de como he de esctructurar toda la información para que posteriormente sea ententible y no sea un "revuelto" de ideas sin estructura.
 		↳  Aplicar el consejo de Irene: He reestructurado el "Estado del Arte" y la "Introducción". Ahora empiezo explicando qué son los Bancos de Tiempo y el sistema ARASAAC (el contexto) antes de pasar a la motivación y a criticar otras apps del mercado. Le da un enfoque mucho más académico y profesional.
 
-↪15.03.2026 :
+↪ 15.03.2026 :
 	Por la mañana he estado redactado el "Abstract" y el "Estado del arte" y me ha  ido quedando muy  bien. Estoy basntante contento por como está quedando. 
 		↪Pienso que podría invesigar y ahondar aun más pero es muy probable que no reciba demasiada importancia toda esta ivestigación por parte del profesorado.
 ⇢ Por la tarde he seguido ivestigando para terminar el estado del arte y lo he dejado bien bien. Creo que lo he defendido muy bien. Ahh y también una tabla comparativa de plataformas 
@@ -74,7 +74,7 @@
 	+ Solución 2: En cuantto a las fuentes, he tenido que ir repasando una a una todas la citas y ver que estaba bien y que no para así estar seguro en el momento de dejarlo escrito o quitarlo. Asi que bueno la mayoría era información buena pero las citas de las fuentes es algo que tengo que dejar bien pulido para antes de la entrega.
 Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré mañana. Lo cierto es que me está gustando hacer las memorias aunque es algo complicado pero creo que me ayuda a poder organizarme los pensamientos a la hora de plasmar tanto conocimiento que estoy adquiriendo y creo que a futuro también me vendrá genial para poder repasarlo y volver a tener la oportunidad de volver a realizar tremendo documento técnico. 
 
-↪16.03.2026 :
+↪ 16.03.2026 :
 	Comienzo el día añadiendo el punto 3 "Metodología usada" a la entrega para el feedback. 
 		↳ Se ha copiado texto literal del libro "Entornos de Desarrollo".Se ha añadido una imagen representativa de SCRUM gerneada por NanoBanana(he añadido observacion "generada con IA")   ¿Debería citarlo en las fuentes? ¿De que manera? ¿Debería citar las IA como herramientas de uso en bibliografía o en metodología?
 ⇢ He añadido para la entrega del feedback el punto 6.1 "Requisitos funcionales" divididos en subpuntos [a,b,c,d] con tablas de 3 columnas [RF, descripcion , Estado]
@@ -88,7 +88,7 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 	▼ Problema: El problema era que l intentar usar `kotlin("kapt")` en los plugins, Gradle petaba dando el error "Plugin not found". El motivo es que no tenía la versión definida en el nuevo catálogo de versiones (libs.versions.toml), por lo que Gradle no sabía de dónde descargarlo.
 	+ Solución: En vez de pelearme para arreglar KAPT, he decidido actualizar el proyecto y migrar directamente a KSP (Kotlin Symbol Processing), que es la herramienta moderna que lo sustituye. Para hacerlo funcionar, declaré el plugin KSP con su versión en el archivo .toml, lo registré en el build.gradle del proyecto general (Top-level) con `apply false`, y finalmente cambié los `kapt(...)` de las dependencias de Room por `ksp(...)` en el módulo de la app. Como beneficio extra, KSP es bastante más rápido compilando código Kotlin, ¡así que la app compilará mejor! Tras la modificacion de esas líneas ha compilado  bien. Espero que en ordenador del trabajo funcione bien a la primera y no tenga que tocar nada raro.
 
-↪17.03.2026 : 
+↪ 17.03.2026 : 
 	Se da comienzo con el Sprint2 bbdd+escaparate, donde haré el módulo de servicios CRUD completo y el recyclerview del escaparate.
 ⇢ Lo primero es renombrar la rama main → desarrollo y después una nueva rama sprint2
 	↳ Cambiar el nombre a rama. Eliminar la rama "master" em local y en remoto habiendo puedo como default la rama "desarrollo" antes de eliminar.	
@@ -111,7 +111,7 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 	▼ Problema: El IDE marcaba warnings por usar `launchWhenStarted` en el Fragment, ya que está obsoleto (deprecated).
 	+ Solución: Se refactoriza el código sustituyéndolo por un simple `launch` combinado con `repeatOnLifecycle(Lifecycle.State.STARTED)`, que es la recomendación actual de Google para observar flujos de forma segura según el ciclo de vida de la vista.
  
-↪18.03.2026 : 
+↪ 18.03.2026 : 
 	Hoy no me ha cundido mucho porque por la mañana, en el trabajo, no he tenido la oportunidad de leer y entender bien la capa de UI. Además la tarde la he tenido liada con otras cosas asi que para hoy a última hora me he puesto un rato con:
 	↳ Implementacion de Navigation Component (`nav_graph.xml`) para que `MainActivity` cargue el `EscaparateFragment` al inicio.
 	↳ Desarrollar la operación "Create" del CRUD: Formulario de alta de servicio y navegación desde el Floating Action Button.
@@ -126,7 +126,7 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 	▼ Problema 3: Al arrancar la app petaba con "You need to use a Theme.AppCompat theme". El tema del template no era compatible con AppCompatActivity.
 	+ Solución: Cambiar el parent del tema en themes.xml a Theme.MaterialComponents.Light.NoActionBar.
 
-↪19.03.2026 :
+↪ 19.03.2026 :
 	Hoy comienzo el día con muchas ganas de trabajar. Creo que podré adelantar el final del srpint2 a lo largo del día y empezar a ponerme con el sprint3 para tener la semana que viene más tiempo para leer los libros de las asignaturas.
 	▼ Problema : He tenido movida con los certificados SSL  en el PC del trabajo porque el PC del trabajo no compilaba. Gradle lanzaba un error `PKIX path building failed` al intentar descargar `room-compiler`. Esto ocurría porque el firewall corporativo (Zscaler) interceptaba la conexión SSL y Java no reconocía su certificado, bloqueando la descarga por seguridad.
 	+ Solución 1: Extraje el certificado de Zscaler en formato `.der`, lo importé usando `keytool` al almacén de certificados local (`cacerts`) y configuré el `gradle.properties` global para que usara este trustStore modificado. Tras reiniciar el daemon de Gradle y hacer un Rebuild, compiló perfectamente.
@@ -138,7 +138,7 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
   el Adapter se estaban asignando dentro del lambda del onClick en vez de fuera, por lo que nunca se ejecutaban.
 	+ Solución 3: Mover las asignaciones de layoutManager y adapter fuera del lambda del constructor de ServicioAdapter. Las tarjetas comenzaron a renderizarse inmediatamente.
 ⇢ Gestión de ramas (Git Workflow): Se creó una rama paralela `bugfix/escaparate` para aislar la corrección del problema del RecyclerView. Una vez solucionado, se fusionó limpiamente en la rama del sprint.
-⇢ FIN DEL SPRINT 2: Se realiza un `git merge --no-ff` de la rama `sprint2` hacia la rama `desarrollo` con el mensaje "feat: CRUD completo - Crear, Detalle, Editar, Eliminar servicios", dejando un historial claro y documentado.
+⇢ !!!FIN DEL SPRINT 2!!!: Se realiza un `git merge --no-ff` de la rama `sprint2` hacia la rama `desarrollo` con el mensaje "feat: CRUD completo - Crear, Detalle, Editar, Eliminar servicios", dejando un historial claro y documentado.
 ⇢ !!!SE DA COMIENTO AL SPRINT 3: Módulo de transacciones!!!
 ⇢ Implementar , en pantalla del detalle de cada tarjeta funcionalidad para el botón "solicitar servicio".
 	↳ Agrego un segundo usuario "María" en la SeedDB y un servicio a su nombre para simular entorno real donde solicitar un servicio que no es del mismo usuario con el que estas falsamente registrado. 
@@ -147,14 +147,17 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 	▼ Problema: Se ve que cuando entras al layout detalles se muestran brevemente todos los botones y rápidamente se ocultan quedando sólamente el boton "solicitar servicio", lo que hace que la app tenga poco nivel. 
 	+ Solución : He corregido poniendo android:visibility="invisible" porque si pongo "gone" tendré problemas a futuro para dejarlos bonitos.
 
-
-
-
-
+↪ 20.03.2026 :
+	La idea es continuar con el S3 donde voy a hacer la pantalla de transacciones  para ver las solicitudes pendientes para aceptarlas , completarlas o cancelarlas. Si me da tiempo comenzaré con la lógica "atómica".
+⇢ 
+**Tareas** para esta tarde
+- En TransacctionAdapter: Cambiar los botones de INVISIBLE a GONE. Se ponen así para que el desarrollo sea más facil por ahora. Finalmente será necesario GONE para que colapsen y no ocupen espacio.
+- Repasar nav_graph.xml: Entender y ver el objetivo de este archivo. Me gusta que desde escaparateFragment salen flechas hacia crearServicioFragment y detalleServicioFragment. Observo que que el resto no van relacionados con flechas y no sé si hace falta. 
+-Para probar: desinstala y reinstala (por el seed). Crea un servicio tuyo → ve al servicio de María ("Clases de inglés") → solicitar → ve a la pestaña "Transacciones" → verás la transacción PENDIENTE como COMPRADOR. Como eres el comprador, solo puedes cancelar. Para probar "Aceptar" y "Completar" tendrías que simular ser María (te lo explico si lo necesitas).
 --- SÍMBOLOGÍA---
 Día nuevo:        ↪
 Paso / Tarea:     ⇢
-Subpaso / Detalle: ↳
+Subpaso / Detalle: 
 Problema:         ▼
 Solución:         +
 ------------------------------------

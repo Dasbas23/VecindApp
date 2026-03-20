@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    nav_graph.xml (ACTUALIZADO)
-    Añadido: detalleServicioFragment con argumento servicioId.
-    Añadida: action desde escaparate hacia detalle.
+    nav_graph.xml (ACTUALIZADO — Sprint 3)
+    Añadido: transaccionFragment como pestaña del BottomNav.
 -->
 <navigation
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,16 +18,20 @@
         android:label="@string/nav_escaparate"
         tools:layout="@layout/fragment_escaparate">
 
-        <!-- Navegar al formulario de crear servicio -->
         <action
             android:id="@+id/action_escaparate_to_crearServicio"
             app:destination="@id/crearServicioFragment" />
 
-        <!-- Navegar al detalle de un servicio -->
         <action
             android:id="@+id/action_escaparate_to_detalle"
             app:destination="@id/detalleServicioFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/transaccionFragment"
+        android:name="com.example.vecindapp.ui.transaccion.TransaccionFragment"
+        android:label="@string/nav_transacciones"
+        tools:layout="@layout/fragment_transacciones" />
 
     <fragment
         android:id="@+id/historialFragment"
@@ -56,7 +59,6 @@
         android:label="Detalle"
         tools:layout="@layout/fragment_detalle_servicio">
 
-        <!-- Argumento: ID del servicio a mostrar -->
         <argument
             android:name="servicioId"
             app:argType="integer" />

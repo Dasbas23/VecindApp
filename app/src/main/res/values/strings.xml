@@ -44,4 +44,17 @@
     <string name="titulo_confirmar_solicitud">Solicitar servicio</string>
     <string name="mensaje_confirmar_solicitud">¿Quieres solicitar este servicio? Se te debitarán %.1f horas al completarse.</string>
     <string name="servicio_solicitado">Servicio solicitado correctamente</string>
+
+    <!-- ═══ Transacciones ═══ -->
+    <string name="nav_transacciones">Transacciones</string>
+    <string name="transacciones_vacio">No tienes transacciones</string>
+    <string name="btn_aceptar">Aceptar</string>
+    <string name="btn_completar">Completar</string>
+    <string name="btn_confirmar_cancelar">Sí, cancelar</string>
+    <string name="titulo_confirmar_aceptar">Aceptar solicitud</string>
+    <string name="mensaje_confirmar_aceptar">¿Quieres aceptar esta solicitud de servicio?</string>
+    <string name="titulo_confirmar_completar">Completar transacción</string>
+    <string name="mensaje_confirmar_completar">¿Confirmas que el servicio se ha realizado? Se transferirán %.1f horas.</string>
+    <string name="titulo_confirmar_cancelar_transaccion">Cancelar transacción</string>
+    <string name="mensaje_confirmar_cancelar_transaccion">¿Estás seguro? El servicio volverá al escaparate.</string>
 </resources>

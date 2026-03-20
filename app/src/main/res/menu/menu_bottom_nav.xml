@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    menu_bottom_nav.xml
-    Define las pestañas de la barra de navegación inferior.
-    Cada item debe tener un id que coincida con el id del fragment
-    en el nav_graph.xml para que NavigationUI los enlace automáticamente.
+    menu_bottom_nav.xml (ACTUALIZADO — Sprint 3)
+    4 pestañas: Escaparate, Transacciones, Historial, Perfil.
+    Los ids deben coincidir con los del nav_graph.xml.
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Pestaña 1: Escaparate (catálogo de servicios) -->
     <item
         android:id="@+id/escaparateFragment"
         android:icon="@android:drawable/ic_menu_search"
         android:title="@string/nav_escaparate" />
 
-    <!-- Pestaña 2: Historial de transacciones -->
+    <item
+        android:id="@+id/transaccionFragment"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="@string/nav_transacciones" />
+
     <item
         android:id="@+id/historialFragment"
         android:icon="@android:drawable/ic_menu_recent_history"
         android:title="@string/nav_historial" />
 
-    <!-- Pestaña 3: Perfil del vecino -->
     <item
         android:id="@+id/perfilFragment"
         android:icon="@android:drawable/ic_menu_myplaces"
