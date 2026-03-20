@@ -65,4 +65,10 @@
     <string name="label_intercambios">intercambios</string>
     <string name="label_mis_servicios">Mis servicios</string>
     <string name="perfil_sin_servicios">No has publicado ningún servicio</string>
+
+    <!-- ═══ Historial ═══ -->
+    <string name="label_completadas">Transacciones completadas</string>
+    <string name="historial_vacio">Aún no has completado ninguna transacción</string>
+    <string name="grafico_sin_datos">Sin datos para el gráfico</string>
+    <string name="formato_historial_horas">%s%.1f h</string>
 </resources>

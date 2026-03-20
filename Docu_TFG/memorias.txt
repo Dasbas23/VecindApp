@@ -151,17 +151,19 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 	La idea es continuar con el S3 donde voy a hacer la pantalla de transacciones  para ver las solicitudes pendientes para aceptarlas , completarlas o cancelarlas. Si me da tiempo comenzaré con la lógica "atómica".
 	↳ Me estoy dando cuenta de que Strings.xml es genial y super fácil más tarde para la hora de hacer que todo el sistema esté en otro idioma. Creo que la teoría es crear otro "strings_en" por ejemplo y cambiar los datos del español al inglés. 
 	↳ Observo que cada día que ha ido pasando he ido escribiendo más y más cosas en mi diario. Lo cuál me indica que he pasado de montar algo básico como un esqueleto de una app que consulta datos en una base de datos y los pinta en 2 layouts. Y eso me encanta porque significa que estoy aprendiendo un montón :). De hecho me gustaría abrir un nuevo apartado, que creo que será dentro de este mismo diario, con las cosas que he ido aprendiendo y las dudas que he tenido. Además creo que me podrá servir a la hora de montar las memorias.
-⇢ He cerrado el S3 !! ...casi sin darme cuenta... Ha sido bastante corto.
-	↳
-⇢ Por lo pronto he tenido que reorganizar los sprints porque a claude s ele ha ido la olla y no me ha hecho ni commits ni historias y me ha preguntando que por donde seguimos. He tenido que pararle los pies un poco pero vamos que al fin y al cabo es una IA y el que tiene que tomar las decisiones de como actuar soy yo así que es 100% mi culpa. 
+	Si es que al final la app del diario... iba a servir para cosas como esta.. e incluso si se desarrollara mucho más se podría llevar a una metodología de trabajo, aunque a la vez que pienso esto, digo que para eso existen los ERPs. ¿No?
+⇢ Para hacer la pantalla transacciones me he encontrado con que la lógica atómica era bastante compleja donde lo más importante era 'completarTransaccion()'
+	↳ Las *Pruebas funcionales* ⇢ han funcionado según lo esperado donde podía solicitar un servicio creado por María, usuario y servicio metido en la Seed par hacer pruebas. Este servicio aparece en mis transacciones como "pendiente" o "cancelado" que es lo que estabamos esperando. Tras cancelar la solicitud, esta aparece nuevamente en el escaparte como "disponible" y con la marca de tiempo inalterada, que era una cosa que a mi me preocupaba. Por otro lado también he comprobado la pantalla del perfil donde se mostraban el saldo de horas, el nivel y el contador de intercambios NO clicables. También aparecen los servicios que he publicado. Lo cierto es que me gustaría que al hacer clic sobre el servicio dede mi perfil, pueda accede al detalle de este y poder editarlo de la misma manera que lo hago a través del escaparate.
+⇢ He cerrado el S3 !! ...casi sin darme cuenta... Ha sido bastante corto:
+⇢ Por lo pronto he tenido que reorganizar los sprints porque a Claude s ele ha ido la olla y no me ha hecho ni commits ni historias y me ha preguntando que por donde seguimos. He tenido que pararle los pies un poco pero vamos que al fin y al cabo es una IA y el que tiene que tomar las decisiones de como actuar soy yo así que es 100% mi culpa. 
 	↳ Como ya me olía que algo así iba a pasar yo ya me había adelantado con el commit para el perfil antes de introducir los cambios necesarios para implementar el historial.
-
-
 **Tareas** para esta tarde
-- En TransacctionAdapter: Cambiar los botones de INVISIBLE a GONE. Se ponen así para que el desarrollo sea más facil por ahora. Finalmente será necesario GONE para que colapsen y no ocupen espacio.
-- Repasar nav_graph.xml: Entender y ver el objetivo de este archivo. Me gusta que desde escaparateFragment salen flechas hacia crearServicioFragment y detalleServicioFragment. Observo que que el resto no van relacionados con flechas y no sé si hace falta. 
--Para probar: desinstala y reinstala (por el seed). Crea un servicio tuyo → ve al servicio de María ("Clases de inglés") → solicitar → ve a la pestaña "Transacciones" → verás la transacción PENDIENTE como COMPRADOR. Como eres el comprador, solo puedes cancelar. Para probar "Aceptar" y "Completar" tendrías que simular ser María.
-- Que son las Factory class?? y que quiere decir ": ViewModelProvider.Factory {@Suppress("UNCHECKED_CAST")"
+- En TransacctionAdapter: Cambiar los botones de INVISIBLE a GONE. Se ponen así para que el desarrollo sea más facil por ahora. Finalmente será necesario GONE para que colapsen y no ocupen espacio. [NO]
+- Repasar nav_graph.xml: Entender y ver el objetivo de este archivo. Me gusta que desde escaparateFragment salen flechas hacia crearServicioFragment y detalleServicioFragment. Observo que que el resto no van relacionados con flechas y no sé si hace falta.[OK] Entiendo que no hacen falta las flechas po no ser una navegación secuecial. 
+-Para probar: desinstala y reinstala (por el seed). Crea un servicio tuyo → ve al servicio de María ("Clases de inglés") → solicitar → ve a la pestaña "Transacciones" → verás la transacción PENDIENTE como COMPRADOR. Como eres el comprador, solo puedes cancelar. Para probar "Aceptar" y "Completar" tendrías que simular ser María. [NOK] No he sabico como simular ser María
+- Que son las Factory class?? y que quiere decir ": ViewModelProvider.Factory {@Suppress("UNCHECKED_CAST")" [OK] Sirven para que Android sepa como crear los ViewModels según los parámetros que le pasamos. El supress es para avisar al compilador de que lo que estamos haciendo ya que la Factory es genérica y devuelve una clase T sin parámetros.
+
+
 
 --- SÍMBOLOGÍA---
 Día nuevo:        ↪

@@ -10,14 +10,13 @@
 
 ## Estado del Proyecto
 
-| Sprint | Estado     | Contenido |
-|--------|------------|-----------|
-| Sprint 1 | Completado | Estructura base y diagramas |
-| Sprint 2 | Completado | BBDD Room + CRUD servicios + escaparate |
-| Sprint 3 | En proceso | Transacciones (solicitar, aceptar, completar, débito/crédito) |
-| Sprint 4 | Pendiente  | Perfil y valoraciones con pictogramas ARASAAC |
-| Sprint 5 | Pendiente  | Historial y estadísticas (MPAndroidChart) |
-| Sprint 6 | Pendiente  | Accesibilidad, TTS, Glide, WorkManager y pulido visual |
+| Sprint   | Estado     | Contenido                                                    |
+|----------|------------|--------------------------------------------------------------|
+| Sprint 1 | Completado | Estructura base y diagramas                                  |
+| Sprint 2 | Completado | BBDD Room + CRUD servicios + escaparate                      |
+| Sprint 3 | Completado | Transacciones + Perfil + Historial (MPAndroidChart)          |
+| Sprint 4 | En proceso | Selección de usuario + Valoraciones con pictogramas ARASAAC  |
+| Sprint 5 | Pendiente  | Accesibilidad, TTS, Glide, WorkManager y pulido visual       |
 
 ---
 
@@ -37,7 +36,7 @@ El proyecto sigue el patrón **MVVM + Clean Architecture** organizado en 5 capas
 ```
 app/src/main/java/com/example/vecindapp/
 ├── data/                  ← Capa de datos
-│   ├── db/                  AppDatabase, DAOs, TypeConverters
+│   ├── db/                  AppDatabase, DAOs, TypeConverters, SeedDatabaseCallback
 │   ├── entities/            Entidades Room (@Entity)
 │   └── repository/          Implementación de repositorios
 ├── domain/                ← Capa de dominio (lógica de negocio)
@@ -46,9 +45,9 @@ app/src/main/java/com/example/vecindapp/
 │   └── usecase/             Casos de uso
 ├── ui/                    ← Capa de presentación
 │   ├── escaparate/          Catálogo de servicios (RecyclerView)
-│   ├── servicio/            Detalle y publicación de servicio
-│   ├── transaccion/         Aceptar y valorar transacciones
-│   ├── perfil/              Perfil del vecino
+│   ├── servicio/            Detalle, publicación y edición de servicio
+│   ├── transaccion/         Gestión de transacciones (aceptar, completar, cancelar)
+│   ├── perfil/              Perfil del vecino (saldo, nivel, mis servicios)
 │   └── historial/           Gráfico de intercambios (MPAndroidChart)
 └── worker/                ← Tareas en segundo plano (WorkManager)
 ```
@@ -107,10 +106,11 @@ app/src/main/java/com/example/vecindapp/
 
 ## Ramas
 
-| Rama                      | Contenido                               |
-|---------------------------|-----------------------------------------|
-| `desarrollo`              | Rama principal de integración           |
-| `sprint2/bbdd+escaparate` | BBDD Room + CRUD servicios + escaparate |
+| Rama                       | Contenido                                          |
+|----------------------------|----------------------------------------------------|
+| `desarrollo`               | Rama principal de integración                      |
+| `sprint2/bbdd+escaparate`  | BBDD Room + CRUD servicios + escaparate            |
+| `sprint3/transacciones`    | Transacciones + Perfil + Historial                 |
 
 ## Autor
 
