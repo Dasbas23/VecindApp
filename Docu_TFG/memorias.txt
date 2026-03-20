@@ -162,7 +162,8 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 - Repasar nav_graph.xml: Entender y ver el objetivo de este archivo. Me gusta que desde escaparateFragment salen flechas hacia crearServicioFragment y detalleServicioFragment. Observo que que el resto no van relacionados con flechas y no sé si hace falta.[OK] Entiendo que no hacen falta las flechas po no ser una navegación secuecial. 
 -Para probar: desinstala y reinstala (por el seed). Crea un servicio tuyo → ve al servicio de María ("Clases de inglés") → solicitar → ve a la pestaña "Transacciones" → verás la transacción PENDIENTE como COMPRADOR. Como eres el comprador, solo puedes cancelar. Para probar "Aceptar" y "Completar" tendrías que simular ser María. [NOK] No he sabico como simular ser María
 - Que son las Factory class?? y que quiere decir ": ViewModelProvider.Factory {@Suppress("UNCHECKED_CAST")" [OK] Sirven para que Android sepa como crear los ViewModels según los parámetros que le pasamos. El supress es para avisar al compilador de que lo que estamos haciendo ya que la Factory es genérica y devuelve una clase T sin parámetros.
-
+⇢ !!!SE DA COMIENZO AL SPRINT 4: Usuarios + Valoraciones!!!
+	Seguro que será interesantísimo!! Tengo ganas de dejarlo curiosete. ;)
 
 
 --- SÍMBOLOGÍA---
@@ -175,6 +176,27 @@ Solución:         +
 Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir haciendo cosas en el trabajo en el documento VecindApp_Especificaciones_Tecnicas.docx guardado en mi drive secundario en punto 7. Planificación de Desarrolo para intentar seguir el calendario y rellenando con lo que realmente he ido haciendo. Así de esta manera queda más concentrado y no tengo que leerme todas las memorias.
 
 ---------------------------------- Cosas que he ido aprendiendo ----------------------------------
-# Completar esta tarde 20/03 o como tarde el 21/03
+(Actualizado a fin del Sprint 3 - 20.03.2026)
+1. Arquitectura y Patrones de Diseño
+	↳ Clean Architecture: Al principio me costó entender por qué había que separar tanto las capas. Lo pillé del todo cuando me di cuenta de que los Repositorios no pueden "hablar" entre ellos. Si necesito cruzar información de dos entidades, eso le toca al ViewModel (o a un UseCase). Me quedó muy claro cuando tuve que redirigir las flechas en el diagrama de clases.
+	↳ MVVM: He interiorizado que el Fragment es "tonto", solo pinta. El ViewModel es el que aguanta el tipo cuando Android destruye y recrea la pantalla (rotaciones, etc.) y expone los estados mediante StateFlow. El Fragment simplemente observa y reacciona.
+	↳ Inyección de Dependencias Manual: En vez de liarme con Hilt (que para el TFG sería overkill), he aprendido a usar la propia clase Application como contenedor Singleton. Con by lazy solo se instancia la BBDD y los Repositorios una vez al arrancar. Simple y efectivo.
+	↳ Patrón Factory: Me preguntaba por qué había que crear esas clases tan "raras" para los ViewModels. La razón es que Android crea los ViewModels él solito, pero solo sabe hacerlo si tienen el constructor vacío. Como los míos necesitan Repositorios en el constructor, la Factory le explica al sistema "oye, créalo así". El @Suppress("UNCHECKED_CAST") es para callar al compilador cuando hacemos un cast genérico que nosotros sabemos que es correcto pero él no puede verificarlo.
 
-		
+2. Ecosistema Android Moderno
+	↳ StateFlow y Corrutinas: He pasado de pensar en llamadas normales a pensar en flujos. Con .collect la UI se actualiza sola cada vez que cambia algo en la BBDD sin que yo tenga que hacer nada. Y repeatOnLifecycle hace que esto solo pase cuando la pantalla está visible, ahorrando batería. Al principio me parecía magia, ahora tiene todo el sentido.
+	↳ ListAdapter + DiffUtil: He aprendido que repintar todo el RecyclerView cada vez que cambia algo es una burrada. DiffUtil compara las dos listas (la vieja y la nueva) con un algoritmo inteligente y solo actualiza las tarjetas que realmente han cambiado. Elegante y eficiente.
+	↳ Navigation Component: Me ha costado entender el nav_graph.xml pero ya le veo la lógica. La diferencia clave: las flechas/actions son para navegación secuencial (donde pasas argumentos de una pantalla a otra). Los destinos del BottomNavigationView no necesitan flechas porque son de nivel superior y se accede a ellos directamente.
+	↳ Strings.xml e Internacionalización: Esto me ha parecido un descubrimiento. Aislar todos los textos en strings.xml no es solo orden, es la puerta para traducir la app entera. La teoría es crear res/values-en/strings.xml con las traducciones y Android cambia solo según el idioma del dispositivo. Una pasada lo fácil que es.
+
+3. Base de Datos (Room / SQLite)
+	↳ Foreign Keys y Seeds: Lo aprendí a las malas. Intenté guardar un servicio para un usuario que no existía en la BBDD y petó con "Foreign Key constraint failed". La solución fue crear un RoomDatabase.Callback (SeedDatabaseCallback) que mete los datos iniciales (usuario demo, María...) al crear la base de datos por primera vez. Ahora entiendo bien la integridad referencial.
+↳ Migraciones Destructivas: Durante el desarrollo modificas las entidades constantemente. fallbackToDestructiveMigration(false) hace que Room borre y recree la BBDD en vez de crashear cuando detecta un cambio de versión. Para producción sería un desastre, pero para desarrollo es perfecto.
+	↳ Operaciones Atómicas: En vez de cargar un objeto entero en memoria para modificar un solo campo (como el saldo de horas), se puede hacer directamente con @Query("UPDATE...") en el DAO. Más limpio, más eficiente y evita condiciones de carrera.
+
+4. Git, Herramientas y Resolución de Problemas
+	↳ Gestión de ramas: Ya tengo un flujo de trabajo claro. Ramas de sprint para el desarrollo normal, ramas bugfix/ para aislar correcciones concretas, y merge --no-ff para que el historial quede limpio y descriptivo. Me alegra haber cogido el hábito desde el principio.
+	↳ SSL y Zscaler: Menuda odisea en el PC del trabajo. El firewall corporativo intercepta el tráfico HTTPS y Java no reconocía su certificado, así que Gradle no podía descargar dependencias. La solución fue extraer el certificado de Zscaler, importarlo al trustStore de Java con keytool y configurar gradle.properties. Aprendizaje duro pero muy útil.
+	↳ Migración KAPT → KSP: En vez de pelearme para arreglar KAPT (que ya estaba deprecado), investigué la documentación y migré directamente a KSP (Kotlin Symbol Processing), que es la herramienta moderna que lo sustituye. Además compila más rápido. Conclusión: si algo está obsoleto, mejor actualizarse que parchear.
+	↳ SCRUM en la vida real: He comprobado que SCRUM tiene más flexibilidad de la que pensaba. En el Sprint 3 fui más rápido de lo previsto y absorbí trabajo de los Sprints  5 ( Historial y estadísicas). Eso es perfectamente válido, se defiende como "se adelantó trabajo del backlog al tener las dependencias ya resueltas". Lo apunto para la memoria. ;)
+(Actualizado a fin del Sprint 3 - 20.03.2026)
