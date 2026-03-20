@@ -149,11 +149,14 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 
 ↪ 20.03.2026 :
 	La idea es continuar con el S3 donde voy a hacer la pantalla de transacciones  para ver las solicitudes pendientes para aceptarlas , completarlas o cancelarlas. Si me da tiempo comenzaré con la lógica "atómica".
+	↳ Me estoy dando cuenta de que Strings.xml es genial y super fácil más tarde para la hora de hacer que todo el sistema esté en otro idioma. Creo que la teoría es crear otro "strings_en" por ejemplo y cambiar los datos del español al inglés. 
 ⇢ 
 **Tareas** para esta tarde
 - En TransacctionAdapter: Cambiar los botones de INVISIBLE a GONE. Se ponen así para que el desarrollo sea más facil por ahora. Finalmente será necesario GONE para que colapsen y no ocupen espacio.
 - Repasar nav_graph.xml: Entender y ver el objetivo de este archivo. Me gusta que desde escaparateFragment salen flechas hacia crearServicioFragment y detalleServicioFragment. Observo que que el resto no van relacionados con flechas y no sé si hace falta. 
--Para probar: desinstala y reinstala (por el seed). Crea un servicio tuyo → ve al servicio de María ("Clases de inglés") → solicitar → ve a la pestaña "Transacciones" → verás la transacción PENDIENTE como COMPRADOR. Como eres el comprador, solo puedes cancelar. Para probar "Aceptar" y "Completar" tendrías que simular ser María (te lo explico si lo necesitas).
+-Para probar: desinstala y reinstala (por el seed). Crea un servicio tuyo → ve al servicio de María ("Clases de inglés") → solicitar → ve a la pestaña "Transacciones" → verás la transacción PENDIENTE como COMPRADOR. Como eres el comprador, solo puedes cancelar. Para probar "Aceptar" y "Completar" tendrías que simular ser María.
+- Que son las Factory class?? y que quiere decir ": ViewModelProvider.Factory {		@Suppress("UNCHECKED_CAST")"
+
 --- SÍMBOLOGÍA---
 Día nuevo:        ↪
 Paso / Tarea:     ⇢
@@ -162,4 +165,5 @@ Problema:         ▼
 Solución:         +
 ------------------------------------
 Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir haciendo cosas en el trabajo en el documento VecindApp_Especificaciones_Tecnicas.docx guardado en mi drive secundario en punto 7. Planificación de Desarrolo para intentar seguir el calendario y rellenando con lo que realmente he ido haciendo. Así de esta manera queda más concentrado y no tengo que leerme todas las memorias.
+
 		
