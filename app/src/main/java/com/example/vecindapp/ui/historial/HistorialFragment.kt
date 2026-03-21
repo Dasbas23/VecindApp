@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
+import com.example.vecindapp.data.SesionUsuario
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -42,7 +43,8 @@ class HistorialFragment : Fragment() {
 
     private val viewModel: HistorialViewModel by viewModels {
         val app = requireActivity().application as VecindAppApplication
-        HistorialViewModel.Factory(app.transaccionRepository)
+        val sesion = SesionUsuario(requireContext())
+        HistorialViewModel.Factory(app.transaccionRepository, sesion.obtenerUsuarioId())
     }
 
     private lateinit var barChart: BarChart

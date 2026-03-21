@@ -27,7 +27,8 @@ import kotlinx.coroutines.launch
  */
 class PerfilViewModel(
     private val usuarioRepository: UsuarioRepository,
-    private val servicioRepository: ServicioRepository
+    private val servicioRepository: ServicioRepository,
+    private val usuarioActualId: Int
 ) : ViewModel() {
 
     /** Datos del usuario actual. */
@@ -37,9 +38,6 @@ class PerfilViewModel(
     /** Lista de servicios publicados por el usuario. */
     private val _misServicios = MutableStateFlow<List<Servicio>>(emptyList())
     val misServicios: StateFlow<List<Servicio>> = _misServicios
-
-    /** ID del usuario actual. TODO: Obtener del sistema de login/perfil. */
-    private val usuarioActualId = 1
 
     init {
         cargarPerfil()
@@ -83,12 +81,13 @@ class PerfilViewModel(
      */
     class Factory(
         private val usuarioRepository: UsuarioRepository,
-        private val servicioRepository: ServicioRepository
+        private val servicioRepository: ServicioRepository,
+        private val usuarioActualId: Int
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(PerfilViewModel::class.java)) {
-                return PerfilViewModel(usuarioRepository, servicioRepository) as T
+                return PerfilViewModel(usuarioRepository, servicioRepository, usuarioActualId) as T
             }
             throw IllegalArgumentException("ViewModel desconocido: ${modelClass.name}")
         }

@@ -17,6 +17,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
+import com.example.vecindapp.data.SesionUsuario
 import com.example.vecindapp.data.entities.Servicio
 import com.example.vecindapp.domain.model.EstadoServicio
 import com.google.android.material.button.MaterialButton
@@ -39,8 +40,10 @@ import java.util.Locale
  */
 class DetalleServicioFragment : Fragment() {
 
-    /** ID del usuario actual. TODO: Obtener del sistema de login/perfil. */
-    private val usuarioActualId = 1
+
+    private val usuarioActualId: Int by lazy {
+        SesionUsuario(requireContext()).obtenerUsuarioId()
+    }
 
     private val viewModel: DetalleServicioViewModel by viewModels {
         val app = requireActivity().application as VecindAppApplication

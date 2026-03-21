@@ -43,7 +43,8 @@ class PerfilFragment : Fragment() {
 
     private val viewModel: PerfilViewModel by viewModels {
         val app = requireActivity().application as VecindAppApplication
-        PerfilViewModel.Factory(app.usuarioRepository, app.servicioRepository)
+        val sesion = SesionUsuario(requireContext())
+        PerfilViewModel.Factory(app.usuarioRepository, app.servicioRepository, sesion.obtenerUsuarioId())
     }
 
     private lateinit var ivAvatar: ImageView
@@ -85,7 +86,13 @@ class PerfilFragment : Fragment() {
         val btnCerrarSesion = view.findViewById<MaterialButton>(R.id.btnCerrarSesion)
         btnCerrarSesion.setOnClickListener {
             SesionUsuario(requireContext()).cerrarSesion()
-            findNavController().navigate(R.id.loginFragment)
+            findNavController().navigate(
+                R.id.loginFragment,
+                null,
+                androidx.navigation.NavOptions.Builder()
+                    .setPopUpTo(R.id.nav_graph, true)  // Limpia TODA la pila
+                    .build()
+            )
         }
     }
 

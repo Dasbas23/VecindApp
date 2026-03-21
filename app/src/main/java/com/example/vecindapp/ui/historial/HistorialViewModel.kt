@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+
 /**
  * ViewModel para la pantalla de historial.
  *
@@ -31,7 +32,8 @@ import java.util.Locale
  * @see HistorialFragment
  */
 class HistorialViewModel(
-    private val transaccionRepository: TransaccionRepository
+    private val transaccionRepository: TransaccionRepository,
+    private val usuarioActualId: Int
 ) : ViewModel() {
 
     /** Transacciones completadas para la lista. */
@@ -42,8 +44,7 @@ class HistorialViewModel(
     private val _datosGrafico = MutableStateFlow<List<DatoMensual>>(emptyList())
     val datosGrafico: StateFlow<List<DatoMensual>> = _datosGrafico
 
-    /** ID del usuario actual. TODO: Obtener del sistema de login/perfil. */
-    private val usuarioActualId = 1
+
 
     init {
         cargarHistorial()
@@ -99,12 +100,13 @@ class HistorialViewModel(
      * Factory para crear [HistorialViewModel].
      */
     class Factory(
-        private val transaccionRepository: TransaccionRepository
+        private val transaccionRepository: TransaccionRepository,
+        private val usuarioActualId: Int
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(HistorialViewModel::class.java)) {
-                return HistorialViewModel(transaccionRepository) as T
+                return HistorialViewModel(transaccionRepository, usuarioActualId) as T
             }
             throw IllegalArgumentException("ViewModel desconocido: ${modelClass.name}")
         }

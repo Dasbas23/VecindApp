@@ -50,6 +50,7 @@ dependencies {
     // Room
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+    implementation(libs.androidx.espresso.core)
     ksp(libs.room.compiler)
 
     // Navigation

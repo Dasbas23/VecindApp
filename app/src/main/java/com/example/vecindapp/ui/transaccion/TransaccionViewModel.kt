@@ -46,7 +46,8 @@ import kotlinx.coroutines.launch
 class TransaccionViewModel(
     private val transaccionRepository: TransaccionRepository,
     private val servicioRepository: ServicioRepository,
-    private val usuarioRepository: UsuarioRepository
+    private val usuarioRepository: UsuarioRepository,
+    private val usuarioActualId: Int
 ) : ViewModel() {
 
     /** Lista enriquecida de transacciones para la UI. */
@@ -56,9 +57,6 @@ class TransaccionViewModel(
     /** Mensaje de feedback para el usuario. */
     private val _mensaje = MutableStateFlow<String?>(null)
     val mensaje: StateFlow<String?> = _mensaje
-
-    /** ID del usuario actual. TODO: Obtener del sistema de login/perfil. */
-    private val usuarioActualId = 1
 
     init {
         cargarTransacciones()
@@ -246,13 +244,14 @@ class TransaccionViewModel(
     class Factory(
         private val transaccionRepository: TransaccionRepository,
         private val servicioRepository: ServicioRepository,
-        private val usuarioRepository: UsuarioRepository
+        private val usuarioRepository: UsuarioRepository,
+        private val usuarioActualId: Int
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(TransaccionViewModel::class.java)) {
                 return TransaccionViewModel(
-                    transaccionRepository, servicioRepository, usuarioRepository
+                    transaccionRepository, servicioRepository, usuarioRepository, usuarioActualId
                 ) as T
             }
             throw IllegalArgumentException("ViewModel desconocido: ${modelClass.name}")

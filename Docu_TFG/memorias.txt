@@ -191,6 +191,7 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 	↳ A partir de ahora haré los commits mucho más detallados:  (feat: pantalla login /nfeat: pantalla registro /nfeat: mantener sesión de usuario con SharedPreferences /nfeat: botón cerrar sesión /nrefactor: MainActivity)
 chore: Actualizar memorias
 
+
 	
 --- SÍMBOLOGÍA---
 Día nuevo:        ↪

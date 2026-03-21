@@ -15,6 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
+import com.example.vecindapp.data.SesionUsuario
 import com.example.vecindapp.domain.model.CategoriaServicio
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -105,7 +106,8 @@ class CrearServicioFragment : Fragment() {
             val categoria = CategoriaServicio.entries[spinnerCategoria.selectedItemPosition]
             val coste = etCoste.text.toString()
 
-            viewModel.guardarServicio(titulo, descripcion, categoria, coste)
+            val sesion = SesionUsuario(requireContext())
+            viewModel.guardarServicio(titulo, descripcion, categoria, coste, sesion.obtenerUsuarioId())
         }
     }
 

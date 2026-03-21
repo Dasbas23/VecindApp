@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
+import com.example.vecindapp.data.SesionUsuario
 import kotlinx.coroutines.launch
 
 /**
@@ -32,10 +33,12 @@ class TransaccionFragment : Fragment() {
 
     private val viewModel: TransaccionViewModel by viewModels {
         val app = requireActivity().application as VecindAppApplication
+        val sesion = SesionUsuario(requireContext())
         TransaccionViewModel.Factory(
             app.transaccionRepository,
             app.servicioRepository,
-            app.usuarioRepository
+            app.usuarioRepository,
+            sesion.obtenerUsuarioId()
         )
     }
 
