@@ -71,4 +71,20 @@
     <string name="historial_vacio">Aún no has completado ninguna transacción</string>
     <string name="grafico_sin_datos">Sin datos para el gráfico</string>
     <string name="formato_historial_horas">%s%.1f h</string>
+
+    <!-- ═══ Login / Registro ═══ -->
+    <string name="titulo_login">Iniciar sesión</string>
+    <string name="subtitulo_login">Banco de tiempo vecinal</string>
+    <string name="hint_nombre_login">Tu nombre</string>
+    <string name="btn_iniciar_sesion">Iniciar sesión</string>
+    <string name="separador_o">— o —</string>
+    <string name="btn_ir_registro">Registrarse como nuevo vecino</string>
+    <string name="titulo_registro">Nuevo vecino</string>
+    <string name="desc_registro">Únete a la comunidad y empieza a intercambiar servicios</string>
+    <string name="hint_nombre_registro">Tu nombre</string>
+    <string name="hint_barrio_registro">Tu barrio</string>
+    <string name="btn_registrarse">Registrarse</string>
+    <string name="btn_volver_login">Ya tengo cuenta</string>
+    <string name="registro_exitoso">¡Bienvenido a VecindApp!</string>
+    <string name="btn_cerrar_sesion">Cerrar sesión</string>
 </resources>

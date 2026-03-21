@@ -15,9 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
+import com.example.vecindapp.data.SesionUsuario
 import com.example.vecindapp.data.entities.Usuario
 import com.example.vecindapp.ui.escaparate.ServicioAdapter
+import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
+import androidx.navigation.fragment.findNavController
 
 /**
  * Fragment de perfil del vecino.
@@ -79,6 +82,11 @@ class PerfilFragment : Fragment() {
         tvIntercambios = view.findViewById(R.id.tvIntercambios)
         rvMisServicios = view.findViewById(R.id.rvMisServicios)
         tvVacioMisServicios = view.findViewById(R.id.tvVacioMisServicios)
+        val btnCerrarSesion = view.findViewById<MaterialButton>(R.id.btnCerrarSesion)
+        btnCerrarSesion.setOnClickListener {
+            SesionUsuario(requireContext()).cerrarSesion()
+            findNavController().navigate(R.id.loginFragment)
+        }
     }
 
     /**

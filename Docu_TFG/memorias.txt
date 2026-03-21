@@ -157,7 +157,7 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 ⇢ He cerrado el S3 !! ...casi sin darme cuenta... Ha sido bastante corto:
 ⇢ Por lo pronto he tenido que reorganizar los sprints porque a Claude s ele ha ido la olla y no me ha hecho ni commits ni historias y me ha preguntando que por donde seguimos. He tenido que pararle los pies un poco pero vamos que al fin y al cabo es una IA y el que tiene que tomar las decisiones de como actuar soy yo así que es 100% mi culpa. 
 	↳ Como ya me olía que algo así iba a pasar yo ya me había adelantado con el commit para el perfil antes de introducir los cambios necesarios para implementar el historial.
-**Tareas** para esta tarde
+		**Tareas** para esta tarde (no se si borrar este apartado o adaptarlo a tareas heechas)
 - En TransacctionAdapter: Cambiar los botones de INVISIBLE a GONE. Se ponen así para que el desarrollo sea más facil por ahora. Finalmente será necesario GONE para que colapsen y no ocupen espacio. [NO]
 - Repasar nav_graph.xml: Entender y ver el objetivo de este archivo. Me gusta que desde escaparateFragment salen flechas hacia crearServicioFragment y detalleServicioFragment. Observo que que el resto no van relacionados con flechas y no sé si hace falta.[OK] Entiendo que no hacen falta las flechas po no ser una navegación secuecial. 
 -Para probar: desinstala y reinstala (por el seed). Crea un servicio tuyo → ve al servicio de María ("Clases de inglés") → solicitar → ve a la pestaña "Transacciones" → verás la transacción PENDIENTE como COMPRADOR. Como eres el comprador, solo puedes cancelar. Para probar "Aceptar" y "Completar" tendrías que simular ser María. [NOK] No he sabico como simular ser María
@@ -165,7 +165,33 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 ⇢ !!!SE DA COMIENZO AL SPRINT 4: Usuarios + Valoraciones!!!
 	Seguro que será interesantísimo!! Tengo ganas de dejarlo curiosete. ;)
 
+↪ 21.03.2026 :
+	Contiuo con la implementación del S4:
+		▼ Problemón (creo) : No hemos llegado a usar @Transaction en la lógica de intercambios de horas para que sea atómica. Esto puede ocasionar problemas si dos usuarios solictan el mismo servicio a la vez?
+		+ Solución : Creo que al pasar el servicio a "PENDIENTE" para que el vendedor acepte dicha solicitud, no habrá problemas de este tipo. Aqui me surge la pregunta: ¿Podrá un usuario ofrecer el mismo servicio más de una vez? Yo creo que esto tiene que ser, oportunidad única y no "hacer necocio" de ello. 
+⇢ Para empezar, se crean los dos fragments para el inicio de sesión y registro de usuarios.
+⇢ Añadir el botón de "cerrar sesión" en el fragment_perfil.
+⇢ Crear SesionUsuario para almacenar el usuario que ha iniciado sesión para no tener que iniciar sesión cada vez que abra la app.
+⇢ Añadir en UsuadioDao una @Query que busca un usuario por el nombre en la BBDD
+	↳ Se hace case insensitve y además se usa .trim() para intentar asegurar que no haya fallos. De igual manera pienso que a futuro tendría que mejorar este sistema de alguna manera.
+⇢ Crear los viewModels de Login y Registro.
+⇢ Creara también la lógica para estos modelos y el botón de cerrado de seion
+⇢ He pasado *Pruebas funcionales* antes de hacer commit con lo implementado:
+	↳ La validación de usuario para el inicio de sesión y el manejo de errores es correcto porque no deja iniciar sesión si el usuario no existe en la base de datos.
+		▼ Problema : está que aún no se ha implementado correctamente el inicio de sesión y lo que hace la app es validar que el usuario existe pero inicia sesión  como "vecino demo" un usuario ha hardcodeado en la Seed. 
+		+ Solución : Se hará con el próximo fix porque hasta ahora me he centrado en las pantallas y el flujo entre ellas
+	↳ He observado un nuevo requerimiento para el sistema pero que creo que es bastante más complejo de lo que me imagino:
+		▼ Problema : Se que cada vez que haces clic en "atrás" la app vuelve a la pantalla que estaba anteriormente. Eso quiere decir que cada acción que se realiza en la app se suma a una especie de lista y que al accionar el botón atrás va recorriendo esa lista en orden inverso. Esto útil para algunos casos o pantallas pero no tanto cuando el usuario requiera salir de la app  y tenga que hacer 15 veces clic en el botón de volver atrás. Por ejemplo: recorro la barra inferior pulsando los 4 botones de izda a derecha uno cada vez en 2 ocasiones y he tenido que hacer clic 8X en botón atrás para poder salir de la app.
+		+ Solución : (fail) He invesigado muy poquito, 5 mins, y he visto que eso es normal cuando se utilizan fragments porque forman parte de la misma activity. Creo que la una de las soluciones para arreglar este comportamiento indeseado y las menos engorrosas,  es indicar como se debe comportar el botón o gesto de volver atrás diciéndole que vuelva a la pantalla del escaparate. De otra modo creo que habría que modificar la escructura de muhcas clases y layouts y será mucho mas complejo, pero de esto último no he llegado a averiguar nada, son solo pensamientos.
+	↳ El fragment del registro funciona correctamente, según lo esperado y muestra los errores contemplados: nombre y barrio no pueden estar vacíos.
+		▼ Problema : He sido capaz de registrar usuarios nuevos con el mismo nombre y mismo barrio varias veces. Esto es algo que en el momento de la implementación no se tuvo en cuenta de manera específica pensando que  por alguna razón esto lo haría Room solo. 
+		+ Solución : Como decía anteriormente en mis memorias hay que mejorar de alguna manera tanto el inicio de sesión como el registro. Imagínate que hay dos usuarios con el mismo nombre pero distinto barrio ¿Qué pasaría? 
+	↳ Otra cosa que he podido detectar y que creo que tendré que mejorar a futuro y hacer un buen MVP, tendrá que ser la información que se muestra en las tarjetas: Creo que lo más sensato será incluir una lista con los barrios de la ciudad en Enums.kt y darle la opción al usuario a la hora de registrase en la app de escoger entre los barrios que se muestran en la lista y nada más porque si además dejamos que lo escriba él, se podría equivocar.
+⇢ He heco un commit "feat: pantallas login + registro mantener sesión de usuario"  antes de ponerme con las sesiones de los usuarios.
+	↳ A partir de ahora haré los commits mucho más detallados:  (feat: pantalla login /nfeat: pantalla registro /nfeat: mantener sesión de usuario con SharedPreferences /nfeat: botón cerrar sesión /nrefactor: MainActivity)
+chore: Actualizar memorias
 
+	
 --- SÍMBOLOGÍA---
 Día nuevo:        ↪
 Paso / Tarea:     ⇢
@@ -175,7 +201,10 @@ Solución:         +
 ----------------------------------
 Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir haciendo cosas en el trabajo en el documento VecindApp_Especificaciones_Tecnicas.docx guardado en mi drive secundario en punto 7. Planificación de Desarrolo para intentar seguir el calendario y rellenando con lo que realmente he ido haciendo. Así de esta manera queda más concentrado y no tengo que leerme todas las memorias.
 
+
+
 ---------------------------------- Cosas que he ido aprendiendo ----------------------------------
+
 (Actualizado a fin del Sprint 3 - 20.03.2026)
 1. Arquitectura y Patrones de Diseño
 	↳ Clean Architecture: Al principio me costó entender por qué había que separar tanto las capas. Lo pillé del todo cuando me di cuenta de que los Repositorios no pueden "hablar" entre ellos. Si necesito cruzar información de dos entidades, eso le toca al ViewModel (o a un UseCase). Me quedó muy claro cuando tuve que redirigir las flechas en el diagrama de clases.
