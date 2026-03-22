@@ -229,7 +229,15 @@ En algún momento parece que Claude está perdiendo contexto... es cierto que es
 
 ↪ 22.03.2026 :
 	Hoy he terminado de redactar los problemas encontrados en las pruebas funcionales y no he hecho  nada más porque tenía que dedicarme a ponerme al día con las clases y hacer las PACs de desarrollo.
-	
+⇢ Terminada la PAC de desarrollo de IA.
+
+↪ 23.03.2026 :
+	**Tareas**
+	⇢ Comprobar lo que ha hecho Claude Code o si  ha pedido algún pull request. 
+	⇢ Que es y como se hace un pull request.
+	⇢ Hacer lo que tienes apuntado en lateral del PC.	
+
+
 --- SÍMBOLOGÍA---
 Día nuevo:        ↪
 Paso / Tarea:     ⇢
