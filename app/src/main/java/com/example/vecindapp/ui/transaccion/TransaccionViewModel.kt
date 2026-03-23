@@ -94,6 +94,7 @@ class TransaccionViewModel(
         val puedeCompletar = esVendedor && transaccion.estado == EstadoTransaccion.ACEPTADA
         val puedeCancelar = transaccion.estado == EstadoTransaccion.PENDIENTE ||
                 transaccion.estado == EstadoTransaccion.ACEPTADA
+        val puedeValorar = transaccion.estado == EstadoTransaccion.COMPLETADA
 
         return TransaccionUI(
             transaccion = transaccion,
@@ -101,7 +102,8 @@ class TransaccionViewModel(
             rol = rol,
             puedeAceptar = puedeAceptar,
             puedeCompletar = puedeCompletar,
-            puedeCancelar = puedeCancelar
+            puedeCancelar = puedeCancelar,
+            puedeValorar = puedeValorar
         )
     }
 
@@ -158,32 +160,19 @@ class TransaccionViewModel(
                     return@launch
                 }
 
-                // 3. Debitar comprador (quitar horas al comprador)
-                usuarioRepository.updateSaldo(
-                    comprador.idUsuario,
-                    comprador.saldoHoras - horas
-                )
-
-                // 4. Acreditar vendedor (poner las horas en la cuenta del vendedor)
-                usuarioRepository.updateSaldo(
-                    vendedor.idUsuario,
-                    vendedor.saldoHoras + horas
-                )
-
-                // 5. Incrementar contadores de intercambios
+                // 3. Debitar comprador y actualizar intercambios/nivel en un solo update
                 val compradorActualizado = comprador.copy(
+                    saldoHoras = comprador.saldoHoras - horas,
                     intercambiosTotal = comprador.intercambiosTotal + 1
                 )
+                usuarioRepository.update(compradorActualizado.copy(nivel = compradorActualizado.calcularNivel()))
+
+                // 4. Acreditar vendedor y actualizar intercambios/nivel en un solo update
                 val vendedorActualizado = vendedor.copy(
+                    saldoHoras = vendedor.saldoHoras + horas,
                     intercambiosTotal = vendedor.intercambiosTotal + 1
                 )
-                // Recalcular niveles
-                usuarioRepository.update(
-                    compradorActualizado.copy(nivel = compradorActualizado.calcularNivel())
-                )
-                usuarioRepository.update(
-                    vendedorActualizado.copy(nivel = vendedorActualizado.calcularNivel())
-                )
+                usuarioRepository.update(vendedorActualizado.copy(nivel = vendedorActualizado.calcularNivel()))
 
                 // 6. Cambiar estado de transacción
                 transaccionRepository.update(

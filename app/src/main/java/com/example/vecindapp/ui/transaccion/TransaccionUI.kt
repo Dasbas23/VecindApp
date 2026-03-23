@@ -23,7 +23,8 @@ data class TransaccionUI(
     val rol: String,
     val puedeAceptar: Boolean,
     val puedeCompletar: Boolean,
-    val puedeCancelar: Boolean
+    val puedeCancelar: Boolean,
+    val puedeValorar: Boolean = false
 ) {
     val id: Int get() = transaccion.idTransaccion
     val estado: EstadoTransaccion get() = transaccion.estado

@@ -100,6 +100,10 @@ class TransaccionFragment : Fragment() {
                     }
                     .setNegativeButton(R.string.btn_cancelar, null)
                     .show()
+            },
+            onValorar = { _ ->
+                // TODO Sprint 4: navegar a ValorarFragment con el idTransaccion
+                Toast.makeText(requireContext(), "Valoración (próximamente)", Toast.LENGTH_SHORT).show()
             }
         )
 

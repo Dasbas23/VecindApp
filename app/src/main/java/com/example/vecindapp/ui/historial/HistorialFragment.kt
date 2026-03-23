@@ -28,13 +28,9 @@ import kotlinx.coroutines.launch
  * Fragment de historial de transacciones.
  *
  * Muestra un gráfico de barras agrupadas (MPAndroidChart) con las horas
- * ganadas y gastadas por mes, y debajo una lista de todas las transacciones
- * completadas del usuario.
- *
- * ## Gráfico de barras
- * - **Verde**: horas ganadas (el usuario fue vendedor).
- * - **Rojo**: horas gastadas (el usuario fue comprador).
- * - Las barras se agrupan por mes.
+ * ganadas y gastadas por mes, y debajo dos listas:
+ * - Transacciones completadas (con título del servicio y signo +/- en color).
+ * - Transacciones canceladas (visibles solo si existen).
  *
  * @see HistorialViewModel
  * @see HistorialAdapter
@@ -44,13 +40,20 @@ class HistorialFragment : Fragment() {
     private val viewModel: HistorialViewModel by viewModels {
         val app = requireActivity().application as VecindAppApplication
         val sesion = SesionUsuario(requireContext())
-        HistorialViewModel.Factory(app.transaccionRepository, sesion.obtenerUsuarioId())
+        HistorialViewModel.Factory(
+            app.transaccionRepository,
+            app.servicioRepository,
+            sesion.obtenerUsuarioId()
+        )
     }
 
     private lateinit var barChart: BarChart
     private lateinit var rvHistorial: RecyclerView
+    private lateinit var rvCanceladas: RecyclerView
     private lateinit var tvVacio: TextView
-    private lateinit var adapter: HistorialAdapter
+    private lateinit var tvSubtituloCanceladas: TextView
+    private lateinit var adapterCompletadas: HistorialAdapter
+    private lateinit var adapterCanceladas: HistorialAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,22 +67,22 @@ class HistorialFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         configurarVistas(view)
         configurarGrafico()
-        configurarRecyclerView()
+        configurarRecyclerViews()
         observarDatosGrafico()
         observarCompletadas()
+        observarCanceladas()
     }
 
     private fun configurarVistas(view: View) {
         barChart = view.findViewById(R.id.barChart)
         rvHistorial = view.findViewById(R.id.rvHistorial)
+        rvCanceladas = view.findViewById(R.id.rvCanceladas)
         tvVacio = view.findViewById(R.id.tvVacioHistorial)
+        tvSubtituloCanceladas = view.findViewById(R.id.tvSubtituloCanceladas)
     }
 
     /**
      * Configura el aspecto visual del gráfico de barras.
-     *
-     * Se elimina la descripción, la leyenda se posiciona abajo,
-     * y el eje X muestra los nombres de los meses.
      */
     private fun configurarGrafico() {
         barChart.apply {
@@ -88,34 +91,33 @@ class HistorialFragment : Fragment() {
             setFitBars(true)
             animateY(800)
 
-            // Eje X: meses
             xAxis.apply {
                 position = XAxis.XAxisPosition.BOTTOM
                 granularity = 1f
                 setDrawGridLines(false)
             }
 
-            // Eje Y izquierdo: horas
             axisLeft.apply {
                 axisMinimum = 0f
                 setDrawGridLines(true)
             }
 
-            // Ocultar eje Y derecho
             axisRight.isEnabled = false
-
-            // Leyenda
             legend.isEnabled = true
         }
     }
 
     /**
-     * Configura el RecyclerView de transacciones completadas.
+     * Configura los dos RecyclerViews (completadas y canceladas).
      */
-    private fun configurarRecyclerView() {
-        adapter = HistorialAdapter()
+    private fun configurarRecyclerViews() {
+        adapterCompletadas = HistorialAdapter()
         rvHistorial.layoutManager = LinearLayoutManager(requireContext())
-        rvHistorial.adapter = adapter
+        rvHistorial.adapter = adapterCompletadas
+
+        adapterCanceladas = HistorialAdapter()
+        rvCanceladas.layoutManager = LinearLayoutManager(requireContext())
+        rvCanceladas.adapter = adapterCanceladas
     }
 
     /**
@@ -137,48 +139,38 @@ class HistorialFragment : Fragment() {
 
     /**
      * Pinta el gráfico de barras agrupadas con los datos mensuales.
-     *
-     * Cada mes tiene dos barras: verde (ganadas) y roja (gastadas).
-     *
-     * @param datos Lista de [DatoMensual] con horas por mes.
      */
     private fun pintarGrafico(datos: List<DatoMensual>) {
         val etiquetasMeses = datos.map { it.mes }
 
-        // Barras de horas ganadas (verde)
         val entradasGanadas = datos.mapIndexed { i, dato ->
             BarEntry(i.toFloat(), dato.ganadas.toFloat())
         }
         val dataSetGanadas = BarDataSet(entradasGanadas, "Ganadas").apply {
-            color = Color.parseColor("#10B981") // Verde
+            color = Color.parseColor("#10B981")
             valueTextSize = 10f
         }
 
-        // Barras de horas gastadas (rojo)
         val entradasGastadas = datos.mapIndexed { i, dato ->
             BarEntry(i.toFloat(), dato.gastadas.toFloat())
         }
         val dataSetGastadas = BarDataSet(entradasGastadas, "Gastadas").apply {
-            color = Color.parseColor("#EF4444") // Rojo
+            color = Color.parseColor("#EF4444")
             valueTextSize = 10f
         }
 
-        // Configurar barras agrupadas
         val barData = BarData(dataSetGanadas, dataSetGastadas).apply {
             barWidth = 0.3f
         }
 
         barChart.apply {
             data = barData
-
-            // Configurar agrupación
             val groupSpace = 0.2f
             val barSpace = 0.05f
             xAxis.axisMinimum = 0f
             xAxis.axisMaximum = barData.getGroupWidth(groupSpace, barSpace) * datos.size
             xAxis.valueFormatter = IndexAxisValueFormatter(etiquetasMeses)
             xAxis.setCenterAxisLabels(true)
-
             groupBars(0f, groupSpace, barSpace)
             invalidate()
         }
@@ -191,9 +183,25 @@ class HistorialFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.completadas.collect { lista ->
-                    adapter.submitList(lista.toMutableList())
-                    tvVacio.visibility =
-                        if (lista.isEmpty()) View.VISIBLE else View.GONE
+                    adapterCompletadas.submitList(lista.toMutableList())
+                    tvVacio.visibility = if (lista.isEmpty()) View.VISIBLE else View.GONE
+                }
+            }
+        }
+    }
+
+    /**
+     * Observa la lista de transacciones canceladas.
+     * Muestra la sección solo si existen canceladas.
+     */
+    private fun observarCanceladas() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.canceladas.collect { lista ->
+                    adapterCanceladas.submitList(lista.toMutableList())
+                    val visibilidad = if (lista.isEmpty()) View.GONE else View.VISIBLE
+                    tvSubtituloCanceladas.visibility = visibilidad
+                    rvCanceladas.visibility = visibilidad
                 }
             }
         }

@@ -120,13 +120,16 @@
 
                 <TextView
                     android:id="@+id/tvNivel"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:lines = "1"
-                    tools:text="NOVATO"
-                    app:autoSizeTextType="uniform"/>
+                    android:maxLines="1"
+                    android:gravity="center"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="8sp"
+                    app:autoSizeMaxTextSize="18sp"
+                    tools:text="REFERENTE"/>
 
                 <TextView
                     android:layout_width="wrap_content"

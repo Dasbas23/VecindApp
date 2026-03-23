@@ -49,7 +49,8 @@ class DetalleServicioFragment : Fragment() {
         val app = requireActivity().application as VecindAppApplication
         DetalleServicioViewModel.Factory(
             app.servicioRepository,
-            app.transaccionRepository
+            app.transaccionRepository,
+            app.usuarioRepository
         )
     }
 
