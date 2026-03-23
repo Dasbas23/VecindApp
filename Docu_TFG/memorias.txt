@@ -233,9 +233,9 @@ En algún momento parece que Claude está perdiendo contexto... es cierto que es
 
 ↪ 23.03.2026 :
 	**Tareas**
-	⇢ Comprobar lo que ha hecho Claude Code o si  ha pedido algún pull request. 
-	⇢ Que es y como se hace un pull request.
-	⇢ Hacer lo que tienes apuntado en lateral del PC.	
+	⇢ Comprobar lo que ha hecho Claude Code o si  ha pedido algún pull request. [Aprender lo que he aprendico en cosas aprendidas]
+	⇢ Que es y como se hace un pull request.[Apuntar en cosas aprendidas]
+	⇢ Hacer lo que tienes apuntado en lateral del PC. [OK]	
 
 
 --- SÍMBOLOGÍA---
