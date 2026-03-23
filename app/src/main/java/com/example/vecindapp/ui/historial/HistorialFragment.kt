@@ -23,6 +23,7 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import kotlinx.coroutines.launch
+import androidx.core.graphics.toColorInt
 
 /**
  * Fragment de historial de transacciones.
@@ -147,7 +148,7 @@ class HistorialFragment : Fragment() {
             BarEntry(i.toFloat(), dato.ganadas.toFloat())
         }
         val dataSetGanadas = BarDataSet(entradasGanadas, "Ganadas").apply {
-            color = Color.parseColor("#10B981")
+            color = "#10B981".toColorInt()
             valueTextSize = 10f
         }
 
@@ -155,7 +156,7 @@ class HistorialFragment : Fragment() {
             BarEntry(i.toFloat(), dato.gastadas.toFloat())
         }
         val dataSetGastadas = BarDataSet(entradasGastadas, "Gastadas").apply {
-            color = Color.parseColor("#EF4444")
+            color = "#EF4444".toColorInt()
             valueTextSize = 10f
         }
 
