@@ -233,9 +233,21 @@ En algún momento parece que Claude está perdiendo contexto... es cierto que es
 
 ↪ 23.03.2026 :
 	**Tareas**
-	⇢ Comprobar lo que ha hecho Claude Code o si  ha pedido algún pull request. [Aprender lo que he aprendico en cosas aprendidas]
+	⇢ Comprobar lo que ha hecho Claude Code o si  ha pedido algún pull request. [Apuntar lo que he aprendico en cosas aprendidas]
 	⇢ Que es y como se hace un pull request.[Apuntar en cosas aprendidas]
 	⇢ Hacer lo que tienes apuntado en lateral del PC. [OK]	
+
+↪ 25.03.2026 :
+	Hoy he retomado el contacto con el desarrollo tras estar unos días con otras tareas del curso. Estos días he pasado de hacer parte del desarrollo con Claude en un chatbot normal a hacerlo con ClaudeCode. Este hace un clone de mi rama y después crea otra con los fixes que aporta. De esta manera yo sólo tengo que revisar lo que ha hecho, ponerlo a prueba y el curso normal de la programacíon es aceptar el PR , pero yo en este caso he hecho un cherry pick para que no se vea mucho rastro del uso de la IA en el TFG por si algún miebro del jurado le da por mirar e investigar (aunque no se habla de la prohibición de los LLM para el código, de igual manera esto es defendible porque es lo que más se acerca a un entorno laboral real).
+⇢ Mantenimiento de las memorias.
+⇢ Revisión y aceptación del código sugerido por Claude Code.
+	↳ Se han solucionado 6 bugs de golpe con el cherry-pick:
+		↳ Bug 1 (Saldo no se actualiza en perfil): El problema estaba en TransaccionViewModel.completarTransaccion(). Se llamaba primero a updateSaldo() para actualizar el saldo en la BBDD, pero después se hacía un .copy() del objeto original (que todavía tenía el saldo viejo) y se llamaba a update(), machacando el saldo correcto con el antiguo. La solución fue eliminar las llamadas separadas a updateSaldo() e incluir el cambio de saldo directamente en el .copy() del update() completo.
+		↳ Bug 2 (No se comprobaba saldo antes de solicitar): DetalleServicioViewModel no tenía acceso a UsuarioRepository, así que no podía verificar si el comprador tenía horas suficientes. Se inyectó el repositorio y se añadió la comprobación comprador.saldoHoras >= servicio.costeHoras antes de crear la transacción. Si no tiene saldo, se emite error y no se bloquea el servicio innecesariamente.
+		↳ Bug 3 (Faltaba botón Valorar tras completar): Las tarjetas de transacciones COMPLETADAS no mostraban ninguna acción. Se añadió un campo puedeValorar a TransaccionUI que es true solo en estado COMPLETADA, y un botón "Valorar" en el adapter. Por ahora muestra un Toast "próximamente" hasta que se implemente el sistema de valoraciones con ARASAAC.
+		↳ Bug 4 (Tarjeta nivel no se adapta al texto): tvNivel tenía layout_width="wrap_content" lo que provocaba que nombres largos como VETERANO o REFERENTE se partieran en dos líneas. Se cambió a match_parent con maxLines="1" y autoSizeMinTextSize para que el texto se encoja en vez de partir línea.
+		↳ Bug 5 (Historial sin título de servicio): HistorialAdapter recibía objetos Transaccion que no contienen el título del servicio. Se creó un HistorialItem enriquecido con el título obtenido de ServicioRepository, y ahora muestra el nombre real del servicio con signo +/- en verde/rojo según sean horas ganadas o gastadas.
+		↳ Bug 6 (Canceladas no aparecen en historial): HistorialViewModel solo filtraba transacciones COMPLETADAS. Se añadió un segundo flow para CANCELADAS y una sección extra en el layout "Transacciones canceladas" que aparece solo si las hay.	
 
 
 --- SÍMBOLOGÍA---
@@ -275,6 +287,15 @@ Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir 
 	↳ Migración KAPT → KSP: En vez de pelearme para arreglar KAPT (que ya estaba deprecado), investigué la documentación y migré directamente a KSP (Kotlin Symbol Processing), que es la herramienta moderna que lo sustituye. Además compila más rápido. Conclusión: si algo está obsoleto, mejor actualizarse que parchear.
 	↳ SCRUM en la vida real: He comprobado que SCRUM tiene más flexibilidad de la que pensaba. En el Sprint 3 fui más rápido de lo previsto y absorbí trabajo de los Sprints  5 ( Historial y estadísicas). Eso es perfectamente válido, se defiende como "se adelantó trabajo del backlog al tener las dependencias ya resueltas". Lo apunto para la memoria. ;)
 (Actualizado a fin del Sprint 3 - 20.03.2026)
+
+(Actualizado a mediados del Sprint 4 - 25.03.2026)
+
+	↳ Pull Requests (PR) y Revisión de Código: He aprendido que un PR no es un simple comando de Git, sino una metodología de trabajo. Sirve para proponer cambios desde una rama secundaria a la principal, permitiendo revisar el código (diffs), ver qué archivos se tocan y comprobar que no rompen nada antes de integrarlos. En un entorno real, es donde el equipo te aprueba o rechaza el código.
+	↳ Git Cherry-Pick (Cirugía de código): Esta herramienta me ha salvado la vida. He aprendido que no siempre tienes que hacer un "merge" completo de una rama. Con `cherry-pick` puedo elegir el hash de un commit específico de cualquier rama e integrarlo en la mía. Lo he usado para traerme correcciones de bugs generadas en ramas de la IA, evitando así ensuciar mi historial de Git con commits basura de configuración de su entorno o dejando rastros indeseados para el TFG. Es literalmente hacer cirugía en el historial de versiones.
+
+(Actualizado a mediados del Sprint 4 - 25.03.2026)
+
+
 
 ------------Fundamentos/Ideas para hacer el trabajo Escrito------------
 - Seprar cada Sprint explicando como he ido econtrandome con problemas y soluciones.
