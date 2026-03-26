@@ -250,12 +250,52 @@ En algún momento parece que Claude está perdiendo contexto... es cierto que es
 		↳ Bug 6 (Canceladas no aparecen en historial): HistorialViewModel solo filtraba transacciones COMPLETADAS. Se añadió un segundo flow para CANCELADAS y una sección extra en el layout "Transacciones canceladas" que aparece solo si las hay.	
 
 ↪ 26.03.2026 :
-	Hoy quiero meterle bastante avance. El objetivo es cerrar el sprint esta semana
-	**Tareas para esta tarde**
-	⇢ Comprobar arreglo en los bugs. (Claude y Gemini)
-	
+	Hoy quiero meterle bastante avance. El objetivo es cerrar el sprint esta semana.
+⇢ He tenido problemas con Zscaller otra vez... y ahora lo he teminado solucionando definitivamente!! He hecho un manual para ello y lo tengo guardado con los otros manuales para Zscaler.
+	↳ El problma es cuando Zscaler está activo, intercepta todas las conexiones HTTPS y presenta su propio certificado SSL. Java/Gradle no reconoce ese certificado y bloquea las descargas de dependencias. En pocas palabras lo he hecho es utilizar el certificado que proporciona Zscaler en sitios de confianza y decirle a Java que utilice este certificado para conectarse con los servidores que necesita (¿hacks o vulnerabilidad de ciberseguridad?). Para mas detalle 'manual_gradle_zscaler.md'
+⇢ Comprobar arreglo en los bugs. (Claude y Gemini)
+	↳ Bug 1 — Saldo se actualiza en perfil [OK]
+		↳ Se encuentra bug al bug -> Está permitido y no debería poner inputs con decimales raros. Ejemplo: ofertas servicio con 0.41 horas pero se muestra en escaparate con 0.4. (Pienso que o se debería validar el formato de número o que debería añadir un nuevo fragment que tenga botones para agregar tiempo cada 0.1 horas)
+	↳ Bug 2 — Comprueba saldo antes de solicitar [OK]
+	↳ Bug 3 — Botón valorar tras completar: [OK] Se obliga a valorar tras marcar "completada" [NOK] Desde transacciones se muestra botón valorar y sale Toast con "próximamente"
+	↳ Bug 4 — Tarjeta nivel se adapta [OK]
+	↳ Bug 5 — Historial muestra título del servicio: [OK] Se muestra título, horas en color adecuado y la fecha y hora
+	↳ Bug 6 — Canceladas aparecen en historial [OK1/2]: Se muestra el cancelado al final de la lista del histórico. La solución pasa por hacer una sección a parte porque tenemos un método observarCanceladas. O también se me ocurre hacer hacer que se muestren por orden de fecha, pero eso sí que no sé como hacerlo. Creo que lo más intuitivo sería 2 pestañas: completadas, canceladas y dentro de canceladas igual a futuro poner si se ha cancelado por ti o por el vendedor. [semiOK] se ha mejorado la lógica de mostdar los observers.
+⇢ Montar el módulo de valoraciones. Por ahora está marchando sin imprevistos. 
+	↳ Se muestran las 9 pseudopictogramas. 
+	↳ No deja salirse de la vista sin validar nada.
+	↳ Se pide al menos un pictograma
+	↳ **Faltará esolver detalle nok del bug 3. 
+⇢ Planificar trabajo restante para el sistema de valoraciones.
+	↪ Hay que buscar 9 pictogramas. Refactorizar vista de historial y añadir nuevas funcionalidades propuestas para el detalle.
+Termino ya y me dejo cosas para mañana
+
+↪ 27.03.2026 :
+completar las memos del día 26 con sugerencias de gemini
+
+	**Tareas pendientes de ayer: lo planificado. Repasar todo el código sugerido Claude.
+	**Tareas para hoy: Rematar y testear el Sprint 4 (Valoraciones ARASAAC)**
+⇢ 1. Descargar los 9 pictogramas de ARASAAC elegidos. ¡OJO! Guardarlos en `res/drawable/` (no en `assets` como sugirió Claude, para que sea más fácil usarlos en los XML).
+⇢ 2. Actualizar el diseño `bottom_sheet_valoracion.xml` para incluir esos `drawables` reales y poner los textos debajo de cada imagen (preparando el terreno para el TTS).
+⇢ 3. Revisar y repasar el código sugerido por Claude (los nuevos BottomSheets y la conexión con el Historial).
+⇢ 4. PRUEBA DE FUEGO FUNCIONAL: Simular ser Usuario A, pedir servicio al Usuario B. Aceptar, Completar, ver el Popup obligatorio de ARASAAC, valorar, e ir al historial para ver la reseña guardada.
+⇢ 
+	↪
+⇢
+	↪
+⇢
+	↪
+⇢
+	↪
+⇢
+	↪
+⇢
+	↪
+⇢
+	↪
 
 
+ 
 --- SÍMBOLOGÍA---
 Día nuevo:        ↪
 Paso / Tarea:     ⇢
@@ -305,3 +345,4 @@ Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir 
 
 ------------Fundamentos/Ideas para hacer el trabajo Escrito------------
 - Seprar cada Sprint explicando como he ido econtrandome con problemas y soluciones.
+
