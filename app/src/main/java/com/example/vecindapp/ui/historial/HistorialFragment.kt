@@ -185,7 +185,7 @@ class HistorialFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.completadas.collect { lista ->
                     adapterCompletadas.submitList(lista.toMutableList())
-                    tvVacio.visibility = if (lista.isEmpty()) View.VISIBLE else View.GONE
+                    actualizarEstadoVacio()
                 }
             }
         }
@@ -203,8 +203,14 @@ class HistorialFragment : Fragment() {
                     val visibilidad = if (lista.isEmpty()) View.GONE else View.VISIBLE
                     tvSubtituloCanceladas.visibility = visibilidad
                     rvCanceladas.visibility = visibilidad
+                    actualizarEstadoVacio()
                 }
             }
         }
+    }
+
+    private fun actualizarEstadoVacio() {
+        val sinDatos = adapterCompletadas.itemCount == 0 && adapterCanceladas.itemCount == 0
+        tvVacio.visibility = if (sinDatos) View.VISIBLE else View.GONE
     }
 }
