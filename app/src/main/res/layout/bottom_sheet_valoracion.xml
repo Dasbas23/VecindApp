@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    bottom_sheet_valoracion.xml
+    Panel inferior para valorar al vecino tras completar una transacción.
+    Contiene 3 secciones de pictogramas (Bien, Regular, Mal),
+    campo de comentario opcional y botón enviar.
+    isCancelable = false → el usuario DEBE valorar.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- Título -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/valoracion_titulo"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:paddingBottom="4dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/valoracion_subtitulo"
+        android:textSize="13sp"
+        android:gravity="center"
+        android:paddingBottom="16dp" />
+
+    <!-- ═══ Sección BIEN (positivos) ═══ -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/valoracion_seccion_bien"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#10B981"
+        android:paddingBottom="8dp" />
+
+    <LinearLayout
+        android:id="@+id/llPictogramasBien"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingBottom="12dp">
+
+        <ImageView
+            android:id="@+id/ivBien1"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="@string/desc_pictograma_bien1"
+            android:src="@android:drawable/btn_star_big_on"
+            android:tag="bien_excelente" />
+
+        <ImageView
+            android:id="@+id/ivBien2"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="@string/desc_pictograma_bien2"
+            android:src="@android:drawable/btn_star_big_on"
+            android:tag="bien_amable" />
+
+        <ImageView
+            android:id="@+id/ivBien3"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="@string/desc_pictograma_bien3"
+            android:src="@android:drawable/btn_star_big_on"
+            android:tag="bien_puntual" />
+    </LinearLayout>
+
+    <!-- ═══ Sección REGULAR (neutros) ═══ -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/valoracion_seccion_regular"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#F59E0B"
+        android:paddingBottom="8dp" />
+
+    <LinearLayout
+        android:id="@+id/llPictogramasRegular"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingBottom="12dp">
+
+        <ImageView
+            android:id="@+id/ivRegular1"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="@string/desc_pictograma_regular1"
+            android:src="@android:drawable/btn_star_big_off"
+            android:tag="regular_normal" />
+
+        <ImageView
+            android:id="@+id/ivRegular2"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="@string/desc_pictograma_regular2"
+            android:src="@android:drawable/btn_star_big_off"
+            android:tag="regular_mejorable" />
+
+        <ImageView
+            android:id="@+id/ivRegular3"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="@string/desc_pictograma_regular3"
+            android:src="@android:drawable/btn_star_big_off"
+            android:tag="regular_lento" />
+    </LinearLayout>
+
+    <!-- ═══ Sección MAL (negativos) ═══ -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/valoracion_seccion_mal"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#EF4444"
+        android:paddingBottom="8dp" />
+
+    <LinearLayout
+        android:id="@+id/llPictogramasMal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingBottom="16dp">
+
+        <ImageView
+            android:id="@+id/ivMal1"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="@string/desc_pictograma_mal1"
+            android:src="@android:drawable/ic_delete"
+            android:tag="mal_impuntual" />
+
+        <ImageView
+            android:id="@+id/ivMal2"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="@string/desc_pictograma_mal2"
+            android:src="@android:drawable/ic_delete"
+            android:tag="mal_desagradable" />
+
+        <ImageView
+            android:id="@+id/ivMal3"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="@string/desc_pictograma_mal3"
+            android:src="@android:drawable/ic_delete"
+            android:tag="mal_no_realizado" />
+    </LinearLayout>
+
+    <!-- Separador -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="12dp"
+        android:background="?android:attr/listDivider" />
+
+    <!-- Comentario opcional -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilComentario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/valoracion_hint_comentario"
+        android:paddingBottom="16dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etComentario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine|textCapSentences"
+            android:minLines="2"
+            android:gravity="top"
+            android:maxLength="200" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Botón Enviar -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnEnviarValoracion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/valoracion_btn_enviar" />
+
+</LinearLayout>

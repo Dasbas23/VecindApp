@@ -18,6 +18,7 @@ import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
 import com.example.vecindapp.data.SesionUsuario
 import kotlinx.coroutines.launch
+import com.example.vecindapp.ui.valoracion.ValoracionBottomSheetFragment
 
 /**
  * Fragment que muestra la lista de transacciones del usuario actual.
@@ -60,6 +61,7 @@ class TransaccionFragment : Fragment() {
         configurarRecyclerView()
         observarTransacciones()
         observarMensajes()
+        observarTransaccionCompletada()
     }
 
     private fun configurarVistas(view: View) {
@@ -135,6 +137,38 @@ class TransaccionFragment : Fragment() {
                     if (mensaje != null) {
                         Toast.makeText(requireContext(), mensaje, Toast.LENGTH_SHORT).show()
                         viewModel.limpiarMensaje()
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Observa la transacción completada y muestra el BottomSheet.
+     */
+
+    private fun observarTransaccionCompletada() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.transaccionCompletada.collect { item ->
+                    if (item != null) {
+                        val sesion = SesionUsuario(requireContext())
+                        val miId = sesion.obtenerUsuarioId()
+                        // El valorado es la otra parte de la transacción
+                        val valoradoId = if (item.transaccion.idVendedorFk == miId) {
+                            item.transaccion.idCompradorFk
+                        } else {
+                            item.transaccion.idVendedorFk
+                        }
+
+                        val bottomSheet = ValoracionBottomSheetFragment.newInstance(
+                            transaccionId = item.transaccion.idTransaccion,
+                            valoradorId = miId,
+                            valoradoId = valoradoId
+                        )
+                        bottomSheet.show(childFragmentManager, "valoracion")
+
+                        viewModel.limpiarTransaccionCompletada()
                     }
                 }
             }

@@ -249,6 +249,12 @@ En algún momento parece que Claude está perdiendo contexto... es cierto que es
 		↳ Bug 5 (Historial sin título de servicio): HistorialAdapter recibía objetos Transaccion que no contienen el título del servicio. Se creó un HistorialItem enriquecido con el título obtenido de ServicioRepository, y ahora muestra el nombre real del servicio con signo +/- en verde/rojo según sean horas ganadas o gastadas.
 		↳ Bug 6 (Canceladas no aparecen en historial): HistorialViewModel solo filtraba transacciones COMPLETADAS. Se añadió un segundo flow para CANCELADAS y una sección extra en el layout "Transacciones canceladas" que aparece solo si las hay.	
 
+↪ 26.03.2026 :
+	Hoy quiero meterle bastante avance. El objetivo es cerrar el sprint esta semana
+	**Tareas para esta tarde**
+	⇢ Comprobar arreglo en los bugs. (Claude y Gemini)
+	
+
 
 --- SÍMBOLOGÍA---
 Día nuevo:        ↪

@@ -72,7 +72,7 @@
     <string name="label_canceladas">Transacciones canceladas</string>
     <string name="historial_vacio">Aún no has completado ninguna transacción</string>
     <string name="grafico_sin_datos">Sin datos para el gráfico</string>
-    <string name="formato_historial_horas">%s%.1f h</string>
+    <string name="formato_historial_horas">%1$s%2$.1f h</string>
 
     <!-- ═══ Login / Registro ═══ -->
     <string name="titulo_login">Iniciar sesión</string>
@@ -89,4 +89,23 @@
     <string name="btn_volver_login">Ya tengo cuenta</string>
     <string name="registro_exitoso">¡Bienvenido a VecindApp!</string>
     <string name="btn_cerrar_sesion">Cerrar sesión</string>
+
+    <!-- ═══ Valoraciones ═══ -->
+    <string name="valoracion_titulo">¡Servicio completado!</string>
+    <string name="valoracion_subtitulo">Valora a tu vecino seleccionando uno o más pictogramas</string>
+    <string name="valoracion_seccion_bien">Bien</string>
+    <string name="valoracion_seccion_regular">Regular</string>
+    <string name="valoracion_seccion_mal">Mal</string>
+    <string name="valoracion_hint_comentario">Comentario opcional</string>
+    <string name="valoracion_btn_enviar">Enviar valoración</string>
+    <string name="valoracion_enviada">¡Gracias por tu valoración!</string>
+    <string name="desc_pictograma_bien1">Excelente</string>
+    <string name="desc_pictograma_bien2">Amable</string>
+    <string name="desc_pictograma_bien3">Puntual</string>
+    <string name="desc_pictograma_regular1">Normal</string>
+    <string name="desc_pictograma_regular2">Mejorable</string>
+    <string name="desc_pictograma_regular3">Lento</string>
+    <string name="desc_pictograma_mal1">Impuntual</string>
+    <string name="desc_pictograma_mal2">Desagradable</string>
+    <string name="desc_pictograma_mal3">No realizado</string>
 </resources>
