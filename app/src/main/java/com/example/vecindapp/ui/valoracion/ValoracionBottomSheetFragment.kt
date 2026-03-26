@@ -70,6 +70,14 @@ class ValoracionBottomSheetFragment : BottomSheetDialogFragment() {
         }
     }
 
+    /** Callback que se ejecuta al cerrar el BottomSheet. */
+    var onDismissCallback: (() -> Unit)? = null
+
+    override fun onDismiss(dialog: android.content.DialogInterface) {
+        super.onDismiss(dialog)
+        onDismissCallback?.invoke()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

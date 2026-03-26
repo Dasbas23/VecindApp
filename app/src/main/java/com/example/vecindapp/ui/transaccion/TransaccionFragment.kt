@@ -39,6 +39,7 @@ class TransaccionFragment : Fragment() {
             app.transaccionRepository,
             app.servicioRepository,
             app.usuarioRepository,
+            app.valoracionRepository,
             sesion.obtenerUsuarioId()
         )
     }
@@ -103,9 +104,27 @@ class TransaccionFragment : Fragment() {
                     .setNegativeButton(R.string.btn_cancelar, null)
                     .show()
             },
-            onValorar = { _ ->
-                // TODO Sprint 4: navegar a ValorarFragment con el idTransaccion
-                Toast.makeText(requireContext(), "Valoración (próximamente)", Toast.LENGTH_SHORT).show()
+            onValorar = { item ->
+                val sesion = SesionUsuario(requireContext())
+                val miId = sesion.obtenerUsuarioId()
+                val valoradoId = if (item.transaccion.idVendedorFk == miId) {
+                    item.transaccion.idCompradorFk
+                } else {
+                    item.transaccion.idVendedorFk
+                }
+
+                val bottomSheet = ValoracionBottomSheetFragment.newInstance(
+                    transaccionId = item.transaccion.idTransaccion,
+                    valoradorId = miId,
+                    valoradoId = valoradoId
+                )
+                bottomSheet.onDismissCallback = {
+                    viewModel.cargarTransacciones()
+                }
+                bottomSheet.show(childFragmentManager, "valoracion")
+                bottomSheet.dialog?.setOnDismissListener {
+                    viewModel.cargarTransacciones()
+                }
             }
         )
 
@@ -166,6 +185,9 @@ class TransaccionFragment : Fragment() {
                             valoradorId = miId,
                             valoradoId = valoradoId
                         )
+                        bottomSheet.onDismissCallback = {
+                            viewModel.cargarTransacciones()
+                        }
                         bottomSheet.show(childFragmentManager, "valoracion")
 
                         viewModel.limpiarTransaccionCompletada()

@@ -9,6 +9,7 @@ import com.example.vecindapp.domain.model.EstadoTransaccion
 import com.example.vecindapp.domain.repository.ServicioRepository
 import com.example.vecindapp.domain.repository.TransaccionRepository
 import com.example.vecindapp.domain.repository.UsuarioRepository
+import com.example.vecindapp.domain.repository.ValoracionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -47,6 +48,7 @@ class TransaccionViewModel(
     private val transaccionRepository: TransaccionRepository,
     private val servicioRepository: ServicioRepository,
     private val usuarioRepository: UsuarioRepository,
+    private val valoracionRepository: ValoracionRepository,
     private val usuarioActualId: Int
 ) : ViewModel() {
 
@@ -70,7 +72,7 @@ class TransaccionViewModel(
      * Carga las transacciones del usuario actual y las transforma
      * en [TransaccionUI] con datos enriquecidos.
      */
-    private fun cargarTransacciones() {
+     fun cargarTransacciones() {
         viewModelScope.launch {
             transaccionRepository.getByUsuario(usuarioActualId)
                 .catch { e -> e.printStackTrace() }
@@ -98,7 +100,8 @@ class TransaccionViewModel(
         val puedeCompletar = esVendedor && transaccion.estado == EstadoTransaccion.ACEPTADA
         val puedeCancelar = transaccion.estado == EstadoTransaccion.PENDIENTE ||
                 transaccion.estado == EstadoTransaccion.ACEPTADA
-        val puedeValorar = transaccion.estado == EstadoTransaccion.COMPLETADA
+        val yaValorada = valoracionRepository.getByTransaccion(transaccion.idTransaccion) != null
+        val puedeValorar = transaccion.estado == EstadoTransaccion.COMPLETADA && !yaValorada
 
         return TransaccionUI(
             transaccion = transaccion,
@@ -247,13 +250,15 @@ class TransaccionViewModel(
         private val transaccionRepository: TransaccionRepository,
         private val servicioRepository: ServicioRepository,
         private val usuarioRepository: UsuarioRepository,
+        private val valoracionRepository: ValoracionRepository,
         private val usuarioActualId: Int
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(TransaccionViewModel::class.java)) {
                 return TransaccionViewModel(
-                    transaccionRepository, servicioRepository, usuarioRepository, usuarioActualId
+                    transaccionRepository, servicioRepository, usuarioRepository,
+                    valoracionRepository, usuarioActualId
                 ) as T
             }
             throw IllegalArgumentException("ViewModel desconocido: ${modelClass.name}")
