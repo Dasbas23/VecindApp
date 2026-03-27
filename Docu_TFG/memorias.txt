@@ -265,7 +265,11 @@ En algún momento parece que Claude está perdiendo contexto... es cierto que es
 	↳ Se muestran las 9 pseudopictogramas. 
 	↳ No deja salirse de la vista sin validar nada.
 	↳ Se pide al menos un pictograma
-	↳ **Faltará esolver detalle nok del bug 3. 
+	↳ [Actualización Bug 3] -   Botón valorar tras completar [OK] Se refactorizó `TransaccionFragment` para que al pulsar el botón se calcule quién es el valorado y se abra el BottomSheet correctamente en lugar del Toast "próximamente".
+		↳ Para evitar valoraciones duplicadas, se inyectó `ValoracionRepository` en el ViewModel. Ahora se comprueba en la BBDD si existe una valoración previa (`yaValorada`). Si existe, el botón se oculta automáticamente.
+		▼ Problema: Al enviar la valoración, el BottomSheet se cerraba pero la lista de transacciones que quedaba de fondo no se actualizaba, dejando el botón "Valorar" visible hasta que cambiabas de pestaña.
+		+ Solución: Se implementó un truco técnico creando un 'onDismissCallback' en el BottomSheet. Al cerrarse, dispara una recarga forzada (cargarTransacciones()) en el ViewModel padre. El botón desaparece al instante.
+	↳ [Actualización Bug 6] — Canceladas en historial: Se corrigió la lógica de los mensajes de vacío. Se creó `actualizarEstadoVacio()` para garantizar que el texto "No hay transacciones" solo salga cuando TANTO completadas como canceladas estén vacías.
 ⇢ Planificar trabajo restante para el sistema de valoraciones.
 	↪ Hay que buscar 9 pictogramas. Refactorizar vista de historial y añadir nuevas funcionalidades propuestas para el detalle.
 Termino ya y me dejo cosas para mañana
