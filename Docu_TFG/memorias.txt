@@ -275,37 +275,33 @@ En algún momento parece que Claude está perdiendo contexto... es cierto que es
 Termino ya y me dejo cosas para mañana
 
 ↪ 27.03.2026 :
-completar las memos del día 26 con sugerencias de gemini
+	Hoy no he podido trabajar mucho :( asi que me dejo pendientes cosas para mañana. Lo que he hecho hoy es:
+⇢ Descargar los 9 pictogramas de ARASAAC elegidos. ¡OJO! Guardados en `res/drawable/` (no en `assets` como sugirió Claude, para que sea más fácil usarlos en los XML).
+	▼ Problema: Pensaba que habría un mayor catálogo de pictogramas que representara las valoraciones pero no era así el caso.
+	+ Solución: He pasado por rebajar un poco mis espectativas que quizás eran un poco altas, y además he utilizado la lógica; por ejemplo para mostrar un pictograma contrario a "amable", la web de ARASAAC me daba la opción de tachar con una cruz roja todo el pictograma para que así se mostrara lo contrario.
+		↳ Finalmente a pesar de la solución lógica dilucidada, he optado por no tomar literalmente las descripciones de las imágenes y utilizar otras, porque me dice fío un poco más de mi intuición y creo que van a representar mejor esas escenas. Me he quedado contento con mi elección :)
+	
+
+↪ 28.03.2026 :
+	Hoy parece que podré tabjar un par de horas. A ver con que me encuentro... 
+
 
 	**Tareas pendientes de ayer: lo planificado. Repasar todo el código sugerido Claude.
 	**Tareas para hoy: Rematar y testear el Sprint 4 (Valoraciones ARASAAC)**
-⇢ 1. Descargar los 9 pictogramas de ARASAAC elegidos. ¡OJO! Guardarlos en `res/drawable/` (no en `assets` como sugirió Claude, para que sea más fácil usarlos en los XML).
 ⇢ 2. Actualizar el diseño `bottom_sheet_valoracion.xml` para incluir esos `drawables` reales y poner los textos debajo de cada imagen (preparando el terreno para el TTS).
 ⇢ 3. Revisar y repasar el código sugerido por Claude (los nuevos BottomSheets y la conexión con el Historial).
 ⇢ 4. PRUEBA DE FUEGO FUNCIONAL: Simular ser Usuario A, pedir servicio al Usuario B. Aceptar, Completar, ver el Popup obligatorio de ARASAAC, valorar, e ir al historial para ver la reseña guardada.
 ⇢ 
 	↪
-⇢
-	↪
-⇢
-	↪
-⇢
-	↪
-⇢
-	↪
-⇢
-	↪
-⇢
-	↪
 
 
  
 --- SÍMBOLOGÍA---
-Día nuevo:        ↪
-Paso / Tarea:     ⇢
-Subpaso / Detalle:↳ 
-Problema:         ▼
-Solución:         +
+Día nuevo:         ↪
+Paso / Tarea:      ⇢
+Subpaso / Detalle: ↳ 
+Problema:          ▼
+Solución:          +
 ----------------------------------
 Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir haciendo cosas en el trabajo en el documento VecindApp_Especificaciones_Tecnicas.docx guardado en mi drive secundario en punto 7. Planificación de Desarrolo para intentar seguir el calendario y rellenando con lo que realmente he ido haciendo. Así de esta manera queda más concentrado y no tengo que leerme todas las memorias.
 
