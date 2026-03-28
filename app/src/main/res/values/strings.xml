@@ -108,4 +108,5 @@
     <string name="desc_pictograma_mal1">Impuntual</string>
     <string name="desc_pictograma_mal2">Desagradable</string>
     <string name="desc_pictograma_mal3">No realizado</string>
+    <string name="detalle_valoracion_fecha">Valorado el %s</string>
 </resources>
