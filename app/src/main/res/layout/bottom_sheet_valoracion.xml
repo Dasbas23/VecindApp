@@ -67,7 +67,7 @@
                     android:padding="4dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/desc_pictograma_bien1"
-                    android:src="@android:drawable/btn_star_big_on"
+                    android:src="@drawable/bien_excelente"
                     android:tag="bien_excelente" />
 
                 <TextView
@@ -94,7 +94,7 @@
                     android:padding="4dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/desc_pictograma_bien2"
-                    android:src="@android:drawable/btn_star_big_on"
+                    android:src="@drawable/bien_amable"
                     android:tag="bien_amable" />
 
                 <TextView
@@ -121,7 +121,7 @@
                     android:padding="4dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/desc_pictograma_bien3"
-                    android:src="@android:drawable/btn_star_big_on"
+                    android:src="@drawable/bien_puntual"
                     android:tag="bien_puntual" />
 
                 <TextView
@@ -166,7 +166,7 @@
                     android:padding="4dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/desc_pictograma_regular1"
-                    android:src="@android:drawable/btn_star_big_off"
+                    android:src="@drawable/regular_ok"
                     android:tag="regular_normal" />
 
                 <TextView
@@ -192,7 +192,7 @@
                     android:padding="4dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/desc_pictograma_regular2"
-                    android:src="@android:drawable/btn_star_big_off"
+                    android:src="@drawable/regular_mejorable"
                     android:tag="regular_mejorable" />
 
                 <TextView
@@ -218,7 +218,7 @@
                     android:padding="4dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/desc_pictograma_regular3"
-                    android:src="@android:drawable/btn_star_big_off"
+                    android:src="@drawable/regular_lento"
                     android:tag="regular_lento" />
 
                 <TextView
@@ -263,7 +263,7 @@
                     android:padding="4dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/desc_pictograma_mal1"
-                    android:src="@android:drawable/ic_delete"
+                    android:src="@drawable/mal_impuntual"
                     android:tag="mal_impuntual" />
 
                 <TextView
@@ -289,7 +289,7 @@
                     android:padding="4dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/desc_pictograma_mal2"
-                    android:src="@android:drawable/ic_delete"
+                    android:src="@drawable/mal_desagradable"
                     android:tag="mal_desagradable" />
 
                 <TextView
@@ -315,7 +315,7 @@
                     android:padding="4dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/desc_pictograma_mal3"
-                    android:src="@android:drawable/ic_delete"
+                    android:src="@drawable/mal_no_realizado"
                     android:tag="mal_no_realizado" />
 
                 <TextView

@@ -118,12 +118,7 @@ class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
             setPadding(4, 4, 4, 4)
 
             // Color según categoría
-            val icono = when {
-                tag.startsWith("bien_") -> android.R.drawable.btn_star_big_on
-                tag.startsWith("regular_") -> android.R.drawable.btn_star_big_off
-                tag.startsWith("mal_") -> android.R.drawable.ic_delete
-                else -> android.R.drawable.ic_menu_help
-            }
+            val icono = obtenerDrawable(tag)
             setImageResource(icono)
         }
 
@@ -141,20 +136,20 @@ class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
     }
 
     /**
-     * Mapea el tag del pictograma a su texto descriptivo legible.
+     * Mapea el tag del pictograma a su recurso drawable de ARASAAC.
      */
-    private fun obtenerDescripcion(tag: String): String {
+    private fun obtenerDrawable(tag: String): Int {
         return when (tag) {
-            "bien_excelente" -> getString(R.string.desc_pictograma_bien1)
-            "bien_amable" -> getString(R.string.desc_pictograma_bien2)
-            "bien_puntual" -> getString(R.string.desc_pictograma_bien3)
-            "regular_normal" -> getString(R.string.desc_pictograma_regular1)
-            "regular_mejorable" -> getString(R.string.desc_pictograma_regular2)
-            "regular_lento" -> getString(R.string.desc_pictograma_regular3)
-            "mal_impuntual" -> getString(R.string.desc_pictograma_mal1)
-            "mal_desagradable" -> getString(R.string.desc_pictograma_mal2)
-            "mal_no_realizado" -> getString(R.string.desc_pictograma_mal3)
-            else -> tag
+            "bien_excelente" -> R.drawable.bien_excelente
+            "bien_amable" -> R.drawable.bien_amable
+            "bien_puntual" -> R.drawable.bien_puntual
+            "regular_normal" -> R.drawable.regular_mejorable
+            "regular_mejorable" -> R.drawable.regular_mejorable
+            "regular_lento" -> R.drawable.regular_lento
+            "mal_impuntual" -> R.drawable.mal_impuntual
+            "mal_desagradable" -> R.drawable.mal_desagradable
+            "mal_no_realizado" -> R.drawable.mal_no_realizado
+            else -> android.R.drawable.ic_menu_help
         }
     }
 
