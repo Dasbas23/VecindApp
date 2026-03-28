@@ -108,5 +108,11 @@
     <string name="desc_pictograma_mal1">Impuntual</string>
     <string name="desc_pictograma_mal2">Desagradable</string>
     <string name="desc_pictograma_mal3">No realizado</string>
+
+    <!-- ═══ Detalle Valoración ═══ -->
+    <string name="detalle_valoracion_titulo">Valoración recibida</string>
+    <string name="detalle_valoracion_pictogramas">Pictogramas seleccionados</string>
+    <string name="detalle_valoracion_comentario">Comentario</string>
     <string name="detalle_valoracion_fecha">Valorado el %s</string>
+    <string name="btn_cerrar">Cerrar</string>
 </resources>

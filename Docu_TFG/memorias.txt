@@ -284,16 +284,23 @@ Termino ya y me dejo cosas para mañana
 
 ↪ 28.03.2026 :
 	Hoy parece que podré tabjar un par de horas. A ver con que me encuentro... 
-
-
-	**Tareas pendientes de ayer: lo planificado. Repasar todo el código sugerido Claude.
-	**Tareas para hoy: Rematar y testear el Sprint 4 (Valoraciones ARASAAC)**
-⇢ 2. Actualizar el diseño `bottom_sheet_valoracion.xml` para incluir esos `drawables` reales y poner los textos debajo de cada imagen (preparando el terreno para el TTS).
-⇢ 3. Revisar y repasar el código sugerido por Claude (los nuevos BottomSheets y la conexión con el Historial).
-⇢ 4. PRUEBA DE FUEGO FUNCIONAL: Simular ser Usuario A, pedir servicio al Usuario B. Aceptar, Completar, ver el Popup obligatorio de ARASAAC, valorar, e ir al historial para ver la reseña guardada.
-⇢ 
-	↪
-
+	[OK] Tareas pendientes de ayer: lo planificado. Repasar todo el código sugerido Claude. [He probado una cosa nueva...Mientras he estado pensando en como hacer los comits anteriores, ClaudeCode me ha implementado los cambios sugeridos en el chat de Claude. Todo esto porque se lo hedado masticado y como tiene que hacerlo. No me he fiado mucho por si me la liaba pero parece que si le das las directrices claras lo hace bien. Aún así hay que ir con cuidado porque el modelo que tengo corriendo en local para ClaudeCode (qwen3-coder:30b) no tiene habilitado el thinking así que es un poquito más torpe y no es capaz de pensar si está haciendo bien o mal su tarea. Al menos esa es mi sensación comparado con un super modelo como Opus 4.6 con razonamiento extendido.]
+	[OK] Tareas para hoy: Rematar y testear el Sprint 4 (Valoraciones ARASAAC)**
+⇢ Actualizar el diseño `bottom_sheet_valoracion.xml` para incluir esos `drawables` reales y poner los textos debajo de cada imagen (preparando el terreno para el TTS).
+	↪ He renombrado los pictogramas según la tabla que me había creado Claude pero más tarde , en el código los tenía mal mapeados.
+		▼ Problema: Al descargar los pictogramas, uno se guardó con el nombre `regular_ok.png` en lugar de `regular_normal.png` (que era el que esperaba la lógica del código). Además, descargué un par de pictogramas extra ("duda_esperar" y "no_entiendo") que no encajaban en el Grid de 3x3.
+		+ Solución: En lugar de renombrar archivos o tocar la UI, se ajustó el mapeo interno en la función `obtenerDrawable()` para que el tag "regular_normal" devuelva `R.drawable.regular_ok`. Los iconos extra se han dejado en la carpeta para un posible tutorial/guía de uso futuro. Se evitó usar `assets` y se trabajó directamente con `res/drawable/` para mejorar el rendimiento y evitar código innecesario con `BitmapFactory`.
+⇢ Revisar y repasar el código sugerido por Claude (los nuevos BottomSheets y la conexión con el Historial).
+	↪ No lo he revisado finalmente pero ha quedado bien. 
+		▼ Problema 1: Quedaba una variable hardcodeada `usuarioActualId = 1` en el constructor del `HistorialAdapter`, lo que rompía la lógica de sesión dinámica que hicimos ayer.
+		+ Solución 1: Se eliminó el valor por defecto y se pasó el ID real del usuario instanciando `SesionUsuario(requireContext()).obtenerUsuarioId()` desde el Fragment.
+		▼ Problema 2: Al intentar compilar (Rebuild), Gradle lanzó un error crítico `processDebugResources FAILED`. Faltaban declaraciones de strings (`detalle_valoracion_titulo`, etc.) en el `strings.xml`. Además, en la lógica del Kotlin faltaba el método `obtenerDescripcion()` y había comentarios residuales de la IA.
+		+ Solución 2: Se utilizó Claude Code en local para hacer la "cirugía". Inyectó las strings faltantes, implementó el mapeo de textos y limpió la clase `DetalleValoracionBottomSheet.kt`. Tras esto, la compilación fue exitosa (`BUILD SUCCESSFUL`).
+⇢ PRUEBA DE FUEGO FUNCIONAL: Simular ser Usuario A, pedir servicio al Usuario B. Aceptar, Completar, ver el Popup obligatorio de ARASAAC, valorar, e ir al historial para ver la reseña guardada.
+	↪ He hecho la prueba funcional y he visto cosas que me gustan pero también algún problema.
+		▼ Problema: El bottomsheet muestra el mensaje "Valoración recibida" tanto si eres el comprador como si eres el vendedor. Eso hace que el usuario se sienta confundido. Ya me siento yo confundido y soy el que la está desarrollando XD. En verdad antes de pasar al siguiente sprint, siento la gran necesidad de resolver 3 cosas: 1º -> la diferenciación entre los servicios ofertados por el usuario con la sesión iniciada y los que este mismo ha consumido. 2º -> acceder al detalle de la valoración y/o servicio  desde el fragment perfil. 3º -> Desde el fragment transacciones , saber cual es mía y cual es de otros (ya lo sabemos ahora porque se diferencian gracias a unas etiquetas de texto "comprador" y "vendedor") y ver el detalle de dicho servicio(descripción y valoración)
+		+ Solución: (Mentalidad MVP). En lugar de romper el flujo del Sprint actual para añadir estas mejoras de usabilidad, se toma la decisión arquitectónica de mantener el foco. Para el problema del título, se cambiará en el strings.xml a un texto neutral como "Detalle de valoración" para salir del paso. Las mejoras de navegación en listas y diferenciación visual de roles se mandan directamente al Backlog del Sprint 5/6 (Refinamiento UI/UX). El MVP funcional está cerrado y asegurado.
+En verdad antes de pasar al siguiente sprint, siento la gran necesidad de resolver 3 cosas: 1º -> la diferenciación entre los servicios ofertados por el usuario con la sesión iniciada y los que este mismo ha consumido. 2º -> acceder al detalle de la valoración y/o servicio  desde el fragment perfil. 3º -> Desde el fragment transacciones , saber cual es mía y cual es de otros (ya lo sabemos ahora porque se diferencian gracias a unas etiquetas de texto "comprador" y "vendedor") y ver el detalle de dicho servicio(descripción y valoración). Pero sé que no es cuando toca hacerlo ya que ahora mismo estoy con el MVP. Así que desahogado, prosigo con el trabajo.
 
  
 --- SÍMBOLOGÍA---
@@ -338,9 +345,15 @@ Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir 
 
 	↳ Pull Requests (PR) y Revisión de Código: He aprendido que un PR no es un simple comando de Git, sino una metodología de trabajo. Sirve para proponer cambios desde una rama secundaria a la principal, permitiendo revisar el código (diffs), ver qué archivos se tocan y comprobar que no rompen nada antes de integrarlos. En un entorno real, es donde el equipo te aprueba o rechaza el código.
 	↳ Git Cherry-Pick (Cirugía de código): Esta herramienta me ha salvado la vida. He aprendido que no siempre tienes que hacer un "merge" completo de una rama. Con `cherry-pick` puedo elegir el hash de un commit específico de cualquier rama e integrarlo en la mía. Lo he usado para traerme correcciones de bugs generadas en ramas de la IA, evitando así ensuciar mi historial de Git con commits basura de configuración de su entorno o dejando rastros indeseados para el TFG. Es literalmente hacer cirugía en el historial de versiones.
+	↳ Conventional Commits (Semántica de Commits): He aprendido que el historial de Git es la "documentación viva" del proyecto y debe ser legible a simple vista. Tras perder tiempo dudando sobre qué etiqueta usar al subir archivos o corregir fallos, he investigado y asimilado el estándar de la industria. Lo dejo documentado como mi guía definitiva:
+		- `feat:` (Feature). Añade una nueva funcionalidad al código que aporta valor al usuario final. (Ej: `feat: implementar BottomSheet de valoraciones con pictogramas ARASAAC`). Si subo imágenes (como los PNGs) junto con el código que las utiliza por primera vez, todo ese paquete es un `feat`.
+		- `fix:` Corrige un error o bug en el código de producción. (Ej: `fix: corregir sobreescritura del saldo de horas al completar una transacción`).
+		- `chore:` Tareas de mantenimiento rutinario que NO afectan al código del usuario final. (Ej: `chore: actualizar el archivo .gitignore` o limpiar archivos residuales del IDE).
+		- `build:` Cambios que afectan al sistema de compilación o dependencias estructurales del proyecto. (Ej: `build: migrar el procesador de anotaciones de KAPT a KSP en build.gradle`).
+		- `refactor:` Modificaciones en el código que ni añaden funcionalidades ni arreglan bugs, pero mejoran la estructura interna, el rendimiento o la legibilidad. (Ej: `refactor: extraer lógica del back stack a un método helper en MainActivity`).
+		- `docs:` Cambios exclusivos en la documentación del proyecto. (Ej: `docs: actualizar README.md y añadir manual de configuración de red Zscaler`).
 
-(Actualizado a mediados del Sprint 4 - 25.03.2026)
-
+(Actualizado a finales del Sprint 4 - 28.03.2026)
 
 
 ------------Fundamentos/Ideas para hacer el trabajo Escrito------------
