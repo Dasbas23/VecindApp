@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.vecindapp.data.entities.Transaccion
+import com.example.vecindapp.data.entities.Valoracion
 import com.example.vecindapp.domain.model.EstadoTransaccion
 import com.example.vecindapp.domain.repository.ServicioRepository
 import com.example.vecindapp.domain.repository.TransaccionRepository
+import com.example.vecindapp.domain.repository.ValoracionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -27,12 +29,14 @@ import java.util.Locale
  *
  * @property transaccionRepository Repositorio de transacciones.
  * @property servicioRepository    Repositorio de servicios (para obtener títulos).
+ * @property valoracionRepository  Repositorio de valoraciones.
  *
  * @see HistorialFragment
  */
 class HistorialViewModel(
     private val transaccionRepository: TransaccionRepository,
     private val servicioRepository: ServicioRepository,
+    private val valoracionRepository: ValoracionRepository,
     private val usuarioActualId: Int
 ) : ViewModel() {
 
@@ -119,15 +123,25 @@ class HistorialViewModel(
     class Factory(
         private val transaccionRepository: TransaccionRepository,
         private val servicioRepository: ServicioRepository,
+        private val valoracionRepository: ValoracionRepository,
         private val usuarioActualId: Int
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(HistorialViewModel::class.java)) {
-                return HistorialViewModel(transaccionRepository, servicioRepository, usuarioActualId) as T
+                return HistorialViewModel(
+                    transaccionRepository, servicioRepository, valoracionRepository, usuarioActualId
+                ) as T
             }
             throw IllegalArgumentException("ViewModel desconocido: ${modelClass.name}")
         }
+    }
+
+    /**
+     * Obtiene la valoración de una transacción para mostrar el detalle.
+     */
+    suspend fun obtenerValoracion(transaccionId: Int): Valoracion? {
+        return valoracionRepository.getByTransaccion(transaccionId)
     }
 }
 

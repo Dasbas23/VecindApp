@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
 import com.example.vecindapp.data.SesionUsuario
+import com.example.vecindapp.ui.valoracion.DetalleValoracionBottomSheet
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -44,6 +46,7 @@ class HistorialFragment : Fragment() {
         HistorialViewModel.Factory(
             app.transaccionRepository,
             app.servicioRepository,
+            app.valoracionRepository,
             sesion.obtenerUsuarioId()
         )
     }
@@ -112,11 +115,29 @@ class HistorialFragment : Fragment() {
      * Configura los dos RecyclerViews (completadas y canceladas).
      */
     private fun configurarRecyclerViews() {
-        adapterCompletadas = HistorialAdapter()
+
+        val sesion = SesionUsuario(requireContext())
+        adapterCompletadas = HistorialAdapter(
+            usuarioActualId = sesion.obtenerUsuarioId()
+        ) { transaccionId ->
+            viewLifecycleOwner.lifecycleScope.launch {
+                val valoracion = viewModel.obtenerValoracion(transaccionId)
+                if (valoracion != null) {
+                    val bottomSheet = DetalleValoracionBottomSheet.newInstance(
+                        pictogramasJson = valoracion.pictogramasJson,
+                        comentario = valoracion.comentario,
+                        timestamp = valoracion.timestamp
+                    )
+                    bottomSheet.show(childFragmentManager, "detalleValoracion")
+                } else {
+                    Toast.makeText(requireContext(), "Sin valoración", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
         rvHistorial.layoutManager = LinearLayoutManager(requireContext())
         rvHistorial.adapter = adapterCompletadas
 
-        adapterCanceladas = HistorialAdapter()
+        adapterCanceladas = HistorialAdapter(usuarioActualId = sesion.obtenerUsuarioId())
         rvCanceladas.layoutManager = LinearLayoutManager(requireContext())
         rvCanceladas.adapter = adapterCanceladas
     }

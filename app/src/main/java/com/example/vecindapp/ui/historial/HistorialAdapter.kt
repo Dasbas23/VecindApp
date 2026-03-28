@@ -20,7 +20,10 @@ import java.util.Locale
  * indicando el título del servicio, si el usuario ganó o gastó horas
  * (con signo +/-  en verde/rojo) y la fecha.
  */
-class HistorialAdapter : ListAdapter<HistorialItem, HistorialAdapter.HistorialViewHolder>(HistorialDiffCallback()) {
+class HistorialAdapter(
+    private val usuarioActualId: Int,
+    private val onItemClick: ((Int) -> Unit)? = null
+) : ListAdapter<HistorialItem, HistorialAdapter.HistorialViewHolder>(HistorialDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistorialViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -76,6 +79,11 @@ class HistorialAdapter : ListAdapter<HistorialItem, HistorialAdapter.HistorialVi
 
             // Historial es solo lectura
             llBotones.visibility = View.GONE
+
+            // Add click listener
+            itemView.setOnClickListener {
+                onItemClick?.invoke(item.transaccion.idTransaccion)
+            }
         }
     }
 

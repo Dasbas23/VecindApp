@@ -2,6 +2,7 @@ package com.example.vecindapp.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 
 /**
  * Helper para gestionar la sesión del usuario activo mediante SharedPreferences.
@@ -48,7 +49,7 @@ class SesionUsuario(context: Context) {
      * Cierra la sesión eliminando el ID guardado.
      */
     fun cerrarSesion() {
-        prefs.edit().remove(KEY_USUARIO_ID).apply()
+        prefs.edit { remove(KEY_USUARIO_ID) }
     }
 
     companion object {
