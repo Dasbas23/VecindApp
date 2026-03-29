@@ -303,6 +303,10 @@ Termino ya y me dejo cosas para mañana
 En verdad antes de pasar al siguiente sprint, siento la gran necesidad de resolver 3 cosas: 1º -> la diferenciación entre los servicios ofertados por el usuario con la sesión iniciada y los que este mismo ha consumido. 2º -> acceder al detalle de la valoración y/o servicio  desde el fragment perfil. 3º -> Desde el fragment transacciones , saber cual es mía y cual es de otros (ya lo sabemos ahora porque se diferencian gracias a unas etiquetas de texto "comprador" y "vendedor") y ver el detalle de dicho servicio(descripción y valoración). Pero sé que no es cuando toca hacerlo ya que ahora mismo estoy con el MVP. Así que desahogado, prosigo con el trabajo.
 !!!FINAL DEL SPRINT4!!!!
 
+↪ 29.03.2026 :
+	SE DA COMIENZO AL SPRINT 5!
+		↪ Lo cierto que es que he tomado la decisión de dividir el srpint 5 en tareas más simples para poder centrarme más en detalle y no abarcar tanto. Si que es cierto que al final los sprits han ido más rápido de lo que yo me esperaba. Pero claro, no me voy a estar alargando innecesariamente con cada sprint. Lo bueno que finalmente tendré una app casi casi como yo me la había imaginado desde el principio.
+
 
  
 --- SÍMBOLOGÍA---
