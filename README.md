@@ -44,11 +44,13 @@ app/src/main/java/com/example/vecindapp/
 │   ├── repository/          Interfaces de repositorios (contratos)
 │   └── usecase/             Casos de uso
 ├── ui/                    ← Capa de presentación
+│   ├── auth/                Autenticación (login, registro)
 │   ├── escaparate/          Catálogo de servicios (RecyclerView)
 │   ├── servicio/            Detalle, publicación y edición de servicio
 │   ├── transaccion/         Gestión de transacciones (aceptar, completar, cancelar)
 │   ├── perfil/              Perfil del vecino (saldo, nivel, mis servicios)
-│   └── historial/           Gráfico de intercambios (MPAndroidChart)
+│   ├── historial/           Gráfico de intercambios (MPAndroidChart)
+│   └── valoracion/          Sistema de valoraciones con pictogramas ARASAAC
 └── worker/                ← Tareas en segundo plano (WorkManager)
 ```
 
