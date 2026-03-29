@@ -35,7 +35,8 @@ import java.util.Locale
 class TransaccionAdapter(
     private val onAceptar: (TransaccionUI) -> Unit,
     private val onCompletar: (TransaccionUI) -> Unit,
-    private val onCancelar: (TransaccionUI) -> Unit
+    private val onCancelar: (TransaccionUI) -> Unit,
+    private val onValorar: (TransaccionUI) -> Unit
 ) : ListAdapter<TransaccionUI, TransaccionAdapter.TransaccionViewHolder>(TransaccionDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransaccionViewHolder {
@@ -95,16 +96,16 @@ class TransaccionAdapter(
          * Muestra u oculta los botones de acción según el rol y estado.
          */
         private fun configurarBotones(item: TransaccionUI) {
-            val tieneAcciones = item.puedeAceptar || item.puedeCompletar || item.puedeCancelar
+            val tieneAcciones = item.puedeAceptar || item.puedeCompletar || item.puedeCancelar || item.puedeValorar
 
             if (!tieneAcciones) {
-                llBotones.visibility = View.INVISIBLE
+                llBotones.visibility = View.GONE
                 return
             }
 
             llBotones.visibility = View.VISIBLE
 
-            // Botón positivo: Aceptar o Completar
+            // Botón positivo: Aceptar, Completar o Valorar
             when {
                 item.puedeAceptar -> {
                     btnPositivo.visibility = View.VISIBLE
@@ -116,8 +117,13 @@ class TransaccionAdapter(
                     btnPositivo.text = itemView.context.getString(R.string.btn_completar)
                     btnPositivo.setOnClickListener { onCompletar(item) }
                 }
+                item.puedeValorar -> {
+                    btnPositivo.visibility = View.VISIBLE
+                    btnPositivo.text = itemView.context.getString(R.string.btn_valorar)
+                    btnPositivo.setOnClickListener { onValorar(item) }
+                }
                 else -> {
-                    btnPositivo.visibility = View.INVISIBLE
+                    btnPositivo.visibility = View.GONE
                 }
             }
 
@@ -127,7 +133,7 @@ class TransaccionAdapter(
                 btnNegativo.text = itemView.context.getString(R.string.btn_cancelar)
                 btnNegativo.setOnClickListener { onCancelar(item) }
             } else {
-                btnNegativo.visibility = View.INVISIBLE
+                btnNegativo.visibility = View.GONE
             }
         }
     }

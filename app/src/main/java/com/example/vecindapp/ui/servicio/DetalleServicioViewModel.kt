@@ -8,6 +8,7 @@ import com.example.vecindapp.data.entities.Transaccion
 import com.example.vecindapp.domain.model.EstadoServicio
 import com.example.vecindapp.domain.repository.ServicioRepository
 import com.example.vecindapp.domain.repository.TransaccionRepository
+import com.example.vecindapp.domain.repository.UsuarioRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -31,7 +32,8 @@ import kotlinx.coroutines.launch
  */
 class DetalleServicioViewModel(
     private val servicioRepository: ServicioRepository,
-    private val transaccionRepository: TransaccionRepository
+    private val transaccionRepository: TransaccionRepository,
+    private val usuarioRepository: UsuarioRepository
 ) : ViewModel() {
 
     /** Servicio cargado de la BBDD de forma reactiva. */
@@ -95,6 +97,13 @@ class DetalleServicioViewModel(
 
         viewModelScope.launch {
             try {
+                // 0. Verificar saldo del comprador
+                val comprador = usuarioRepository.getByIdOnce(compradorId)
+                if (comprador == null || comprador.saldoHoras < servicioActual.costeHoras) {
+                    _error.value = "Saldo insuficiente (necesitas ${servicioActual.costeHoras} h)"
+                    return@launch
+                }
+
                 // 1. Crear la transacción
                 val transaccion = Transaccion(
                     idCompradorFk = compradorId,
@@ -172,12 +181,13 @@ class DetalleServicioViewModel(
      */
     class Factory(
         private val servicioRepository: ServicioRepository,
-        private val transaccionRepository: TransaccionRepository
+        private val transaccionRepository: TransaccionRepository,
+        private val usuarioRepository: UsuarioRepository
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(DetalleServicioViewModel::class.java)) {
-                return DetalleServicioViewModel(servicioRepository, transaccionRepository) as T
+                return DetalleServicioViewModel(servicioRepository, transaccionRepository, usuarioRepository) as T
             }
             throw IllegalArgumentException("ViewModel desconocido: ${modelClass.name}")
         }

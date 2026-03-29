@@ -9,6 +9,7 @@ import com.example.vecindapp.domain.model.EstadoTransaccion
 import com.example.vecindapp.domain.repository.ServicioRepository
 import com.example.vecindapp.domain.repository.TransaccionRepository
 import com.example.vecindapp.domain.repository.UsuarioRepository
+import com.example.vecindapp.domain.repository.ValoracionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -46,7 +47,9 @@ import kotlinx.coroutines.launch
 class TransaccionViewModel(
     private val transaccionRepository: TransaccionRepository,
     private val servicioRepository: ServicioRepository,
-    private val usuarioRepository: UsuarioRepository
+    private val usuarioRepository: UsuarioRepository,
+    private val valoracionRepository: ValoracionRepository,
+    private val usuarioActualId: Int
 ) : ViewModel() {
 
     /** Lista enriquecida de transacciones para la UI. */
@@ -57,8 +60,9 @@ class TransaccionViewModel(
     private val _mensaje = MutableStateFlow<String?>(null)
     val mensaje: StateFlow<String?> = _mensaje
 
-    /** ID del usuario actual. TODO: Obtener del sistema de login/perfil. */
-    private val usuarioActualId = 1
+    /** Transacción recién completada (para abrir el BottomSheet de valoración). */
+    private val _transaccionCompletada = MutableStateFlow<TransaccionUI?>(null)
+    val transaccionCompletada: StateFlow<TransaccionUI?> = _transaccionCompletada
 
     init {
         cargarTransacciones()
@@ -68,7 +72,7 @@ class TransaccionViewModel(
      * Carga las transacciones del usuario actual y las transforma
      * en [TransaccionUI] con datos enriquecidos.
      */
-    private fun cargarTransacciones() {
+     fun cargarTransacciones() {
         viewModelScope.launch {
             transaccionRepository.getByUsuario(usuarioActualId)
                 .catch { e -> e.printStackTrace() }
@@ -96,6 +100,8 @@ class TransaccionViewModel(
         val puedeCompletar = esVendedor && transaccion.estado == EstadoTransaccion.ACEPTADA
         val puedeCancelar = transaccion.estado == EstadoTransaccion.PENDIENTE ||
                 transaccion.estado == EstadoTransaccion.ACEPTADA
+        val yaValorada = valoracionRepository.getByTransaccion(transaccion.idTransaccion) != null
+        val puedeValorar = transaccion.estado == EstadoTransaccion.COMPLETADA && !yaValorada
 
         return TransaccionUI(
             transaccion = transaccion,
@@ -103,7 +109,8 @@ class TransaccionViewModel(
             rol = rol,
             puedeAceptar = puedeAceptar,
             puedeCompletar = puedeCompletar,
-            puedeCancelar = puedeCancelar
+            puedeCancelar = puedeCancelar,
+            puedeValorar = puedeValorar
         )
     }
 
@@ -160,32 +167,19 @@ class TransaccionViewModel(
                     return@launch
                 }
 
-                // 3. Debitar comprador (quitar horas al comprador)
-                usuarioRepository.updateSaldo(
-                    comprador.idUsuario,
-                    comprador.saldoHoras - horas
-                )
-
-                // 4. Acreditar vendedor (poner las horas en la cuenta del vendedor)
-                usuarioRepository.updateSaldo(
-                    vendedor.idUsuario,
-                    vendedor.saldoHoras + horas
-                )
-
-                // 5. Incrementar contadores de intercambios
+                // 3. Debitar comprador y actualizar intercambios/nivel en un solo update
                 val compradorActualizado = comprador.copy(
+                    saldoHoras = comprador.saldoHoras - horas,
                     intercambiosTotal = comprador.intercambiosTotal + 1
                 )
+                usuarioRepository.update(compradorActualizado.copy(nivel = compradorActualizado.calcularNivel()))
+
+                // 4. Acreditar vendedor y actualizar intercambios/nivel en un solo update
                 val vendedorActualizado = vendedor.copy(
+                    saldoHoras = vendedor.saldoHoras + horas,
                     intercambiosTotal = vendedor.intercambiosTotal + 1
                 )
-                // Recalcular niveles
-                usuarioRepository.update(
-                    compradorActualizado.copy(nivel = compradorActualizado.calcularNivel())
-                )
-                usuarioRepository.update(
-                    vendedorActualizado.copy(nivel = vendedorActualizado.calcularNivel())
-                )
+                usuarioRepository.update(vendedorActualizado.copy(nivel = vendedorActualizado.calcularNivel()))
 
                 // 6. Cambiar estado de transacción
                 transaccionRepository.update(
@@ -198,13 +192,22 @@ class TransaccionViewModel(
                     EstadoServicio.COMPLETADO.name
                 )
 
-                _mensaje.value = "Transacción completada. ${horas}h transferidas"
+                _mensaje.value = "¡Horas transferidas con éxito!"
+                _transaccionCompletada.value = item
+
 
             } catch (e: Exception) {
                 e.printStackTrace()
                 _mensaje.value = "Error al completar la transacción"
             }
         }
+    }
+
+    /**
+     * Limpia el mensaje de feedback.
+     */
+    fun limpiarTransaccionCompletada() {
+        _transaccionCompletada.value = null
     }
 
     /**
@@ -246,13 +249,16 @@ class TransaccionViewModel(
     class Factory(
         private val transaccionRepository: TransaccionRepository,
         private val servicioRepository: ServicioRepository,
-        private val usuarioRepository: UsuarioRepository
+        private val usuarioRepository: UsuarioRepository,
+        private val valoracionRepository: ValoracionRepository,
+        private val usuarioActualId: Int
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(TransaccionViewModel::class.java)) {
                 return TransaccionViewModel(
-                    transaccionRepository, servicioRepository, usuarioRepository
+                    transaccionRepository, servicioRepository, usuarioRepository,
+                    valoracionRepository, usuarioActualId
                 ) as T
             }
             throw IllegalArgumentException("ViewModel desconocido: ${modelClass.name}")

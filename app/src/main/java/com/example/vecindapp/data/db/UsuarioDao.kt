@@ -80,4 +80,13 @@ interface UsuarioDao {
      */
     @Query("UPDATE usuario SET saldo_horas = :saldo WHERE id_usuario = :id")
     suspend fun updateSaldo(id: Int, saldo: Double)
+
+    /**
+     * Busca un usuario por nombre (case-insensitive).
+     *
+     * @param nombre Nombre a buscar.
+     * @return El [Usuario] o null si no existe.
+     */
+    @Query("SELECT * FROM usuario WHERE nombre = :nombre COLLATE NOCASE LIMIT 1")
+    suspend fun buscarPorNombre(nombre: String): Usuario?
 }

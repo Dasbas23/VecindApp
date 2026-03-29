@@ -1,0 +1,48 @@
+[alias]
+	# === BÁSICOS ===
+	s = status -sb #[ok] (no se si me gusta mas git status normal pero con colores)
+	a = add . #[ok] (add normal)
+	c = commit -m #[ok] (commit normal)
+	ac = !git add . && git commit -m #[ok] (Añade todos los fichero modificados y hace commit con mensaje) - Yo la quitaría porque prefiero hacer git a > git s > git c y si acaso un git p.... aunque igual es útil para alguna chore sencillita como actualizar memorias.
+	p = push #[ok] (Push a remote)
+	pl = pull #[ok] (Pull desde remote)
+
+	# === RAMAS ===
+	co = checkout #[ok] (Cambia a la rama seleccionada, hay que darle un argumento hacia que rama se quiere cambiar)
+	cob = checkout -b #[ok] (Crea una rama nueva y salta a ella)
+	br = branch #[ok] (Nueva rama)
+	bra = branch -a #[ok] (Lista todas las ramas: locales + remotas)
+	brd = branch -d #[ok] (Elimina la rama que digas como argumento en local)
+	brr = push origin --delete #[ok] (Borra una rama del remoto)
+	merged = branch --merged #[ok] (Lista ramas ya mergeadas que puedes borrar tranquilamente. Para limpiar ramas muertas)
+
+	# === HISTORIAL ===
+	lg = log --oneline --graph --all --decorate --color #[ok] (A diferencia con ll es más compacto)
+	ll = log --graph --pretty=format:'%C(yellow)%h%Creset %C(cyan)%an%Creset %C(white)%s%Creset %C(green)(%cr)%Creset%C(auto)%d%Creset' --all #[ok] (Te muestra el graph en bonito con el formato amarillo: commits, azul:usuario, blanco: que se ha hecho, Verde:hace cuanto tiempo)
+	last = log -1 --stat #[ok] (Muestra el último commit)
+	preview = log desarrollo..HEAD --oneline #[ok] (Antes de mergear a desarrollo, muestra qué commits tiene tu rama que desarrollo no tiene. Retrovisor antes de cerrar sprint)
+
+	# === DESHACER ===
+	undo = reset HEAD~1 --mixed #[ok] (Deshace el commit pero deja el add y los archivos sin tocar. Sirve para editar un mensaje mal puesto o añadir más archivos.)
+	unstage = reset HEAD -- #[ok] (Lo contrario de add. Saca el archivo del staging)
+	discard = checkout -- #[ok] (Deja el archivo como estaba al principio del commit. Sirve para hacer experimentos y si no funciona dejarlo como estaba al comienzo)
+	oops = commit --amend --no-edit #[ok] (Se te olvidó un archivo en el commit? git add archivo.kt > git oops y se mete en el último commit sin cambiar el mensaje)
+	nuke = !git reset --hard HEAD && git clean -fd #[ok] (Resetea la rama en la que estás. CUIDADO: borra TODO lo no commiteado)
+
+	# === STASH ===
+	ss = stash save #[ok] (Hace un stash. Congela los cambios y no se los lleva contigo si haces checkout)
+	sp = stash pop #[ok] (Recupera los cambios del último stash y lo borra de la lista)
+	sl = stash list #[ok] (Muestra la lista de stashes)
+
+	# === INFO ===
+	who = shortlog -sne #[ok] (Muestra quien soy y cuantos commits tienes)
+	here = rev-parse --abbrev-ref HEAD #[ok] (Muestra donde esta el HEAD en local)
+	alias = config --get-regexp alias #[ok] (Muestra la lista de alias disponibles)
+	f = fetch origin #[ok] (Descarga info del remoto sin tocar tu código. Como mirar el correo sin abrir los sobres)
+	changes = diff --stat #[@] (Resumen de archivos tocados y líneas cambiadas antes de commitear)
+	count = rev-list --count HEAD #[@] (Cuántos commits lleva el repo en total)
+	lastweek = log --oneline --since='1 week ago' #[@] (Commits de la última semana. Útil para memorias y seguimiento)
+	graph = log --oneline --graph --all -20 #[@] (Como lg pero solo los últimos 20 commits)
+	d = diff #[@] (Ver cambios en detalle de archivos NO stageados)
+	ds = diff --staged #[@] (Ver cambios en detalle de archivos YA stageados, listos para commit)
+	dw = diff --word-diff #[@] (Como d pero resalta palabra por palabra en vez de línea entera. Ideal para textos o strings largos)

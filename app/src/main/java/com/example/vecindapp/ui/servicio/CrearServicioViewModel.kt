@@ -56,7 +56,7 @@ class CrearServicioViewModel(
         descripcion: String,
         categoria: CategoriaServicio,
         costeTexto: String,
-        usuarioId: Int = 1 // TODO: Obtener del usuario logueado
+        usuarioId: Int
     ) {
         // Validaciones
         if (titulo.isBlank()) {

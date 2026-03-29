@@ -157,24 +157,207 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 ⇢ He cerrado el S3 !! ...casi sin darme cuenta... Ha sido bastante corto:
 ⇢ Por lo pronto he tenido que reorganizar los sprints porque a Claude s ele ha ido la olla y no me ha hecho ni commits ni historias y me ha preguntando que por donde seguimos. He tenido que pararle los pies un poco pero vamos que al fin y al cabo es una IA y el que tiene que tomar las decisiones de como actuar soy yo así que es 100% mi culpa. 
 	↳ Como ya me olía que algo así iba a pasar yo ya me había adelantado con el commit para el perfil antes de introducir los cambios necesarios para implementar el historial.
-**Tareas** para esta tarde
+		**Tareas** para esta tarde (no se si borrar este apartado o adaptarlo a tareas heechas)
 - En TransacctionAdapter: Cambiar los botones de INVISIBLE a GONE. Se ponen así para que el desarrollo sea más facil por ahora. Finalmente será necesario GONE para que colapsen y no ocupen espacio. [NO]
 - Repasar nav_graph.xml: Entender y ver el objetivo de este archivo. Me gusta que desde escaparateFragment salen flechas hacia crearServicioFragment y detalleServicioFragment. Observo que que el resto no van relacionados con flechas y no sé si hace falta.[OK] Entiendo que no hacen falta las flechas po no ser una navegación secuecial. 
 -Para probar: desinstala y reinstala (por el seed). Crea un servicio tuyo → ve al servicio de María ("Clases de inglés") → solicitar → ve a la pestaña "Transacciones" → verás la transacción PENDIENTE como COMPRADOR. Como eres el comprador, solo puedes cancelar. Para probar "Aceptar" y "Completar" tendrías que simular ser María. [NOK] No he sabico como simular ser María
 - Que son las Factory class?? y que quiere decir ": ViewModelProvider.Factory {@Suppress("UNCHECKED_CAST")" [OK] Sirven para que Android sepa como crear los ViewModels según los parámetros que le pasamos. El supress es para avisar al compilador de que lo que estamos haciendo ya que la Factory es genérica y devuelve una clase T sin parámetros.
+⇢ !!!SE DA COMIENZO AL SPRINT 4: Usuarios + Valoraciones!!!
+	Seguro que será interesantísimo!! Tengo ganas de dejarlo curiosete. ;)
+
+↪ 21.03.2026 :
+	Contiuo con la implementación del S4:
+		▼ Problemón (creo) : No hemos llegado a usar @Transaction en la lógica de intercambios de horas para que sea atómica. Esto puede ocasionar problemas si dos usuarios solictan el mismo servicio a la vez?
+		+ Solución : Creo que al pasar el servicio a "PENDIENTE" para que el vendedor acepte dicha solicitud, no habrá problemas de este tipo. Aqui me surge la pregunta: ¿Podrá un usuario ofrecer el mismo servicio más de una vez? Yo creo que esto tiene que ser, oportunidad única y no "hacer necocio" de ello. 
+⇢ Para empezar, se crean los dos fragments para el inicio de sesión y registro de usuarios.
+⇢ Añadir el botón de "cerrar sesión" en el fragment_perfil.
+⇢ Crear SesionUsuario para almacenar el usuario que ha iniciado sesión para no tener que iniciar sesión cada vez que abra la app.
+⇢ Añadir en UsuadioDao una @Query que busca un usuario por el nombre en la BBDD
+	↳ Se hace case insensitve y además se usa .trim() para intentar asegurar que no haya fallos. De igual manera pienso que a futuro tendría que mejorar este sistema de alguna manera.
+⇢ Crear los viewModels de Login y Registro.
+⇢ Creara también la lógica para estos modelos y el botón de cerrado de seion
+⇢ He pasado *Pruebas funcionales* antes de hacer commit con lo implementado:
+	↳ La validación de usuario para el inicio de sesión y el manejo de errores es correcto porque no deja iniciar sesión si el usuario no existe en la base de datos.
+		▼ Problema : está que aún no se ha implementado correctamente el inicio de sesión y lo que hace la app es validar que el usuario existe pero inicia sesión  como "vecino demo" un usuario ha hardcodeado en la Seed. 
+		+ Solución : Se hará con el próximo fix porque hasta ahora me he centrado en las pantallas y el flujo entre ellas
+	↳ He observado un nuevo requerimiento para el sistema pero que creo que es bastante más complejo de lo que me imagino:
+		▼ Problema : Se que cada vez que haces clic en "atrás" la app vuelve a la pantalla que estaba anteriormente. Eso quiere decir que cada acción que se realiza en la app se suma a una especie de lista y que al accionar el botón atrás va recorriendo esa lista en orden inverso. Esto útil para algunos casos o pantallas pero no tanto cuando el usuario requiera salir de la app  y tenga que hacer 15 veces clic en el botón de volver atrás. Por ejemplo: recorro la barra inferior pulsando los 4 botones de izda a derecha uno cada vez en 2 ocasiones y he tenido que hacer clic 8X en botón atrás para poder salir de la app.
+		+ Solución : (fail) He invesigado muy poquito, 5 mins, y he visto que eso es normal cuando se utilizan fragments porque forman parte de la misma activity. Creo que la una de las soluciones para arreglar este comportamiento indeseado y las menos engorrosas,  es indicar como se debe comportar el botón o gesto de volver atrás diciéndole que vuelva a la pantalla del escaparate. De otra modo creo que habría que modificar la escructura de muhcas clases y layouts y será mucho mas complejo, pero de esto último no he llegado a averiguar nada, son solo pensamientos.[SOLUCIONADO EN REFACTOR]
+	↳ El fragment del registro funciona correctamente, según lo esperado y muestra los errores contemplados: nombre y barrio no pueden estar vacíos.
+		▼ Problema : He sido capaz de registrar usuarios nuevos con el mismo nombre y mismo barrio varias veces. Esto es algo que en el momento de la implementación no se tuvo en cuenta de manera específica pensando que  por alguna razón esto lo haría Room solo. 
+		+ Solución : Como decía anteriormente en mis memorias hay que mejorar de alguna manera tanto el inicio de sesión como el registro. Imagínate que hay dos usuarios con el mismo nombre pero distinto barrio ¿Qué pasaría? 
+	↳ Otra cosa que he podido detectar y que creo que tendré que mejorar a futuro y hacer un buen MVP, tendrá que ser la información que se muestra en las tarjetas: Creo que lo más sensato será incluir una lista con los barrios de la ciudad en Enums.kt y darle la opción al usuario a la hora de registrase en la app de escoger entre los barrios que se muestran en la lista y nada más porque si además dejamos que lo escriba él, se podría equivocar.
+⇢ He heco un commit "feat: pantallas login + registro mantener sesión de usuario"  antes de ponerme con las sesiones de los usuarios.
+	↳ A partir de ahora haré los commits mucho más detallados:  (feat: pantalla login /nfeat: pantalla registro /nfeat: mantener sesión de usuario con SharedPreferences /nfeat: botón cerrar sesión /nrefactor: MainActivity)
+chore: Actualizar memorias
+⇢ Se refactoriza el código para arreglar el back stack:
+	↳ Hacer que el bottmNav limpie la pila hasta llegar a escaparate con el resultado de que haciendo un clic hacia atrás vuelva a la pantalla del escaparate.
+		▼ Problema: resulta que el BottomNav, al navegar hacia atrás no se actualizaba el estado de la barra inferior dejando una mala sensación de uso.
+		+ Solución : Se refactoriza el Main (sinceramente no sé si es buena idea, pero funciona) haciendo que actualice el icono pero sin activar el listener. Ahora ya da mejora sensación.
+⇢ Se refactoriza la capa UI para deshacernos de las sesión de usuario hardcodeada con anterioridad. Ahora obtiene el ID del usuario que ha iniciado sesión porque se guarda.
+En algún momento parece que Claude está perdiendo contexto... es cierto que esta app está empezando a tener un tamaño bastante considerable y no sé si le estaré pidiendo tareas muy largas. ¿Debería hacerle solicitudes más cortas?
+⇢ **Pruebas funcionales**:
+	Se descubren bastantes cosas que es necesario corregir antes de seguir añadiendo más capas. Voy a empezar por el principio siguiendo los pasos marcados en el diagrama de casos de uso
+	↳ Caso 1, crear perfil : El perfil se crea correctamente.
+		▼ Problema : Seguimos teniendo los problemas de duplicado de usuarios.
+		+ Solución : [SPRINT 5] Se tiene en cuenta y se resolverá más tarde.
+	↳ Caso 2, Iniciar sesión en la app : Se puede iniciar sesión de manera normal.
+		▼ Problema : Al tener usuarios duplicados, mi lógica me dice que se iniciará con el 1º usuario que se encuentre en la base de datos con el nombre indicado en el login.
+		+ Solución : [SPRINT 5] Se tiene en cuenta y se resolverá más tarde con la implementación de usuarios únicos.
+	↳ Caso 3, 6 y 9: Se pueden publicar y editar múltiples ofertas. La visualización en el escaparate se realiza de manera adecuada.
+		▼ Problema : La cancelación de un servicio sea comprado o publicado por uno mismo no se refleja en el historial
+		+ Solución : Habría que ver como marcar estos servicios. Estoy pensado en marcar de un color los servicios propios distinguiendo con otro color los servicios de otras personas y que mantengan los estados "completado" , "pendiente", y "cancelado".
+	↳ Caso 4, explorar los distintos anuncios: Lo anuncios en el escaparate se pueden explorar libremente y se pueden solicitar también libremente. 
+		▼ Problema : El problema que encuentro aquí es que no se comprueba el saldo en horas del comprador quedando así anuncios  marcados como pendiente no dejando ver a otras personas el anuncio hasta que el vendedor intenta aceptarlo pero al aceptarlo se da cuenta de que no tiene horas y por tanto tiene que cancelar el servicio para que vuelva al escaparate.
+		+ Solución : Comprobar rápidamente el saldo de horas para ver si se puede o no mandar la solicitud del servicio. De esta manera no se bloquean anuncios innecesariamente.
+	↳ Caso 5, TTS : [SPRINT 5]
+	↳ Caso 6 implements Caso 7, Aceptar la propuesta de compra del servicio que implementa la valoración con ARASAAC: El proceso de aceptar un servicio no está funcionando según mis expectativas cuando realicé el diagrama de casos de uso. Lo que yo quería  es que el servicio una vez comprado y aceptado por el vendedor, entrara de inmediato el sistema de valoraciónes.
+		▼ Problema : En el mundo real esto no funciona así. Pues no puedes comprar algo y nada mas comprarlo, mandar una valoración. Lo que sí que puedes hacer , al igual que en BlaBlaCar, es ofrecer el servicio, realizarlo y al finalizarlo, en este caso marcarlo como completado ya por fin se podrá realizar la valoración. 
+		+ Solución :Pues he tenido que replantear como quiero que sea el sistema de valoraciones y creo que, como se menciona anteriormente, lo ideal sería marcar cuales son tus servicios y cuales no. Puntualizando más en la lógica de la transacción creo que debería seguir el siguiente camino: [comprador] > solicita servicio > recibe respuesta > se descuentan horas (se suman al vendedor)> obligación de mandar valoración (la recibe el vendedor) >  recibe valoración (del vendedor) > se marca servicio como completado > se muestra en historial :? || [vendedor] > publica servicio > recibe solicitud del servicio > confirma solicitud > se le agregan las horas > realiza servicio > marca servicio como completado > obligación de realizar valoración > recibe su valoración > se muestra en historial :?
+	↳ Caso 8, visualizar perfil propio: Aquí tenemos otro melón por abrir. Primero se ve el nombre del usuario y debajo el barrio.  Se muestran las tarjetas con el saldo de horas, el nivel y el contador de intercambios. Se muestran las tarjetas "Mis servicios".
+		▼ Problema 1 : Las tarjetas con el sado de horas no se actualizan. El problema está en PerfilFragment donde pintarPerfil() no pilla bien los datos del saldo de las horas del usuario
+		+ Solución 1: [fail] Se intenta Cambiar 'tvSaldoHoras.text = String.format("%.1f", usuario.saldoHoras)' por 'tvSaldoHoras.text = usuario.saldoHoras.toString()' sin éxito aún.
+		▼ Problema 2 : La tarjeta que muestra el nivel no se adapta a la logitud del texto. Cuando se muestra del nivel de NOVATO está bien porque solo tiene seis caracteres, pero cuanado cambiamos a VETERANO o REFERENTE  que ya tienen más de >=7 char, las letras que no caben pasan a una nueva línea y se ve mal. 
+		+ Solución 2: Cambiar el ' android:layout_weight="1.4"' para que el centro ocupe un poco más que el las dos tarjetas de los lados.
+		▼ Problema 3 : Esto es un problema sobre el cual tengo que investigar bastante  porque tiene que ver con Android MPChart. Se trata de las estadísticas. Para empezar, el gráfico está resulón . El problema es que es poco intuitivo porque funciona como un pantalla aparte donde puedes hacer zoom in y zoom out. Cuando haces doble clic sobre el gráfico se hace zoom im y para hacer zoom out de vuelta tiene que pellizcar la pantalla. Además te puedes desplazar por el. Me recuerda un poco a una GoogleMaps embebido pero con gráficos de 2 barras en vez de mapas. Se muestra correctamente el total de horas gastadas con el de horas cambiadas. Lo que pasa que para mi gusto personal no es lo que esperaba de primeras. Claro está que aun tiene mucho margen de mejora por delante, aplicar filtros en dos botones o mil cosas pero para el MVP no hará falta tanta floritura. Sólo que quede bien y quiero se sea intuitivo. *-*-
+		+ Solución 3: (fail) no sé como resolverlo o como quiero que sean los gráficos todavía.
+		▼Problema 4: El historial que se muestra debajo no refleja claramente cuales son las horas que entran y cuales son las que han salido. Por ahora solo se muestran las tarjetas con las 'Transacciones completadas'  don de cada tarjeta muestra información con horas gastadas y el saldo en negativo, el estado COMPLETADO y la fecha y hora que ahora mismo no sé si es la fecha de completado o de publicación.
+		+ Solución : Propongo, que ya que se muestra en el gáfico horas gastadas en rojo y horas ganadas en verde, que las tarjetas muestren las transacciones con las horas que se han ingresado. Es decir, que los servicios que se han marcado como completados al vender pasen a mostrarse con saldo de horas positivo para que así sepas que esos servicios son los que tu has vendido. Añadir también , ya que está contemplado en el fragment del perfil navegar al detalle de ese servicio, también desde la pantalla del historial.
+
+	↳ Caso 9, editar/cancelar servicio: Creo que funciona según lo planeado y lo esperado. Se puede editar el servicio y/o cancelarlo habiendo una pregunta de confirmación antes de realizar la acción. Considero el UX en este caso está bien.
+⇢ Visto todos estos problemas plantero la posibilidad de, si vuelve a pasar, hacer un nuevo Srpint basado sólo en la UI y la UX. Por ahora lo descarto porque creo que es mejor atacar los errores a medida que van apareciendo ya que sulen ser de recien programación y tengo más actualizado su funcionamiento. De otra manera sería volver al error días mas tarde y me costaría mas acordarme de todos los detalles y es que además si tengo pasar mucho tiempo escribiendo detalles sobre erroes no me centro lo importante. (ya solo con estas ultimas pruebas me he pegado unas cuantas horas solo para escribirlas.)
+
+↪ 22.03.2026 :
+	Hoy he terminado de redactar los problemas encontrados en las pruebas funcionales y no he hecho  nada más porque tenía que dedicarme a ponerme al día con las clases y hacer las PACs de desarrollo.
+⇢ Terminada la PAC de desarrollo de IA.
+
+↪ 23.03.2026 :
+	**Tareas**
+	⇢ Comprobar lo que ha hecho Claude Code o si  ha pedido algún pull request. [Apuntar lo que he aprendico en cosas aprendidas]
+	⇢ Que es y como se hace un pull request.[Apuntar en cosas aprendidas]
+	⇢ Hacer lo que tienes apuntado en lateral del PC. [OK]	
+
+↪ 25.03.2026 :
+	Hoy he retomado el contacto con el desarrollo tras estar unos días con otras tareas del curso. Estos días he pasado de hacer parte del desarrollo con Claude en un chatbot normal a hacerlo con ClaudeCode. Este hace un clone de mi rama y después crea otra con los fixes que aporta. De esta manera yo sólo tengo que revisar lo que ha hecho, ponerlo a prueba y el curso normal de la programacíon es aceptar el PR , pero yo en este caso he hecho un cherry pick para que no se vea mucho rastro del uso de la IA en el TFG por si algún miebro del jurado le da por mirar e investigar (aunque no se habla de la prohibición de los LLM para el código, de igual manera esto es defendible porque es lo que más se acerca a un entorno laboral real).
+⇢ Mantenimiento de las memorias.
+⇢ Revisión y aceptación del código sugerido por Claude Code.
+	↳ Se han solucionado 6 bugs de golpe con el cherry-pick:
+		↳ Bug 1 (Saldo no se actualiza en perfil): El problema estaba en TransaccionViewModel.completarTransaccion(). Se llamaba primero a updateSaldo() para actualizar el saldo en la BBDD, pero después se hacía un .copy() del objeto original (que todavía tenía el saldo viejo) y se llamaba a update(), machacando el saldo correcto con el antiguo. La solución fue eliminar las llamadas separadas a updateSaldo() e incluir el cambio de saldo directamente en el .copy() del update() completo.
+		↳ Bug 2 (No se comprobaba saldo antes de solicitar): DetalleServicioViewModel no tenía acceso a UsuarioRepository, así que no podía verificar si el comprador tenía horas suficientes. Se inyectó el repositorio y se añadió la comprobación comprador.saldoHoras >= servicio.costeHoras antes de crear la transacción. Si no tiene saldo, se emite error y no se bloquea el servicio innecesariamente.
+		↳ Bug 3 (Faltaba botón Valorar tras completar): Las tarjetas de transacciones COMPLETADAS no mostraban ninguna acción. Se añadió un campo puedeValorar a TransaccionUI que es true solo en estado COMPLETADA, y un botón "Valorar" en el adapter. Por ahora muestra un Toast "próximamente" hasta que se implemente el sistema de valoraciones con ARASAAC.
+		↳ Bug 4 (Tarjeta nivel no se adapta al texto): tvNivel tenía layout_width="wrap_content" lo que provocaba que nombres largos como VETERANO o REFERENTE se partieran en dos líneas. Se cambió a match_parent con maxLines="1" y autoSizeMinTextSize para que el texto se encoja en vez de partir línea.
+		↳ Bug 5 (Historial sin título de servicio): HistorialAdapter recibía objetos Transaccion que no contienen el título del servicio. Se creó un HistorialItem enriquecido con el título obtenido de ServicioRepository, y ahora muestra el nombre real del servicio con signo +/- en verde/rojo según sean horas ganadas o gastadas.
+		↳ Bug 6 (Canceladas no aparecen en historial): HistorialViewModel solo filtraba transacciones COMPLETADAS. Se añadió un segundo flow para CANCELADAS y una sección extra en el layout "Transacciones canceladas" que aparece solo si las hay.	
+
+↪ 26.03.2026 :
+	Hoy quiero meterle bastante avance. El objetivo es cerrar el sprint esta semana.
+⇢ He tenido problemas con Zscaller otra vez... y ahora lo he teminado solucionando definitivamente!! He hecho un manual para ello y lo tengo guardado con los otros manuales para Zscaler.
+	↳ El problma es cuando Zscaler está activo, intercepta todas las conexiones HTTPS y presenta su propio certificado SSL. Java/Gradle no reconoce ese certificado y bloquea las descargas de dependencias. En pocas palabras lo he hecho es utilizar el certificado que proporciona Zscaler en sitios de confianza y decirle a Java que utilice este certificado para conectarse con los servidores que necesita (¿hacks o vulnerabilidad de ciberseguridad?). Para mas detalle 'manual_gradle_zscaler.md'
+⇢ Comprobar arreglo en los bugs. (Claude y Gemini)
+	↳ Bug 1 — Saldo se actualiza en perfil [OK]
+		↳ Se encuentra bug al bug -> Está permitido y no debería poner inputs con decimales raros. Ejemplo: ofertas servicio con 0.41 horas pero se muestra en escaparate con 0.4. (Pienso que o se debería validar el formato de número o que debería añadir un nuevo fragment que tenga botones para agregar tiempo cada 0.1 horas)
+	↳ Bug 2 — Comprueba saldo antes de solicitar [OK]
+	↳ Bug 3 — Botón valorar tras completar: [OK] Se obliga a valorar tras marcar "completada" [NOK] Desde transacciones se muestra botón valorar y sale Toast con "próximamente"
+	↳ Bug 4 — Tarjeta nivel se adapta [OK]
+	↳ Bug 5 — Historial muestra título del servicio: [OK] Se muestra título, horas en color adecuado y la fecha y hora
+	↳ Bug 6 — Canceladas aparecen en historial [OK1/2]: Se muestra el cancelado al final de la lista del histórico. La solución pasa por hacer una sección a parte porque tenemos un método observarCanceladas. O también se me ocurre hacer hacer que se muestren por orden de fecha, pero eso sí que no sé como hacerlo. Creo que lo más intuitivo sería 2 pestañas: completadas, canceladas y dentro de canceladas igual a futuro poner si se ha cancelado por ti o por el vendedor. [semiOK] se ha mejorado la lógica de mostdar los observers.
+⇢ Montar el módulo de valoraciones. Por ahora está marchando sin imprevistos. 
+	↳ Se muestran las 9 pseudopictogramas. 
+	↳ No deja salirse de la vista sin validar nada.
+	↳ Se pide al menos un pictograma
+	↳ [Actualización Bug 3] -   Botón valorar tras completar [OK] Se refactorizó `TransaccionFragment` para que al pulsar el botón se calcule quién es el valorado y se abra el BottomSheet correctamente en lugar del Toast "próximamente".
+		↳ Para evitar valoraciones duplicadas, se inyectó `ValoracionRepository` en el ViewModel. Ahora se comprueba en la BBDD si existe una valoración previa (`yaValorada`). Si existe, el botón se oculta automáticamente.
+		▼ Problema: Al enviar la valoración, el BottomSheet se cerraba pero la lista de transacciones que quedaba de fondo no se actualizaba, dejando el botón "Valorar" visible hasta que cambiabas de pestaña.
+		+ Solución: Se implementó un truco técnico creando un 'onDismissCallback' en el BottomSheet. Al cerrarse, dispara una recarga forzada (cargarTransacciones()) en el ViewModel padre. El botón desaparece al instante.
+	↳ [Actualización Bug 6] — Canceladas en historial: Se corrigió la lógica de los mensajes de vacío. Se creó `actualizarEstadoVacio()` para garantizar que el texto "No hay transacciones" solo salga cuando TANTO completadas como canceladas estén vacías.
+⇢ Planificar trabajo restante para el sistema de valoraciones.
+	↪ Hay que buscar 9 pictogramas. Refactorizar vista de historial y añadir nuevas funcionalidades propuestas para el detalle.
+Termino ya y me dejo cosas para mañana
+
+↪ 27.03.2026 :
+	Hoy no he podido trabajar mucho :( asi que me dejo pendientes cosas para mañana. Lo que he hecho hoy es:
+⇢ Descargar los 9 pictogramas de ARASAAC elegidos. ¡OJO! Guardados en `res/drawable/` (no en `assets` como sugirió Claude, para que sea más fácil usarlos en los XML).
+	▼ Problema: Pensaba que habría un mayor catálogo de pictogramas que representara las valoraciones pero no era así el caso.
+	+ Solución: He pasado por rebajar un poco mis espectativas que quizás eran un poco altas, y además he utilizado la lógica; por ejemplo para mostrar un pictograma contrario a "amable", la web de ARASAAC me daba la opción de tachar con una cruz roja todo el pictograma para que así se mostrara lo contrario.
+		↳ Finalmente a pesar de la solución lógica dilucidada, he optado por no tomar literalmente las descripciones de las imágenes y utilizar otras, porque me dice fío un poco más de mi intuición y creo que van a representar mejor esas escenas. Me he quedado contento con mi elección :)
+	
+
+↪ 28.03.2026 :
+	Hoy parece que podré tabjar un par de horas. A ver con que me encuentro... 
+	[OK] Tareas pendientes de ayer: lo planificado. Repasar todo el código sugerido Claude. [He probado una cosa nueva...Mientras he estado pensando en como hacer los comits anteriores, ClaudeCode me ha implementado los cambios sugeridos en el chat de Claude. Todo esto porque se lo hedado masticado y como tiene que hacerlo. No me he fiado mucho por si me la liaba pero parece que si le das las directrices claras lo hace bien. Aún así hay que ir con cuidado porque el modelo que tengo corriendo en local para ClaudeCode (qwen3-coder:30b) no tiene habilitado el thinking así que es un poquito más torpe y no es capaz de pensar si está haciendo bien o mal su tarea. Al menos esa es mi sensación comparado con un super modelo como Opus 4.6 con razonamiento extendido.]
+	[OK] Tareas para hoy: Rematar y testear el Sprint 4 (Valoraciones ARASAAC)**
+⇢ Actualizar el diseño `bottom_sheet_valoracion.xml` para incluir esos `drawables` reales y poner los textos debajo de cada imagen (preparando el terreno para el TTS).
+	↪ He renombrado los pictogramas según la tabla que me había creado Claude pero más tarde , en el código los tenía mal mapeados.
+		▼ Problema: Al descargar los pictogramas, uno se guardó con el nombre `regular_ok.png` en lugar de `regular_normal.png` (que era el que esperaba la lógica del código). Además, descargué un par de pictogramas extra ("duda_esperar" y "no_entiendo") que no encajaban en el Grid de 3x3.
+		+ Solución: En lugar de renombrar archivos o tocar la UI, se ajustó el mapeo interno en la función `obtenerDrawable()` para que el tag "regular_normal" devuelva `R.drawable.regular_ok`. Los iconos extra se han dejado en la carpeta para un posible tutorial/guía de uso futuro. Se evitó usar `assets` y se trabajó directamente con `res/drawable/` para mejorar el rendimiento y evitar código innecesario con `BitmapFactory`.
+⇢ Revisar y repasar el código sugerido por Claude (los nuevos BottomSheets y la conexión con el Historial).
+	↪ No lo he revisado finalmente pero ha quedado bien. 
+		▼ Problema 1: Quedaba una variable hardcodeada `usuarioActualId = 1` en el constructor del `HistorialAdapter`, lo que rompía la lógica de sesión dinámica que hicimos ayer.
+		+ Solución 1: Se eliminó el valor por defecto y se pasó el ID real del usuario instanciando `SesionUsuario(requireContext()).obtenerUsuarioId()` desde el Fragment.
+		▼ Problema 2: Al intentar compilar (Rebuild), Gradle lanzó un error crítico `processDebugResources FAILED`. Faltaban declaraciones de strings (`detalle_valoracion_titulo`, etc.) en el `strings.xml`. Además, en la lógica del Kotlin faltaba el método `obtenerDescripcion()` y había comentarios residuales de la IA.
+		+ Solución 2: Se utilizó Claude Code en local para hacer la "cirugía". Inyectó las strings faltantes, implementó el mapeo de textos y limpió la clase `DetalleValoracionBottomSheet.kt`. Tras esto, la compilación fue exitosa (`BUILD SUCCESSFUL`).
+⇢ PRUEBA DE FUEGO FUNCIONAL: Simular ser Usuario A, pedir servicio al Usuario B. Aceptar, Completar, ver el Popup obligatorio de ARASAAC, valorar, e ir al historial para ver la reseña guardada.
+	↪ He hecho la prueba funcional y he visto cosas que me gustan pero también algún problema.
+		▼ Problema: El bottomsheet muestra el mensaje "Valoración recibida" tanto si eres el comprador como si eres el vendedor. Eso hace que el usuario se sienta confundido. Ya me siento yo confundido y soy el que la está desarrollando XD. En verdad antes de pasar al siguiente sprint, siento la gran necesidad de resolver 3 cosas: 1º -> la diferenciación entre los servicios ofertados por el usuario con la sesión iniciada y los que este mismo ha consumido. 2º -> acceder al detalle de la valoración y/o servicio  desde el fragment perfil. 3º -> Desde el fragment transacciones , saber cual es mía y cual es de otros (ya lo sabemos ahora porque se diferencian gracias a unas etiquetas de texto "comprador" y "vendedor") y ver el detalle de dicho servicio(descripción y valoración)
+		+ Solución: (Mentalidad MVP). En lugar de romper el flujo del Sprint actual para añadir estas mejoras de usabilidad, se toma la decisión arquitectónica de mantener el foco. Para el problema del título, se cambiará en el strings.xml a un texto neutral como "Detalle de valoración" para salir del paso. Las mejoras de navegación en listas y diferenciación visual de roles se mandan directamente al Backlog del Sprint 5/6 (Refinamiento UI/UX). El MVP funcional está cerrado y asegurado.
+En verdad antes de pasar al siguiente sprint, siento la gran necesidad de resolver 3 cosas: 1º -> la diferenciación entre los servicios ofertados por el usuario con la sesión iniciada y los que este mismo ha consumido. 2º -> acceder al detalle de la valoración y/o servicio  desde el fragment perfil. 3º -> Desde el fragment transacciones , saber cual es mía y cual es de otros (ya lo sabemos ahora porque se diferencian gracias a unas etiquetas de texto "comprador" y "vendedor") y ver el detalle de dicho servicio(descripción y valoración). Pero sé que no es cuando toca hacerlo ya que ahora mismo estoy con el MVP. Así que desahogado, prosigo con el trabajo.
+!!!FINAL DEL SPRINT4!!!!
 
 
-
+ 
 --- SÍMBOLOGÍA---
-Día nuevo:        ↪
-Paso / Tarea:     ⇢
-Subpaso / Detalle:↳ 
-Problema:         ▼
-Solución:         +
+Día nuevo:         ↪
+Paso / Tarea:      ⇢
+Subpaso / Detalle: ↳ 
+Problema:          ▼
+Solución:          +
 ----------------------------------
 Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir haciendo cosas en el trabajo en el documento VecindApp_Especificaciones_Tecnicas.docx guardado en mi drive secundario en punto 7. Planificación de Desarrolo para intentar seguir el calendario y rellenando con lo que realmente he ido haciendo. Así de esta manera queda más concentrado y no tengo que leerme todas las memorias.
 
----------------------------------- Cosas que he ido aprendiendo ----------------------------------
-# Completar esta tarde 20/03 o como tarde el 21/03
 
-		
+
+---------------------------------- Cosas que he ido aprendiendo ----------------------------------
+
+(Actualizado a fin del Sprint 3 - 20.03.2026)
+1. Arquitectura y Patrones de Diseño
+	↳ Clean Architecture: Al principio me costó entender por qué había que separar tanto las capas. Lo pillé del todo cuando me di cuenta de que los Repositorios no pueden "hablar" entre ellos. Si necesito cruzar información de dos entidades, eso le toca al ViewModel (o a un UseCase). Me quedó muy claro cuando tuve que redirigir las flechas en el diagrama de clases.
+	↳ MVVM: He interiorizado que el Fragment es "tonto", solo pinta. El ViewModel es el que aguanta el tipo cuando Android destruye y recrea la pantalla (rotaciones, etc.) y expone los estados mediante StateFlow. El Fragment simplemente observa y reacciona.
+	↳ Inyección de Dependencias Manual: En vez de liarme con Hilt (que para el TFG sería overkill), he aprendido a usar la propia clase Application como contenedor Singleton. Con by lazy solo se instancia la BBDD y los Repositorios una vez al arrancar. Simple y efectivo.
+	↳ Patrón Factory: Me preguntaba por qué había que crear esas clases tan "raras" para los ViewModels. La razón es que Android crea los ViewModels él solito, pero solo sabe hacerlo si tienen el constructor vacío. Como los míos necesitan Repositorios en el constructor, la Factory le explica al sistema "oye, créalo así". El @Suppress("UNCHECKED_CAST") es para callar al compilador cuando hacemos un cast genérico que nosotros sabemos que es correcto pero él no puede verificarlo.
+
+2. Ecosistema Android Moderno
+	↳ StateFlow y Corrutinas: He pasado de pensar en llamadas normales a pensar en flujos. Con .collect la UI se actualiza sola cada vez que cambia algo en la BBDD sin que yo tenga que hacer nada. Y repeatOnLifecycle hace que esto solo pase cuando la pantalla está visible, ahorrando batería. Al principio me parecía magia, ahora tiene todo el sentido.
+	↳ ListAdapter + DiffUtil: He aprendido que repintar todo el RecyclerView cada vez que cambia algo es una burrada. DiffUtil compara las dos listas (la vieja y la nueva) con un algoritmo inteligente y solo actualiza las tarjetas que realmente han cambiado. Elegante y eficiente.
+	↳ Navigation Component: Me ha costado entender el nav_graph.xml pero ya le veo la lógica. La diferencia clave: las flechas/actions son para navegación secuencial (donde pasas argumentos de una pantalla a otra). Los destinos del BottomNavigationView no necesitan flechas porque son de nivel superior y se accede a ellos directamente.
+	↳ Strings.xml e Internacionalización: Esto me ha parecido un descubrimiento. Aislar todos los textos en strings.xml no es solo orden, es la puerta para traducir la app entera. La teoría es crear res/values-en/strings.xml con las traducciones y Android cambia solo según el idioma del dispositivo. Una pasada lo fácil que es.
+
+3. Base de Datos (Room / SQLite)
+	↳ Foreign Keys y Seeds: Lo aprendí a las malas. Intenté guardar un servicio para un usuario que no existía en la BBDD y petó con "Foreign Key constraint failed". La solución fue crear un RoomDatabase.Callback (SeedDatabaseCallback) que mete los datos iniciales (usuario demo, María...) al crear la base de datos por primera vez. Ahora entiendo bien la integridad referencial.
+↳ Migraciones Destructivas: Durante el desarrollo modificas las entidades constantemente. fallbackToDestructiveMigration(false) hace que Room borre y recree la BBDD en vez de crashear cuando detecta un cambio de versión. Para producción sería un desastre, pero para desarrollo es perfecto.
+	↳ Operaciones Atómicas: En vez de cargar un objeto entero en memoria para modificar un solo campo (como el saldo de horas), se puede hacer directamente con @Query("UPDATE...") en el DAO. Más limpio, más eficiente y evita condiciones de carrera.
+
+4. Git, Herramientas y Resolución de Problemas
+	↳ Gestión de ramas: Ya tengo un flujo de trabajo claro. Ramas de sprint para el desarrollo normal, ramas bugfix/ para aislar correcciones concretas, y merge --no-ff para que el historial quede limpio y descriptivo. Me alegra haber cogido el hábito desde el principio.
+	↳ SSL y Zscaler: Menuda odisea en el PC del trabajo. El firewall corporativo intercepta el tráfico HTTPS y Java no reconocía su certificado, así que Gradle no podía descargar dependencias. La solución fue extraer el certificado de Zscaler, importarlo al trustStore de Java con keytool y configurar gradle.properties. Aprendizaje duro pero muy útil.
+	↳ Migración KAPT → KSP: En vez de pelearme para arreglar KAPT (que ya estaba deprecado), investigué la documentación y migré directamente a KSP (Kotlin Symbol Processing), que es la herramienta moderna que lo sustituye. Además compila más rápido. Conclusión: si algo está obsoleto, mejor actualizarse que parchear.
+	↳ SCRUM en la vida real: He comprobado que SCRUM tiene más flexibilidad de la que pensaba. En el Sprint 3 fui más rápido de lo previsto y absorbí trabajo de los Sprints  5 ( Historial y estadísicas). Eso es perfectamente válido, se defiende como "se adelantó trabajo del backlog al tener las dependencias ya resueltas". Lo apunto para la memoria. ;)
+(Actualizado a fin del Sprint 3 - 20.03.2026)
+
+(Actualizado a mediados del Sprint 4 - 25.03.2026)
+
+	↳ Pull Requests (PR) y Revisión de Código: He aprendido que un PR no es un simple comando de Git, sino una metodología de trabajo. Sirve para proponer cambios desde una rama secundaria a la principal, permitiendo revisar el código (diffs), ver qué archivos se tocan y comprobar que no rompen nada antes de integrarlos. En un entorno real, es donde el equipo te aprueba o rechaza el código.
+	↳ Git Cherry-Pick (Cirugía de código): Esta herramienta me ha salvado la vida. He aprendido que no siempre tienes que hacer un "merge" completo de una rama. Con `cherry-pick` puedo elegir el hash de un commit específico de cualquier rama e integrarlo en la mía. Lo he usado para traerme correcciones de bugs generadas en ramas de la IA, evitando así ensuciar mi historial de Git con commits basura de configuración de su entorno o dejando rastros indeseados para el TFG. Es literalmente hacer cirugía en el historial de versiones.
+	↳ Conventional Commits (Semántica de Commits): He aprendido que el historial de Git es la "documentación viva" del proyecto y debe ser legible a simple vista. Tras perder tiempo dudando sobre qué etiqueta usar al subir archivos o corregir fallos, he investigado y asimilado el estándar de la industria. Lo dejo documentado como mi guía definitiva:
+		- `feat:` (Feature). Añade una nueva funcionalidad al código que aporta valor al usuario final. (Ej: `feat: implementar BottomSheet de valoraciones con pictogramas ARASAAC`). Si subo imágenes (como los PNGs) junto con el código que las utiliza por primera vez, todo ese paquete es un `feat`.
+		- `fix:` Corrige un error o bug en el código de producción. (Ej: `fix: corregir sobreescritura del saldo de horas al completar una transacción`).
+		- `chore:` Tareas de mantenimiento rutinario que NO afectan al código del usuario final. (Ej: `chore: actualizar el archivo .gitignore` o limpiar archivos residuales del IDE).
+		- `build:` Cambios que afectan al sistema de compilación o dependencias estructurales del proyecto. (Ej: `build: migrar el procesador de anotaciones de KAPT a KSP en build.gradle`).
+		- `refactor:` Modificaciones en el código que ni añaden funcionalidades ni arreglan bugs, pero mejoran la estructura interna, el rendimiento o la legibilidad. (Ej: `refactor: extraer lógica del back stack a un método helper en MainActivity`).
+		- `docs:` Cambios exclusivos en la documentación del proyecto. (Ej: `docs: actualizar README.md y añadir manual de configuración de red Zscaler`).
+
+(Actualizado a finales del Sprint 4 - 28.03.2026)
+
+
+------------Fundamentos/Ideas para hacer el trabajo Escrito------------
+- Seprar cada Sprint explicando como he ido econtrandome con problemas y soluciones.
+

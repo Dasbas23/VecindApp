@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
+import com.example.vecindapp.data.SesionUsuario
 import kotlinx.coroutines.launch
+import com.example.vecindapp.ui.valoracion.ValoracionBottomSheetFragment
 
 /**
  * Fragment que muestra la lista de transacciones del usuario actual.
@@ -32,10 +34,13 @@ class TransaccionFragment : Fragment() {
 
     private val viewModel: TransaccionViewModel by viewModels {
         val app = requireActivity().application as VecindAppApplication
+        val sesion = SesionUsuario(requireContext())
         TransaccionViewModel.Factory(
             app.transaccionRepository,
             app.servicioRepository,
-            app.usuarioRepository
+            app.usuarioRepository,
+            app.valoracionRepository,
+            sesion.obtenerUsuarioId()
         )
     }
 
@@ -57,6 +62,7 @@ class TransaccionFragment : Fragment() {
         configurarRecyclerView()
         observarTransacciones()
         observarMensajes()
+        observarTransaccionCompletada()
     }
 
     private fun configurarVistas(view: View) {
@@ -97,6 +103,28 @@ class TransaccionFragment : Fragment() {
                     }
                     .setNegativeButton(R.string.btn_cancelar, null)
                     .show()
+            },
+            onValorar = { item ->
+                val sesion = SesionUsuario(requireContext())
+                val miId = sesion.obtenerUsuarioId()
+                val valoradoId = if (item.transaccion.idVendedorFk == miId) {
+                    item.transaccion.idCompradorFk
+                } else {
+                    item.transaccion.idVendedorFk
+                }
+
+                val bottomSheet = ValoracionBottomSheetFragment.newInstance(
+                    transaccionId = item.transaccion.idTransaccion,
+                    valoradorId = miId,
+                    valoradoId = valoradoId
+                )
+                bottomSheet.onDismissCallback = {
+                    viewModel.cargarTransacciones()
+                }
+                bottomSheet.show(childFragmentManager, "valoracion")
+                bottomSheet.dialog?.setOnDismissListener {
+                    viewModel.cargarTransacciones()
+                }
             }
         )
 
@@ -128,6 +156,41 @@ class TransaccionFragment : Fragment() {
                     if (mensaje != null) {
                         Toast.makeText(requireContext(), mensaje, Toast.LENGTH_SHORT).show()
                         viewModel.limpiarMensaje()
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Observa la transacción completada y muestra el BottomSheet.
+     */
+
+    private fun observarTransaccionCompletada() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.transaccionCompletada.collect { item ->
+                    if (item != null) {
+                        val sesion = SesionUsuario(requireContext())
+                        val miId = sesion.obtenerUsuarioId()
+                        // El valorado es la otra parte de la transacción
+                        val valoradoId = if (item.transaccion.idVendedorFk == miId) {
+                            item.transaccion.idCompradorFk
+                        } else {
+                            item.transaccion.idVendedorFk
+                        }
+
+                        val bottomSheet = ValoracionBottomSheetFragment.newInstance(
+                            transaccionId = item.transaccion.idTransaccion,
+                            valoradorId = miId,
+                            valoradoId = valoradoId
+                        )
+                        bottomSheet.onDismissCallback = {
+                            viewModel.cargarTransacciones()
+                        }
+                        bottomSheet.show(childFragmentManager, "valoracion")
+
+                        viewModel.limpiarTransaccionCompletada()
                     }
                 }
             }

@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    bottom_sheet_valoracion.xml (ACTUALIZADO)
+    Añadido: texto descriptivo debajo de cada pictograma para accesibilidad
+    y futura integración con TTS.
+-->
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Título -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/valoracion_titulo"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:paddingBottom="4dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/valoracion_subtitulo"
+            android:textSize="13sp"
+            android:gravity="center"
+            android:paddingBottom="16dp" />
+
+        <!-- ═══ Sección BIEN ═══ -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/valoracion_seccion_bien"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#10B981"
+            android:paddingBottom="8dp" />
+
+        <LinearLayout
+            android:id="@+id/llPictogramasBien"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingBottom="12dp">
+
+            <!-- Pictograma + texto: Excelente -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/ivBien1"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="4dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/desc_pictograma_bien1"
+                    android:src="@drawable/bien_excelente"
+                    android:tag="bien_excelente" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/desc_pictograma_bien1"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:paddingTop="2dp" />
+            </LinearLayout>
+
+            <!-- Pictograma + texto: Amable -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/ivBien2"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="4dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/desc_pictograma_bien2"
+                    android:src="@drawable/bien_amable"
+                    android:tag="bien_amable" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/desc_pictograma_bien2"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:paddingTop="2dp" />
+            </LinearLayout>
+
+            <!-- Pictograma + texto: Puntual -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/ivBien3"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="4dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/desc_pictograma_bien3"
+                    android:src="@drawable/bien_puntual"
+                    android:tag="bien_puntual" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/desc_pictograma_bien3"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:paddingTop="2dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ═══ Sección REGULAR ═══ -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/valoracion_seccion_regular"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#F59E0B"
+            android:paddingBottom="8dp" />
+
+        <LinearLayout
+            android:id="@+id/llPictogramasRegular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingBottom="12dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/ivRegular1"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="4dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/desc_pictograma_regular1"
+                    android:src="@drawable/regular_ok"
+                    android:tag="regular_normal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/desc_pictograma_regular1"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:paddingTop="2dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/ivRegular2"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="4dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/desc_pictograma_regular2"
+                    android:src="@drawable/regular_mejorable"
+                    android:tag="regular_mejorable" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/desc_pictograma_regular2"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:paddingTop="2dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/ivRegular3"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="4dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/desc_pictograma_regular3"
+                    android:src="@drawable/regular_lento"
+                    android:tag="regular_lento" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/desc_pictograma_regular3"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:paddingTop="2dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ═══ Sección MAL ═══ -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/valoracion_seccion_mal"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#EF4444"
+            android:paddingBottom="8dp" />
+
+        <LinearLayout
+            android:id="@+id/llPictogramasMal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/ivMal1"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="4dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/desc_pictograma_mal1"
+                    android:src="@drawable/mal_impuntual"
+                    android:tag="mal_impuntual" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/desc_pictograma_mal1"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:paddingTop="2dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/ivMal2"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="4dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/desc_pictograma_mal2"
+                    android:src="@drawable/mal_desagradable"
+                    android:tag="mal_desagradable" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/desc_pictograma_mal2"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:paddingTop="2dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/ivMal3"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="4dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/desc_pictograma_mal3"
+                    android:src="@drawable/mal_no_realizado"
+                    android:tag="mal_no_realizado" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/desc_pictograma_mal3"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:paddingTop="2dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Separador -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="12dp"
+            android:background="?android:attr/listDivider" />
+
+        <!-- Comentario opcional -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilComentario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/valoracion_hint_comentario"
+            android:paddingBottom="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etComentario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine|textCapSentences"
+                android:minLines="2"
+                android:gravity="top"
+                android:maxLength="200" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Botón Enviar -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEnviarValoracion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/valoracion_btn_enviar" />
+
+    </LinearLayout>
+
+</ScrollView>

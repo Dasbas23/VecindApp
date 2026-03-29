@@ -50,6 +50,7 @@
     <string name="transacciones_vacio">No tienes transacciones</string>
     <string name="btn_aceptar">Aceptar</string>
     <string name="btn_completar">Completar</string>
+    <string name="btn_valorar">Valorar</string>
     <string name="btn_confirmar_cancelar">Sí, cancelar</string>
     <string name="titulo_confirmar_aceptar">Aceptar solicitud</string>
     <string name="mensaje_confirmar_aceptar">¿Quieres aceptar esta solicitud de servicio?</string>
@@ -68,7 +69,50 @@
 
     <!-- ═══ Historial ═══ -->
     <string name="label_completadas">Transacciones completadas</string>
+    <string name="label_canceladas">Transacciones canceladas</string>
     <string name="historial_vacio">Aún no has completado ninguna transacción</string>
     <string name="grafico_sin_datos">Sin datos para el gráfico</string>
-    <string name="formato_historial_horas">%s%.1f h</string>
+    <string name="formato_historial_horas">%1$s%2$.1f h</string>
+
+    <!-- ═══ Login / Registro ═══ -->
+    <string name="titulo_login">Iniciar sesión</string>
+    <string name="subtitulo_login">Banco de tiempo vecinal</string>
+    <string name="hint_nombre_login">Tu nombre</string>
+    <string name="btn_iniciar_sesion">Iniciar sesión</string>
+    <string name="separador_o">— o —</string>
+    <string name="btn_ir_registro">Registrarse como nuevo vecino</string>
+    <string name="titulo_registro">Nuevo vecino</string>
+    <string name="desc_registro">Únete a la comunidad y empieza a intercambiar servicios</string>
+    <string name="hint_nombre_registro">Tu nombre</string>
+    <string name="hint_barrio_registro">Tu barrio</string>
+    <string name="btn_registrarse">Registrarse</string>
+    <string name="btn_volver_login">Ya tengo cuenta</string>
+    <string name="registro_exitoso">¡Bienvenido a VecindApp!</string>
+    <string name="btn_cerrar_sesion">Cerrar sesión</string>
+
+    <!-- ═══ Valoraciones ═══ -->
+    <string name="valoracion_titulo">¡Servicio completado!</string>
+    <string name="valoracion_subtitulo">Valora a tu vecino seleccionando uno o más pictogramas</string>
+    <string name="valoracion_seccion_bien">Bien</string>
+    <string name="valoracion_seccion_regular">Regular</string>
+    <string name="valoracion_seccion_mal">Mal</string>
+    <string name="valoracion_hint_comentario">Comentario opcional</string>
+    <string name="valoracion_btn_enviar">Enviar valoración</string>
+    <string name="valoracion_enviada">¡Gracias por tu valoración!</string>
+    <string name="desc_pictograma_bien1">Excelente</string>
+    <string name="desc_pictograma_bien2">Amable</string>
+    <string name="desc_pictograma_bien3">Puntual</string>
+    <string name="desc_pictograma_regular1">Normal</string>
+    <string name="desc_pictograma_regular2">Mejorable</string>
+    <string name="desc_pictograma_regular3">Lento</string>
+    <string name="desc_pictograma_mal1">Impuntual</string>
+    <string name="desc_pictograma_mal2">Desagradable</string>
+    <string name="desc_pictograma_mal3">No realizado</string>
+
+    <!-- ═══ Detalle Valoración ═══ -->
+    <string name="detalle_valoracion_titulo">Valoración recibida</string>
+    <string name="detalle_valoracion_pictogramas">Pictogramas seleccionados</string>
+    <string name="detalle_valoracion_comentario">Comentario</string>
+    <string name="detalle_valoracion_fecha">Valorado el %s</string>
+    <string name="btn_cerrar">Cerrar</string>
 </resources>
