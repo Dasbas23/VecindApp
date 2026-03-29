@@ -15,8 +15,9 @@
 | Sprint 1 | Completado | Estructura base y diagramas                                  |
 | Sprint 2 | Completado | BBDD Room + CRUD servicios + escaparate                      |
 | Sprint 3 | Completado | Transacciones + Perfil + Historial (MPAndroidChart)          |
-| Sprint 4 | En proceso | Selección de usuario + Valoraciones con pictogramas ARASAAC  |
-| Sprint 5 | Pendiente  | Accesibilidad, TTS, Glide, WorkManager y pulido visual       |
+| Sprint 4 | Completado | Selección de usuario + Valoraciones con pictogramas ARASAAC  |
+| Sprint 5 | En proceso | Accesibilidad + TTS                                          |
+| Sprint 6 | Pendiente  | WorkManager y pulido visual                                  |
 
 ---
 
@@ -62,7 +63,6 @@ app/src/main/java/com/example/vecindapp/
 | Navegación      | Navigation Component 2.9.7          |
 | Arquitectura    | ViewModel 2.10.0 + LiveData         |
 | Gráficos        | MPAndroidChart v3.1.0               |
-| Imágenes        | Glide 4.16.0                        |
 | Background      | WorkManager 2.9.0                   |
 | Accesibilidad   | Android TTS API + ARASAAC           |
 | Procesador      | KSP (Kotlin Symbol Processing)      |
