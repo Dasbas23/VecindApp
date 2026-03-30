@@ -364,4 +364,5 @@ Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir 
 
 ------------Fundamentos/Ideas para hacer el trabajo Escrito------------
 - Seprar cada Sprint explicando como he ido econtrandome con problemas y soluciones.
+- He detectado una gran necesidad de organización y de esctructuración de conocimientos, detalles y cosas que se han hecho. Estoy abriendo muchos chats independietes entre sí y cada uno especializado en algo(git, planificador, programador,solucion de errores, sugiriente de memorias y alguna cosa más que ahora no recuerdo). Para ello utilizaré NoteBookLM. Le volcaré archivos de texto con los historiales de cada chat.
 
