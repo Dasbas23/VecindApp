@@ -24,7 +24,7 @@ class SesionUsuario(context: Context) {
      * @param id Clave primaria del usuario en la tabla `usuario`.
      */
     fun guardarUsuarioId(id: Int) {
-        prefs.edit().putInt(KEY_USUARIO_ID, id).apply()
+        prefs.edit { putInt(KEY_USUARIO_ID, id) }
     }
 
     /**
