@@ -19,17 +19,19 @@ import com.example.vecindapp.data.entities.Servicio
  * en lugar de refrescar toda la lista.
  *
  * Cada tarjeta muestra: título, categoría, coste en horas y pictograma ARASAAC.
- * Al pulsar una tarjeta se ejecuta el callback [onServicioClick] para navegar
- * al detalle del servicio.
+ * Al pulsar una tarjeta se ejecuta [onServicioClick]. Al mantener pulsada se
+ * ejecuta [onServicioLongClick] si está definido.
  *
- * @property onServicioClick Lambda que se ejecuta al pulsar una tarjeta,
- *                           recibiendo el [Servicio] pulsado.
+ * @property onServicioClick     Lambda ejecutado al pulsar una tarjeta.
+ * @property onServicioLongClick Lambda ejecutado al mantener pulsada una tarjeta
+ *                               (opcional). Debe devolver `true` para consumir el evento.
  *
  * @see EscaparateFragment
  * @see EscaparateViewModel
  */
 class ServicioAdapter(
-    private val onServicioClick: (Servicio) -> Unit
+    private val onServicioClick: (Servicio) -> Unit,
+    private val onServicioLongClick: ((Servicio) -> Boolean)? = null
 ) : ListAdapter<Servicio, ServicioAdapter.ServicioViewHolder>(ServicioDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServicioViewHolder {
@@ -73,6 +75,11 @@ class ServicioAdapter(
             //     .into(ivPictograma)
 
             itemView.setOnClickListener { onServicioClick(servicio) }
+            if (onServicioLongClick != null) {
+                itemView.setOnLongClickListener { onServicioLongClick.invoke(servicio) }
+            } else {
+                itemView.setOnLongClickListener(null)
+            }
         }
     }
 

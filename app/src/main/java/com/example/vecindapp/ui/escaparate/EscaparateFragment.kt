@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
+import com.example.vecindapp.ui.common.TtsHelper
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 
@@ -45,6 +46,8 @@ class EscaparateFragment : Fragment() {
     private lateinit var adapter: ServicioAdapter
     private lateinit var rvEscaparate: RecyclerView
     private lateinit var tvVacio: TextView
+    private lateinit var fabTts: FloatingActionButton
+    private lateinit var ttsHelper: TtsHelper
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,9 +59,11 @@ class EscaparateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        ttsHelper = TtsHelper(requireContext(), viewLifecycleOwner.lifecycle)
         configurarVistas(view)
         configurarRecyclerView()
         configurarFab(view)
+        configurarFabTts()
         observarServicios()
     }
 
@@ -68,6 +73,7 @@ class EscaparateFragment : Fragment() {
     private fun configurarVistas(view: View) {
         rvEscaparate = view.findViewById(R.id.rvEscaparate)
         tvVacio = view.findViewById(R.id.tvVacio)
+        fabTts = view.findViewById(R.id.fabTts)
     }
 
     /**
@@ -76,12 +82,20 @@ class EscaparateFragment : Fragment() {
      * Al pulsar una tarjeta se navegará al detalle del servicio.
      */
     private fun configurarRecyclerView() {
-        adapter = ServicioAdapter { servicio ->
-            val bundle = Bundle().apply {
-                putInt("servicioId", servicio.idServicio)
+        adapter = ServicioAdapter(
+            onServicioClick = { servicio ->
+                val bundle = Bundle().apply {
+                    putInt("servicioId", servicio.idServicio)
+                }
+                findNavController().navigate(R.id.action_escaparate_to_detalle, bundle)
+            },
+            onServicioLongClick = { servicio ->
+                ttsHelper.speak(
+                    "${servicio.titulo}, ${TtsHelper.formatearCoste(servicio.costeHoras)} horas"
+                )
+                true
             }
-            findNavController().navigate(R.id.action_escaparate_to_detalle, bundle)
-        }
+        )
         // Fuera del lambda, donde siempre debería haber estado
         rvEscaparate.layoutManager = LinearLayoutManager(requireContext())
         rvEscaparate.adapter = adapter
@@ -115,6 +129,29 @@ class EscaparateFragment : Fragment() {
                     tvVacio.visibility = if (lista.isEmpty()) View.VISIBLE else View.GONE
                 }
             }
+        }
+    }
+
+    /**
+     * Configura el FAB de TTS para leer en voz alta los servicios
+     * actualmente visibles en el RecyclerView.
+     *
+     * Solo lee los ítems dentro del viewport (posiciones firstVisible..lastVisible).
+     * Cada servicio se anuncia como "título, X horas". Los ítems se separan
+     * con ". " para que el motor TTS interprete una pausa natural entre ellos.
+     */
+    private fun configurarFabTts() {
+        fabTts.setOnClickListener {
+            val lm = rvEscaparate.layoutManager as LinearLayoutManager
+            val first = lm.findFirstVisibleItemPosition()
+            val last = lm.findLastVisibleItemPosition()
+            if (first == RecyclerView.NO_POSITION) return@setOnClickListener
+            val texto = (first..last)
+                .mapNotNull { adapter.currentList.getOrNull(it) }
+                .joinToString(". ") { s ->
+                    "${s.titulo}, ${TtsHelper.formatearCoste(s.costeHoras)} horas"
+                }
+            if (texto.isNotBlank()) ttsHelper.speak(texto)
         }
     }
 }

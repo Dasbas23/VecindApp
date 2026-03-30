@@ -20,7 +20,9 @@ import com.example.vecindapp.VecindAppApplication
 import com.example.vecindapp.data.SesionUsuario
 import com.example.vecindapp.data.entities.Servicio
 import com.example.vecindapp.domain.model.EstadoServicio
+import com.example.vecindapp.ui.common.TtsHelper
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -64,6 +66,9 @@ class DetalleServicioFragment : Fragment() {
     private lateinit var btnSolicitar: MaterialButton
     private lateinit var btnEditar: MaterialButton
     private lateinit var btnEliminar: MaterialButton
+    private lateinit var fabTts: FloatingActionButton
+    private lateinit var ttsHelper: TtsHelper
+    private var servicioActual: Servicio? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,6 +81,8 @@ class DetalleServicioFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configurarVistas(view)
+        ttsHelper = TtsHelper(requireContext(), viewLifecycleOwner.lifecycle)
+        configurarFabTts()
 
         val servicioId = arguments?.getInt("servicioId") ?: run {
             findNavController().popBackStack()
@@ -101,6 +108,7 @@ class DetalleServicioFragment : Fragment() {
         btnSolicitar = view.findViewById(R.id.btnSolicitar)
         btnEditar = view.findViewById(R.id.btnEditar)
         btnEliminar = view.findViewById(R.id.btnEliminar)
+        fabTts = view.findViewById(R.id.fabTts)
     }
 
     /**
@@ -120,6 +128,7 @@ class DetalleServicioFragment : Fragment() {
      * Rellena las vistas y muestra/oculta botones según el contexto.
      */
     private fun pintarDetalle(servicio: Servicio) {
+        servicioActual = servicio
         tvTitulo.text = servicio.titulo
         tvCategoria.text = servicio.categoria.name
         tvCoste.text = getString(R.string.formato_coste_horas, servicio.costeHoras)
@@ -284,6 +293,23 @@ class DetalleServicioFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Configura el FAB de TTS para leer en voz alta el detalle completo
+     * del servicio actualmente cargado.
+     *
+     * Lee: título → categoría → coste → descripción → estado.
+     * No hace nada si el servicio aún no se ha cargado.
+     */
+    private fun configurarFabTts() {
+        fabTts.setOnClickListener {
+            val s = servicioActual ?: return@setOnClickListener
+            val desc = s.descripcion ?: getString(R.string.sin_descripcion)
+            val costeTexto = TtsHelper.formatearCoste(s.costeHoras)
+            val texto = "${s.titulo}. ${s.categoria.name}. $costeTexto horas. $desc. ${s.estado.name}"
+            ttsHelper.speak(texto)
         }
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -13,6 +14,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.vecindapp.R
+import com.example.vecindapp.ui.common.TtsHelper
 import com.example.vecindapp.VecindAppApplication
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
@@ -52,6 +54,7 @@ class ValoracionBottomSheetFragment : BottomSheetDialogFragment() {
     /** Color de fondo para pictogramas seleccionados. */
     private val colorSeleccionado = Color.parseColor("#DBEAFE") // Azul claro
     private val colorNormal = Color.TRANSPARENT
+    private lateinit var ttsHelper: TtsHelper
 
     private var transaccionId: Int = 0
     private var valoradorId: Int = 0
@@ -88,6 +91,8 @@ class ValoracionBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        ttsHelper = TtsHelper(requireContext(), viewLifecycleOwner.lifecycle)
+        configurarBotonTts(view)
         configurarPictogramas(view)
         configurarBotonEnviar(view)
         observarResultado()
@@ -122,6 +127,27 @@ class ValoracionBottomSheetFragment : BottomSheetDialogFragment() {
                 val tag = iv.tag as? String ?: return@setOnClickListener
                 togglePictograma(iv, tag)
             }
+        }
+    }
+
+    /**
+     * Conecta el [ImageButton] de altavoz para leer en voz alta los pictogramas
+     * actualmente seleccionados.
+     *
+     * Si no hay ninguno seleccionado, lee "Sin pictogramas seleccionados".
+     * Las descripciones se obtienen de [PictogramaMapper] para ser legibles por humanos.
+     */
+    private fun configurarBotonTts(view: View) {
+        val ibTts = view.findViewById<ImageButton>(R.id.ibTts)
+        ibTts.setOnClickListener {
+            val texto = if (pictogramasSeleccionados.isEmpty()) {
+                getString(R.string.tts_sin_pictogramas)
+            } else {
+                pictogramasSeleccionados.joinToString(", ") { tag ->
+                    PictogramaMapper.obtenerDescripcion(requireContext(), tag)
+                }
+            }
+            ttsHelper.speak(texto)
         }
     }
 
