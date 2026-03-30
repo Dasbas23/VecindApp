@@ -115,4 +115,8 @@
     <string name="detalle_valoracion_comentario">Comentario</string>
     <string name="detalle_valoracion_fecha">Valorado el %s</string>
     <string name="btn_cerrar">Cerrar</string>
+
+    <!-- ═══ Accesibilidad TTS ═══ -->
+    <string name="desc_tts">Leer en voz alta</string>
+    <string name="tts_sin_pictogramas">Sin pictogramas seleccionados</string>
 </resources>
