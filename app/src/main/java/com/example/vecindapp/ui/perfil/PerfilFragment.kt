@@ -109,10 +109,13 @@ class PerfilFragment : Fragment() {
      * el [ServicioAdapter] del escaparate.
      */
     private fun configurarRecyclerView() {
-        servicioAdapter = ServicioAdapter { servicio ->
+        servicioAdapter = ServicioAdapter (
+            onServicioClick = {servicio ->
+
             // TODO: Navegar al detalle del servicio desde el perfil
             // Requiere añadir action en nav_graph desde perfil a detalle
-        }
+            }
+        )
         rvMisServicios.layoutManager = LinearLayoutManager(requireContext())
         rvMisServicios.adapter = servicioAdapter
     }
