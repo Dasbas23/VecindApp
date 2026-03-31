@@ -306,6 +306,16 @@ En verdad antes de pasar al siguiente sprint, siento la gran necesidad de resolv
 ↪ 29.03.2026 :
 	SE DA COMIENZO AL SPRINT 5!
 		↪ Lo cierto que es que he tomado la decisión de dividir el srpint 5 en tareas más simples para poder centrarme más en detalle y no abarcar tanto. Si que es cierto que al final los sprits han ido más rápido de lo que yo me esperaba. Pero claro, no me voy a estar alargando innecesariamente con cada sprint. Lo bueno que finalmente tendré una app casi casi como yo me la había imaginado desde el principio.
+⇢ Para empezar bien el día, he decidido meterle caña a ClaudeCode por consola CLI (quería aprender su funcionamiento). Quería hacerlo de esta manera e implementar esto, adaptándome a flujos de trabajo modernos asistidos por IA que tanto escucho hablar últimamente. *Detalle... es la primera vez que hago esto y además no he mirado tutoriales, solo IA a saco*
+	 ↳ Voy a explicar lo mejor que recuerdo como lo he hecho ya que a la fecha de escritura de estas líneas (1.5 días más tarde) y las horas que corren (4:40 am) no estoy muy fino que digamos. 
+		↳ 1º Le he consultado que plugins necesarios para mi proyecto. Y he añadido superpowers
+			Para ello he utilizado las IAs Claude y Gemini en sus modelos más potentes y thinking con la esperanza de conseguir un resultado adecuado. Debido a mi inexperiencia, esto viene bien porque según mis experiencias, las IAs te ayudan bien a aprender conceptos nuevos. Igual no pueden ayudarte a hilar muy fino pero para esto me ha venido de maravilla.
+		↳ 2º Tras usar los superpowers con 'brainstorming' ##Seguir aqui VecindApp: Guion, Bocetos y Metodología buscar "(superpowers:using-superpowers)"
+
+
+↪ 30.03.2026 :
+	Hoy he tenido 
+Como me gusta git
 
 
  
