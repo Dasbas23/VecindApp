@@ -306,17 +306,48 @@ En verdad antes de pasar al siguiente sprint, siento la gran necesidad de resolv
 ↪ 29.03.2026 :
 	SE DA COMIENZO AL SPRINT 5!
 		↪ Lo cierto que es que he tomado la decisión de dividir el srpint 5 en tareas más simples para poder centrarme más en detalle y no abarcar tanto. Si que es cierto que al final los sprits han ido más rápido de lo que yo me esperaba. Pero claro, no me voy a estar alargando innecesariamente con cada sprint. Lo bueno que finalmente tendré una app casi casi como yo me la había imaginado desde el principio.
-⇢ Para empezar bien el día, he decidido meterle caña a ClaudeCode por consola CLI (quería aprender su funcionamiento). Quería hacerlo de esta manera e implementar esto, adaptándome a flujos de trabajo modernos asistidos por IA que tanto escucho hablar últimamente. *Detalle... es la primera vez que hago esto y además no he mirado tutoriales, solo IA a saco*
-	 ↳ Voy a explicar lo mejor que recuerdo como lo he hecho ya que a la fecha de escritura de estas líneas (1.5 días más tarde) y las horas que corren (4:40 am) no estoy muy fino que digamos. 
-		↳ 1º Le he consultado que plugins necesarios para mi proyecto. Y he añadido superpowers
+⇢ Diseño del TTS con Claude Code: Para empezar bien el día, he decidido meterle caña a ClaudeCode por consola CLI (quería aprender su funcionamiento). Quería hacerlo de esta manera e implementar esto, adaptándome a flujos de trabajo modernos asistidos por IA que tanto escucho hablar últimamente. *Detalle... es la primera vez que hago esto y además no he mirado tutoriales, solo IA a saco*
+	 ↳ Voy a explicar lo mejor que recuerdo como lo he hecho ya que a la fecha de escritura de estas líneas (1.5 días más tarde). 
+		↳ 1º Le he consultado que plugins necesarios para mi proyecto. Y he añadido superpowers porque tiene herramientas chulas. Las demás: claude-mem o claude- everything o UI/UX no las he metido porque no eran tan útiles por ahora.
 			Para ello he utilizado las IAs Claude y Gemini en sus modelos más potentes y thinking con la esperanza de conseguir un resultado adecuado. Debido a mi inexperiencia, esto viene bien porque según mis experiencias, las IAs te ayudan bien a aprender conceptos nuevos. Igual no pueden ayudarte a hilar muy fino pero para esto me ha venido de maravilla.
-		↳ 2º Tras usar los superpowers con 'brainstorming' ##Seguir aqui VecindApp: Guion, Bocetos y Metodología buscar "(superpowers:using-superpowers)"
-
+		↳ 2º He valorado, con un chat "crítico" el prompt y la metodología que deberá seguir ClaudeCode para planear la implementación del TTS.
+			Se opta por sacrificar tiempos 
+		↳ 3º Tras instalar los superpowers y analizar con 'brainstorming' el proyecto, decido que lo mejor es optar por una de las tres opciones propuestas. Se opta por una que tiene un retraso de ~200ms en incialicar el TTS pero es lo mismo que tarda en cargar el Fragment así que es asumible. Las demas opciones las he descartado porque o eran muy complicadas y había que refactorizar mucho o dejaba deuda técnica a futuro.
+			▼ Problema: ¿Dónde meto la inicialización y el shutdown del motor TTS para que no haya memory leaks sin tener que ensuciar todos los Fragments con código de limpieza?
+			+ Solución: Se aprueba usar DefaultLifecycleObserver. Básicamente el TTS se engancha al viewLifecycleOwner del Fragment y se inicializa, habla y hace shutdown() solito según el ciclo de vida de la vista. Ni me tengo que acordar de pararlo al salir de la pantalla. Me recuerda un poco a cuando descubrí repeatOnLifecycle, que también parecía magia al principio.
+		↳ 4º  Durante la planificación Claude Code se ha dado cuenta de que los métodos obtenerDescripcion() y obtenerDrawable() estaban metidos como privados dentro de DetalleValoracionBottomSheet y que el TTS los iba a necesitar desde otro sitio.
+			+ Solución: Utilizar el botón con diseño "Material" y con el icono del volumen activado para que sea más intuitivo.
+			+ Solución: Decido, entre varias opciones, el comportamiento del TTS en las diferentes pantallas.
+			+ Solución: Se ha creado un PictogramaMapper.kt como object (Singleton) para centralizar el mapeo de pictogramas. Así si mañana añado un pictograma nuevo solo lo toco en un sitio y no tengo que acordarme de que estaba duplicado en dos clases. Bien pensado.
+		↳ 5º Se van haciendo ajustes sobre el planning que propone CCode con ayuda de un modelo externo y se aprueban las modificaciones.
+		↳ 6º El plan de +1000 líneas en markdown queda perfectamete estructurado y claro para proceder con la implementación
+			▼ Problema: El motor TTS leerá el texto como un robot. Dirá "bien barra baja excelente, mal barra baja impuntual" y no queremos eso.
+			+ Solución: Formatear la manera en la que el TTS leerá la dirente información. He obligado a que use pictogramaMapper.obtenerDescripcion(tag) para que lea "Excelente", "Impuntual", etc.
+			▼ Problema : En el escaparate, al construir el texto para el TTS concatenaba el coste directamente del campo costeHoras (que es un Double). Resultado: el TTS leería "dos punto cero horas". Suena fatal.
+			+ Solución: He pedido que implemente un formatearCoste() que quite los decimales innecesarios. Si es 2.0 que diga "2 horas", si es 1.5 que diga "1,5 horas". Parece una tontería pero para accesibilidad estos detalles son los que marcan la diferencia.
+				↳ También he pillado que se le había olvidado aplicar el formateo al saldo de horas del Perfil. Mismo problema: si tienes 10.0 horas, diría "diez punto cero". Corregido antes de aprobar.
+⇢ Crisis! resolver liada modelo local qwen3-coder:30b: Al tener el plan super bien dividio y estructurado, quería ahorrarme unos tokens de CCode (iba un poco justo para el resto del día). En la misma sesión de CCode se pueden usar distintos modelos de IA así que he pensado que como eran tareas simples, mecánicas (1,2,3), solo tenía que crear y refactorizar copiando exactamente del manual. La idea es que el resto de tareas las realizara el modelo más potente (Sonnet) desde la API porque es más listo y tenía que idear cosas nuevas.
+	▼ Problema : Observo tras 25 minutos de procesamiento, que mi modelo en local no me ha hecho ni puto caso y se ha saltado las indicaciones del planning. Como me veo venir el el problema, he subido rápidamente el plan que me ha hecho CCode a un chat con la intención de usarlo más tarde. Tambíen el log de la consola para que no se me perdiera detalle de la liada.
+		↳ Me voy a trabajar (turno de noches) y dejo todo esto empantando en el PC de casa.Tocará hacer limpieza [OK]
 
 ↪ 30.03.2026 :
-	Hoy he tenido 
-Como me gusta git
+	Hoy he tenido que lidiar con la liada que me ha hecho qwen en casa. No ha sido pérdida de tiempo porque creo que he aprendido mucho y muy intenso.
+⇢ Plan de contingencia: Tenía que "arreglar" el fallo de casa, lo digo entre comillas porque por suerte no ha pasado nada sino que todo se ha quedado en local y simplemente tendré que deshacer todo lo que ha liado qwen, además de manera fácil con un hard reset y se va todoa tomal pol saco.
+	↳ 1º He instalado CCode en el ordenador.
+		▼ Problema: Zscaler otra vez!!. Me daba errores ECONNREFUSED y ERR_BAD_REQUEST y no había manera de que arrancara Claude Code por consola. A pesar de estar unas pocas horas probando con certificados de la misma manera que lo hice con AndroidStudio no he sido capaz por 
+		+ Solución: He tirado por la interfaz web de Claude.ai/code. He creado el planning que tenía guardado a  la rama de git "sprint5" en local y lo he subido a remoto de github. Como desde esta página CCode se hace un clone, tiene acceso a todo el contexto. Así que hecho esto Claude se pone con el manual y se pone a implementar todos los camibios y me hace una PR maravillosa que más tarde tendré que mergear a la mía [OK]
+⇢ Me traigo la rama de CCode a local para compilar y comprobar funcionamiento y posibles problemas:
+	▼ Problema: Build falla en PerfilFragment.kt por que en la tarea 5 se había cambiado el cosntructor de ServicioAdapter para añadir la lambda de TTS. En la tarea 7 nos e ha actualizado la llamada en el Perfil. Faltaba el parámetro onServicioClick.
+	+ Solución: Facilita, (pero con ayuda de la IA) lo he arreglado a mano en el IDE. Han sido 3 líneas que he tenido que meter onservicioCick como parametro que recibe ServicioAdapter. 
+⇢ En casa ya descansado me pongo con la limpieza y lo termino dejando de maravilla ^_^
+	↳ Lo primero que hago es ponerme en mi rama sprint5. Para a continuacion traerme uno por uno  mediante cherry pick los cambios que quiero. Lo he hecho por la intezfaz gráfica del IDE con unos pocos clics (más facil). 
+	↳ Tras tener los cherrypicks en mi rama se hace esta movida [git rebase -i (<tu SHA aqui>) --exec "git commit --amend --reset-author --no-edit"]. Esto recorre los commits automáticamente y me pone a mi como autor único de cada uno. Esto deja el grafo bien limpio y sin comits de terceros. 
+Como me gusta git! Tengo pensdo dejar que ClaudeCode haga de las suyas y me mejores el DocEngie, al ser un proyecto poersonal puedo hacer alarde de que se usar la IA a mi favor. 
+⇢ Comprobar que la app se puede istalar y que de manera general funciona correctamente. Faltará hacer y documentar las pruebas funcionales.
 
+↪ 31.03.2026 :
+	Hoy voy a hacer y documentar las pruebas fucnionales que tengo pendientes de hacer. Tras estos intensos días quiero aprovechar ahora para reflexionar un poco ya que cada día la IA está mas presente en nuestro entrorno. Me he dado cuenta de que usar IA por consola acelera bastante la escritura de código y propone buenas estructuras (como los Observers), pero no tiene conocimienteo  sobre como quiero que sea el usecase de la app. Asi que con lo aprendido estos días me doy cuenta que las IAs son bastande limitadas y son buenas para hacer tareas pesada específicas. Lo que no tienen es el contexto de la app y el funcionamiento ni mucho menosla visión del producto o de como son las cosas en la realidad. Las IAs sólo ven matrices y las multiplican o más simplemente ceros y unos en forma de matrices que multiplican y usan esos procesos como neuronas (Graciaas a DotCsv por tantos años de conocimiento :P)
+⇢ Pruebas funcionales: Se hacen pruebas funcionales sobre la app y se descubren cositas que creo que tengo que corregir y añadir antes de seguir con el desarrollo 
 
  
 --- SÍMBOLOGÍA---
@@ -370,6 +401,18 @@ Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir 
 		- `docs:` Cambios exclusivos en la documentación del proyecto. (Ej: `docs: actualizar README.md y añadir manual de configuración de red Zscaler`).
 
 (Actualizado a finales del Sprint 4 - 28.03.2026)
+
+(Actualizado a mediados del Sprint 5 - 31.03.2026)
+5. Trabajo con IAs y Modelos de Lenguaje
+	↳ Las IAs no tienen visión de producto: He comprobado que por mucho que un modelo te proponga código limpio y buenas estructuras (como el DefaultLifecycleObserver para el TTS), no tiene ni idea de lo que tiene sentido para el usuario final. Sin que yo lo revisara, el TTS habría leído nombres de archivos internos como "bien_excelente" en vez de "Excelente", habría puesto un icono de silencio en un botón de altavoz, y habría dicho "dos punto cero horas". La IA escribe código que compila, pero el sentido común sigue siendo cosa mía.
+	↳ No todos los modelos valen para todo: He probado a usar un modelo local (qwen3-coder:30b) para tareas que creía mecánicas y me ha liado parda. Se ha puesto a escribir Java en vez de Kotlin y se ha saltado el plan entero. Conclusión: los modelos pequeños sin thinking van bien para cosas muy simples tipo chore, pero para integrar lógica en la UI hay que tirar de Sonnet o Opus que saben razonar antes de actuar.
+	↳ Claude Code por web cuando la CLI no va: Cuando Zscaler me ha bloqueado la consola en el trabajo, he podido tirar por claude.ai/code subiendo el contexto al repo remoto. Me ha generado una PR con todos los commits del plan. No es lo ideal pero es un plan B que funciona.
+
+6. Git Avanzado
+	↳ Rebase interactivo para cambiar autoría: Además del cherry-pick que ya conocía, he aprendido a usar git rebase -i con --exec "git commit --amend --reset-author --no-edit" para cambiar el autor de varios commits de golpe. Muy útil cuando los commits vienen de ramas de la IA y quieres que el historial quede limpio.
+	↳ Hard reset como botón de pánico: Cuando el modelo local me ha liado el código, un git reset --hard + git clean -fd me ha dejado la rama como estaba en segundos. Trabajar con agentes de IA sin saber hacer esto sería una temeridad.
+
+(Actualizado a mediados del Sprint 5 - 31.03.2026)
 
 
 ------------Fundamentos/Ideas para hacer el trabajo Escrito------------
