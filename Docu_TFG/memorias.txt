@@ -348,8 +348,47 @@ Como me gusta git! Tengo pensdo dejar que ClaudeCode haga de las suyas y me mejo
 ↪ 31.03.2026 :
 	Hoy voy a hacer y documentar las pruebas fucnionales que tengo pendientes de hacer. Tras estos intensos días quiero aprovechar ahora para reflexionar un poco ya que cada día la IA está mas presente en nuestro entrorno. Me he dado cuenta de que usar IA por consola acelera bastante la escritura de código y propone buenas estructuras (como los Observers), pero no tiene conocimienteo  sobre como quiero que sea el usecase de la app. Asi que con lo aprendido estos días me doy cuenta que las IAs son bastande limitadas y son buenas para hacer tareas pesada específicas. Lo que no tienen es el contexto de la app y el funcionamiento ni mucho menosla visión del producto o de como son las cosas en la realidad. Las IAs sólo ven matrices y las multiplican o más simplemente ceros y unos en forma de matrices que multiplican y usan esos procesos como neuronas (Graciaas a DotCsv por tantos años de conocimiento :P)
 ⇢ Pruebas funcionales: Se hacen pruebas funcionales sobre la app y se descubren cositas que creo que tengo que corregir y añadir antes de seguir con el desarrollo 
+	↳ Escaparate - Lectura Global: El botón lee todas las tarjetas que están a la vista en la pantalla. Solo lee las tarjetas completas y se deja las que se ven a medias. Las lee todas haciendo  una pausa entre cada una. Las horas las lee bien.
 
- 
+***************
+or favor, prueba la app haciendo exactamente esto y dime si notas algo raro en la voz o en el comportamiento:
+
+Escaparate - Lectura Global: Pulsa el botón flotante del altavoz.
+
+¿Lee todas las tarjetas visibles una tras otra?
+
+¿Hace una pausa natural entre tarjeta y tarjeta? (Gracias al .  que le pusimos).
+
+¿Dice "2 horas" o "2.0 horas"? (Aquí comprobamos si funciona bien el formatearCoste).
+
+Escaparate - Tap Largo: Mantén pulsada una tarjeta cualquiera.
+
+¿Solo lee esa tarjeta en concreto?
+
+Si le das un toque normal (tap corto)... ¿Sigue entrando al detalle del servicio como antes o se ha roto la navegación?
+
+Detalle del Servicio: Entra a un servicio y dale al botón de voz.
+
+¿Te lee todos los datos de corrido (Título, categoría, coste, descripción, estado)?
+
+Perfil: Ve a la pestaña de tu perfil y dale al botón.
+
+¿Lee tu nombre, barrio, saldo y nivel correctamente?
+
+Prueba de Fuego (Ciclo de Vida):
+
+Dale a leer en el Escaparate y, mientras está hablando, cambia rápidamente a la pestaña del Perfil.
+
+¿Se calla de golpe? (Si se calla, el DefaultLifecycleObserver es un éxito absoluto. Si sigue hablando como un fantasma en la otra pantalla, tenemos un problema).
+
+Valoraciones (BottomSheet):
+
+Abre el menú de dejar una valoración.
+
+Dale al altavoz sin tocar nada. ¿Dice "Sin pictogramas seleccionados"?
+
+Marca el de "Excelente" y "Amable" y dale al altavoz. ¿Dice las palabras bonitas o dice los códigos feos internos (bien_excelente)?
+****************
 --- SÍMBOLOGÍA---
 Día nuevo:         ↪
 Paso / Tarea:      ⇢
