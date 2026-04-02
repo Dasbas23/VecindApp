@@ -48,7 +48,7 @@ class TtsHelper(
     init {
         tts = TextToSpeech(context.applicationContext) { status ->
             if (status == TextToSpeech.SUCCESS) {
-                val result = tts?.setLanguage(Locale("es", "ES"))
+                val result = tts?.setLanguage(Locale.forLanguageTag("es-ES"))
                 isReady = result != TextToSpeech.LANG_MISSING_DATA
                         && result != TextToSpeech.LANG_NOT_SUPPORTED
                 if (isReady) {
@@ -111,10 +111,12 @@ class TtsHelper(
          * @param coste Valor en horas (Double).
          * @return String legible sin decimales innecesarios.
          */
-        fun formatearCoste(coste: Double): String =
-            if (coste == coste.toLong().toDouble())
+        fun formatearCoste(coste: Double): String {
+            return if (coste % 1.0 == 0.0) {
                 coste.toLong().toString()
-            else
-                coste.toString().replace('.', ',')
+            } else {
+                String.format(Locale.forLanguageTag("es-ES"), "%.1f", coste)
+            }
+        }
     }
 }
