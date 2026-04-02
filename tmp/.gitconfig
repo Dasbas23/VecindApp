@@ -59,3 +59,8 @@
 	peek = !git diff --stat HEAD @{upstream} #[ok] (Qué archivos cambiarían si hago pull)
 	peekfull = !git diff HEAD @{upstream} #[ok] (Ver los cambios en detalle antes de pull)
 	peekword = !git diff --word-diff HEAD @{upstream} #[ok] (Ver cambios palabra a palabra antes de pull)
+	
+	# === COMPARAR CON REMOTO (antes de hacer push) === 
+	outgoing = !git diff --stat @{upstream} HEAD #[@] (Qué archivos cambiarían si hago push)
+	outfull = !git diff @{upstream} HEAD #[@] (Ver los cambios en detalle antes de push)
+	outword = !git diff --word-diff @{upstream} HEAD #[@] (Ver cambios palabra a palabra antes de push)

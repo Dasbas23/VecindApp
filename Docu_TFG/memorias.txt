@@ -347,48 +347,32 @@ Como me gusta git! Tengo pensdo dejar que ClaudeCode haga de las suyas y me mejo
 
 ↪ 31.03.2026 :
 	Hoy voy a hacer y documentar las pruebas fucnionales que tengo pendientes de hacer. Tras estos intensos días quiero aprovechar ahora para reflexionar un poco ya que cada día la IA está mas presente en nuestro entrorno. Me he dado cuenta de que usar IA por consola acelera bastante la escritura de código y propone buenas estructuras (como los Observers), pero no tiene conocimienteo  sobre como quiero que sea el usecase de la app. Asi que con lo aprendido estos días me doy cuenta que las IAs son bastande limitadas y son buenas para hacer tareas pesada específicas. Lo que no tienen es el contexto de la app y el funcionamiento ni mucho menosla visión del producto o de como son las cosas en la realidad. Las IAs sólo ven matrices y las multiplican o más simplemente ceros y unos en forma de matrices que multiplican y usan esos procesos como neuronas (Graciaas a DotCsv por tantos años de conocimiento :P)
+
+↪ 01.04.2026 :
+	Hoy no he trabajado. Tenía cosas pendientes que hacer así que aprovecharé la noche del 2 al 3 para avanzar mucho. Esta noche del 1 al 2 tengo planeado terminar de documentar las pruebas funcionales y arreglarlo antes de avanzar con los detalles.
+	
+↪ 01.04.2026 :
+	Estoy bastante vaguete y no me apetece mucho trabajal... a ver como se me da la noche.
 ⇢ Pruebas funcionales: Se hacen pruebas funcionales sobre la app y se descubren cositas que creo que tengo que corregir y añadir antes de seguir con el desarrollo 
-	↳ Escaparate - Lectura Global: El botón lee todas las tarjetas que están a la vista en la pantalla. Solo lee las tarjetas completas y se deja las que se ven a medias. Las lee todas haciendo  una pausa entre cada una. Las horas las lee bien.
+	↳ Escaparate - Lectura Global: El botón lee todas las tarjetas que están a la vista en la pantalla. Solo lee las tarjetas completas y se deja las que se ven a medias. Las lee todas haciendo  una pausa entre cada una. Las horas las lee bien.Hace una pausa natural entre tarjeta y tarjeta(gracias al .  que le pusimos)
+		▼ Problema:  El TTS lee el valor real del coste. Esto pasa porque no se ha limitado la cantidad de decimales que se pueden introducir, entoces el TTS leerá 1,9999999983 horas. Las horas que se muestran en pantalla sí que se había contemplado que pasara eso así que se hace aproximación para mostrarlo bien. El problema de verdad es cuando en la BBDD no se gestiona ese tipo de errores.	
+		+Solución: refactorizar TtsHelper.kt donde he mejorado la lógica de formatearCoste() para gestionar correctamente los decimales. 
+			↳ En detalle: El problema no era solo de UI, sino de cómo se representan los Double internamente. Los decimales en binario no siempre son exactos, por eso aparecen valores raros como 1.9999999983.
+			 Antes:	- Se usaba toString() directamente → sacaba todos los decimales “reales” 
+				- Se hacía un replace('.', ',') → parche visual, pero no solucionaba el problema 
+			Ahora: 	- Se comprueba si el número es entero con (coste % 1.0 == 0.0) 
+				- Si es entero → se convierte a Long y se muestra sin decimales 
+				- Si no → se formatea con String.format y Locale "es-ES"
+		▼ Problema: Cuando es 1 hora, lee "una horas" en plural
+		+ Solución: Refactorizar nuevamente TtsHelper.kt donde añado formatearCosteConUnidad(). Llama a la funcion anterior mencionada y además  comprueba si tienque que hablar en plurar o en singular. ¿Overkill? No lo sé pero me ha gustado solucionar esto por mi cuenta :)
+	↳ Escaparate - Tap Largo: Se lee sólo la tarjeta en concreto, bien. Si le das un clic corto, la navegación funciona bien y entará al detalle. #meter esto en el manual de usuario.
+		▼ Problema: Al igual que el problema anterior, se leía en plurar.
+		+ Solución: Se corrige con refactor anterior porque formatearCoste() ahora pasa a ser private.
+	↳ Detalle del Servicio: Aqui he encontrado varias cosas que no me terminan de gustar
+		▼ Problema: Aquí para empezar no me gusta la posición del texto y como se gestiona cuando un título es demasiado largo. [fail. Se hará en siguiente sprint ya que ahora estamos con TTS]
+		▼ Problema: Tts lee pero no indica el qué!
 
-***************
-or favor, prueba la app haciendo exactamente esto y dime si notas algo raro en la voz o en el comportamiento:
-
-Escaparate - Lectura Global: Pulsa el botón flotante del altavoz.
-
-¿Lee todas las tarjetas visibles una tras otra?
-
-¿Hace una pausa natural entre tarjeta y tarjeta? (Gracias al .  que le pusimos).
-
-¿Dice "2 horas" o "2.0 horas"? (Aquí comprobamos si funciona bien el formatearCoste).
-
-Escaparate - Tap Largo: Mantén pulsada una tarjeta cualquiera.
-
-¿Solo lee esa tarjeta en concreto?
-
-Si le das un toque normal (tap corto)... ¿Sigue entrando al detalle del servicio como antes o se ha roto la navegación?
-
-Detalle del Servicio: Entra a un servicio y dale al botón de voz.
-
-¿Te lee todos los datos de corrido (Título, categoría, coste, descripción, estado)?
-
-Perfil: Ve a la pestaña de tu perfil y dale al botón.
-
-¿Lee tu nombre, barrio, saldo y nivel correctamente?
-
-Prueba de Fuego (Ciclo de Vida):
-
-Dale a leer en el Escaparate y, mientras está hablando, cambia rápidamente a la pestaña del Perfil.
-
-¿Se calla de golpe? (Si se calla, el DefaultLifecycleObserver es un éxito absoluto. Si sigue hablando como un fantasma en la otra pantalla, tenemos un problema).
-
-Valoraciones (BottomSheet):
-
-Abre el menú de dejar una valoración.
-
-Dale al altavoz sin tocar nada. ¿Dice "Sin pictogramas seleccionados"?
-
-Marca el de "Excelente" y "Amable" y dale al altavoz. ¿Dice las palabras bonitas o dice los códigos feos internos (bien_excelente)?
-****************
+	¿Repasar BBDD? - El formateo debería hacerse a nivel interno para que en la BBDD esté bien;  antes de pintar pantalla o pasarle cosas al TTS.
 --- SÍMBOLOGÍA---
 Día nuevo:         ↪
 Paso / Tarea:      ⇢
