@@ -42,7 +42,7 @@
     <!-- ═══ Solicitar Servicio ═══ -->
     <string name="btn_solicitar">Solicitar servicio</string>
     <string name="titulo_confirmar_solicitud">Solicitar servicio</string>
-    <string name="mensaje_confirmar_solicitud">¿Quieres solicitar este servicio? Se te debitarán %.1f horas al completarse.</string>
+    <string name="mensaje_confirmar_solicitud">¿Quieres solicitar este servicio? Se te descontarán %.1f horas al completarse.</string>
     <string name="servicio_solicitado">Servicio solicitado correctamente</string>
 
     <!-- ═══ Transacciones ═══ -->
