@@ -302,13 +302,14 @@ class DetalleServicioFragment : Fragment() {
      *
      * Lee: título → categoría → coste → descripción → estado.
      * No hace nada si el servicio aún no se ha cargado.
+     * Los puntos en [texto] son necesarios para las pausas
      */
     private fun configurarFabTts() {
         fabTts.setOnClickListener {
             val s = servicioActual ?: return@setOnClickListener
             val desc = s.descripcion ?: getString(R.string.sin_descripcion)
-            val costeTexto = TtsHelper.formatearCoste(s.costeHoras)
-            val texto = "${s.titulo}. ${s.categoria.name}. $costeTexto horas. $desc. ${s.estado.name}"
+            val costeTexto = TtsHelper.formatearCosteConUnidad(s.costeHoras)
+            val texto = "${s.titulo}. ${s.categoria.name}. $costeTexto . $desc. ${s.estado.name}"
             ttsHelper.speak(texto)
         }
     }

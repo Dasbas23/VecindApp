@@ -91,7 +91,7 @@ class EscaparateFragment : Fragment() {
             },
             onServicioLongClick = { servicio ->
                 ttsHelper.speak(
-                    "${servicio.titulo}, ${TtsHelper.formatearCoste(servicio.costeHoras)} horas"
+                    "${servicio.titulo}, ${TtsHelper.formatearCosteConUnidad(servicio.costeHoras)} "
                 )
                 true
             }
@@ -149,7 +149,7 @@ class EscaparateFragment : Fragment() {
             val texto = (first..last)
                 .mapNotNull { adapter.currentList.getOrNull(it) }
                 .joinToString(". ") { s ->
-                    "${s.titulo}, ${TtsHelper.formatearCoste(s.costeHoras)} horas"
+                    "${s.titulo}, ${TtsHelper.formatearCosteConUnidad(s.costeHoras)}"
                 }
             if (texto.isNotBlank()) ttsHelper.speak(texto)
         }

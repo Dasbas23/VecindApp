@@ -111,12 +111,24 @@ class TtsHelper(
          * @param coste Valor en horas (Double).
          * @return String legible sin decimales innecesarios.
          */
-        fun formatearCoste(coste: Double): String {
+        private fun formatearCoste(coste: Double): String {
             return if (coste % 1.0 == 0.0) {
                 coste.toLong().toString()
             } else {
                 String.format(Locale.forLanguageTag("es-ES"), "%.1f", coste)
             }
+        }
+
+        /**
+         * Comprueba si tiene que leer "una hora" en singular o plural.
+         *
+         * @param coste Valor en horas (Double).
+         */
+        fun formatearCosteConUnidad(coste: Double): String {
+            val texto = formatearCoste(coste)
+            val unidad = if (texto == "1") "hora" else "horas"
+            return "$texto $unidad"
+
         }
     }
 }
