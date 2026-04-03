@@ -20,6 +20,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
+import androidx.core.graphics.toColorInt
 
 /**
  * BottomSheet obligatorio para valorar al vecino tras completar una transacción.
@@ -51,8 +52,10 @@ class ValoracionBottomSheetFragment : BottomSheetDialogFragment() {
     /** Lista mutable de pictogramas seleccionados (por su tag). */
     private val pictogramasSeleccionados = mutableListOf<String>()
 
+    /** Comentario opcional escrito por el usuario en valoración. */
+    private lateinit var  comentarioValoracion: String
     /** Color de fondo para pictogramas seleccionados. */
-    private val colorSeleccionado = Color.parseColor("#DBEAFE") // Azul claro
+    private val colorSeleccionado = "#DBEAFE".toColorInt() // Azul claro
     private val colorNormal = Color.TRANSPARENT
     private lateinit var ttsHelper: TtsHelper
 
@@ -140,6 +143,7 @@ class ValoracionBottomSheetFragment : BottomSheetDialogFragment() {
     private fun configurarBotonTts(view: View) {
         val ibTts = view.findViewById<ImageButton>(R.id.ibTts)
         ibTts.setOnClickListener {
+            // 1. Procesar pictogramas: Si no hay ninguno seleccionado, usar el string de recursos
             val texto = if (pictogramasSeleccionados.isEmpty()) {
                 getString(R.string.tts_sin_pictogramas)
             } else {
@@ -147,8 +151,13 @@ class ValoracionBottomSheetFragment : BottomSheetDialogFragment() {
                     PictogramaMapper.obtenerDescripcion(requireContext(), tag)
                 }
             }
-            ttsHelper.speak(texto)
-        }
+            // 2. Procesar comentario: Si está vacío, usar el string de recursos
+            val inputComentario = view.findViewById<TextInputEditText>(R.id.etComentario).text.toString()
+            comentarioValoracion = inputComentario.ifBlank {
+                getString(R.string.tts_sin_comentario)
+            }
+            ttsHelper.speak("Valoración: $texto . Comentario: $comentarioValoracion")
+            }
     }
 
     /**
