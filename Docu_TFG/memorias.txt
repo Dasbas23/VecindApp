@@ -38,7 +38,7 @@
 	▼ Problema: Al importar el código XML generado por la IA en draw.io, los títulos de las clases no se renderizaban bien  y al tocar cualquier cosa se descuajeringaban de lugar las tablas.
 	+ Solución 1: Había que añadir la propiedad "html=1;" en el estilo de cada swimlane (contenedor de la clase) para que diagrams.net interpretara correctamente el código HTML de los títulos. He tenido que pedirle nuevamente a la IA que utilizara una template que había creado yo sombre como lo quería pero el trabajo tedioso de completarlo, se lo ha llevado la IA.
 
-↪ 12.03.2026 :
+↪ 12.03.2026 : 
 	Terminar de maquetar el diagrama de clases y ententer su funcionamiento: Tras añadir las clases que faltaban (DetalleViewModel, TransaccionRepository y ValoracionRepository), el diagrama queda cerrado con 13 clases en total estructuradas en 5 capas. 
 	▼ Problema 1: Tenía una confusión  importante entre "Android Jetpack" y "Jetpack Compose" y pensaba que tendría que volver refolmular cassi todo.
 	+ Solución 1: Tras revisar la propuesta ("Generaré entornos gráficos basados en XML"), he aclarado que lo que no debo usar es Compose (que es la librería UI). El resto de la familia Android Jetpack (Room, ViewModel, WorkManager) es el estándar nativo y perfectamente válido. Gracias a haber elegido Clean Architecture, el único cambio que he tenido que hacer es modificar el diagrama para que la Vista sea "XML / Activity" en lugar de "Compose". Todo el núcleo lógico se mantiene intacto.
@@ -353,7 +353,7 @@ Como me gusta git! Tengo pensdo dejar que ClaudeCode haga de las suyas y me mejo
 	
 ↪ 01.04.2026 :
 	Estoy bastante vaguete y no me apetece mucho trabajal... a ver como se me da la noche.
-⇢ Pruebas funcionales: Se hacen pruebas funcionales sobre la app y se descubren cositas que creo que tengo que corregir y añadir antes de seguir con el desarrollo 
+⇢ Pruebas funcionales: Se hacen pruebas funcionales sobre la app y se descubren cositas que creo que tengo que corregir y añadir antes de seguir con el desarrollo. 
 	↳ Escaparate - Lectura Global: El botón lee todas las tarjetas que están a la vista en la pantalla. Solo lee las tarjetas completas y se deja las que se ven a medias. Las lee todas haciendo  una pausa entre cada una. Las horas las lee bien.Hace una pausa natural entre tarjeta y tarjeta(gracias al .  que le pusimos)
 		▼ Problema:  El TTS lee el valor real del coste. Esto pasa porque no se ha limitado la cantidad de decimales que se pueden introducir, entoces el TTS leerá 1,9999999983 horas. Las horas que se muestran en pantalla sí que se había contemplado que pasara eso así que se hace aproximación para mostrarlo bien. El problema de verdad es cuando en la BBDD no se gestiona ese tipo de errores.	
 		+Solución: refactorizar TtsHelper.kt donde he mejorado la lógica de formatearCoste() para gestionar correctamente los decimales. 
@@ -368,11 +368,30 @@ Como me gusta git! Tengo pensdo dejar que ClaudeCode haga de las suyas y me mejo
 	↳ Escaparate - Tap Largo: Se lee sólo la tarjeta en concreto, bien. Si le das un clic corto, la navegación funciona bien y entará al detalle. #meter esto en el manual de usuario.
 		▼ Problema: Al igual que el problema anterior, se leía en plurar.
 		+ Solución: Se corrige con refactor anterior porque formatearCoste() ahora pasa a ser private.
+		▼ Problema: Si no hay servicios y le das al FAB, no dice nada.
+		+ Solución : (fail)
 	↳ Detalle del Servicio: Aqui he encontrado varias cosas que no me terminan de gustar
 		▼ Problema: Aquí para empezar no me gusta la posición del texto y como se gestiona cuando un título es demasiado largo. [fail. Se hará en siguiente sprint ya que ahora estamos con TTS]
 		▼ Problema: Tts lee pero no indica el qué!
+		+ Solución: Refactorizo Detalleserviciofragment.kt hardcodeando "categoría", "coste", "descripcion" y "estado" para que indique a que hace referencia. [Si da tiempo , refactorizar en siguiente Sprint, el  6, para meter esos datos en strings.xml ]
+		▼ Problema: Tts lee mal cuando se trata de mayúsculas sin tíldes.
+		+ Solución: He corregido Enums.kt poniendoles tíldes a  "TECONOLOGÍA" Y "COMPANÍA". Ya lee bien [Me pregunto si no será mejor solución pasarlo como parámetros toLower() porque es cierto que tts leerá mal si las palabras no tienen accentos pero al menos no deletrea las categorías. Por otro lado se me ocurre también que las categorías deberían estar listadas en el Strings y no puestas a pelo en el Enums, pero eso ya es muy de app internacional y la mía por ahora no lo es y tampoco me dará tiempo a hacerla multilingüe]
 
 	¿Repasar BBDD? - El formateo debería hacerse a nivel interno para que en la BBDD esté bien;  antes de pintar pantalla o pasarle cosas al TTS.
+
+↪ 02.04.2026 :
+	Me he hecho una super cheatSheet con alias personalizados para organizar el flujo de trabajo. Hoy no me va a cundir mucho, lo presiento.
+⇢ Continuar con las pruebas funcionales justo donde lo dejé ayer.
+	↳ Perfil:
+		▼ Problema: Tts lee pero no indica el qué!
+		+ Solución: Refactorizo PerfilFragment.kt hardcodeando "lugar" y "saldo" para que indique a que hace referencia. [Si da tiempo , refactorizar en siguiente Sprint, el  6, para meter esos datos en strings.xml]
+	↳ Prueba de Fuego (Ciclo de Vida):  Esta prueba es todo un logro! Se calla de golpe cuando cambias de pantalla o haces un longTap o sales de la pantalla. 
+	↳ Valoraciones (BottomSheet): pffff por donde empezar... No me gusta como ha quedado. La cosa funciona sólo cuando terminas de completar el servicio. Me gustaría que la misma funcionalidad estuviera en el historial > valoración recibida. [OK]
+		▼ Problema: El Tts funciona bien, pero no como yo me esperaba. El Tts lee correctamente las descripciones de los prictogramas. Además los lee en orden en el que se han seleccionado. Lo que no me gustaba, es que no se leía el comentario opcional.
+		+ Solución: Añado un lateinit "comentarioValoracion" que se procesa en 'configurarBotonTts()'cuando haces tap en el icono de escuchar. Comprueba si está vacío y recita mensaje guardado en strings. Extrae la infomación del campo comentario en vivo y la recita (no se conecta a la BBDD porque aún no se ha guardado nada.)
+!!!TTS lee los emojiiis!!!! :D  Finalmente no me ha cundido mucho en cuanto a progreso pero sí que he aprendido cosas guays.
+		
+
 --- SÍMBOLOGÍA---
 Día nuevo:         ↪
 Paso / Tarea:      ⇢
