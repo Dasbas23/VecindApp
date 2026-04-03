@@ -309,7 +309,7 @@ class DetalleServicioFragment : Fragment() {
             val s = servicioActual ?: return@setOnClickListener
             val desc = s.descripcion ?: getString(R.string.sin_descripcion)
             val costeTexto = TtsHelper.formatearCosteConUnidad(s.costeHoras)
-            val texto = "${s.titulo}. ${s.categoria.name}. $costeTexto . $desc. ${s.estado.name}"
+            val texto = "${s.titulo}. Categoría: ${s.categoria.name}. Coste: $costeTexto . Descripción: $desc. Estado: ${s.estado.name}"
             ttsHelper.speak(texto)
         }
     }

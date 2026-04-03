@@ -178,7 +178,7 @@ class PerfilFragment : Fragment() {
         fabTts.setOnClickListener {
             val u = usuarioActual ?: return@setOnClickListener
             val saldoTexto = TtsHelper.formatearCosteConUnidad(u.saldoHoras)
-            val texto = "${u.nombre}. ${u.barrio}. $saldoTexto horas. Nivel ${u.nivel.name}"
+            val texto = "${u.nombre}. Lugar: ${u.barrio}. Saldo, $saldoTexto . Nivel ${u.nivel.name}"
             ttsHelper.speak(texto)
         }
     }
