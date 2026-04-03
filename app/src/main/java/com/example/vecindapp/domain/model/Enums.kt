@@ -31,11 +31,11 @@ enum class CategoriaServicio {
     /** Tareas domésticas: limpieza, bricolaje, jardinería, etc. */
     HOGAR,
     /** Soporte técnico: ordenadores, móviles, redes, etc. */
-    TECNOLOGIA,
+    TECNOLOGÍA,
     /** Clases particulares, idiomas, ayuda con deberes, etc. */
     EDUCACION,
     /** Acompañamiento, paseos, conversación, etc. */
-    COMPANIA,
+    COMPANÍA,
     /** Hacer la compra, recoger paquetes, trámites, etc. */
     RECADOS,
     /** Cualquier servicio que no encaje en las anteriores. */
