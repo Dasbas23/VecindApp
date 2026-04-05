@@ -390,6 +390,12 @@ Como me gusta git! Tengo pensdo dejar que ClaudeCode haga de las suyas y me mejo
 		▼ Problema: El Tts funciona bien, pero no como yo me esperaba. El Tts lee correctamente las descripciones de los prictogramas. Además los lee en orden en el que se han seleccionado. Lo que no me gustaba, es que no se leía el comentario opcional.
 		+ Solución: Añado un lateinit "comentarioValoracion" que se procesa en 'configurarBotonTts()'cuando haces tap en el icono de escuchar. Comprueba si está vacío y recita mensaje guardado en strings. Extrae la infomación del campo comentario en vivo y la recita (no se conecta a la BBDD porque aún no se ha guardado nada.)
 !!!TTS lee los emojiiis!!!! :D  Finalmente no me ha cundido mucho en cuanto a progreso pero sí que he aprendido cosas guays.
+
+↪ 05.04.2026 :
+	Bueno vamos a ver si avanzo un poquito ahora por la mañana. Me he quedado en la prueba funcional del BottomSheet de las Valoracioes, pero ahora me quiero centrar en el Historial ya que allí también se muestran las valoraciones pero por ahora no se leen. 
+		▼ Problema: Se muestra la información de la valoración , pero no hay forma de escucharla. [En srpint 6 implementar la edición de la valoración][Sprint 6 refactorizar bottom_sheet_detalle_valoracion.xml y strings.xml para que nuestre "<string name="detalle_valoracion_titulo">Valoración recibida</string> " "<string name="detalle_valoracion_titulo">Valoración enviada</string>" e implementar la edicion del comentario (Creo que es un refactor gordo ya se verá si se implementa o no.)]
+		+ Solución: **Estoy atascado, necesito ayuda. 
+
 		
 
 --- SÍMBOLOGÍA---
