@@ -129,7 +129,7 @@ app/src/main/java/com/example/vecindapp/
 - **`p`** = `push` #[ok] **(Push a remote)**
 - **`pl`** = `pull` #[ok] **(Pull desde remote)**
 
-###### === RAMAS ===
+#### === RAMAS ===
 
 - **`co`** = `checkout` #[ok] **(Cambia a la rama seleccionada, hay que darle un argumento hacia que rama se quiere cambiar)**
 - **`cob` = `checkout -b` #[ok] **(Crea una rama nueva y salta a ella)**

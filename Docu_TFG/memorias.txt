@@ -393,8 +393,9 @@ Como me gusta git! Tengo pensdo dejar que ClaudeCode haga de las suyas y me mejo
 
 ↪ 05.04.2026 :
 	Bueno vamos a ver si avanzo un poquito ahora por la mañana. Me he quedado en la prueba funcional del BottomSheet de las Valoracioes, pero ahora me quiero centrar en el Historial ya que allí también se muestran las valoraciones pero por ahora no se leen. 
-		▼ Problema: Se muestra la información de la valoración , pero no hay forma de escucharla. [En srpint 6 implementar la edición de la valoración][Sprint 6 refactorizar bottom_sheet_detalle_valoracion.xml y strings.xml para que nuestre "<string name="detalle_valoracion_titulo">Valoración recibida</string> " "<string name="detalle_valoracion_titulo">Valoración enviada</string>" e implementar la edicion del comentario (Creo que es un refactor gordo ya se verá si se implementa o no.)]
-		+ Solución: **Estoy atascado, necesito ayuda. 
+		▼ Problema: Se muestra la información de la valoración , pero no hay forma de escucharla. El BottomSheet de solo lectura no tiene botón de altavoz ni integración con TtsHelper. [En srpint 6 implementar la edición de la valoración][Sprint 6 refactorizar bottom_sheet_detalle_valoracion.xml y strings.xml para que nuestre "<string name="detalle_valoracion_titulo">Valoración recibida</string> " "<string name="detalle_valoracion_titulo">Valoración enviada</string>" e implementar la edicion del comentario (Creo que es un refactor gordo ya se verá si se implementa o no.)]
+		+ Solución: Se añade un ImageButton de altavoz junto al título del BottomSheet. Al pulsarlo , el TtsHelper lee los pictogramas  seleccionados usando PictogramaMapper para obtener las descripciones legibles y, si existe comentario opcional, lo recita también. El helper se liga al ciclo del vida del BottomSheet para que se destruya solo al cerrar.
+
 
 		
 
