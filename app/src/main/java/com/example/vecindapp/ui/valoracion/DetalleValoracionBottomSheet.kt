@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.vecindapp.R
+import com.example.vecindapp.ui.common.TtsHelper
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
@@ -80,6 +82,26 @@ class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
         }
 
         btnCerrar.setOnClickListener { dismiss() }
+
+        // TTS
+        val ttsHelper = TtsHelper(requireContext(), viewLifecycleOwner.lifecycle)
+
+        val ibTts = view.findViewById<ImageButton>(R.id.ibTtsDetalle)
+        ibTts.setOnClickListener {
+            val pictogramas = parsearPictogramas(pictogramasJson)
+            val textosPictogramas = pictogramas.map { tag ->
+                PictogramaMapper.obtenerDescripcion(requireContext(), tag)
+            }
+
+            val textoCompleto = buildString {
+                append("Valoración. ")
+                append("Pictogramas: ${textosPictogramas.joinToString(", ")}. ")
+                if (comentario.isNotBlank()) {
+                    append("Comentario: $comentario")
+                }
+            }
+            ttsHelper.speak(textoCompleto)
+        }
     }
 
     /**
