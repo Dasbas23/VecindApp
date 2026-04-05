@@ -114,12 +114,13 @@ app/src/main/java/com/example/vecindapp/
 | `sprint2/bbdd+escaparate`  | BBDD Room + CRUD servicios + escaparate            |
 | `sprint3/transacciones`    | Transacciones + Perfil + Historial                 |
 | `sprint4/ usuarios+valorac`| Login sencillo de usuarius + sistema valoraciones  |
+| `sprint5/ accesibilidad `  | TTS en escaparate + servicio + valoración + perfil |
 
-## Utilidades
+## | Utilidades
 
-`[alias]`
+`[alias Git]`
 
-### === BÁSICOS ===
+#### === BÁSICOS ===
 
 - **`s`** = `status -sb` #[ok] **(no se si me gusta mas git status normal pero con colores)**
 - **`a`** = `add .` #[ok] **(add normal)**
@@ -128,7 +129,7 @@ app/src/main/java/com/example/vecindapp/
 - **`p`** = `push` #[ok] **(Push a remote)**
 - **`pl`** = `pull` #[ok] **(Pull desde remote)**
 
-### === RAMAS ===
+###### === RAMAS ===
 
 - **`co`** = `checkout` #[ok] **(Cambia a la rama seleccionada, hay que darle un argumento hacia que rama se quiere cambiar)**
 - **`cob` = `checkout -b` #[ok] **(Crea una rama nueva y salta a ella)**
@@ -139,14 +140,14 @@ app/src/main/java/com/example/vecindapp/
 - **`merged`** = `branch --merged` #[ok] **(Lista ramas ya mergeadas que puedes borrar tranquilamente. Para limpiar ramas muertas)**
 - **`mergeff`** = `merge --no-ff` #[@] **(Merge forzando commit de merge. Para cerrar sprints con marca visible en el historial)**
 
-### === HISTORIAL ===
+#### === HISTORIAL ===
 
 - **`lg`** = `log --oneline --graph --all --decorate --color` #[ok] **(A diferencia con ll es más compacto)**
 - **`ll`** = `log --graph --pretty=format:'%C(yellow)%h%Creset %C(cyan)%an%Creset %C(white)%s%Creset %C(green)(%cr)%Creset%C(auto)%d%Creset' --all` #[ok] **(Te muestra el graph en bonito con el formato amarillo: commits, azul:usuario, blanco: que se ha hecho, Verde:hace cuanto tiempo)**
 - **`last`** = `log -1 --stat` #[ok] **(Muestra el último commit)**
 - **`preview`** = `!git log $(git rev-parse --abbrev-ref @{upstream} 2>/dev/null || echo desarrollo)..HEAD --oneline` #[ok] **(Antes de mergear a desarrollo, muestra qué commits tiene tu rama que desarrollo no tiene. Retrovisor antes de cerrar sprint)**
 
-### === DESHACER ===
+#### === DESHACER ===
 
 - **`undo`** = `reset HEAD~1 --mixed` #[ok] **(Deshace el commit pero deja el add y los archivos sin tocar. Sirve para editar un mensaje mal puesto o añadir más archivos.)**
 - **`unstage`** = `reset HEAD --` #[ok] **(Lo contrario de add. Saca el archivo del staging)**
@@ -154,13 +155,13 @@ app/src/main/java/com/example/vecindapp/
 - **`oops`** = `commit --amend --no-edit` #[ok] **(Se te olvidó un archivo en el commit? git add archivo.kt > git oops y se mete en el último commit sin cambiar el mensaje)**
 - **`nuke`** = `!git reset --hard HEAD && git clean -fd` #[ok] **(Resetea la rama en la que estás. CUIDADO: borra TODO lo no commiteado)**
 
-### === STASH ===
+#### === STASH ===
 
 - **`ss`** = `stash push -m` #[ok] **(!Necesita mensaje! Hace un stash. Congela los cambios y no se los lleva contigo si haces checkout)**
 - **`sp`** = `stash pop` #[ok] **(Recupera los cambios del último stash y lo borra de la lista)**
 - **`sl`** = `stash list` #[ok] **(Muestra la lista de stashes)**
 
-### === INFO ===
+#### === INFO ===
 
 - **`who`** = `shortlog -sne` #[ok] **(Muestra quien soy y cuantos commits tienes)**
 - **`here`** = `rev-parse --abbrev-ref HEAD` #[ok] **(Muestra donde esta el HEAD en local)**
@@ -174,14 +175,14 @@ app/src/main/java/com/example/vecindapp/
 - **`ds`** = `diff --staged` #[ok] **(Ver cambios en detalle de archivos YA stageados, listos para commit)**
 - **`dw`** = `diff --word-diff` #[ok] **(Como d pero resalta palabra por palabra en vez de línea entera. Ideal para textos o strings largos)**
 
-### === COMPARAR CON REMOTO (después de git f) ===
+#### === COMPARAR CON REMOTO (después de git f) ===
 
 - **`incoming`** = `!git log HEAD..@{upstream} --oneline` #[ok] **(Qué commits tiene el remoto que yo no tengo)**
 - **`peek`** = `!git diff --stat HEAD @{upstream}` #[ok] **(Qué archivos cambiarían si hago pull)**
 - **` `** = `!git diff HEAD @{upstream}` #[ok] **(Ver los cambios en detalle antes de pull)**
 - **`peekword`** = `!git diff --word-diff HEAD @{upstream}` #[ok] **(Ver cambios palabra a palabra antes de pull)**
 
-### === COMPARAR CON REMOTO (antes de hacer push) === 
+#### === COMPARAR CON REMOTO (antes de hacer push) === 
 
 - **`outgoing`** = `!git diff --stat @{upstream} HEAD` #[@] **(Qué archivos cambiarían si hago push)**
 - **`outfull`** = `!git diff @{upstream} HEAD` #[@] **(Ver los cambios en detalle antes de push)**
