@@ -1,6 +1,5 @@
 package com.example.vecindapp.ui.historial
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +23,7 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.launch
 import androidx.core.graphics.toColorInt
 
@@ -31,9 +31,9 @@ import androidx.core.graphics.toColorInt
  * Fragment de historial de transacciones.
  *
  * Muestra un gráfico de barras agrupadas (MPAndroidChart) con las horas
- * ganadas y gastadas por mes, y debajo dos listas:
- * - Transacciones completadas (con título del servicio y signo +/- en color).
- * - Transacciones canceladas (visibles solo si existen).
+ * ganadas y gastadas por mes, y debajo un [TabLayout] con dos pestañas
+ * para alternar entre transacciones completadas y canceladas en un
+ * único [RecyclerView].
  *
  * @see HistorialViewModel
  * @see HistorialAdapter
@@ -53,11 +53,12 @@ class HistorialFragment : Fragment() {
 
     private lateinit var barChart: BarChart
     private lateinit var rvHistorial: RecyclerView
-    private lateinit var rvCanceladas: RecyclerView
     private lateinit var tvVacio: TextView
-    private lateinit var tvSubtituloCanceladas: TextView
-    private lateinit var adapterCompletadas: HistorialAdapter
-    private lateinit var adapterCanceladas: HistorialAdapter
+    private lateinit var tabLayout: TabLayout
+    private lateinit var adapter: HistorialAdapter
+
+    private var listaCompletadas: List<HistorialItem> = emptyList()
+    private var listaCanceladas: List<HistorialItem> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,7 +72,8 @@ class HistorialFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         configurarVistas(view)
         configurarGrafico()
-        configurarRecyclerViews()
+        configurarRecyclerView()
+        configurarTabLayout()
         observarDatosGrafico()
         observarCompletadas()
         observarCanceladas()
@@ -80,9 +82,8 @@ class HistorialFragment : Fragment() {
     private fun configurarVistas(view: View) {
         barChart = view.findViewById(R.id.barChart)
         rvHistorial = view.findViewById(R.id.rvHistorial)
-        rvCanceladas = view.findViewById(R.id.rvCanceladas)
         tvVacio = view.findViewById(R.id.tvVacioHistorial)
-        tvSubtituloCanceladas = view.findViewById(R.id.tvSubtituloCanceladas)
+        tabLayout = view.findViewById(R.id.tabLayoutHistorial)
     }
 
     /**
@@ -112,12 +113,11 @@ class HistorialFragment : Fragment() {
     }
 
     /**
-     * Configura los dos RecyclerViews (completadas y canceladas).
+     * Configura el único RecyclerView compartido por ambas pestañas.
      */
-    private fun configurarRecyclerViews() {
-
+    private fun configurarRecyclerView() {
         val sesion = SesionUsuario(requireContext())
-        adapterCompletadas = HistorialAdapter(
+        adapter = HistorialAdapter(
             usuarioActualId = sesion.obtenerUsuarioId()
         ) { transaccionId ->
             viewLifecycleOwner.lifecycleScope.launch {
@@ -135,11 +135,21 @@ class HistorialFragment : Fragment() {
             }
         }
         rvHistorial.layoutManager = LinearLayoutManager(requireContext())
-        rvHistorial.adapter = adapterCompletadas
+        rvHistorial.adapter = adapter
+    }
 
-        adapterCanceladas = HistorialAdapter(usuarioActualId = sesion.obtenerUsuarioId())
-        rvCanceladas.layoutManager = LinearLayoutManager(requireContext())
-        rvCanceladas.adapter = adapterCanceladas
+    /**
+     * Configura el [TabLayout] para alternar entre completadas y canceladas.
+     * Por defecto muestra la pestaña "Completadas" (posición 0).
+     */
+    private fun configurarTabLayout() {
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                actualizarLista()
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
     }
 
     /**
@@ -205,8 +215,8 @@ class HistorialFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.completadas.collect { lista ->
-                    adapterCompletadas.submitList(lista.toMutableList())
-                    actualizarEstadoVacio()
+                    listaCompletadas = lista
+                    actualizarLista()
                 }
             }
         }
@@ -214,24 +224,29 @@ class HistorialFragment : Fragment() {
 
     /**
      * Observa la lista de transacciones canceladas.
-     * Muestra la sección solo si existen canceladas.
      */
     private fun observarCanceladas() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.canceladas.collect { lista ->
-                    adapterCanceladas.submitList(lista.toMutableList())
-                    val visibilidad = if (lista.isEmpty()) View.GONE else View.VISIBLE
-                    tvSubtituloCanceladas.visibility = visibilidad
-                    rvCanceladas.visibility = visibilidad
-                    actualizarEstadoVacio()
+                    listaCanceladas = lista
+                    actualizarLista()
                 }
             }
         }
     }
 
-    private fun actualizarEstadoVacio() {
-        val sinDatos = adapterCompletadas.itemCount == 0 && adapterCanceladas.itemCount == 0
-        tvVacio.visibility = if (sinDatos) View.VISIBLE else View.GONE
+    /**
+     * Actualiza el RecyclerView con la lista correspondiente a la pestaña activa.
+     * Pestaña 0 = Completadas, Pestaña 1 = Canceladas.
+     */
+    private fun actualizarLista() {
+        val listaActiva = if (tabLayout.selectedTabPosition == 1) {
+            listaCanceladas
+        } else {
+            listaCompletadas
+        }
+        adapter.submitList(listaActiva.toMutableList())
+        tvVacio.visibility = if (listaActiva.isEmpty()) View.VISIBLE else View.GONE
     }
 }
