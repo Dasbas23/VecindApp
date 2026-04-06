@@ -139,7 +139,7 @@ class PerfilFragment : Fragment() {
     private fun pintarPerfil(usuario: Usuario) {
         usuarioActual = usuario
         tvNombre.text = usuario.nombre
-        tvBarrio.text = usuario.barrio
+        tvBarrio.text = usuario.barrio.displayName
         tvSaldoHoras.text = String.format("%.1f", usuario.saldoHoras)
         tvNivel.text = usuario.nivel.name
         tvIntercambios.text = usuario.intercambiosTotal.toString()
@@ -178,7 +178,7 @@ class PerfilFragment : Fragment() {
         fabTts.setOnClickListener {
             val u = usuarioActual ?: return@setOnClickListener
             val saldoTexto = TtsHelper.formatearCosteConUnidad(u.saldoHoras)
-            val texto = "${u.nombre}. Lugar: ${u.barrio}. Saldo, $saldoTexto . Nivel ${u.nivel.name}"
+            val texto = "${u.nombre}. Lugar: ${u.barrio.displayName}. Saldo, $saldoTexto . Nivel ${u.nivel.name}"
             ttsHelper.speak(texto)
         }
     }

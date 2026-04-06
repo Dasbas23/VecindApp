@@ -37,7 +37,7 @@ import com.example.vecindapp.data.entities.Valoracion
  */
 @Database(
     entities = [Usuario::class, Servicio::class, Transaccion::class, Valoracion::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

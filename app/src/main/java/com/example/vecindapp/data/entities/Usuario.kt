@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.example.vecindapp.domain.model.Barrio
 import com.example.vecindapp.domain.model.NivelVecino
 
 /**
@@ -37,7 +38,7 @@ data class Usuario(
     val nombre: String,
 
     @ColumnInfo(name = "barrio")
-    val barrio: String,
+    val barrio: Barrio,
 
     @ColumnInfo(name = "avatar_path")
     val avatarPath: String? = null,

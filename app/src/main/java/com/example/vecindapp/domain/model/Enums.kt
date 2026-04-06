@@ -75,3 +75,50 @@ enum class EstadoTransaccion {
     /** Cancelada por cualquiera de las dos partes. */
     CANCELADA
 }
+
+/**
+ * Barrios de Zaragoza disponibles para seleccionar en el registro.
+ *
+ * Cada valor incluye un [displayName] legible con tildes y mayúsculas
+ * correctas para mostrar en el Spinner y en el perfil del usuario.
+ *
+ * @property displayName Nombre legible del barrio.
+ */
+enum class Barrio(val displayName: String) {
+    ACTUR("Actur"),
+    ALMOZARA("Almozara"),
+    ARCOSUR("Arcosur"),
+    ARRABAL("Arrabal"),
+    CASABLANCA("Casablanca"),
+    CASCO_HISTORICO("Casco Histórico"),
+    CASETAS("Casetas"),
+    CENTRO("Centro"),
+    DELICIAS("Delicias"),
+    GARRAPINILLOS("Garrapinillos"),
+    JUSLIBOL("Juslibol"),
+    LA_CARTUJA_BAJA("La Cartuja Baja"),
+    LA_JOTA("La Jota"),
+    LA_PAZ("La Paz"),
+    LAS_FUENTES("Las Fuentes"),
+    MIRALBUENO("Miralbueno"),
+    MONTANANA("Montañana"),
+    MONTECANAL("Montecanal"),
+    MONZALBARBA("Monzalbarba"),
+    MOVERA("Movera"),
+    OLIVER("Oliver"),
+    PENAFLOR("Peñaflor"),
+    PICARRAL("Picarral"),
+    RABAL("Rabal"),
+    ROMAREDA("Romareda"),
+    ROSALES_DEL_CANAL("Rosales del Canal"),
+    SAN_GREGORIO("San Gregorio"),
+    SAN_JOSE("San José"),
+    SAN_JUAN_DE_MOZARRIFAR("San Juan de Mozarrifar"),
+    SANTA_ISABEL("Santa Isabel"),
+    TORRERO("Torrero"),
+    UNIVERSIDAD("Universidad"),
+    VADORREY("Vadorrey"),
+    VALDEFIERRO("Valdefierro"),
+    VALDESPARTERA("Valdespartera"),
+    VILLARRAPA("Villarrapa")
+}

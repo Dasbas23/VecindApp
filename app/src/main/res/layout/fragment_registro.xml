@@ -55,24 +55,27 @@
             android:maxLength="40" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Campo barrio -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilBarrioRegistro"
+    <!-- Selector de barrio -->
+    <TextView
+        android:id="@+id/tvLabelBarrio"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:hint="@string/hint_barrio_registro"
+        android:layout_marginTop="16dp"
+        android:text="@string/hint_barrio_registro"
+        android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@id/tilNombreRegistro"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etBarrioRegistro"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textCapWords"
-            android:maxLength="40" />
-    </com.google.android.material.textfield.TextInputLayout>
+    <Spinner
+        android:id="@+id/spinnerBarrio"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:minHeight="48dp"
+        app:layout_constraintTop_toBottomOf="@id/tvLabelBarrio"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Botón registrarse -->
     <com.google.android.material.button.MaterialButton
@@ -81,7 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/btn_registrarse"
-        app:layout_constraintTop_toBottomOf="@id/tilBarrioRegistro"
+        app:layout_constraintTop_toBottomOf="@id/spinnerBarrio"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

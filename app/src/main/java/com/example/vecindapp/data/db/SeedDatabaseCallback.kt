@@ -29,14 +29,14 @@ class SeedDatabaseCallback : RoomDatabase.Callback() {
             db.execSQL(
                 """
                 INSERT INTO usuario (nombre, barrio, saldo_horas, intercambios_total, nivel, fecha_registro)
-                VALUES ('Vecino Demo', 'Centro', 10.0, 0, 'NOVATO', ${System.currentTimeMillis()})
+                VALUES ('Vecino Demo', 'CENTRO', 10.0, 0, 'NOVATO', ${System.currentTimeMillis()})
                 """.trimIndent()
             )
             // Usuario 2: vecina para probar transacciones
             db.execSQL(
                 """
                 INSERT INTO usuario (nombre, barrio, saldo_horas, intercambios_total, nivel, fecha_registro)
-                VALUES ('María López', 'Ensanche', 8.0, 3, 'NOVATO', ${System.currentTimeMillis()})
+                VALUES ('María López', 'DELICIAS', 8.0, 3, 'NOVATO', ${System.currentTimeMillis()})
                 """.trimIndent()
             )
             // Servicio de prueba de María (para que usuario 1 pueda solicitarlo)

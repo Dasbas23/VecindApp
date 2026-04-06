@@ -1,6 +1,7 @@
 package com.example.vecindapp.data.db
 
 import androidx.room.TypeConverter
+import com.example.vecindapp.domain.model.Barrio
 import com.example.vecindapp.domain.model.CategoriaServicio
 import com.example.vecindapp.domain.model.EstadoServicio
 import com.example.vecindapp.domain.model.EstadoTransaccion
@@ -21,6 +22,16 @@ import com.example.vecindapp.domain.model.NivelVecino
  * @see EstadoTransaccion
  */
 class Converters {
+
+    // ── Barrio ───────────────────────────────────────────────
+
+    /** Convierte [Barrio] → [String] para almacenar en SQLite. */
+    @TypeConverter
+    fun fromBarrio(valor: Barrio): String = valor.name
+
+    /** Convierte [String] → [Barrio] al leer de SQLite. */
+    @TypeConverter
+    fun toBarrio(valor: String): Barrio = Barrio.valueOf(valor)
 
     // ── NivelVecino ──────────────────────────────────────────
 
