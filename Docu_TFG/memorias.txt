@@ -396,8 +396,11 @@ Como me gusta git! Tengo pensdo dejar que ClaudeCode haga de las suyas y me mejo
 		▼ Problema: Se muestra la información de la valoración , pero no hay forma de escucharla. El BottomSheet de solo lectura no tiene botón de altavoz ni integración con TtsHelper. [En srpint 6 implementar la edición de la valoración][Sprint 6 refactorizar bottom_sheet_detalle_valoracion.xml y strings.xml para que nuestre "<string name="detalle_valoracion_titulo">Valoración recibida</string> " "<string name="detalle_valoracion_titulo">Valoración enviada</string>" e implementar la edicion del comentario (Creo que es un refactor gordo ya se verá si se implementa o no.)]
 		+ Solución: Se añade un ImageButton de altavoz junto al título del BottomSheet. Al pulsarlo , el TtsHelper lee los pictogramas  seleccionados usando PictogramaMapper para obtener las descripciones legibles y, si existe comentario opcional, lo recita también. El helper se liga al ciclo del vida del BottomSheet para que se destruya solo al cerrar.
 
+↪ 06.04.2026 :
+	Hoy termino con el S5. 
+⇢ Quiero darselo a ClaudeCode y para ello he estado un buen rato repasando la estructura de carpetas del proyecto y organizado bien el README y el Claude.md. También he forjado un buen pormpt para CCode.
 
-		
+
 
 --- SÍMBOLOGÍA---
 Día nuevo:         ↪

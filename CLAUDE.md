@@ -30,11 +30,14 @@ app/src/main/java/com/example/vecindapp/
 │   ├── repository/      → Repository interfaces (contracts)
 │   └── usecase/         → Use cases (business logic) [pendiente]
 ├── ui/
+|   ├── auth/            → LoginFragment, RegistroFragment + ViewModels
+|   ├── common/          → Clases utilitarias transversales (TtsHelper.kt)
 │   ├── escaparate/      → EscaparateFragment + ViewModel + ServicioAdapter
 │   ├── servicio/        → CrearServicioFragment + DetalleServicioFragment + ViewModels
 │   ├── transaccion/     → TransaccionFragment + ViewModel + Adapter + TransaccionUI
 │   ├── perfil/          → PerfilFragment + ViewModel (reuses ServicioAdapter)
-│   └── historial/       → HistorialFragment + ViewModel + Adapter + MPAndroidChart
+│   ├── historial/       → HistorialFragment + ViewModel + Adapter + MPAndroidChart
+|   └── valoracion/      → ValoracionBottomSheetFragment + ViewModel + PictogramaMapper (ARASAAC)
 └── worker/              → WorkManager (local notifications) [pendiente]
 ```
 
@@ -46,8 +49,8 @@ app/src/main/java/com/example/vecindapp/
 - MPAndroidChart v3.1.0 (bar charts in Historial)
 - Glide 4.16.0 (avatar images) [pendiente integrar]
 - WorkManager 2.9.0 (background tasks) [pendiente]
-- Android TTS API (native, no external dependency) [pendiente]
-- ARASAAC pictograms (bundled as local assets) [pendiente]
+- Android TTS API (native, no external dependency)
+- ARASAAC pictograms (bundled as local assets in res/drawable)
 
 ## Database
 
@@ -63,8 +66,9 @@ Use fallbackToDestructiveMigration(false) during development.
 | Sprint 1 | Done       | Base structure and diagrams                               |
 | Sprint 2 | Done       | Room DB + CRUD services + escaparate                      |
 | Sprint 3 | Done       | Transactions + Profile + History (MPAndroidChart)         |
-| Sprint 4 | In progress| User selection + Ratings with ARASAAC pictograms          |
-| Sprint 5 | Pending    | Accessibility, TTS, Glide, WorkManager, visual polish     |
+| Sprint 4 | Done       | User selection + Ratings with ARASAAC pictograms          |
+| Sprint 5 | In progress| Accessibility, TTS, Glide, WorkManager, visual polish     |
+| Sprint 6 | Pending    | WorkManager (local notifications), visual polish & images |
 
 ## Navigation (nav_graph.xml)
 
@@ -74,12 +78,7 @@ Use fallbackToDestructiveMigration(false) during development.
 
 ## Known TODOs
 
-- usuarioActualId is hardcoded to 1 in all ViewModels → replace with SharedPreferences
-- Glide not yet integrated for avatar/pictogram loading
-- ARASAAC pictograms not yet bundled as assets
-- TTS not yet implemented
-- WorkManager notifications not yet implemented
-- Diagram de clases needs updating with new methods
+- WorkManager notifications not yet implemented (Sprint 6)
 
 ## Conventions
 
