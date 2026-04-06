@@ -37,7 +37,7 @@ import com.example.vecindapp.data.entities.Valoracion
  */
 @Database(
     entities = [Usuario::class, Servicio::class, Transaccion::class, Valoracion::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -76,7 +76,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "vecindapp_db"
                 )
-                    .fallbackToDestructiveMigration(false)
+                    .fallbackToDestructiveMigration(true)
                     .addCallback(SeedDatabaseCallback())
                     .build()
                 INSTANCE = instance

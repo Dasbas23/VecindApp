@@ -60,4 +60,12 @@ interface UsuarioRepository {
      * @param saldo Nuevo saldo de horas.
      */
     suspend fun updateSaldo(id: Int, saldo: Double)
+
+    /**
+     * Busca un usuario por nombre (case-insensitive).
+     *
+     * @param nombre Nombre a buscar.
+     * @return El [Usuario] o null si no existe.
+     */
+    suspend fun buscarPorNombre(nombre: String): Usuario?
 }

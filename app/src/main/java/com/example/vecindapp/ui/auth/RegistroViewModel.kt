@@ -51,8 +51,14 @@ class RegistroViewModel(
 
         viewModelScope.launch {
             try {
+                val nombreLimpio = nombre.trim()
+                val existente = usuarioRepository.buscarPorNombre(nombreLimpio)
+                if (existente != null) {
+                    _error.value = "Ya existe un vecino con ese nombre"
+                    return@launch
+                }
                 val usuario = Usuario(
-                    nombre = nombre.trim(),
+                    nombre = nombreLimpio,
                     barrio = barrio.trim()
                 )
                 val id = usuarioRepository.insert(usuario)
