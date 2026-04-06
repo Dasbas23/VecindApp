@@ -406,6 +406,10 @@ Como me gusta git! Tengo pensdo dejar que ClaudeCode haga de las suyas y me mejo
 		▼ Problema : Me he enocntrado en la problemática de comparar las dos ramas, CCode y Gemini, que tenía guardadas en local. Sólo era capaz de comparar la rama que en la que estaba contra la que había hecho la IA ya que no tenían los mismos commits.
 		+ Solución: Tras mucho tocar he podido hacerlo gracias al IDE haciendo checkout en una de las ramas y despues haciendo un "compare worktree" o algo similar, ha sido un poco de casualidad que he dado con ello, pero vamos que me ha venido de locos. CCode me gusta más pero se chupa los tokens que da gusto (¿Será porque tiene demasiando contexto? Yo creo que sí que tiene muchas cosas que procesar y tener en cuenta y que Gemini suele ser más perezoso en cuato a buscar contexto)
 ⇢ He añadido también el spinner de los barrios y he actualizado Enums.kt con los barrios de Zaragoza y cada barrio recibe un displayName. Esto mata dos pajaros de un tiro porque sive para que el usuario no se vuelva loco leyendo todo mayúsculas y el TTS lo lea normal, no como si le fuera a dar un cortocircuito.
+⇢ He implementado una gran mejora técnica donde cada usuario es único. [Fuera del TFG, si se me antoja sería una buena idea implementar la edición del perfil de cada usuario completa: con su nombre, correo, foto de perfil y todo ese rollo... pero con 2 meses de TFG no me da para tanto]
+⇢ He creado las pestañas que tenía pendientes de hacer en HistorialFragment donde se muestra por un lado "Transacciones completadas" y por otro lado "Transacciones canceladas".
+	▼ Problema : Las tarjetas ques se muestran en ese RecyclerView, canceladas, se muestran de la misma manera que en  "completadas" donde el saldo se muestra como gastado y/o ganado pero realmente no computa en el gráfico ni afecta el saldo de cada usuario.
+	+ Solución: En el spint 6, ver de qué manera esto se puede solucionar pero ya no quiero pasar más tiempo con estos arreglos porque ya acumularé  mucho atraso con el cominezo del último srpint sino.
 ⇢ Quiero detallar un poco más la forma de hacer merge de una rama en otra porque aun con el flujo de trabajo avanzado de git y los alias que me he montado he terminado por hacerme un lío porque justo en el momento mas inadecuado ha saltado una actualizacion de VsCode y me ha hecho dudar pero más tarde la hubiera liado igualmente porque no había proporcionado los parámetros adecuados:	
 	↳ 1. Para empezar, si estás en la rama secundaria tienes que tener todo al dia commit y push por si la cagas.
 		↳ Como yo la he cagado dejando los commits que hizo Claude sin hacer un cherrypick pues lo desribo brevemente: Hay que hacer un rebase de los hashes (si te atreves o te acuerdas hacerlo dando un rango desde -i hasta el hash) que quiere cambiar con el parámetro --exec para que ejecute " git commit --amend --reset-author --no-edit". Se abirá un editor y lo dejas tal cuál está con " :qw " para que se cierre y se guarde y se ejecute tal cual.
@@ -416,7 +420,13 @@ Como me gusta git! Tengo pensdo dejar que ClaudeCode haga de las suyas y me mejo
 
 SE DA COMIENZO AL SPRINT 6!
 
-⇢ En este rato he redactado lo que se ha hehco para finalizar el Sprint 5 [***PENDIENTE***]y me quiero preparar un poco  lo que me he ido dejando para el sprint 6 e ir separandolo en tareas más pequeñas para no tener que hacerlo todo de golpe
+⇢ En este rato he redactado lo que se ha hecho para finalizar el Sprint 5 y me quiero preparar un poco  lo que me he ido dejando para el sprint 6 e ir separandolo en tareas más pequeñas para no tener que hacerlo todo de golpe.
+⇢ He estado trasteando con conocimienteos básicos sobre bash, y es que me está gustando basntante. Estoy planteandome seriamente el cambio a Linux de aqui al verano cuando termine el grado y meterle caña a mi objetivo de aprender ciberseguridad. Realmente pensaba que era mucho más de lo que me imagino pero para comenzar a trastear me está molando bastante.
+
+↪ 07.04.2026: 
+	Creo que ya tengo todo lo necesario para comenzar a preparar la separación de tareas del S6. 
+⇢ Lo primero que he hecho ha sido crear una nueva rama "
+
 
 --- SÍMBOLOGÍA---
 Día nuevo:         ↪
