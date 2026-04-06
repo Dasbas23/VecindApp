@@ -399,6 +399,9 @@ Como me gusta git! Tengo pensdo dejar que ClaudeCode haga de las suyas y me mejo
 ↪ 06.04.2026 :
 	Hoy termino con el S5. 
 ⇢ Quiero darselo a ClaudeCode y para ello he estado un buen rato repasando la estructura de carpetas del proyecto y organizado bien el README y el Claude.md. También he forjado un buen pormpt para CCode.
+	▼ Problema: La he liado con el chat "Iniciando desarrollo en Android Studio con Clean Architecture". He actualizado el contexto que tenía el chat sobre el repositorio de git y acto seguido quería que rehiciera la respuesta tendiendo en cuenta las actualizaciones. Al darle al boton reintantar, no me he fijado que era el primer mensaje del hilo del chat y se ha perdido todo lo hablado a lo largo del mes...
+	+ Solución: Ninguna. Menos mal que tengo las memorias estas actualizadas con lo que voy haciendo porque sino... la liada hubiera sido parda.
+⇢ Al quedarme sin límite de uso en Claude, he optado por pedirle al modo agente de Gemini en Android Studio que me hiciera las tareas que tenía contempladas para CCode. Aparentemente está bien porque la app funciona, y sólo he tenido que tocar un par de cosas pero no se si me termina de gustar lo que ha hecho o es que estoy acostumbrado al estilo de Claude. Poor ahora la he dejado en una rama aparte para ver como me hace los cambios CCode y ver cuál me gusta más.
 
 
 
