@@ -67,8 +67,8 @@ Use fallbackToDestructiveMigration(false) during development.
 | Sprint 2 | Done       | Room DB + CRUD services + escaparate                      |
 | Sprint 3 | Done       | Transactions + Profile + History (MPAndroidChart)         |
 | Sprint 4 | Done       | User selection + Ratings with ARASAAC pictograms          |
-| Sprint 5 | In progress| Accessibility, TTS, Glide, WorkManager, visual polish     |
-| Sprint 6 | Pending    | WorkManager (local notifications), visual polish & images |
+| Sprint 5 | Done       | Accessibility, TTS, Glide, WorkManager, visual polish     |
+| Sprint 6 | In progress| WorkManager (local notifications), visual polish & images |
 
 ## Navigation (nav_graph.xml)
 

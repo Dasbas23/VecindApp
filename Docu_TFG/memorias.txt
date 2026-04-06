@@ -402,8 +402,21 @@ Como me gusta git! Tengo pensdo dejar que ClaudeCode haga de las suyas y me mejo
 	▼ Problema: La he liado con el chat "Iniciando desarrollo en Android Studio con Clean Architecture". He actualizado el contexto que tenía el chat sobre el repositorio de git y acto seguido quería que rehiciera la respuesta tendiendo en cuenta las actualizaciones. Al darle al boton reintantar, no me he fijado que era el primer mensaje del hilo del chat y se ha perdido todo lo hablado a lo largo del mes...
 	+ Solución: Ninguna. Menos mal que tengo las memorias estas actualizadas con lo que voy haciendo porque sino... la liada hubiera sido parda.
 ⇢ Al quedarme sin límite de uso en Claude, he optado por pedirle al modo agente de Gemini en Android Studio que me hiciera las tareas que tenía contempladas para CCode. Aparentemente está bien porque la app funciona, y sólo he tenido que tocar un par de cosas pero no se si me termina de gustar lo que ha hecho o es que estoy acostumbrado al estilo de Claude. Poor ahora la he dejado en una rama aparte para ver como me hace los cambios CCode y ver cuál me gusta más.
+	↳ Finalmente me quedo con la version de Claude que me gusta más como manejalas variables y separa las funcionalicades en las distinas clases. Creo que es más de mi estilo. 
+		▼ Problema : Me he enocntrado en la problemática de comparar las dos ramas, CCode y Gemini, que tenía guardadas en local. Sólo era capaz de comparar la rama que en la que estaba contra la que había hecho la IA ya que no tenían los mismos commits.
+		+ Solución: Tras mucho tocar he podido hacerlo gracias al IDE haciendo checkout en una de las ramas y despues haciendo un "compare worktree" o algo similar, ha sido un poco de casualidad que he dado con ello, pero vamos que me ha venido de locos. CCode me gusta más pero se chupa los tokens que da gusto (¿Será porque tiene demasiando contexto? Yo creo que sí que tiene muchas cosas que procesar y tener en cuenta y que Gemini suele ser más perezoso en cuato a buscar contexto)
+⇢ He añadido también el spinner de los barrios y he actualizado Enums.kt con los barrios de Zaragoza y cada barrio recibe un displayName. Esto mata dos pajaros de un tiro porque sive para que el usuario no se vuelva loco leyendo todo mayúsculas y el TTS lo lea normal, no como si le fuera a dar un cortocircuito.
+⇢ Quiero detallar un poco más la forma de hacer merge de una rama en otra porque aun con el flujo de trabajo avanzado de git y los alias que me he montado he terminado por hacerme un lío porque justo en el momento mas inadecuado ha saltado una actualizacion de VsCode y me ha hecho dudar pero más tarde la hubiera liado igualmente porque no había proporcionado los parámetros adecuados:	
+	↳ 1. Para empezar, si estás en la rama secundaria tienes que tener todo al dia commit y push por si la cagas.
+		↳ Como yo la he cagado dejando los commits que hizo Claude sin hacer un cherrypick pues lo desribo brevemente: Hay que hacer un rebase de los hashes (si te atreves o te acuerdas hacerlo dando un rango desde -i hasta el hash) que quiere cambiar con el parámetro --exec para que ejecute " git commit --amend --reset-author --no-edit". Se abirá un editor y lo dejas tal cuál está con " :qw " para que se cierre y se guarde y se ejecute tal cual.
+	  2. Haces checkout a la rama principal , en este caso desarrollo y te pones al día con un pull con lo que pudiera haber.
+	  3. Usando el alias mergeff ( merge --no-ff), tienes que indicar que rama quieres mergear dentro de la que estas ahora y además tienes que añadir un mensajito diciendo que haces con "-m"
+  
+!!!FINAL DEL SPRINT 5!!!!
 
+SE DA COMIENZO AL SPRINT 6!
 
+⇢ En este rato he redactado lo que se ha hehco para finalizar el Sprint 5 [***PENDIENTE***]y me quiero preparar un poco  lo que me he ido dejando para el sprint 6 e ir separandolo en tareas más pequeñas para no tener que hacerlo todo de golpe
 
 --- SÍMBOLOGÍA---
 Día nuevo:         ↪

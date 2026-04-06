@@ -36,23 +36,26 @@ El proyecto sigue el patrón **MVVM + Clean Architecture** organizado en 5 capas
 
 ```
 app/src/main/java/com/example/vecindapp/
-├── data/                  ← Capa de datos
-│   ├── db/                  AppDatabase, DAOs, TypeConverters, SeedDatabaseCallback
-│   ├── entities/            Entidades Room (@Entity)
-│   └── repository/          Implementación de repositorios
-├── domain/                ← Capa de dominio (lógica de negocio)
-│   ├── model/               Enums y modelos del dominio
-│   ├── repository/          Interfaces de repositorios (contratos)
-│   └── usecase/             Casos de uso
-├── ui/                    ← Capa de presentación
-│   ├── auth/                Autenticación (login, registro)
-│   ├── escaparate/          Catálogo de servicios (RecyclerView)
-│   ├── servicio/            Detalle, publicación y edición de servicio
-│   ├── transaccion/         Gestión de transacciones (aceptar, completar, cancelar)
-│   ├── perfil/              Perfil del vecino (saldo, nivel, mis servicios)
-│   ├── historial/           Gráfico de intercambios (MPAndroidChart)
-│   └── valoracion/          Sistema de valoraciones con pictogramas ARASAAC
-└── worker/                ← Tareas en segundo plano (WorkManager)
+├── VecindAppApplication.kt  → Singleton DI container (DB + Repos)
+├── MainActivity.kt          → Single Activity (NavHost + BottomNav)
+├── data/
+│   ├── db/              → AppDatabase, DAOs, Converters, SeedDatabaseCallback
+│   ├── entities/        → Room entities (Usuario, Servicio, Transaccion, Valoracion)
+│   └── repository/      → Repository implementations (*Impl)
+├── domain/
+│   ├── model/           → Enums (NivelVecino, CategoriaServicio, EstadoServicio, EstadoTransaccion)
+│   ├── repository/      → Repository interfaces (contracts)
+│   └── usecase/         → Use cases (business logic) [pendiente]
+├── ui/
+|   ├── auth/            → LoginFragment, RegistroFragment + ViewModels
+|   ├── common/          → Clases utilitarias transversales (TtsHelper.kt)
+│   ├── escaparate/      → EscaparateFragment + ViewModel + ServicioAdapter
+│   ├── servicio/        → CrearServicioFragment + DetalleServicioFragment + ViewModels
+│   ├── transaccion/     → TransaccionFragment + ViewModel + Adapter + TransaccionUI
+│   ├── perfil/          → PerfilFragment + ViewModel (reuses ServicioAdapter)
+│   ├── historial/       → HistorialFragment + ViewModel + Adapter + MPAndroidChart
+|   └── valoracion/      → ValoracionBottomSheetFragment + ViewModel + PictogramaMapper (ARASAAC)
+└── worker/              → WorkManager (local notifications) [pendiente]
 ```
 
 ## Stack tecnológico
@@ -115,6 +118,8 @@ app/src/main/java/com/example/vecindapp/
 | `sprint3/transacciones`    | Transacciones + Perfil + Historial                 |
 | `sprint4/ usuarios+valorac`| Login sencillo de usuarius + sistema valoraciones  |
 | `sprint5/ accesibilidad `  | TTS en escaparate + servicio + valoración + perfil |
+| `sprint6/ worker+ui&ux `   | TTS en escaparate + servicio + valoración + perfil |
+
 
 ## | Utilidades
 
@@ -138,7 +143,7 @@ app/src/main/java/com/example/vecindapp/
 - **`brd`** = `branch -d` #[ok] **(Elimina la rama que digas como argumento en local)**
 - **`brr`** = `push origin --delete` #[ok] **(Borra una rama del remoto)**
 - **`merged`** = `branch --merged` #[ok] **(Lista ramas ya mergeadas que puedes borrar tranquilamente. Para limpiar ramas muertas)**
-- **`mergeff`** = `merge --no-ff` #[@] **(Merge forzando commit de merge. Para cerrar sprints con marca visible en el historial)**
+- **`mergeff`** = `merge --no-ff` #[@] **(Merge forzando commit de merge. Para cerrar sprints con marca visible en el historial. Indicar rama a mergear en la que estas. Requieres mensaje "-m")**
 
 #### === HISTORIAL ===
 
@@ -184,9 +189,9 @@ app/src/main/java/com/example/vecindapp/
 
 #### === COMPARAR CON REMOTO (antes de hacer push) === 
 
-- **`outgoing`** = `!git diff --stat @{upstream} HEAD` #[@] **(Qué archivos cambiarían si hago push)**
-- **`outfull`** = `!git diff @{upstream} HEAD` #[@] **(Ver los cambios en detalle antes de push)**
-- **`outword`** = `!git diff --word-diff @{upstream} HEAD` #[@] **(Ver cambios palabra a palabra antes de push)**
+- **`outgoing`** = `!git diff --stat @{upstream} HEAD` #[ok] **(Qué archivos cambiarían si hago push)**
+- **`outfull`** = `!git diff @{upstream} HEAD` #[ok] **(Ver los cambios en detalle antes de push)**
+- **`outword`** = `!git diff --word-diff @{upstream} HEAD` #[ok] **(Ver cambios palabra a palabra antes de push)**
 
 ## Autor
 
