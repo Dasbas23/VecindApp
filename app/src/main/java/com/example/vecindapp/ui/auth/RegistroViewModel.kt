@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.vecindapp.data.entities.Usuario
+import com.example.vecindapp.domain.model.Barrio
 import com.example.vecindapp.domain.repository.UsuarioRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -37,23 +38,25 @@ class RegistroViewModel(
      * El nuevo vecino recibe 5.0 horas de bienvenida y nivel NOVATO.
      *
      * @param nombre Nombre del nuevo vecino.
-     * @param barrio Barrio o zona donde vive.
+     * @param barrio Barrio seleccionado del Spinner.
      */
-    fun registrar(nombre: String, barrio: String) {
+    fun registrar(nombre: String, barrio: Barrio) {
         if (nombre.isBlank()) {
             _error.value = "El nombre no puede estar vacío"
-            return
-        }
-        if (barrio.isBlank()) {
-            _error.value = "El barrio no puede estar vacío"
             return
         }
 
         viewModelScope.launch {
             try {
+                val nombreLimpio = nombre.trim()
+                val existente = usuarioRepository.buscarPorNombre(nombreLimpio)
+                if (existente != null) {
+                    _error.value = "Ya existe un vecino con ese nombre"
+                    return@launch
+                }
                 val usuario = Usuario(
-                    nombre = nombre.trim(),
-                    barrio = barrio.trim()
+                    nombre = nombreLimpio,
+                    barrio = barrio
                 )
                 val id = usuarioRepository.insert(usuario)
                 _registrado.value = id.toInt()

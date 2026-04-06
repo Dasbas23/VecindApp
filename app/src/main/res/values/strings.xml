@@ -42,7 +42,7 @@
     <!-- ═══ Solicitar Servicio ═══ -->
     <string name="btn_solicitar">Solicitar servicio</string>
     <string name="titulo_confirmar_solicitud">Solicitar servicio</string>
-    <string name="mensaje_confirmar_solicitud">¿Quieres solicitar este servicio? Se te debitarán %.1f horas al completarse.</string>
+    <string name="mensaje_confirmar_solicitud">¿Quieres solicitar este servicio? Se te descontarán %.1f horas al completarse.</string>
     <string name="servicio_solicitado">Servicio solicitado correctamente</string>
 
     <!-- ═══ Transacciones ═══ -->
@@ -115,4 +115,9 @@
     <string name="detalle_valoracion_comentario">Comentario</string>
     <string name="detalle_valoracion_fecha">Valorado el %s</string>
     <string name="btn_cerrar">Cerrar</string>
+
+    <!-- ═══ Accesibilidad TTS ═══ -->
+    <string name="desc_tts">Leer en voz alta</string>
+    <string name="tts_sin_pictogramas">Sin pictogramas seleccionados</string>
+    <string name="tts_sin_comentario">No se ha añadido comentario</string>
 </resources>

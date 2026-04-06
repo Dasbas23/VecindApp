@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.vecindapp.R
+import com.example.vecindapp.ui.common.TtsHelper
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
@@ -80,6 +82,26 @@ class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
         }
 
         btnCerrar.setOnClickListener { dismiss() }
+
+        // TTS
+        val ttsHelper = TtsHelper(requireContext(), viewLifecycleOwner.lifecycle)
+
+        val ibTts = view.findViewById<ImageButton>(R.id.ibTtsDetalle)
+        ibTts.setOnClickListener {
+            val pictogramas = parsearPictogramas(pictogramasJson)
+            val textosPictogramas = pictogramas.map { tag ->
+                PictogramaMapper.obtenerDescripcion(requireContext(), tag)
+            }
+
+            val textoCompleto = buildString {
+                append("Valoración. ")
+                append("Pictogramas: ${textosPictogramas.joinToString(", ")}. ")
+                if (comentario.isNotBlank()) {
+                    append("Comentario: $comentario")
+                }
+            }
+            ttsHelper.speak(textoCompleto)
+        }
     }
 
     /**
@@ -118,13 +140,12 @@ class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
             setPadding(4, 4, 4, 4)
 
             // Color según categoría
-            val icono = obtenerDrawable(tag)
-            setImageResource(icono)
+            setImageResource(PictogramaMapper.obtenerDrawable(tag))
         }
 
         // Texto descriptivo
         val tv = TextView(requireContext()).apply {
-            text = obtenerDescripcion(tag)
+            text = PictogramaMapper.obtenerDescripcion(requireContext(), tag)
             textSize = 10f
             gravity = android.view.Gravity.CENTER
             setPadding(0, 4, 0, 0)
@@ -133,42 +154,6 @@ class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
         container.addView(iv)
         container.addView(tv)
         return container
-    }
-
-    /**
-     * Mapea el tag del pictograma a su recurso drawable de ARASAAC.
-     */
-    private fun obtenerDrawable(tag: String): Int {
-        return when (tag) {
-            "bien_excelente" -> R.drawable.bien_excelente
-            "bien_amable" -> R.drawable.bien_amable
-            "bien_puntual" -> R.drawable.bien_puntual
-            "regular_normal" -> R.drawable.regular_ok
-            "regular_mejorable" -> R.drawable.regular_mejorable
-            "regular_lento" -> R.drawable.regular_lento
-            "mal_impuntual" -> R.drawable.mal_impuntual
-            "mal_desagradable" -> R.drawable.mal_desagradable
-            "mal_no_realizado" -> R.drawable.mal_no_realizado
-            else -> android.R.drawable.ic_menu_help
-        }
-    }
-
-    /**
-     * Mapea el tag del pictograma a su texto descriptivo legible.
-     */
-    private fun obtenerDescripcion(tag: String): String {
-        return when (tag) {
-            "bien_excelente" -> getString(R.string.desc_pictograma_bien1)
-            "bien_amable" -> getString(R.string.desc_pictograma_bien2)
-            "bien_puntual" -> getString(R.string.desc_pictograma_bien3)
-            "regular_normal" -> getString(R.string.desc_pictograma_regular1)
-            "regular_mejorable" -> getString(R.string.desc_pictograma_regular2)
-            "regular_lento" -> getString(R.string.desc_pictograma_regular3)
-            "mal_impuntual" -> getString(R.string.desc_pictograma_mal1)
-            "mal_desagradable" -> getString(R.string.desc_pictograma_mal2)
-            "mal_no_realizado" -> getString(R.string.desc_pictograma_mal3)
-            else -> tag
-        }
     }
 
     companion object {

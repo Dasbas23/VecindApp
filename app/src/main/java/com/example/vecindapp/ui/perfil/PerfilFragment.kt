@@ -17,8 +17,10 @@ import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
 import com.example.vecindapp.data.SesionUsuario
 import com.example.vecindapp.data.entities.Usuario
+import com.example.vecindapp.ui.common.TtsHelper
 import com.example.vecindapp.ui.escaparate.ServicioAdapter
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 import androidx.navigation.fragment.findNavController
 
@@ -55,6 +57,9 @@ class PerfilFragment : Fragment() {
     private lateinit var tvIntercambios: TextView
     private lateinit var rvMisServicios: RecyclerView
     private lateinit var tvVacioMisServicios: TextView
+    private lateinit var fabTts: FloatingActionButton
+    private lateinit var ttsHelper: TtsHelper
+    private var usuarioActual: Usuario? = null
 
     private lateinit var servicioAdapter: ServicioAdapter
 
@@ -69,6 +74,8 @@ class PerfilFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configurarVistas(view)
+        ttsHelper = TtsHelper(requireContext(), viewLifecycleOwner.lifecycle)
+        configurarFabTts()
         configurarRecyclerView()
         observarUsuario()
         observarMisServicios()
@@ -83,6 +90,7 @@ class PerfilFragment : Fragment() {
         tvIntercambios = view.findViewById(R.id.tvIntercambios)
         rvMisServicios = view.findViewById(R.id.rvMisServicios)
         tvVacioMisServicios = view.findViewById(R.id.tvVacioMisServicios)
+        fabTts = view.findViewById(R.id.fabTts)
         val btnCerrarSesion = view.findViewById<MaterialButton>(R.id.btnCerrarSesion)
         btnCerrarSesion.setOnClickListener {
             SesionUsuario(requireContext()).cerrarSesion()
@@ -101,10 +109,13 @@ class PerfilFragment : Fragment() {
      * el [ServicioAdapter] del escaparate.
      */
     private fun configurarRecyclerView() {
-        servicioAdapter = ServicioAdapter { servicio ->
+        servicioAdapter = ServicioAdapter (
+            onServicioClick = {servicio ->
+
             // TODO: Navegar al detalle del servicio desde el perfil
             // Requiere añadir action en nav_graph desde perfil a detalle
-        }
+            }
+        )
         rvMisServicios.layoutManager = LinearLayoutManager(requireContext())
         rvMisServicios.adapter = servicioAdapter
     }
@@ -126,8 +137,9 @@ class PerfilFragment : Fragment() {
      * Rellena las vistas de la cabecera con los datos del usuario.
      */
     private fun pintarPerfil(usuario: Usuario) {
+        usuarioActual = usuario
         tvNombre.text = usuario.nombre
-        tvBarrio.text = usuario.barrio
+        tvBarrio.text = usuario.barrio.displayName
         tvSaldoHoras.text = String.format("%.1f", usuario.saldoHoras)
         tvNivel.text = usuario.nivel.name
         tvIntercambios.text = usuario.intercambiosTotal.toString()
@@ -152,6 +164,22 @@ class PerfilFragment : Fragment() {
                         if (lista.isEmpty()) View.VISIBLE else View.GONE
                 }
             }
+        }
+    }
+
+    /**
+     * Configura el FAB de TTS para leer en voz alta los datos principales
+     * del perfil del usuario: nombre, barrio, saldo de horas y nivel.
+     *
+     * No lee la lista de servicios para evitar lecturas excesivamente largas.
+     * No hace nada si el usuario aún no se ha cargado.
+     */
+    private fun configurarFabTts() {
+        fabTts.setOnClickListener {
+            val u = usuarioActual ?: return@setOnClickListener
+            val saldoTexto = TtsHelper.formatearCosteConUnidad(u.saldoHoras)
+            val texto = "${u.nombre}. Lugar: ${u.barrio.displayName}. Saldo, $saldoTexto . Nivel ${u.nivel.name}"
+            ttsHelper.speak(texto)
         }
     }
 }

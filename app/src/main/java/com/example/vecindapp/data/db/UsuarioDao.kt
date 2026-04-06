@@ -29,7 +29,7 @@ interface UsuarioDao {
      * @param usuario Objeto [Usuario] a insertar.
      * @return El `rowId` generado por SQLite para el registro insertado.
      */
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(usuario: Usuario): Long
 
     /**

@@ -3,8 +3,8 @@
     fragment_historial.xml
     Pantalla de historial del vecino. Muestra:
     - Gráfico de barras con horas ganadas/gastadas por mes (MPAndroidChart)
-    - Lista de transacciones completadas (con título del servicio)
-    - Lista de transacciones canceladas
+    - TabLayout para alternar entre completadas y canceladas
+    - Lista de transacciones (un solo RecyclerView)
 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -40,19 +40,28 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp" />
 
-        <!-- Subtítulo: transacciones completadas -->
-        <TextView
-            android:id="@+id/tvSubtituloCompletadas"
+        <!-- Pestañas: Completadas / Canceladas -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayoutHistorial"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/label_completadas"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            app:tabMode="fixed"
+            app:tabGravity="fill">
 
-        <!-- Lista de transacciones completadas -->
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_completadas" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_canceladas" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <!-- Lista de transacciones (única, alternada por pestaña) -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvHistorial"
             android:layout_width="match_parent"
@@ -61,10 +70,11 @@
             android:clipToPadding="false"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
+            android:paddingBottom="16dp"
             android:nestedScrollingEnabled="false"
             tools:listitem="@layout/item_transaccion" />
 
-        <!-- Mensaje cuando no hay completadas -->
+        <!-- Mensaje cuando no hay datos en la pestaña activa -->
         <TextView
             android:id="@+id/tvVacioHistorial"
             android:layout_width="match_parent"
@@ -75,33 +85,6 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:visibility="gone" />
-
-        <!-- Subtítulo: transacciones canceladas -->
-        <TextView
-            android:id="@+id/tvSubtituloCanceladas"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/label_canceladas"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:visibility="gone" />
-
-        <!-- Lista de transacciones canceladas -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvCanceladas"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
-            android:clipToPadding="false"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:nestedScrollingEnabled="false"
-            android:visibility="gone"
-            tools:listitem="@layout/item_transaccion" />
 
     </LinearLayout>
 

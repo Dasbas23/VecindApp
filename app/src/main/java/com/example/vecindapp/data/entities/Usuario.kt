@@ -2,7 +2,9 @@ package com.example.vecindapp.data.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.example.vecindapp.domain.model.Barrio
 import com.example.vecindapp.domain.model.NivelVecino
 
 /**
@@ -26,7 +28,7 @@ import com.example.vecindapp.domain.model.NivelVecino
  * @see NivelVecino
  * @see com.example.vecindapp.data.db.UsuarioDao
  */
-@Entity(tableName = "usuario")
+@Entity(tableName = "usuario", indices = [Index(value = ["nombre"], unique = true)])
 data class Usuario(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_usuario")
@@ -36,7 +38,7 @@ data class Usuario(
     val nombre: String,
 
     @ColumnInfo(name = "barrio")
-    val barrio: String,
+    val barrio: Barrio,
 
     @ColumnInfo(name = "avatar_path")
     val avatarPath: String? = null,

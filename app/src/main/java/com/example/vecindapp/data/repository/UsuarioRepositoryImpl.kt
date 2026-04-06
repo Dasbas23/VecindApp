@@ -42,4 +42,7 @@ class UsuarioRepositoryImpl(
 
     override suspend fun updateSaldo(id: Int, saldo: Double) =
         usuarioDao.updateSaldo(id, saldo)
+
+    override suspend fun buscarPorNombre(nombre: String): Usuario? =
+        usuarioDao.buscarPorNombre(nombre)
 }
