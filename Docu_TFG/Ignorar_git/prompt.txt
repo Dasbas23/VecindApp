@@ -1,0 +1,32 @@
+		=== Prompt para completar Sprint5 de Vecindapp | 06/04/2026 ===
+Actúa como un desarrollador Android experto. Revisa el código del proyecto para obtener contexto. Lee CLAUDE.md y Docu_TFG/memorias.txt para contexto completo.
+Rama actual: sprint5/accesibilidad
+Quedan estas tareas del Sprint 5. Hazlas una por una con commit atómico después de cada una:
+TAREA 1: Usuarios únicos
+Archivos objetivo: Usuario.kt, UsuarioDao.kt, UsuarioRepository.kt, UsuarioRepositoryImpl.kt, RegistroViewModel.kt, AppDatabase.kt
+En la entidad Usuario.kt, añade @Index(value = ["nombre"], unique = true) al @Entity.
+Asegúrate de que exista una función buscarPorNombre(nombre: String): Usuario? en el Dao y el Repository.
+Cambiar OnConflictStrategy.REPLACE a ABORT en el insert del DAO
+En RegistroViewModel.kt, antes de insertar, verifica que no existe con ese método. Si existe, emite el error "Ya existe un vecino con ese nombre" a
+través del flow de errores.
+Sube la version del @Database a 2 en AppDatabase.kt y asegúrate de que el builder tenga .fallbackToDestructiveMigration() activado.
+Ejecuta ./gradlew assembleDebug. Si es exitoso, haz Commit: "feat: nombre de usuario único con índice UNIQUE"
+TAREA 2: Barrios como Spinner
+Archivos objetivo: Enums.kt, Converters.kt, Usuario.kt, SeedDatabaseCallback.kt, fragment_registro.xml, RegistroFragment.kt, PerfilFragment.kt
+Crea un enum class Barrio en domain/model/Enums.kt con estos valores: ACTUR, ALMOZARA, ARCOSUR, ARRABAL, CASABLANCA, CASCO_HISTORICO, CASETAS, CENTRO, DELICIAS, GARRAPINILLOS, JUSLIBOL, LA_CARTUJA_BAJA, LA_JOTA, LA_PAZ, LAS_FUENTES, MIRALBUENO, MONTANANA, MONTECANAL, MONZALBARBA, MOVERA, OLIVER, PENAFLOR, PICARRAL, RABAL, ROMAREDA, ROSALES_DEL_CANAL, SAN_GREGORIO, SAN_JOSE, SAN_JUAN_DE_MOZARRIFAR, SANTA_ISABEL, TORRERO, UNIVERSIDAD, VADORREY, VALDEFIERRO, VALDESPARTERA, VILLARRAPA. Cada valor del enum Barrio tendrá una propiedad displayName: String con el nombre legible (con tildes y mayúsculas correctas, ej: CASCO_HISTORICO("Casco Histórico"))
+En fragment_registro.xml, sustituir el TextInputLayout del barrio por un Spinner
+En RegistroFragment.kt, poblar el Spinner. Cada valor del enum Barrio tendrá una propiedad displayName: String con el nombre legible (con tildes y mayúsculas correctas, ej: CASCO_HISTORICO("Casco Histórico")). El Spinner y el Perfil usarán barrio.displayName para mostrar el texto.
+Añadir TypeConverter en Converters.kt para Barrio y viceversa.
+Actualizar la entidad Usuario: cambiar barrio de String a Barrio (cambia la propiedad barrio de String al nuevo enum Barrio.)
+Actualizar SeedDatabaseCallback.kt para usar Barrio.xxx en lugar de Strings, y PerfilFragment.kt para usar usuario.barrio.name o la propiedad adecuada para mostrar el String donde el seed de 'Ensanche' se cambie a un barrio válido del enum (ej: Centro o Delicias).
+Commit: "feat: barrios predefinidos con Spinner en registro"
+TAREA 3: Pestañas completadas/canceladas en historial
+Archivos objetivo: fragment_historial.xml, HistorialFragment.kt
+En fragment_historial.xml, añadir un TabLayout de Material con 2 tabs: "Completadas" y "Canceladas"
+Mantén un solo RecyclerView en la vista. Al cambiar de pestaña en el TabLayout, actualiza la lista que se le envía al HistorialAdapter (alternando entre los flows de completadas y canceladas que ya están en el ViewModel).
+Por defecto mostrar "Completadas"
+Commit: "feat: pestañas en historial para completadas y canceladas"
+Convenciones: XML para UI (no Compose), KDoc en clases públicas, español.
+No toques nada del TTS ni de los archivos de valoración.
+
+		=== Completado ===
