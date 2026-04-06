@@ -118,7 +118,7 @@ app/src/main/java/com/example/vecindapp/
 | `sprint3/transacciones`    | Transacciones + Perfil + Historial                 |
 | `sprint4/ usuarios+valorac`| Login sencillo de usuarius + sistema valoraciones  |
 | `sprint5/ accesibilidad `  | TTS en escaparate + servicio + valoración + perfil |
-| `sprint6/ worker+ui&ux `   | TTS en escaparate + servicio + valoración + perfil |
+| `sprint6/ worker+ui&ux `   | Workmanager(tareas 2º plano) + Mejoras diseño UX/UI|
 
 
 ## | Utilidades
@@ -130,7 +130,7 @@ app/src/main/java/com/example/vecindapp/
 - **`s`** = `status -sb` #[ok] **(no se si me gusta mas git status normal pero con colores)**
 - **`a`** = `add .` #[ok] **(add normal)**
 - **`c`** = `commit -m` #[ok] **(commit normal)**
-- **`ac`** = `!git add . && git commit -m` #[ok] **(Añade todos los fichero modificados y hace commit con mensaje)** _- Yo la quitaría porque prefiero hacer git a > git s > git c y si acaso un git p.... aunque igual es útil para alguna chore sencillita como actualizar memorias._
+- **`ac`** = `!git add . && git commit -m` #[ok] **(Añade todos los fichero modificados y hace commit con mensaje)** 
 - **`p`** = `push` #[ok] **(Push a remote)**
 - **`pl`** = `pull` #[ok] **(Pull desde remote)**
 
@@ -184,7 +184,7 @@ app/src/main/java/com/example/vecindapp/
 
 - **`incoming`** = `!git log HEAD..@{upstream} --oneline` #[ok] **(Qué commits tiene el remoto que yo no tengo)**
 - **`peek`** = `!git diff --stat HEAD @{upstream}` #[ok] **(Qué archivos cambiarían si hago pull)**
-- **` `** = `!git diff HEAD @{upstream}` #[ok] **(Ver los cambios en detalle antes de pull)**
+- **`peekfull `** = `!git diff HEAD @{upstream}` #[ok] **(Ver los cambios en detalle antes de pull)**
 - **`peekword`** = `!git diff --word-diff HEAD @{upstream}` #[ok] **(Ver cambios palabra a palabra antes de pull)**
 
 #### === COMPARAR CON REMOTO (antes de hacer push) === 
