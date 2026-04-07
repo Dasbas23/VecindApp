@@ -20,6 +20,7 @@
     <string name="hint_descripcion">Descripción (opcional)</string>
     <string name="label_categoria">Categoría</string>
     <string name="hint_coste">Coste en horas</string>
+    <string name="label_coste_slider">Coste en horas: %s</string>
     <string name="btn_guardar">Guardar servicio</string>
     <string name="servicio_guardado">Servicio publicado correctamente</string>
 

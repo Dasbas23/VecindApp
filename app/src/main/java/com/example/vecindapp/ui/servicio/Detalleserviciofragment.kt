@@ -185,11 +185,25 @@ class DetalleServicioFragment : Fragment() {
 
         val etTitulo = dialogView.findViewById<EditText>(R.id.etEditarTitulo)
         val etDescripcion = dialogView.findViewById<EditText>(R.id.etEditarDescripcion)
-        val etCoste = dialogView.findViewById<EditText>(R.id.etEditarCoste)
+        val sliderCoste = dialogView.findViewById<com.google.android.material.slider.Slider>(
+            R.id.sliderEditarCoste
+        )
+        val tvLabelCoste = dialogView.findViewById<TextView>(R.id.tvEditarLabelCoste)
 
         etTitulo.setText(servicio.titulo)
         etDescripcion.setText(servicio.descripcion ?: "")
-        etCoste.setText(servicio.costeHoras.toString())
+        sliderCoste.value = servicio.costeHoras.toFloat()
+        tvLabelCoste.text = getString(
+            R.string.label_coste_slider,
+            CrearServicioFragment.formatearHoras(sliderCoste.value)
+        )
+        sliderCoste.setLabelFormatter { CrearServicioFragment.formatearHoras(it) }
+        sliderCoste.addOnChangeListener { _, valor, _ ->
+            tvLabelCoste.text = getString(
+                R.string.label_coste_slider,
+                CrearServicioFragment.formatearHoras(valor)
+            )
+        }
 
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.titulo_editar_servicio)
@@ -197,14 +211,10 @@ class DetalleServicioFragment : Fragment() {
             .setPositiveButton(R.string.btn_guardar) { _, _ ->
                 val titulo = etTitulo.text.toString()
                 val descripcion = etDescripcion.text.toString()
-                val coste = etCoste.text.toString().toDoubleOrNull()
+                val coste = sliderCoste.value.toDouble()
 
                 if (titulo.isBlank()) {
                     Toast.makeText(requireContext(), R.string.error_titulo_vacio, Toast.LENGTH_SHORT).show()
-                    return@setPositiveButton
-                }
-                if (coste == null || coste <= 0) {
-                    Toast.makeText(requireContext(), R.string.error_coste_invalido, Toast.LENGTH_SHORT).show()
                     return@setPositiveButton
                 }
 

@@ -48,29 +48,19 @@ class CrearServicioViewModel(
      * @param titulo      Título del servicio (obligatorio, no vacío).
      * @param descripcion Descripción del servicio (opcional).
      * @param categoria   Categoría seleccionada en el Spinner.
-     * @param costeTexto  Coste en horas como texto del EditText.
-     * @param usuarioId   ID del usuario que publica (por ahora fijo a 1).
+     * @param coste       Coste en horas (ya validado por el Slider: 0.25–8.0).
+     * @param usuarioId   ID del usuario que publica.
      */
     fun guardarServicio(
         titulo: String,
         descripcion: String,
         categoria: CategoriaServicio,
-        costeTexto: String,
+        coste: Double,
         usuarioId: Int
     ) {
         // Validaciones
         if (titulo.isBlank()) {
             _error.value = "El título no puede estar vacío"
-            return
-        }
-
-        val coste = costeTexto.toDoubleOrNull()
-        if (coste == null || coste <= 0) {
-            _error.value = "Introduce un coste válido (mayor que 0)"
-            return
-        }
-        if (coste > 8.0) {
-            _error.value = "El máximo por servicio es de 8 horas"
             return
         }
 

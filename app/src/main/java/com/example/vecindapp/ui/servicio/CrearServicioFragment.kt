@@ -18,7 +18,7 @@ import com.example.vecindapp.VecindAppApplication
 import com.example.vecindapp.data.SesionUsuario
 import com.example.vecindapp.domain.model.CategoriaServicio
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.slider.Slider
 import kotlinx.coroutines.launch
 
 /**
@@ -46,10 +46,11 @@ class CrearServicioFragment : Fragment() {
         CrearServicioViewModel.Factory(app.servicioRepository)
     }
 
-    private lateinit var etTitulo: TextInputEditText
-    private lateinit var etDescripcion: TextInputEditText
+    private lateinit var etTitulo: com.google.android.material.textfield.TextInputEditText
+    private lateinit var etDescripcion: com.google.android.material.textfield.TextInputEditText
     private lateinit var spinnerCategoria: Spinner
-    private lateinit var etCoste: TextInputEditText
+    private lateinit var sliderCoste: Slider
+    private lateinit var tvLabelCoste: android.widget.TextView
     private lateinit var btnGuardar: MaterialButton
 
     override fun onCreateView(
@@ -75,8 +76,10 @@ class CrearServicioFragment : Fragment() {
         etTitulo = view.findViewById(R.id.etTitulo)
         etDescripcion = view.findViewById(R.id.etDescripcion)
         spinnerCategoria = view.findViewById(R.id.spinnerCategoria)
-        etCoste = view.findViewById(R.id.etCoste)
+        sliderCoste = view.findViewById(R.id.sliderCoste)
+        tvLabelCoste = view.findViewById(R.id.tvLabelCoste)
         btnGuardar = view.findViewById(R.id.btnGuardar)
+        configurarSlider()
     }
 
     /**
@@ -96,6 +99,18 @@ class CrearServicioFragment : Fragment() {
     }
 
     /**
+     * Configura el Slider de coste con un [Slider.LabelFormatter] personalizado
+     * y actualiza el label de texto encima del slider al cambiar el valor.
+     */
+    private fun configurarSlider() {
+        sliderCoste.setLabelFormatter { valor -> formatearHoras(valor) }
+        tvLabelCoste.text = getString(R.string.label_coste_slider, formatearHoras(sliderCoste.value))
+        sliderCoste.addOnChangeListener { _, valor, _ ->
+            tvLabelCoste.text = getString(R.string.label_coste_slider, formatearHoras(valor))
+        }
+    }
+
+    /**
      * Configura el click del botón "Guardar" para recoger los datos
      * del formulario y pasarlos al ViewModel.
      */
@@ -104,7 +119,7 @@ class CrearServicioFragment : Fragment() {
             val titulo = etTitulo.text.toString()
             val descripcion = etDescripcion.text.toString()
             val categoria = CategoriaServicio.entries[spinnerCategoria.selectedItemPosition]
-            val coste = etCoste.text.toString()
+            val coste = sliderCoste.value.toDouble()
 
             val sesion = SesionUsuario(requireContext())
             viewModel.guardarServicio(titulo, descripcion, categoria, coste, sesion.obtenerUsuarioId())
@@ -142,6 +157,19 @@ class CrearServicioFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    companion object {
+        /**
+         * Formatea un valor de horas (Float) en texto legible.
+         *
+         * Ejemplos: 2.0 → "2h", 1.25 → "1h 15min", 0.5 → "0h 30min".
+         */
+        fun formatearHoras(valor: Float): String {
+            val horas = valor.toInt()
+            val minutos = ((valor - horas) * 60).toInt()
+            return if (minutos == 0) "${horas}h" else "${horas}h ${minutos}min"
         }
     }
 }
