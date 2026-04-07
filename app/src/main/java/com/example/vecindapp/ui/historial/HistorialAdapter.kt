@@ -8,7 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import android.graphics.drawable.GradientDrawable
 import com.example.vecindapp.R
+import com.google.android.material.card.MaterialCardView
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -41,6 +43,7 @@ class HistorialAdapter(
      */
     inner class HistorialViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+        private val cardView: MaterialCardView = itemView as MaterialCardView
         private val tvRol: TextView = itemView.findViewById(R.id.tvRol)
         private val tvEstado: TextView = itemView.findViewById(R.id.tvEstadoTransaccion)
         private val tvTitulo: TextView = itemView.findViewById(R.id.tvTituloTransaccion)
@@ -52,9 +55,15 @@ class HistorialAdapter(
             val signo = if (item.esVendedor) "+" else "-"
             val colorHoras = if (item.esVendedor) 0xFF10B981.toInt() else 0xFFEF4444.toInt()
 
-            // Rol: GANADAS (verde) o GASTADAS (rojo)
+            // Resetear estilos del card (puede estar reciclado)
+            cardView.strokeColor = android.graphics.Color.TRANSPARENT
+            cardView.setCardBackgroundColor(android.graphics.Color.WHITE)
+
+            // Rol: GANADAS (verde) o GASTADAS (rojo) con chip
             tvRol.text = if (item.esVendedor) "GANADAS" else "GASTADAS"
             tvRol.setTextColor(colorHoras)
+            val chipBg = tvRol.background as? GradientDrawable
+            chipBg?.setColor(if (item.esVendedor) 0x2010B981 else 0x20EF4444)
 
             // Estado con color neutro (puede ser COMPLETADA o CANCELADA)
             tvEstado.text = item.transaccion.estado.name

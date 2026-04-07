@@ -9,27 +9,33 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardTransaccion"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
-    app:contentPadding="16dp">
+    app:contentPadding="16dp"
+    app:strokeWidth="2dp"
+    app:strokeColor="@android:color/transparent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Rol del usuario en esta transacción -->
+        <!-- Rol del usuario en esta transacción (chip visual) -->
         <TextView
             android:id="@+id/tvRol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/bg_chip_rol"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
             android:textSize="11sp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="COMPRADOR" />
+            tools:text="Comprador" />
 
         <!-- Estado de la transacción -->
         <TextView

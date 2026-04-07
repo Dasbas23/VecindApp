@@ -51,6 +51,8 @@
     <string name="btn_aceptar">Aceptar</string>
     <string name="btn_completar">Completar</string>
     <string name="btn_valorar">Valorar</string>
+    <string name="rol_comprador">Comprador</string>
+    <string name="rol_vendedor">Vendedor</string>
     <string name="btn_confirmar_cancelar">Sí, cancelar</string>
     <string name="titulo_confirmar_aceptar">Aceptar solicitud</string>
     <string name="mensaje_confirmar_aceptar">¿Quieres aceptar esta solicitud de servicio?</string>

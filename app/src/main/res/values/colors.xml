@@ -7,4 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Roles en transacciones -->
+    <color name="rol_comprador">#FFE3F2FD</color>
+    <color name="rol_comprador_text">#FF1565C0</color>
+    <color name="rol_comprador_borde">#FF42A5F5</color>
+    <color name="rol_vendedor">#FFE8F5E9</color>
+    <color name="rol_vendedor_text">#FF2E7D32</color>
+    <color name="rol_vendedor_borde">#FF66BB6A</color>
 </resources>
