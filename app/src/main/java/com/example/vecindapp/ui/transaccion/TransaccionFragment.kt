@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.fragment.findNavController
 import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
 import com.example.vecindapp.data.SesionUsuario
@@ -125,6 +126,12 @@ class TransaccionFragment : Fragment() {
                 bottomSheet.dialog?.setOnDismissListener {
                     viewModel.cargarTransacciones()
                 }
+            },
+            onItemClick = { item ->
+                val bundle = Bundle().apply {
+                    putInt("servicioId", item.transaccion.idServicioFk)
+                }
+                findNavController().navigate(R.id.action_global_to_detalle, bundle)
             }
         )
 

@@ -110,10 +110,11 @@ class PerfilFragment : Fragment() {
      */
     private fun configurarRecyclerView() {
         servicioAdapter = ServicioAdapter (
-            onServicioClick = {servicio ->
-
-            // TODO: Navegar al detalle del servicio desde el perfil
-            // Requiere añadir action en nav_graph desde perfil a detalle
+            onServicioClick = { servicio ->
+                val bundle = Bundle().apply {
+                    putInt("servicioId", servicio.idServicio)
+                }
+                findNavController().navigate(R.id.action_global_to_detalle, bundle)
             }
         )
         rvMisServicios.layoutManager = LinearLayoutManager(requireContext())

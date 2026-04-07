@@ -8,10 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import android.graphics.drawable.GradientDrawable
 import com.example.vecindapp.R
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.card.MaterialCardView
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -38,7 +36,8 @@ class TransaccionAdapter(
     private val onAceptar: (TransaccionUI) -> Unit,
     private val onCompletar: (TransaccionUI) -> Unit,
     private val onCancelar: (TransaccionUI) -> Unit,
-    private val onValorar: (TransaccionUI) -> Unit
+    private val onValorar: (TransaccionUI) -> Unit,
+    private val onItemClick: (TransaccionUI) -> Unit
 ) : ListAdapter<TransaccionUI, TransaccionAdapter.TransaccionViewHolder>(TransaccionDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransaccionViewHolder {
@@ -56,7 +55,6 @@ class TransaccionAdapter(
      */
     inner class TransaccionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val cardView: MaterialCardView = itemView as MaterialCardView
         private val tvRol: TextView = itemView.findViewById(R.id.tvRol)
         private val tvEstado: TextView = itemView.findViewById(R.id.tvEstadoTransaccion)
         private val tvTitulo: TextView = itemView.findViewById(R.id.tvTituloTransaccion)
@@ -70,26 +68,7 @@ class TransaccionAdapter(
          * Vincula los datos de una [TransaccionUI] a las vistas.
          */
         fun bind(item: TransaccionUI) {
-            // Chip de rol con color según comprador/vendedor
-            val esComprador = item.rol == "COMPRADOR"
-            tvRol.text = if (esComprador)
-                itemView.context.getString(R.string.rol_comprador)
-            else
-                itemView.context.getString(R.string.rol_vendedor)
-
-            val chipBg = tvRol.background as? GradientDrawable
-            if (esComprador) {
-                chipBg?.setColor(itemView.context.getColor(R.color.rol_comprador))
-                tvRol.setTextColor(itemView.context.getColor(R.color.rol_comprador_text))
-                cardView.strokeColor = itemView.context.getColor(R.color.rol_comprador_borde)
-                cardView.setCardBackgroundColor(itemView.context.getColor(R.color.rol_comprador))
-            } else {
-                chipBg?.setColor(itemView.context.getColor(R.color.rol_vendedor))
-                tvRol.setTextColor(itemView.context.getColor(R.color.rol_vendedor_text))
-                cardView.strokeColor = itemView.context.getColor(R.color.rol_vendedor_borde)
-                cardView.setCardBackgroundColor(itemView.context.getColor(R.color.rol_vendedor))
-            }
-
+            tvRol.text = item.rol
             tvEstado.text = item.estado.name
             tvTitulo.text = item.tituloServicio
             tvHoras.text = itemView.context.getString(
@@ -112,6 +91,8 @@ class TransaccionAdapter(
 
             // Configurar botones según permisos
             configurarBotones(item)
+
+            itemView.setOnClickListener { onItemClick(item) }
         }
 
         /**
