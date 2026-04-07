@@ -26,7 +26,7 @@ app/src/main/java/com/example/vecindapp/
 │   ├── entities/        → Room entities (Usuario, Servicio, Transaccion, Valoracion)
 │   └── repository/      → Repository implementations (*Impl)
 ├── domain/
-│   ├── model/           → Enums (NivelVecino, CategoriaServicio, EstadoServicio, EstadoTransaccion)
+│   ├── model/           → Enums (NivelVecino, CategoriaServicio, EstadoServicio, EstadoTransaccion, Barrio)
 │   ├── repository/      → Repository interfaces (contracts)
 │   └── usecase/         → Use cases (business logic) [pendiente]
 ├── ui/
@@ -54,10 +54,11 @@ app/src/main/java/com/example/vecindapp/
 
 ## Database
 
+Current DB version: 3
 4 Room entities: USUARIO, SERVICIO, TRANSACCION, VALORACION.
 SeedDatabaseCallback creates 2 test users + 1 test service on first run.
 Converters handle enum ↔ String conversions for Room.
-Use fallbackToDestructiveMigration(false) during development.
+Use fallbackToDestructiveMigration(true) during development.
 
 ## Current Sprint Status
 
@@ -67,8 +68,8 @@ Use fallbackToDestructiveMigration(false) during development.
 | Sprint 2 | Done       | Room DB + CRUD services + escaparate                      |
 | Sprint 3 | Done       | Transactions + Profile + History (MPAndroidChart)         |
 | Sprint 4 | Done       | User selection + Ratings with ARASAAC pictograms          |
-| Sprint 5 | Done       | Accessibility, TTS, Glide, WorkManager, visual polish     |
-| Sprint 6 | In progress| WorkManager (local notifications), visual polish & images |
+| Sprint 5 | Done       | Accessibility +TTS + unique users + spinner + history tabs|
+| Sprint 6 | In progress| WorkManager (local notifs), visual UI/UX polish & images  |
 
 ## Navigation (nav_graph.xml)
 

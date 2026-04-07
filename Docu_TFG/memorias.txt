@@ -1,4 +1,4 @@
-↪ 06.03.2026 : 
+	↪ 06.03.2026 : 
 	He empezado con cierta incertidumbre ya que me han concedido el APTO. Como no sé muy bien por dónde empezar, he empezado por preguntar a Gemini y a Claude. He decidido que quiero un estilo moderno pero que sea sencillo e intuitivo. Ya veremos cómo hacerlo... 
 	Se piden varios bocetos para inspirarme en Gemini con Nano banana. Estoy viendo un vídeo de "Programador X" en YT para ver cómo empezar. Hace hincapié en la escalabilidad y el diseño, es casi que lo más importante. Una de las conclusiones que he sacado es que voy a utilizar una metodología ágil "SCRUM" con "Kanban" para tener un seguimiento y control, sprints de 1 semana.
 ⇢ Poner botón para activar el TTS parece ser una buena idea.
@@ -443,7 +443,21 @@ SE DA COMIENZO AL SPRINT 6!
 			+ Solución: Lo más limpio: que el botón "Ver valoración" del detalle abra el BottomSheet (que es modal y no se apila en el back stack), y que el BottomSheet no tenga botón de vuelta al detalle. Así el flujo es siempre tarjeta → detalle → BottomSheet (cierra) → detalle.
 		9. En cuanto a bottom_sheet_detalle_valoracion.xml , el título muestra siempre el string "Valoración recibida". Pero eso no ofrece información clara al usuario porque cuando has enviado la valoración debería mostrar "Valoración enviada".
 		10. Quiero darle un estilo visual según los los conceptos que cree al comienzo de idear esta app con NanoBanana. Para ello he ideado un "Helper para el estilo de la app" con ayuda de Gemini que describe de manera bastante precisa el estilo y las tonalidades. Esta guía estará al final de este documento y tendrá que ser revisada.
-		11. Luego si que meteremos el worker. Pienso que eso será menos trabajo ¿verdad?
+		11. Luego si que meteremos el worker. Pienso que eso será menos trabajo.
+⇢ Resolver incongruencias sobre el Helper de  estilo visual de al app.
+	▼ Problema : en la primera iteracción había pensado en usar modo claro y oscuro y eso significa que Android actuvaría el modo oscuro automáticamente, pero al no tener los colores del tema oscuro definidos quedaría un poco extraño el modo oscuro.
+	+ Solución : El problema se resuelve dejando por defecto el tema Light porque ya tengo una paleta medio resuelta y así no tengo que pensar en una paleta para el modo oscuro. Para no liar la cosa más por ahora creo que será facil implementar e modo oscuro en un futuro porque no hay que toca funcionalidades, solo añadir un botón que cambia el tema.[dejando para vías futuras el modo oscuro]
+⇢ "Reunirme" con mis ayudantes Claude y Gemini para idear los paquetes en los que se va a dividr la primera fase del Sprint. Estoy satisfecho por como ha ido el planteamiento y la cantidad de problemas que se han cubierto.
+	↳ Tras un análisis crítico, se decide dividir el refactor de UI/UX y la navegación en 3 "Paquetes" atómicos para enviárselos a Claude Code por consola sin saturar su ventana de contexto (evitando así el "Scope Creep" y los fallos en cascada del Sprint 5).
+		- Paquete 1 (Listas y Tarjetas): Diferenciación visual de Vendedor/Comprador, oscurecimiento y tachado de tarjetas CANCELADAS con Paint.STRIKE_THRU_TEXT_FLAG y texto "Sin cargo", y truncado de textos largos (maxLines="2" + ellipsize="end") para evitar saltos en la UI. El texto completo se verá al entrar al detalle.
+		- Paquete 2 (Formularios): Blindar la entrada de datos. Se sustituye el TextInputEditText del coste por un Slider nativo de Material Design.
+			▼ Problema: Se planteó un Slider con granularidad de 0.2 horas (= 12 minutos). Nadie piensa en 12 minutos. Es anti-intuitivo.
++ Solución: Se obliga a usar stepSize="0.25" (cuartos de hora), con un rango de 0.25 a 8.0. Eso da 32 posiciones, así que hay que implementar un LabelFormatter con app:labelBehavior="floating" para que al arrastrar muestre el formato "1h 15m" y el usuario sepa dónde está.
+		- Paquete 3 (Navegación DWYT — "Don't Waste Your Time"): Conectar todo sin bucles.
+			▼ Problema: Las pantallas actuales (Transacciones, Historial, Perfil) tenían flujos de navegación inconexos o circulares hacia el Detalle o hacia la Valoración. Si desde historial vas al detalle y desde el detalle vas a la valoración y desde la valoración vas al detalle... bucle infinito.
+			+ Solución: Se centraliza todo en "Detalle del Servicio" como hub. Cualquier clic en una tarjeta lleva al detalle. Solo desde ese detalle se puede abrir el BottomSheet modal de la valoración (que al ser modal no se apila en el back stack). El BottomSheet no tiene botón de vuelta al detalle. Flujo limpio: tarjeta → detalle → BottomSheet (cierra) → detalle. Además el título del BottomSheet se hace dinámico pasándole un booleano por los arguments: "Valoración enviada" vs "Valoración recibida". Esto cubre los puntos 2, 7, 8 y 9 de la lista que tenía.
+⇢ Ejecución del Paquete 1: Se elabora un prompt con directrices estrictas para Claude Code limitando los archivos que puede tocar (solo los adapters y XML correspondientes) y obligándole a hacer un assembleDebug antes de cada commit. Son 3 tareas con 3 commits atómicos.
+
 
 	
 
@@ -517,42 +531,3 @@ Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir 
 - He detectado una gran necesidad de organización y de esctructuración de conocimientos, detalles y cosas que se han hecho. Estoy abriendo muchos chats independietes entre sí y cada uno especializado en algo(git, planificador, programador,solucion de errores, sugiriente de memorias y alguna cosa más que ahora no recuerdo). Para ello utilizaré NoteBookLM. Le volcaré archivos de texto con los historiales de cada chat.
 
 
------------- Helper para el estilo de la app ------------
-Analizando las imágenes de "VecindApp" que has subido, el estilo no está nada reñido con Material Design; de hecho, es una adaptación de Material Design enfocada en la accesibilidad, la cercanía y la usabilidad (parece muy orientada a personas mayores o a una navegación muy intuitiva).
-Aquí tienes el desglose de los elementos visuales que definen este estilo para que puedas aplicarlos a tu proyecto:
-1. Gama de Colores (La Paleta)
-El esquema de colores busca transmitir tranquilidad, confianza y acción sin ser agresivo:
-Color Principal (Primary): Tonos verdes. Vemos un verde esmeralda/mar para las cabeceras y barras superiores, y un verde más tipo "bosque" o pastel para botones de confirmación. El verde transmite comunidad, positividad y salud.
-Color de Acento (Secondary/Accent): Naranja suave, salmón o coral. Se utiliza estratégicamente para crear contraste y llamar la atención sobre acciones clave (como los botones redondos de "Pedir Ayuda" o "Ofrecer Ayuda", o las notificaciones).
-Fondos (Background): Blanco puro o grises/azules extremadamente claros. Esto es vital para que el texto y los iconos destaquen por completo (alto contraste).
-2. Estilo de Botones y Formas
-El diseño huye de las esquinas afiladas. Todo es suave:
-Botones tipo "Píldora" (Pill-shaped): Los botones principales (como "Aceptar", "Enviar Valoración" o "Publicar Solicitud") tienen los bordes totalmente redondeados.
-Tarjetas (Cards): La información no está suelta en la pantalla, está agrupada dentro de "cajas" blancas con bordes redondeados y una sombra muy suave (en Android esto se llama elevation). Esto ayuda al cerebro a separar visualmente qué es cada cosa (un usuario, un servicio, un formulario).
-3. Iconografía y Elementos Visuales
-Este es el punto más característico de las imágenes que has compartido:
-Pictogramas: En lugar de usar los típicos iconos minimalistas de líneas finas de Google, la app usa dibujos estilo cómic/pictograma (en las imágenes se menciona el sistema ARASAAC). Son ilustraciones planas, con bordes negros claros y colores sólidos.
-Avatares reales: El uso de fotos de caras (o ilustraciones amigables) para los perfiles humaniza mucho la interfaz.
-Botones de accesibilidad: Se ven botones muy grandes y claros para funciones de voz (el icono del altavoz), lo que refuerza que es una app para todos los públicos.
-4. Espaciado y Tipografía
-Letra clara y grande: Usa una tipografía Sans-serif (sin adornos en las puntas de las letras, probablemente la fuente por defecto de Android, Roboto), en tamaños grandes y en negrita para los títulos.
-Márgenes amplios: Hay mucho "aire" entre los distintos botones y textos. En diseño de apps, tener botones grandes y separados es crucial para que el usuario no toque donde no debe por error.
-En resumen para tu app: Si quieres lograr este aspecto, debes configurar tus archivos de recursos (colors.xml y themes.xml) con una paleta Verde/Naranja, usar MaterialCardView para agrupar la información, redondear al máximo las esquinas de tus botones y buscar paquetes de iconos que sean más ilustrativos y menos abstractos.
-
-**Posibles colores
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="verde_vecindapp_principal">#2E8B57</color> <color name="verde_vecindapp_oscuro">#1B5E38</color> <color name="verde_vecindapp_claro">#A8D5BA</color> <color name="naranja_acento">#E76F51</color> <color name="naranja_claro">#F4A261</color> <color name="fondo_app">#F4F7F5</color> <color name="blanco_tarjetas">#FFFFFF</color> <color name="texto_principal">#2D3436</color> <color name="texto_secundario">#636E72</color> </resources>
-**Posible themes.xml
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.MiPrimeraApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        
-        <item name="colorPrimary">@color/verde_vecindapp_principal</item>
-        <item name="colorPrimaryVariant">@color/verde_vecindapp_oscuro</item>
-        <item name="colorOnPrimary">@color/blanco_tarjetas</item> <item name="colorSecondary">@color/naranja_acento</item>
-        <item name="colorSecondaryVariant">@color/naranja_claro</item>
-        <item name="colorOnSecondary">@color/blanco_tarjetas</item>
-
-        <item name="android:colorBackground">@color/fondo_app</item>
-        <item name="colorSurface">@color/blanco_tarjetas</item> <item name="colorOnSurface">@color/texto_principal</item> </style>
-</resources>
