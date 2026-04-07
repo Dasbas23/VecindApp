@@ -8,8 +8,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import android.graphics.Paint
 import android.graphics.drawable.GradientDrawable
 import com.example.vecindapp.R
+import com.example.vecindapp.domain.model.EstadoTransaccion
 import com.google.android.material.card.MaterialCardView
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -85,6 +87,26 @@ class HistorialAdapter(
 
             val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
             tvFecha.text = sdf.format(Date(item.transaccion.timestamp))
+
+            // Estilo diferenciado para transacciones canceladas
+            val esCancelada = item.transaccion.estado == EstadoTransaccion.CANCELADA
+            if (esCancelada) {
+                cardView.setCardBackgroundColor(
+                    itemView.context.getColor(R.color.cancelada_fondo)
+                )
+                tvHoras.text = itemView.context.getString(R.string.historial_sin_cargo)
+                tvHoras.setTextColor(itemView.context.getColor(R.color.cancelada_texto))
+                tvHoras.paintFlags = tvHoras.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                tvTitulo.setTextColor(itemView.context.getColor(R.color.cancelada_texto))
+                tvFecha.setTextColor(itemView.context.getColor(R.color.cancelada_texto))
+                tvRol.setTextColor(itemView.context.getColor(R.color.cancelada_texto))
+                chipBg?.setColor(0x20000000)
+            } else {
+                // Resetear estilos para ViewHolder reciclado
+                tvHoras.paintFlags = tvHoras.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                tvTitulo.setTextColor(0xFF212121.toInt())
+                tvFecha.setTextColor(0xFF212121.toInt())
+            }
 
             // Historial es solo lectura
             llBotones.visibility = View.GONE

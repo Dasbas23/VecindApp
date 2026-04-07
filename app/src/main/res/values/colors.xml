@@ -15,4 +15,8 @@
     <color name="rol_vendedor">#FFE8F5E9</color>
     <color name="rol_vendedor_text">#FF2E7D32</color>
     <color name="rol_vendedor_borde">#FF66BB6A</color>
+
+    <!-- Estado cancelada -->
+    <color name="cancelada_fondo">#FFF5F5F5</color>
+    <color name="cancelada_texto">#FF9E9E9E</color>
 </resources>

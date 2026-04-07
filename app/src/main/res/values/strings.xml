@@ -73,6 +73,7 @@
     <string name="label_completadas">Transacciones completadas</string>
     <string name="label_canceladas">Transacciones canceladas</string>
     <string name="historial_vacio">Aún no has completado ninguna transacción</string>
+    <string name="historial_sin_cargo">Sin cargo</string>
     <string name="grafico_sin_datos">Sin datos para el gráfico</string>
     <string name="formato_historial_horas">%1$s%2$.1f h</string>
 
