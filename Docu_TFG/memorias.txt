@@ -457,8 +457,12 @@ SE DA COMIENZO AL SPRINT 6!
 			▼ Problema: Las pantallas actuales (Transacciones, Historial, Perfil) tenían flujos de navegación inconexos o circulares hacia el Detalle o hacia la Valoración. Si desde historial vas al detalle y desde el detalle vas a la valoración y desde la valoración vas al detalle... bucle infinito.
 			+ Solución: Se centraliza todo en "Detalle del Servicio" como hub. Cualquier clic en una tarjeta lleva al detalle. Solo desde ese detalle se puede abrir el BottomSheet modal de la valoración (que al ser modal no se apila en el back stack). El BottomSheet no tiene botón de vuelta al detalle. Flujo limpio: tarjeta → detalle → BottomSheet (cierra) → detalle. Además el título del BottomSheet se hace dinámico pasándole un booleano por los arguments: "Valoración enviada" vs "Valoración recibida". Esto cubre los puntos 2, 7, 8 y 9 de la lista que tenía.
 ⇢ Ejecución del Paquete 1: Se elabora un prompt con directrices estrictas para Claude Code limitando los archivos que puede tocar (solo los adapters y XML correspondientes) y obligándole a hacer un assembleDebug antes de cada commit. Son 3 tareas con 3 commits atómicos.
-
-
+	↳ Resultado del Paquete 1 (Listas y Tarjetas): Ha ido bien. He usado el flujo subagent-driven-development de CCode y me ha sacado commits atómicos limpios:
+		- f9bbd1a: Diferenciación visual comprador/vendedor con chip de rol, stroke lateral y fondo tintado. Se distingue a simple vista.
+		- 40d503d: Tarjetas canceladas con fondo gris, texto "Sin cargo" tachado y textos en gris secundario.
+		- Lo del truncado de textos largos (maxLines/ellipsize) resulta que ya estaba implementado y CCode se ha dado cuenta solo sin duplicar código. Un detalle que está bien porque si lo hubiera metido dos veces habría sido un lío.
+⇢ Ejecución del Paquete 2: Elaboro un prompt, esta vez ya menos elaborado porque dispongo de superpowers y eso funciona muy bien!
+	↳ Resultado del paquete 2 (Slider para coste de horas en lugar de textInput)
 	
 
 --- SÍMBOLOGÍA---
