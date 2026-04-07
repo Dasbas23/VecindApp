@@ -1,0 +1,96 @@
+Usa tu flujo de trabajo de Superpowers (Plan -> Execute -> Review) para esta tarea. Actúa como un desarrollador Android experto. Revisa el código del proyecto para obtener contexto. Lee CLAUDE.md y Docu_TFG/memorias.txt para contexto completo.
+Rama actual: sprint6/worker+ui&ux
+Haz las tareas una por una con commit atómico después de cada una:
+TAREA 1: Diferenciación visual comprador/vendedor en transacciones
+
+Archivos objetivo: item_transaccion.xml, TransaccionAdapter.kt
+En las tarjetas de transacciones, diferenciar visualmente si el usuario actual es COMPRADOR o VENDEDOR.
+Usar un borde lateral de color (stroke left) o fondo tintado suave: azul claro para comprador, verde claro para vendedor.
+Añadir una etiqueta visible tipo chip o badge con el texto "Comprador" / "Vendedor" en la tarjeta.
+No tocar la lógica de negocio, solo la presentación.
+Ejecuta ./gradlew assembleDebug. Commit: "feat: diferenciación visual comprador/vendedor en transacciones"
+
+TAREA 2: Tarjetas canceladas en gris con texto tachado
+
+Archivos objetivo: HistorialAdapter.kt, item_historial.xml (o el layout que use el adapter del historial)
+Cuando una transacción tenga estado CANCELADA, aplicar fondo gris claro a la tarjeta y Paint.STRIKE_THRU_TEXT_FLAG al texto de las horas.
+Sustituir el indicador de horas (+X / -X) por el texto "Sin cargo" en color gris.
+El resto de información (título del servicio, fecha) se mantiene legible pero en tono gris secundario.
+Ejecuta ./gradlew assembleDebug. Commit: "feat: tarjetas canceladas con estilo visual diferenciado"
+
+TAREA 3: Limitar textos largos en tarjetas
+
+Archivos objetivo: item_servicio.xml, item_transaccion.xml, item_historial.xml
+En los TextView de título de las tarjetas de escaparate, transacciones e historial: añadir android:maxLines="2", android:ellipsize="end".
+No limitar la entrada del usuario (maxLength) ni tocar los fragments de creación/edición.
+El texto completo se verá al entrar al detalle.
+Ejecuta ./gradlew assembleDebug. Commit: "feat: truncar textos largos con ellipsis en tarjetas"
+
+Convenciones: XML para UI (no Compose), KDoc en clases públicas, español.
+No tocar nada del TTS, valoraciones ni navegación.
+
+===========================================================
+
+Usa tu flujo de trabajo de Superpowers (Plan -> Execute -> Review) para esta tarea. Actúa como un desarrollador Android experto. Revisa el código del proyecto para obtener contexto. Lee CLAUDE.md y Docu_TFG/memorias.txt para contexto completo.
+
+
+Rama actual: sprint6/worker+ui&ux. Commit atómico tras cada tarea.
+TAREA: Slider para coste de horas en lugar de TextInput
+
+Archivos objetivo: fragment_crear_servicio.xml, CrearServicioFragment.kt, fragment_editar / EditarServicioFragment si existe en el proyecto
+Sustituir el TextInputEditText del coste de horas por un com.google.android.material.slider.Slider con: valueFrom=0.25, valueTo=8.0, stepSize=0.25
+Mostrar un label/globo encima del thumb con formato legible: horas enteras → "2h", con fracción → "1h 15min", "0h 30min", "0h 15min". Usar LabelFormatter personalizado para esto.
+Actualizar el Fragment para leer el valor del Slider en vez del TextInput. Quitar la validación de decimales que ya no hace falta.
+Si existe fragment de edición de servicio, aplicar el mismo cambio ahí también.
+Ejecuta ./gradlew assembleDebug. Commit: "feat: Slider con pasos de 0.25h para coste de servicios"
+
+Convenciones: XML para UI (no Compose), KDoc en clases públicas, español.
+No tocar TTS, valoraciones ni navegación.
+
+===========================================================
+
+Usa tu flujo de trabajo de superpowers:writing-plans (Plan -> Execute -> Review). Actúa como un desarrollador Android experto. Revisa el código del proyecto para obtener contexto.
+
+Genera ÚNICAMENTE el plan de implementación detallado (Documento .md en la carpeta de planes) para las siguientes tareas. NO ejecutes la implementación ni realices cambios en los archivos de código en esta sesión. Mi objetivo es validar el diseño técnico primero.
+
+Rama actual: sprint6/worker+ui&ux
+
+OBJETIVO: Hub de Navegación y BottomSheets dinámicos (Navegación DWYT).
+
+TAREA 1: Navegar al detalle del servicio desde transacciones y perfil
+
+Archivos objetivo: TransaccionAdapter.kt, item_transaccion.xml, TransaccionFragment.kt, PerfilFragment.kt
+Al hacer tap en una tarjeta de transacción, navegar a detalleServicioFragment pasando el servicioId como argumento (usar la action existente en nav_graph o crear una nueva si no existe).
+En PerfilFragment, al hacer tap en una tarjeta de "Mis servicios", navegar igualmente a detalleServicioFragment (si no lo hace ya).
+No cambiar el comportamiento de los botones de acción (aceptar, completar, cancelar, valorar) que ya existen en las tarjetas.
+Ejecuta ./gradlew assembleDebug. Commit: "feat: navegación al detalle del servicio desde transacciones y perfil"
+
+TAREA 2: Navegar al detalle del servicio desde el BottomSheet de valoración del historial
+
+Archivos objetivo: bottom_sheet_detalle_valoracion.xml, DetalleValoracionBottomSheet.kt
+Actualizar newInstance() para que reciba también el servicioId como argumento en el Bundle.
+Añadir un botón "Ver servicio" en el BottomSheet de detalle de valoración.
+Al pulsarlo, cerrar el BottomSheet (dismiss()) y navegar a detalleServicioFragment con el servicioId correspondiente.
+Actualizar todos los puntos que llaman a newInstance() para pasar el servicioId.
+Ejecuta ./gradlew assembleDebug. Commit: "feat: botón ver servicio en BottomSheet de valoración"
+
+TAREA 3: Abrir BottomSheet de valoración desde el detalle del servicio
+
+Archivos objetivo: DetalleServicioFragment.kt, fragment_detalle_servicio.xml
+Añadir un botón "Ver valoración" visible solo si existe una valoración asociada a la transacción completada de ese servicio para el usuario actual.
+Al pulsarlo, abrir DetalleValoracionBottomSheet como modal (no como navegación de fragment, para evitar bucle en el back stack).
+Si no hay valoración, el botón no se muestra.
+Ejecuta ./gradlew assembleDebug. Commit: "feat: ver valoración desde detalle del servicio como BottomSheet modal"
+
+TAREA 4: Título dinámico en BottomSheet de valoración
+
+Archivos objetivo: DetalleValoracionBottomSheet.kt, bottom_sheet_detalle_valoracion.xml, strings.xml
+Recibir un booleano esEnviada por los arguments del fragment.
+Si esEnviada == true, mostrar el string "Valoración enviada". Si false, mostrar "Valoración recibida".
+Añadir ambos strings a strings.xml.
+Actualizar todos los puntos que abren este BottomSheet para pasar el booleano correctamente (comparar idValorador con el usuario de sesión).
+Ejecuta ./gradlew assembleDebug. Commit: "feat: título dinámico enviada/recibida en BottomSheet de valoración"
+
+Convenciones: XML para UI (no Compose), KDoc en clases públicas, español.
+No tocar TTS ni el Slider del paquete anterior.
+
