@@ -192,7 +192,7 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 chore: Actualizar memorias
 ⇢ Se refactoriza el código para arreglar el back stack:
 	↳ Hacer que el bottmNav limpie la pila hasta llegar a escaparate con el resultado de que haciendo un clic hacia atrás vuelva a la pantalla del escaparate.
-		▼ Problema: resulta que el BottomNav, al navegar hacia atrás no se actualizaba el estado de la barra inferior dejando una mala sensación de uso.
+		▼ Problema: resulta que el BottomNav, al navegar hacia atrás no se actualizaba el estado de la barra inferior dejando una mala sensación de uso. 
 		+ Solución : Se refactoriza el Main (sinceramente no sé si es buena idea, pero funciona) haciendo que actualice el icono pero sin activar el listener. Ahora ya da mejora sensación.
 ⇢ Se refactoriza la capa UI para deshacernos de las sesión de usuario hardcodeada con anterioridad. Ahora obtiene el ID del usuario que ha iniciado sesión porque se guarda.
 En algún momento parece que Claude está perdiendo contexto... es cierto que esta app está empezando a tener un tamaño bastante considerable y no sé si le estaré pidiendo tareas muy largas. ¿Debería hacerle solicitudes más cortas?
@@ -406,7 +406,7 @@ Como me gusta git! Tengo pensdo dejar que ClaudeCode haga de las suyas y me mejo
 		▼ Problema : Me he enocntrado en la problemática de comparar las dos ramas, CCode y Gemini, que tenía guardadas en local. Sólo era capaz de comparar la rama que en la que estaba contra la que había hecho la IA ya que no tenían los mismos commits.
 		+ Solución: Tras mucho tocar he podido hacerlo gracias al IDE haciendo checkout en una de las ramas y despues haciendo un "compare worktree" o algo similar, ha sido un poco de casualidad que he dado con ello, pero vamos que me ha venido de locos. CCode me gusta más pero se chupa los tokens que da gusto (¿Será porque tiene demasiando contexto? Yo creo que sí que tiene muchas cosas que procesar y tener en cuenta y que Gemini suele ser más perezoso en cuato a buscar contexto)
 ⇢ He añadido también el spinner de los barrios y he actualizado Enums.kt con los barrios de Zaragoza y cada barrio recibe un displayName. Esto mata dos pajaros de un tiro porque sive para que el usuario no se vuelva loco leyendo todo mayúsculas y el TTS lo lea normal, no como si le fuera a dar un cortocircuito.
-⇢ He implementado una gran mejora técnica donde cada usuario es único. [Fuera del TFG, si se me antoja sería una buena idea implementar la edición del perfil de cada usuario completa: con su nombre, correo, foto de perfil y todo ese rollo... pero con 2 meses de TFG no me da para tanto]
+⇢ He implementado una gran mejora técnica donde cada usuario es único. [vías futuras: Fuera del TFG, si se me antoja sería una buena idea implementar la edición del perfil de cada usuario completa: con su nombre, correo, foto de perfil y todo ese rollo... pero con 2 meses de TFG no me da para tanto]
 ⇢ He creado las pestañas que tenía pendientes de hacer en HistorialFragment donde se muestra por un lado "Transacciones completadas" y por otro lado "Transacciones canceladas".
 	▼ Problema : Las tarjetas ques se muestran en ese RecyclerView, canceladas, se muestran de la misma manera que en  "completadas" donde el saldo se muestra como gastado y/o ganado pero realmente no computa en el gráfico ni afecta el saldo de cada usuario.
 	+ Solución: En el spint 6, ver de qué manera esto se puede solucionar pero ya no quiero pasar más tiempo con estos arreglos porque ya acumularé  mucho atraso con el cominezo del último srpint sino.
@@ -425,8 +425,27 @@ SE DA COMIENZO AL SPRINT 6!
 
 ↪ 07.04.2026: 
 	Creo que ya tengo todo lo necesario para comenzar a preparar la separación de tareas del S6. 
-⇢ Lo primero que he hecho ha sido crear una nueva rama "
+⇢ Lo primero que he hecho ha sido crear una nueva rama "sprint6/worker+ui&ux". Ahora toca pensar e idear.
+	↳ Tengo algo en mente pero necesito algo de ayuda sobre lo que he estado repasadndo a ver si me dejo algo o no me dejo nada.
+		Me apetece meterme primero con la UI/UX (el órden NO implica prioridades):
+		1. La diferencia visual en las transacciones. Que quede claro a simple vista (con colores de fondo, bordes o etiquetas o lo que sea) si eres el comprador o el vendedor
+		2. Navegación fácil. Al hacer click sobre un elemento estando en historial o en transacciones, que nos lleve al detalle del servicio oirignal (Creo que es más intuitivo que un longTap para ver detalle en una ventana flotante rollo Iphone [no es mala idea para vías futuras])
+			↳ Ahora me estoy dando cuenta que desde "Historial" veo la valoración en el tap corto... Estoy pensadno en símplemete añadir un botón en ese mismo bottomsheet que me permita navegar a ese detalle y de esta forma no tengo que refactorizar muuucho, sólo tengo que implementar una vez la navegación al detalle. De hecho ya tengo el fragment_detalle_servicio.xml para redirigir todo el flujo allí ¿verdad?. Implementar un bortón que me lleve hasta allí creo que será lo mas asequible.
+		3. Gestionar los textos largos. Revisando, he visto que tenía apuntado por ahí un tema con los textos que eran demasiado largos. Que no sabía que hacer, si hacer que la letra sea más pequeña para que quepan en el recuadro , o mostrar unos puntos suspensivos "..." o limitar  por BBDD y text imput la cantidad de caracteres que se puede introducir. Mi lógica me dice que la limitación y/o validación es siempre la clave de todo porque además así guíamos al usuario.
+		4. Editar las valoraciones. Aquí me asalta la duda de si es un básico del CRUD o sólo es una pijada que se me antojó a mí en el momento. Mi intuición me dice que se quede así y que no toque nada al tratarse de un MVP y dados los plazos en los que nos manejamos para la entrega del proyecto. En todo caso dejar para [vías futuras] o esto sí, darle prioridad baja.
+		5. Saldo de horas con decimales raros en la BBDD. Hay que limitar la cantidad de decimales que el usuario puede introducir. Aquí lo tengo bastante claro: Quiero máximo 2 decimales y además que se puedan digitar tanto una coma "," como un punto "."; ha de ser con este atributo android:digits="0123456789.," en el TextInputEditText. Después habrá que normalizarlo en Room y no sé si en algún lugar más.
+			▼ Problema :  Aquí dice "máximo 2 decimales" pero antes hablaba incrementos de horas como 0.5 o 1.5 (en las primeras ideas). ¿Tiene sentido que alguien ofrezca un servicio por 1.37 horas? Pues no!
+			+ Solución : Sería más limpio un Spinner o un Slider con pasos de 0.5 en vez de un campo libre con validación de decimales. 
+		6. Tarjetas canceladas en el historial que se muestran son saldos gastado/ganado. Hay que quitar el indicador de horas pero preferiblemente yo lo mostraría tachado y en gris para que se sepa que no se ha realizado la transacción. Además me gusta la idea de mostrar un mensajito  "No se han descontado/sumado horas de tu saldo"  o "sin cargo"
+		7. Acceder al detalle del servicio desde el Perfil ("Mis servicios").Cierto es que lo he mencionado pero creo que no ha quedado claro en el punto 2 de esta lista. He añadido el subpaso de como creo que debería ser la lógica y creo que aplica lo mismo aquí. 
+		8. Ahora que he estado redactado un poco más, me está fluyendo la idea de implemetar desde la vista del detalle en las transacciones completadas, de la misma manera que implemetaría un botón desde la valoración para ver el detalle, pues hacer lo contrario; ver la valoración recibida o enviada desde el detalle que habré creado. (no sé si ha quedado claro).
+			▼ Problema: Se crea una navegación circular: tarjeta → detalle servicio → valoración → detalle servicio → valoración... Necesitas decidir ahora cómo cortar el bucle.
+			+ Solución: Lo más limpio: que el botón "Ver valoración" del detalle abra el BottomSheet (que es modal y no se apila en el back stack), y que el BottomSheet no tenga botón de vuelta al detalle. Así el flujo es siempre tarjeta → detalle → BottomSheet (cierra) → detalle.
+		9. En cuanto a bottom_sheet_detalle_valoracion.xml , el título muestra siempre el string "Valoración recibida". Pero eso no ofrece información clara al usuario porque cuando has enviado la valoración debería mostrar "Valoración enviada".
+		10. Quiero darle un estilo visual según los los conceptos que cree al comienzo de idear esta app con NanoBanana. Para ello he ideado un "Helper para el estilo de la app" con ayuda de Gemini que describe de manera bastante precisa el estilo y las tonalidades. Esta guía estará al final de este documento y tendrá que ser revisada.
+		11. Luego si que meteremos el worker. Pienso que eso será menos trabajo ¿verdad?
 
+	
 
 --- SÍMBOLOGÍA---
 Día nuevo:         ↪
@@ -497,3 +516,43 @@ Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir 
 - Seprar cada Sprint explicando como he ido econtrandome con problemas y soluciones.
 - He detectado una gran necesidad de organización y de esctructuración de conocimientos, detalles y cosas que se han hecho. Estoy abriendo muchos chats independietes entre sí y cada uno especializado en algo(git, planificador, programador,solucion de errores, sugiriente de memorias y alguna cosa más que ahora no recuerdo). Para ello utilizaré NoteBookLM. Le volcaré archivos de texto con los historiales de cada chat.
 
+
+------------ Helper para el estilo de la app ------------
+Analizando las imágenes de "VecindApp" que has subido, el estilo no está nada reñido con Material Design; de hecho, es una adaptación de Material Design enfocada en la accesibilidad, la cercanía y la usabilidad (parece muy orientada a personas mayores o a una navegación muy intuitiva).
+Aquí tienes el desglose de los elementos visuales que definen este estilo para que puedas aplicarlos a tu proyecto:
+1. Gama de Colores (La Paleta)
+El esquema de colores busca transmitir tranquilidad, confianza y acción sin ser agresivo:
+Color Principal (Primary): Tonos verdes. Vemos un verde esmeralda/mar para las cabeceras y barras superiores, y un verde más tipo "bosque" o pastel para botones de confirmación. El verde transmite comunidad, positividad y salud.
+Color de Acento (Secondary/Accent): Naranja suave, salmón o coral. Se utiliza estratégicamente para crear contraste y llamar la atención sobre acciones clave (como los botones redondos de "Pedir Ayuda" o "Ofrecer Ayuda", o las notificaciones).
+Fondos (Background): Blanco puro o grises/azules extremadamente claros. Esto es vital para que el texto y los iconos destaquen por completo (alto contraste).
+2. Estilo de Botones y Formas
+El diseño huye de las esquinas afiladas. Todo es suave:
+Botones tipo "Píldora" (Pill-shaped): Los botones principales (como "Aceptar", "Enviar Valoración" o "Publicar Solicitud") tienen los bordes totalmente redondeados.
+Tarjetas (Cards): La información no está suelta en la pantalla, está agrupada dentro de "cajas" blancas con bordes redondeados y una sombra muy suave (en Android esto se llama elevation). Esto ayuda al cerebro a separar visualmente qué es cada cosa (un usuario, un servicio, un formulario).
+3. Iconografía y Elementos Visuales
+Este es el punto más característico de las imágenes que has compartido:
+Pictogramas: En lugar de usar los típicos iconos minimalistas de líneas finas de Google, la app usa dibujos estilo cómic/pictograma (en las imágenes se menciona el sistema ARASAAC). Son ilustraciones planas, con bordes negros claros y colores sólidos.
+Avatares reales: El uso de fotos de caras (o ilustraciones amigables) para los perfiles humaniza mucho la interfaz.
+Botones de accesibilidad: Se ven botones muy grandes y claros para funciones de voz (el icono del altavoz), lo que refuerza que es una app para todos los públicos.
+4. Espaciado y Tipografía
+Letra clara y grande: Usa una tipografía Sans-serif (sin adornos en las puntas de las letras, probablemente la fuente por defecto de Android, Roboto), en tamaños grandes y en negrita para los títulos.
+Márgenes amplios: Hay mucho "aire" entre los distintos botones y textos. En diseño de apps, tener botones grandes y separados es crucial para que el usuario no toque donde no debe por error.
+En resumen para tu app: Si quieres lograr este aspecto, debes configurar tus archivos de recursos (colors.xml y themes.xml) con una paleta Verde/Naranja, usar MaterialCardView para agrupar la información, redondear al máximo las esquinas de tus botones y buscar paquetes de iconos que sean más ilustrativos y menos abstractos.
+
+**Posibles colores
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="verde_vecindapp_principal">#2E8B57</color> <color name="verde_vecindapp_oscuro">#1B5E38</color> <color name="verde_vecindapp_claro">#A8D5BA</color> <color name="naranja_acento">#E76F51</color> <color name="naranja_claro">#F4A261</color> <color name="fondo_app">#F4F7F5</color> <color name="blanco_tarjetas">#FFFFFF</color> <color name="texto_principal">#2D3436</color> <color name="texto_secundario">#636E72</color> </resources>
+**Posible themes.xml
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.MiPrimeraApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        
+        <item name="colorPrimary">@color/verde_vecindapp_principal</item>
+        <item name="colorPrimaryVariant">@color/verde_vecindapp_oscuro</item>
+        <item name="colorOnPrimary">@color/blanco_tarjetas</item> <item name="colorSecondary">@color/naranja_acento</item>
+        <item name="colorSecondaryVariant">@color/naranja_claro</item>
+        <item name="colorOnSecondary">@color/blanco_tarjetas</item>
+
+        <item name="android:colorBackground">@color/fondo_app</item>
+        <item name="colorSurface">@color/blanco_tarjetas</item> <item name="colorOnSurface">@color/texto_principal</item> </style>
+</resources>
