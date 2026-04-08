@@ -143,13 +143,15 @@ class DetalleServicioFragment : Fragment() {
                             // la valoración que veo es la ENVIADA (esEnviada = true).
                             val esEnviada = valoracion.idValoradorFk == usuarioActualId
 
-                            val bottomSheet = com.example.vecindapp.ui.valoracion.DetalleValoracionBottomSheet.newInstance(
-                                pictogramasJson = valoracion.pictogramasJson,
-                                comentario = valoracion.comentario,
-                                timestamp = valoracion.timestamp,
-                                servicioId = servicioActual?.idServicio ?:-1, // No mostrar botón "Ver servicio" desde aquí
-                                esEnviada = esEnviada // False o True
-                            )
+                            val bottomSheet =
+                                com.example.vecindapp.ui.valoracion.DetalleValoracionBottomSheet.newInstance(
+                                    pictogramasJson = valoracion.pictogramasJson,
+                                    comentario = valoracion.comentario,
+                                    timestamp = valoracion.timestamp,
+                                    servicioId = servicioActual?.idServicio
+                                        ?: -1, // No mostrar botón "Ver servicio" desde aquí
+                                    esEnviada = esEnviada // False o True
+                                )
                             bottomSheet.show(childFragmentManager, "DetalleValoracion")
                         }
                     } else {
@@ -250,7 +252,11 @@ class DetalleServicioFragment : Fragment() {
                 val coste = sliderCoste.value.toDouble()
 
                 if (titulo.isBlank()) {
-                    Toast.makeText(requireContext(), R.string.error_titulo_vacio, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.error_titulo_vacio,
+                        Toast.LENGTH_SHORT
+                    ).show()
                     return@setPositiveButton
                 }
 
@@ -302,7 +308,11 @@ class DetalleServicioFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.eliminado.collect { eliminado ->
                     if (eliminado) {
-                        Toast.makeText(requireContext(), R.string.servicio_eliminado, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.servicio_eliminado,
+                            Toast.LENGTH_SHORT
+                        ).show()
                         findNavController().popBackStack()
                     }
                 }
@@ -318,7 +328,11 @@ class DetalleServicioFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.actualizado.collect { actualizado ->
                     if (actualizado) {
-                        Toast.makeText(requireContext(), R.string.servicio_actualizado, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.servicio_actualizado,
+                            Toast.LENGTH_SHORT
+                        ).show()
                         viewModel.limpiarActualizado()
                     }
                 }
@@ -355,7 +369,8 @@ class DetalleServicioFragment : Fragment() {
             val s = servicioActual ?: return@setOnClickListener
             val desc = s.descripcion ?: getString(R.string.sin_descripcion)
             val costeTexto = TtsHelper.formatearCosteConUnidad(s.costeHoras)
-            val texto = "${s.titulo}. Categoría: ${s.categoria.name}. Coste: $costeTexto . Descripción: $desc. Estado: ${s.estado.name}"
+            val texto =
+                "${s.titulo}. Categoría: ${s.categoria.name}. Coste: $costeTexto . Descripción: $desc. Estado: ${s.estado.name}"
             ttsHelper.speak(texto)
         }
     }
