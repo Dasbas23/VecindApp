@@ -462,8 +462,16 @@ SE DA COMIENZO AL SPRINT 6!
 		- 40d503d: Tarjetas canceladas con fondo gris, texto "Sin cargo" tachado y textos en gris secundario.
 		- Lo del truncado de textos largos (maxLines/ellipsize) resulta que ya estaba implementado y CCode se ha dado cuenta solo sin duplicar código. Un detalle que está bien porque si lo hubiera metido dos veces habría sido un lío.
 ⇢ Ejecución del Paquete 2: Elaboro un prompt, esta vez ya menos elaborado porque dispongo de superpowers y eso funciona muy bien!
-	↳ Resultado del paquete 2 (Slider para coste de horas en lugar de textInput)
-	
+	↳ Resultado del paquete 2 (Slider para coste de horas en lugar de textInput).
+		- Se implementa un slider nativo de MaterialDesign con 32 posiciones en lugar de dejar el campo con texto libre.			↳ Se configura de manera que tenga valores desde 0.25 hasta 8.0 con pasos de 0.25. Para que sea más 'humano', integro un globo flotante (LabelFormater) que sigue la ubicación del puntero  muestra 1h15min en vez de 1.25 horas[en la la siguiente iteracción haré que el formato humano esté para toda la app, es que hora el TTs lee 1,8 horas para 1h45mins]
+			↳ Refactorizar CrearServicioViewModel y DetalleServicioFragment:  Al estar la entrada de datos blindada desde la UI, se ha eliminado toda la lógica de validación de decimales y rangos que había . De esta manera....
+		
+	↳ Se sustituye el campo de texto libre para el coste de horas por un Slider nativo de Material Design.
+		+ Solución técnica: Se configura el Slider con `valueFrom="0.25"`, `valueTo="8.0"` y `stepSize="0.25"`. Se implementa un `LabelFormatter` personalizado para que el globo flotante muestre el tiempo en formato humano (ej. "1h 15min" en lugar de "1.25").
+		+ Refactorización (Correct by Construction): Al estar la entrada de datos blindada desde la UI, se ha eliminado toda la lógica de validación de decimales y rangos que había en `CrearServicioViewModel.kt` y `DetalleServicioFragment.kt`, limpiando deuda técnica y aplicando el principio DRY.
+08.04.2026:
+
+⇢ He metido una fucnión nueva en la entidad Servicio.kt "estaCompletado" que utilizaré para terminar los pulidos en la siguiente iteracción
 
 --- SÍMBOLOGÍA---
 Día nuevo:         ↪
