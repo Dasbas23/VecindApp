@@ -94,4 +94,12 @@ data class Servicio(
      */
     fun estaVencido(): Boolean =
         fechaCaducidad != null && System.currentTimeMillis() > fechaCaducidad
+
+    /**
+     * Comprueba si el servicio está completado.
+     *
+     * @return `true` si [estado] si el estado es [EstadoServicio.COMPLETADO].
+     */
+    fun estaCompletado(): Boolean =
+        estado == EstadoServicio.COMPLETADO
 }
