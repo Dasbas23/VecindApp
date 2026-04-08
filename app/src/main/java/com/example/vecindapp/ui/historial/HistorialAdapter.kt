@@ -8,11 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import android.graphics.Paint
-import android.graphics.drawable.GradientDrawable
 import com.example.vecindapp.R
-import com.example.vecindapp.domain.model.EstadoTransaccion
-import com.google.android.material.card.MaterialCardView
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -26,7 +22,7 @@ import java.util.Locale
  */
 class HistorialAdapter(
     private val usuarioActualId: Int,
-    private val onItemClick: ((Int) -> Unit)? = null
+    private val onItemClick: ((HistorialItem) -> Unit)? = null
 ) : ListAdapter<HistorialItem, HistorialAdapter.HistorialViewHolder>(HistorialDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistorialViewHolder {
@@ -45,7 +41,6 @@ class HistorialAdapter(
      */
     inner class HistorialViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val cardView: MaterialCardView = itemView as MaterialCardView
         private val tvRol: TextView = itemView.findViewById(R.id.tvRol)
         private val tvEstado: TextView = itemView.findViewById(R.id.tvEstadoTransaccion)
         private val tvTitulo: TextView = itemView.findViewById(R.id.tvTituloTransaccion)
@@ -57,15 +52,9 @@ class HistorialAdapter(
             val signo = if (item.esVendedor) "+" else "-"
             val colorHoras = if (item.esVendedor) 0xFF10B981.toInt() else 0xFFEF4444.toInt()
 
-            // Resetear estilos del card (puede estar reciclado)
-            cardView.strokeColor = android.graphics.Color.TRANSPARENT
-            cardView.setCardBackgroundColor(android.graphics.Color.WHITE)
-
-            // Rol: GANADAS (verde) o GASTADAS (rojo) con chip
+            // Rol: GANADAS (verde) o GASTADAS (rojo)
             tvRol.text = if (item.esVendedor) "GANADAS" else "GASTADAS"
             tvRol.setTextColor(colorHoras)
-            val chipBg = tvRol.background as? GradientDrawable
-            chipBg?.setColor(if (item.esVendedor) 0x2010B981 else 0x20EF4444)
 
             // Estado con color neutro (puede ser COMPLETADA o CANCELADA)
             tvEstado.text = item.transaccion.estado.name
@@ -88,32 +77,12 @@ class HistorialAdapter(
             val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
             tvFecha.text = sdf.format(Date(item.transaccion.timestamp))
 
-            // Estilo diferenciado para transacciones canceladas
-            val esCancelada = item.transaccion.estado == EstadoTransaccion.CANCELADA
-            if (esCancelada) {
-                cardView.setCardBackgroundColor(
-                    itemView.context.getColor(R.color.cancelada_fondo)
-                )
-                tvHoras.text = itemView.context.getString(R.string.historial_sin_cargo)
-                tvHoras.setTextColor(itemView.context.getColor(R.color.cancelada_texto))
-                tvHoras.paintFlags = tvHoras.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                tvTitulo.setTextColor(itemView.context.getColor(R.color.cancelada_texto))
-                tvFecha.setTextColor(itemView.context.getColor(R.color.cancelada_texto))
-                tvRol.setTextColor(itemView.context.getColor(R.color.cancelada_texto))
-                chipBg?.setColor(0x20000000)
-            } else {
-                // Resetear estilos para ViewHolder reciclado
-                tvHoras.paintFlags = tvHoras.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-                tvTitulo.setTextColor(0xFF212121.toInt())
-                tvFecha.setTextColor(0xFF212121.toInt())
-            }
-
             // Historial es solo lectura
             llBotones.visibility = View.GONE
 
             // Add click listener
             itemView.setOnClickListener {
-                onItemClick?.invoke(item.transaccion.idTransaccion)
+                onItemClick?.invoke(item)
             }
         }
     }

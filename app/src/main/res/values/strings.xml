@@ -119,6 +119,7 @@
     <string name="detalle_valoracion_comentario">Comentario</string>
     <string name="detalle_valoracion_fecha">Valorado el %s</string>
     <string name="btn_cerrar">Cerrar</string>
+    <string name="btn_ver_servicio">Ver servicio</string>
 
     <!-- ═══ Accesibilidad TTS ═══ -->
     <string name="desc_tts">Leer en voz alta</string>

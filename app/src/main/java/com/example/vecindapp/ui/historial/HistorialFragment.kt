@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.fragment.findNavController
 import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
 import com.example.vecindapp.data.SesionUsuario
@@ -119,15 +120,22 @@ class HistorialFragment : Fragment() {
         val sesion = SesionUsuario(requireContext())
         adapter = HistorialAdapter(
             usuarioActualId = sesion.obtenerUsuarioId()
-        ) { transaccionId ->
+        ) { item ->
             viewLifecycleOwner.lifecycleScope.launch {
-                val valoracion = viewModel.obtenerValoracion(transaccionId)
+                val valoracion = viewModel.obtenerValoracion(item.transaccion.idTransaccion)
                 if (valoracion != null) {
                     val bottomSheet = DetalleValoracionBottomSheet.newInstance(
                         pictogramasJson = valoracion.pictogramasJson,
                         comentario = valoracion.comentario,
-                        timestamp = valoracion.timestamp
+                        timestamp = valoracion.timestamp,
+                        servicioId = item.transaccion.idServicioFk
                     )
+                    bottomSheet.onVerServicioCallback = { id ->
+                        val bundle = Bundle().apply {
+                            putInt("servicioId", id)
+                        }
+                        findNavController().navigate(R.id.action_global_to_detalle, bundle)
+                    }
                     bottomSheet.show(childFragmentManager, "detalleValoracion")
                 } else {
                     Toast.makeText(requireContext(), "Sin valoración", Toast.LENGTH_SHORT).show()

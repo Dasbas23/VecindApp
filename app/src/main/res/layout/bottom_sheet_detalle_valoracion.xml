@@ -84,6 +84,15 @@
             android:textSize="12sp"
             android:paddingBottom="16dp" />
 
+        <!-- Botón Ver Servicio -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnVerServicio"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/btn_ver_servicio" />
+
         <!-- Botón cerrar -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCerrarDetalle"
