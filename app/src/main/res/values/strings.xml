@@ -114,12 +114,15 @@
     <string name="desc_pictograma_mal3">No realizado</string>
 
     <!-- ═══ Detalle Valoración ═══ -->
-    <string name="detalle_valoracion_titulo">Valoración recibida</string>
+    <string name="detalle_valoracion_titulo">Detalle de valoración</string>
+    <string name="titulo_valoracion_enviada">Valoración enviada</string>
+    <string name="titulo_valoracion_recibida">Valoración recibida</string>
     <string name="detalle_valoracion_pictogramas">Pictogramas seleccionados</string>
     <string name="detalle_valoracion_comentario">Comentario</string>
     <string name="detalle_valoracion_fecha">Valorado el %s</string>
     <string name="btn_cerrar">Cerrar</string>
     <string name="btn_ver_servicio">Ver servicio</string>
+    <string name="btn_ver_valoracion">Ver valoración</string>
 
     <!-- ═══ Accesibilidad TTS ═══ -->
     <string name="desc_tts">Leer en voz alta</string>

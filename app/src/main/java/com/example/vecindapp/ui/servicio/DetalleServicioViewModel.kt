@@ -5,10 +5,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.vecindapp.data.entities.Servicio
 import com.example.vecindapp.data.entities.Transaccion
+import com.example.vecindapp.data.entities.Valoracion
 import com.example.vecindapp.domain.model.EstadoServicio
 import com.example.vecindapp.domain.repository.ServicioRepository
 import com.example.vecindapp.domain.repository.TransaccionRepository
 import com.example.vecindapp.domain.repository.UsuarioRepository
+import com.example.vecindapp.domain.repository.ValoracionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -27,18 +29,25 @@ import kotlinx.coroutines.launch
  *
  * @property servicioRepository    Repositorio de servicios.
  * @property transaccionRepository Repositorio de transacciones.
+ * @property usuarioRepository     Repositorio de usuarios.
+ * @property valoracionRepository  Repositorio de valoraciones.
  *
  * @see DetalleServicioFragment
  */
 class DetalleServicioViewModel(
     private val servicioRepository: ServicioRepository,
     private val transaccionRepository: TransaccionRepository,
-    private val usuarioRepository: UsuarioRepository
+    private val usuarioRepository: UsuarioRepository,
+    private val valoracionRepository: ValoracionRepository
 ) : ViewModel() {
 
     /** Servicio cargado de la BBDD de forma reactiva. */
     private val _servicio = MutableStateFlow<Servicio?>(null)
     val servicio: StateFlow<Servicio?> = _servicio
+
+    /** Valoración asociada al servicio (si existe). */
+    private val _valoracion = MutableStateFlow<Valoracion?>(null)
+    val valoracion: StateFlow<Valoracion?> = _valoracion
 
     /** Indica si el servicio se ha eliminado con éxito. */
     private val _eliminado = MutableStateFlow(false)
@@ -68,6 +77,24 @@ class DetalleServicioViewModel(
                 .collect { servicio ->
                     _servicio.value = servicio
                 }
+        }
+    }
+
+    /**
+     * Busca si existe una valoración asociada a este servicio.
+     * Cadena: servicio → transacción → valoración.
+     */
+    fun buscarValoracion(servicioId: Int) {
+        viewModelScope.launch {
+            try {
+                val transaccion = transaccionRepository.getByServicio(servicioId)
+                if (transaccion != null) {
+                    val valoracion = valoracionRepository.getByTransaccion(transaccion.idTransaccion)
+                    _valoracion.value = valoracion
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
@@ -177,17 +204,23 @@ class DetalleServicioViewModel(
     }
 
     /**
-     * Factory actualizada con ambos repositorios.
+     * Factory actualizada con todos los repositorios.
      */
     class Factory(
         private val servicioRepository: ServicioRepository,
         private val transaccionRepository: TransaccionRepository,
-        private val usuarioRepository: UsuarioRepository
+        private val usuarioRepository: UsuarioRepository,
+        private val valoracionRepository: ValoracionRepository
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(DetalleServicioViewModel::class.java)) {
-                return DetalleServicioViewModel(servicioRepository, transaccionRepository, usuarioRepository) as T
+                return DetalleServicioViewModel(
+                    servicioRepository,
+                    transaccionRepository,
+                    usuarioRepository,
+                    valoracionRepository
+                ) as T
             }
             throw IllegalArgumentException("ViewModel desconocido: ${modelClass.name}")
         }

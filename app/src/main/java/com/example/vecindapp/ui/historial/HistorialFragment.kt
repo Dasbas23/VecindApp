@@ -124,11 +124,15 @@ class HistorialFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope.launch {
                 val valoracion = viewModel.obtenerValoracion(item.transaccion.idTransaccion)
                 if (valoracion != null) {
+                    val sesion = SesionUsuario(requireContext())
+                    val esEnviada = valoracion.idValoradorFk == sesion.obtenerUsuarioId()
+
                     val bottomSheet = DetalleValoracionBottomSheet.newInstance(
                         pictogramasJson = valoracion.pictogramasJson,
                         comentario = valoracion.comentario,
                         timestamp = valoracion.timestamp,
-                        servicioId = item.transaccion.idServicioFk
+                        servicioId = item.transaccion.idServicioFk,
+                        esEnviada = esEnviada
                     )
                     bottomSheet.onVerServicioCallback = { id ->
                         val bundle = Bundle().apply {

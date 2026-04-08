@@ -52,7 +52,8 @@ class DetalleServicioFragment : Fragment() {
         DetalleServicioViewModel.Factory(
             app.servicioRepository,
             app.transaccionRepository,
-            app.usuarioRepository
+            app.usuarioRepository,
+            app.valoracionRepository
         )
     }
 
@@ -66,6 +67,7 @@ class DetalleServicioFragment : Fragment() {
     private lateinit var btnSolicitar: MaterialButton
     private lateinit var btnEditar: MaterialButton
     private lateinit var btnEliminar: MaterialButton
+    private lateinit var btnVerValoracion: MaterialButton
     private lateinit var fabTts: FloatingActionButton
     private lateinit var ttsHelper: TtsHelper
     private var servicioActual: Servicio? = null
@@ -90,7 +92,9 @@ class DetalleServicioFragment : Fragment() {
         }
 
         viewModel.cargarServicio(servicioId)
+        viewModel.buscarValoracion(servicioId)
         observarServicio()
+        observarValoracion()
         observarSolicitud()
         observarEliminacion()
         observarActualizacion()
@@ -108,6 +112,7 @@ class DetalleServicioFragment : Fragment() {
         btnSolicitar = view.findViewById(R.id.btnSolicitar)
         btnEditar = view.findViewById(R.id.btnEditar)
         btnEliminar = view.findViewById(R.id.btnEliminar)
+        btnVerValoracion = view.findViewById(R.id.btnVerValoracion)
         fabTts = view.findViewById(R.id.fabTts)
     }
 
@@ -119,6 +124,37 @@ class DetalleServicioFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.servicio.collect { servicio ->
                     servicio?.let { pintarDetalle(it) }
+                }
+            }
+        }
+    }
+
+    /**
+     * Observa si hay una valoración para mostrar el botón correspondiente.
+     */
+    private fun observarValoracion() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.valoracion.collect { valoracion ->
+                    if (valoracion != null) {
+                        btnVerValoracion.visibility = View.VISIBLE
+                        btnVerValoracion.setOnClickListener {
+                            // En el detalle del servicio, si yo soy el que valoró (valorador),
+                            // la valoración que veo es la ENVIADA (esEnviada = true).
+                            val esEnviada = valoracion.idValoradorFk == usuarioActualId
+
+                            val bottomSheet = com.example.vecindapp.ui.valoracion.DetalleValoracionBottomSheet.newInstance(
+                                pictogramasJson = valoracion.pictogramasJson,
+                                comentario = valoracion.comentario,
+                                timestamp = valoracion.timestamp,
+                                servicioId = servicioActual?.idServicio ?:-1, // No mostrar botón "Ver servicio" desde aquí
+                                esEnviada = esEnviada // False o True
+                            )
+                            bottomSheet.show(childFragmentManager, "DetalleValoracion")
+                        }
+                    } else {
+                        btnVerValoracion.visibility = View.GONE
+                    }
                 }
             }
         }

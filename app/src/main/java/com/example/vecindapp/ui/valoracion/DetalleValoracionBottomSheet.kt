@@ -27,6 +27,7 @@ import java.util.Locale
  * - `pictogramasJson`: JSON con los IDs de pictogramas.
  * - `comentario`: Texto del comentario (puede ser vacío).
  * - `timestamp`: Fecha de la valoración en millis.
+ * - `esEnviada`: Booleano para cambiar el título.
  */
 class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
 
@@ -34,6 +35,7 @@ class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
     private var comentario: String = ""
     private var timestamp: Long = 0L
     private var servicioId: Int = -1
+    private var esEnviada: Boolean = false
 
     var onVerServicioCallback: ((Int) -> Unit)? = null
 
@@ -44,6 +46,7 @@ class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
             comentario = it.getString(ARG_COMENTARIO, "")
             timestamp = it.getLong(ARG_TIMESTAMP, 0L)
             servicioId = it.getInt(ARG_SERVICIO_ID, -1)
+            esEnviada = it.getBoolean(ARG_ES_ENVIADA, false)
         }
     }
 
@@ -58,12 +61,20 @@ class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val tvTitulo = view.findViewById<TextView>(R.id.tvTituloValoracion)
         val llPictogramas = view.findViewById<LinearLayout>(R.id.llPictogramasDetalle)
         val tvComentario = view.findViewById<TextView>(R.id.tvComentarioDetalle)
         val tvLabelComentario = view.findViewById<TextView>(R.id.tvLabelComentarioDetalle)
         val tvFecha = view.findViewById<TextView>(R.id.tvFechaValoracion)
         val btnVerServicio = view.findViewById<MaterialButton>(R.id.btnVerServicio)
         val btnCerrar = view.findViewById<MaterialButton>(R.id.btnCerrarDetalle)
+
+        // Título dinámico
+        tvTitulo.text = if (esEnviada) {
+            getString(R.string.titulo_valoracion_enviada)
+        } else {
+            getString(R.string.titulo_valoracion_recibida)
+        }
 
         // Botón Ver Servicio
         if (servicioId > 0) {
@@ -177,6 +188,7 @@ class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
         private const val ARG_COMENTARIO = "comentario"
         private const val ARG_TIMESTAMP = "timestamp"
         private const val ARG_SERVICIO_ID = "servicioId"
+        private const val ARG_ES_ENVIADA = "esEnviada"
 
         /**
          * Crea una instancia para visualizar una valoración.
@@ -185,7 +197,8 @@ class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
             pictogramasJson: String,
             comentario: String?,
             timestamp: Long,
-            servicioId: Int
+            servicioId: Int,
+            esEnviada: Boolean = false
         ): DetalleValoracionBottomSheet {
             return DetalleValoracionBottomSheet().apply {
                 arguments = Bundle().apply {
@@ -193,6 +206,7 @@ class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
                     putString(ARG_COMENTARIO, comentario ?: "")
                     putLong(ARG_TIMESTAMP, timestamp)
                     putInt(ARG_SERVICIO_ID, servicioId)
+                    putBoolean(ARG_ES_ENVIADA, esEnviada)
                 }
             }
         }
