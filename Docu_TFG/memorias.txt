@@ -465,20 +465,34 @@ SE DA COMIENZO AL SPRINT 6!
 	↳ Resultado del paquete 2 (Slider para coste de horas en lugar de textInput).
 		- Se implementa un slider nativo de MaterialDesign con 32 posiciones en lugar de dejar el campo con texto libre.			↳ Se configura de manera que tenga valores desde 0.25 hasta 8.0 con pasos de 0.25. Para que sea más 'humano', integro un globo flotante (LabelFormater) que sigue la ubicación del puntero  muestra 1h15min en vez de 1.25 horas[en la la siguiente iteracción haré que el formato humano esté para toda la app, es que hora el TTs lee 1,8 horas para 1h45mins]
 			↳ Refactorizar CrearServicioViewModel y DetalleServicioFragment:  Al estar la entrada de datos blindada desde la UI, se ha eliminado toda la lógica de validación de decimales y rangos que había . De esta manera me aseguro que sólo se introduzcan datos correctos.
-		
-08.04.2026:
-	Continuar con la ejecución de los paquetes
-※ Ejecución del Paquete 3: Esta vez he procurado elaborar un prompt más escueto para
+※ Ejecución del Paquete 3: Este paquete era el más sensible y el que más iba a costar implementar. Como me iba a quedar sin tokens le pedí a CCode que sólamente me elaborara un plan de 4 tareas para la implementación de este paquete. 
+	
+↪ 08.04.2026:
+※ Continuar donde lo había dejado en casa.
+	↳ Al llegar al trabajo lo que hice fue discurir un poco y finalmente lo hice con el modo agente del IDE Android Studio aprovechando que tengo la suscripción PRO de Gemini.
+		▼ Problema : Perdí bastntate tiempo (casi 5 horas) subdividiendo estos prompts en cosas más digeribles porque no me fiaba que que lo hiciera todo de golpe y repasando lo que ha hecho en base al documento generado por Claude miranyo yo linea por linea modificada y compilando manualmente. Había por ahí también un poltergeist  de Gradle que me daba un BuilsSuccessful pero que luego el IDE me daba como error en tiempo de compilación.
+		+ Solución: No aplica, pero sí que he aprendido que delimitar muy bien las tareas que tiene que hacer la IA. El poltergeist se solucionó tipando manualmente el tipo de string a doublé , que eran los datos que le pasaba el Slider a la entidad en Room.
+	↳ Resultado del Paquete 3 Navegación que coonstaba exactamente de estas 4 tareas:
+		↳ Navegar al Detalle desde Transacciones y Perfil:
+			- Añadir la acción para que, al hacer tap en una tarjeta de transacción o en una tarjeta de "Mis servicios" (desde el Perfil), la app te lleve directamente al DetalleServicioFragment pasando el servicioId.
+		↳ Navegar al Detalle desde el BottomSheet del Historial:
+			- Actualizar el BottomSheet de valoración para que reciba el servicioId.
+			- Añadir un botón de "Ver servicio" que, al pulsarlo, cierre el BottomSheet (dismiss()) y te navegue al detalle original.
+		↳ Abrir el BottomSheet de valoración desde el Detalle del Servicio:
+			- Añadir un botón "Ver valoración" en el detalle (visible solo si existe una valoración asociada a esa transacción completada).
+			- Al pulsarlo, abrir el BottomSheet como modal (no como navegación de fragment). Esto fue clave para cortar el bucle y evitar que las pantallas se apilaran infinitamente.
+		↳ Título dinámico en el BottomSheet de valoración:
+			- Pasar un booleano (esEnviada) por los arguments.
+			- Lógica para que el título muestre "Valoración enviada" o "Valoración recibida" dependiendo de quién sea el usuario en esa transacción.
+※ He metido una fucnión nueva en la entidad Servicio.kt "estaCompletado" que utilizaré para terminar los pulidos en la siguiente iteracción.
+※ He tenido una sesión de auditorIA porque he perdido el hilo de por donde queda mi planificación. 
+	▼ Problema : Entre dividir el sprint en fases y las fases en subfases y la ultima subase en tareas individuales... me he perdido.
+	+ Solución : Gemini se ha ecargado de ayudarme a reconsutruir el flujo de trabajo sacandome así de dudas.
+※ Estructurar los siguientes pasos a seguir.
+	- Hacer las pruebas fucionales y tratar de corregirlas entre hoy y el día 9.
+	- Los colores. 
+	- El worker. No sé aún de que manera hacerlo para la demo.
 
-
-
-※ Ejecución del Paquete 3 - Tarea 1 (Navegación al Detalle):
-	↳ Se ha implementado un "Hub de Navegación" centralizado. 
-		+ Mejora arquitectónica: Se ha creado una 'Global Action' en el `nav_graph.xml`. Esto evita duplicar flechas de navegación en el editor visual y permite que cualquier fragmento salte al detalle del servicio de forma estandarizada.
-		+ Refactor de Adapters: Se ha añadido un callback `onItemClick` a `TransaccionAdapter`. Ahora, el tap en cualquier parte de la tarjeta (que no sea un botón de acción) redirige al usuario al detalle completo del servicio asociado.
-		+ Perfil: Se ha completado la navegación desde "Mis servicios" en el perfil, eliminando los antiguos TODOs y unificando la experiencia de usuario.
-
-※ He metido una fucnión nueva en la entidad Servicio.kt "estaCompletado" que utilizaré para terminar los pulidos en la siguiente iteracción
 
 --- SÍMBOLOGÍA---
 Día nuevo:         ↪

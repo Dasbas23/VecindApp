@@ -94,3 +94,7 @@ Ejecuta ./gradlew assembleDebug. Commit: "feat: título dinámico enviada/recibi
 Convenciones: XML para UI (no Compose), KDoc en clases públicas, español.
 No tocar TTS ni el Slider del paquete anterior.
 
+
+
+Resume this session with:──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+claude --resume 84a38fbf-1ab4-4e7f-b685-0c68740494f3

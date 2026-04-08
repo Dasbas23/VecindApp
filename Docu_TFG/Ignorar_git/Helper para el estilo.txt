@@ -1,4 +1,20 @@
-**Repasar
+Archivos objetivo: colors.xml, themes.xml
+Sustituir los colores actuales en colors.xml por la paleta VecindApp:
+
+verde_vecindapp_principal #2E8B57
+verde_vecindapp_oscuro #1B5E38
+verde_vecindapp_claro #A8D5BA
+naranja_acento #E76F51
+naranja_claro #F4A261
+fondo_app #F4F7F5
+blanco_tarjetas #FFFFFF
+texto_principal #2D3436
+texto_secundario #636E72
+
+
+En themes.xml, cambiar el parent a Theme.MaterialComponents.Light.NoActionBar (NO DayNight). Renombrar el theme a Theme.VecindApp. Mapear los atributos: colorPrimary → verde principal, colorPrimaryVariant → verde oscuro, colorOnPrimary → blanco, colorSecondary → naranja acento, colorSecondaryVariant → naranja claro, colorOnSecondary → blanco, android:colorBackground → fondo_app, colorSurface → blanco_tarjetas, colorOnSurface → texto_principal.
+Verificar que el nombre del theme esté actualizado en AndroidManifest.xml.
+Ejecuta ./gradlew assembleDebug. Commit: "feat: paleta de colores VecindApp verde/naranja con tema Light
 
 ------------ Helper para el estilo de la app ------------
 Analizando las imágenes de "VecindApp" que has subido, el estilo no está nada reñido con Material Design; de hecho, es una adaptación de Material Design enfocada en la accesibilidad, la cercanía y la usabilidad (parece muy orientada a personas mayores o a una navegación muy intuitiva).
