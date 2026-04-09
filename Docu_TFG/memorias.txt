@@ -492,6 +492,27 @@ SE DA COMIENZO AL SPRINT 6!
 	- Hacer las pruebas fucionales y tratar de corregirlas entre hoy y el día 9.
 	- Los colores. 
 	- El worker. No sé aún de que manera hacerlo para la demo.
+※ Me ha dado tiempo a pedirle CCode que me implemente los colores y themes. Luego les echo un vistazo
+
+↪ 09.04.2026 : 
+	He trasteado un poco con los colores y he dado con unos que me gustan pero que hay que retocar porque los que hay ahora mismo no me terminan de convencer, la app es muy plana.
+	Creo que voy a edirtar las memorias desde VsCode a partir de ahora. Me corrige más y me autocompleta palabras. Además de poder tabular más y mejor buscardor. Y tambíen el tema  que tengo configurado y la letra mucho mejor.
+※ Pruebas funcionales. He descubierto unas poquitas cosas que no me termian de convencer...
+	↳ Se hace prueba de slider al editar un servicio ya publicado: el Slider se posiciona exactamente en el valor que tenía el servicio.
+	↳ El Backstack del Hub: Navega: Perfil -> Servicio -> Ver Valoración. Cierra la valoración. Pulsar el botón atrás del sistema lleva de vuelta al perfil. Funciona correctamente.
+	↳ Bugs que me he ido encontrado:
+		▼ Problema : Lectura del tts en detalle valoración.
+		+ Solución : Refactor sencillo. Lee comentario "enviado" o "recibido" en funcion del valor del tvTitulo. Lee "sin comentario" si no hay comentario.
+		▼ Problema : El servicio se puede editar una vez cuando está en cualquier estado. No debería poder hacerse salvo sólo si está  "ACTIVO".
+		+ Solución : En DetalleServicioFragment se hace refactor y se condicionan los botones  Editar/Eliminar a solo visible si ES propietario y está ACTIVO
+		▼ Problema : Situar los tv y los botones de manera más ergonomica.
+		+ Solución : 
+		▼ Problema :
+		+ Solución : 
+		▼ Problema :
+		+ Solución :  
+
+※
 
 
 --- SÍMBOLOGÍA---
