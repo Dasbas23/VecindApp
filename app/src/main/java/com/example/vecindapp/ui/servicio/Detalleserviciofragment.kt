@@ -67,6 +67,7 @@ class DetalleServicioFragment : Fragment() {
     private lateinit var btnSolicitar: MaterialButton
     private lateinit var btnEditar: MaterialButton
     private lateinit var btnEliminar: MaterialButton
+    private lateinit var btnCancelarSolicitud: MaterialButton
     private lateinit var btnVerValoracion: MaterialButton
     private lateinit var fabTts: FloatingActionButton
     private lateinit var ttsHelper: TtsHelper
@@ -96,6 +97,7 @@ class DetalleServicioFragment : Fragment() {
         observarServicio()
         observarValoracion()
         observarSolicitud()
+        observarCancelacion()
         observarEliminacion()
         observarActualizacion()
         observarErrores()
@@ -112,6 +114,7 @@ class DetalleServicioFragment : Fragment() {
         btnSolicitar = view.findViewById(R.id.btnSolicitar)
         btnEditar = view.findViewById(R.id.btnEditar)
         btnEliminar = view.findViewById(R.id.btnEliminar)
+        btnCancelarSolicitud = view.findViewById(R.id.btnCancelarSolicitud)
         btnVerValoracion = view.findViewById(R.id.btnVerValoracion)
         fabTts = view.findViewById(R.id.fabTts)
     }
@@ -183,10 +186,16 @@ class DetalleServicioFragment : Fragment() {
         // Mostrar botones según quién mira y el estado del servicio
         val esPropietario = servicio.idUsuarioFk == usuarioActualId
         val estaActivo = servicio.estado == EstadoServicio.ACTIVO
+        val estaPendiente = servicio.estado == EstadoServicio.RESERVADO
 
-        // Editar/Eliminar: solo visible si ES propietario y está ACTIVO
+        // Editar: solo visible si ES propietario y está ACTIVO
         btnEditar.visibility = if (esPropietario && estaActivo) View.VISIBLE else View.GONE
+        
+        // Eliminar: solo visible si ES propietario y está ACTIVO (nadie esperando)
         btnEliminar.visibility = if (esPropietario && estaActivo) View.VISIBLE else View.GONE
+
+        // Cancelar Solicitud: solo visible si ES propietario y está RESERVADO (alguien esperando)
+        btnCancelarSolicitud.visibility = if (esPropietario && estaPendiente) View.VISIBLE else View.GONE
 
         // Solicitar: solo visible si NO es propietario y el servicio está ACTIVO
         btnSolicitar.visibility = if (!esPropietario && estaActivo) View.VISIBLE else View.GONE
@@ -195,6 +204,7 @@ class DetalleServicioFragment : Fragment() {
         btnSolicitar.setOnClickListener { mostrarDialogoConfirmarSolicitud(servicio) }
         btnEditar.setOnClickListener { mostrarDialogoEditar(servicio) }
         btnEliminar.setOnClickListener { mostrarDialogoConfirmarEliminar() }
+        btnCancelarSolicitud.setOnClickListener { mostrarDialogoConfirmarCancelarSolicitud() }
     }
 
     /**
@@ -281,6 +291,20 @@ class DetalleServicioFragment : Fragment() {
     }
 
     /**
+     * Muestra un diálogo de confirmación antes de cancelar la solicitud.
+     */
+    private fun mostrarDialogoConfirmarCancelarSolicitud() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.titulo_confirmar_cancelar_solicitud)
+            .setMessage(R.string.mensaje_confirmar_cancelar_solicitud)
+            .setPositiveButton(R.string.btn_confirmar_cancelar) { _, _ ->
+                viewModel.cancelarSolicitud()
+            }
+            .setNegativeButton(R.string.btn_cancelar, null)
+            .show()
+    }
+
+    /**
      * Observa si la solicitud fue exitosa para navegar de vuelta.
      */
     private fun observarSolicitud() {
@@ -294,6 +318,26 @@ class DetalleServicioFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
                         findNavController().popBackStack()
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Observa si la cancelación fue exitosa.
+     */
+    private fun observarCancelacion() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.cancelado.collect { cancelado ->
+                    if (cancelado) {
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.solicitud_cancelada,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        // No navegamos atrás, el servicio vuelve a estar ACTIVO y visible
                     }
                 }
             }

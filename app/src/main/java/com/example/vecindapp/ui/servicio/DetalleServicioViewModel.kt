@@ -61,6 +61,10 @@ class DetalleServicioViewModel(
     private val _solicitado = MutableStateFlow(false)
     val solicitado: StateFlow<Boolean> = _solicitado
 
+    /** Indica si la solicitud se ha cancelado con éxito. */
+    private val _cancelado = MutableStateFlow(false)
+    val cancelado: StateFlow<Boolean> = _cancelado
+
     /** Mensaje de error para mostrar al usuario. */
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
@@ -150,6 +154,37 @@ class DetalleServicioViewModel(
             } catch (e: Exception) {
                 e.printStackTrace()
                 _error.value = "Error al solicitar el servicio"
+            }
+        }
+    }
+
+    /**
+     * Cancela una solicitud pendiente (vuelve el servicio a ACTIVO y cancela la transacción).
+     */
+    fun cancelarSolicitud() {
+        val servicioActual = _servicio.value ?: return
+        if (servicioActual.estado != EstadoServicio.RESERVADO) return
+
+        viewModelScope.launch {
+            try {
+                // 1. Buscar la transacción PENDIENTE asociada
+                val transaccion = transaccionRepository.getByServicio(servicioActual.idServicio)
+                if (transaccion != null) {
+                    // 2. Marcar la transacción como CANCELADA
+                    val transaccionCancelada = transaccion.copy(estado = com.example.vecindapp.domain.model.EstadoTransaccion.CANCELADA)
+                    transaccionRepository.update(transaccionCancelada)
+                }
+
+                // 3. Volver el servicio a estado ACTIVO
+                servicioRepository.cambiarEstado(
+                    servicioActual.idServicio,
+                    EstadoServicio.ACTIVO.name
+                )
+
+                _cancelado.value = true
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _error.value = "Error al cancelar la solicitud"
             }
         }
     }

@@ -37,6 +37,10 @@
     <string name="mensaje_confirmar_eliminar">¿Estás seguro de que quieres eliminar este servicio?</string>
     <string name="servicio_eliminado">Servicio eliminado</string>
     <string name="servicio_actualizado">Servicio actualizado</string>
+    <string name="solicitud_cancelada">Solicitud cancelada. El servicio vuelve a estar activo.</string>
+    <string name="btn_cancelar_solicitud">Cancelar solicitud</string>
+    <string name="titulo_confirmar_cancelar_solicitud">Cancelar solicitud</string>
+    <string name="mensaje_confirmar_cancelar_solicitud">¿Estás seguro de que quieres cancelar la solicitud actual? El servicio volverá a estar disponible para otros vecinos.</string>
     <string name="error_titulo_vacio">El título no puede estar vacío</string>
     <string name="error_coste_invalido">Introduce un coste válido</string>
 

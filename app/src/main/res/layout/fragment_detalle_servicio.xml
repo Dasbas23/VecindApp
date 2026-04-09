@@ -168,6 +168,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:visibility="invisible"/>
 
+        <!-- Botón Cancelar Solicitud -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancelarSolicitud"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/btn_cancelar_solicitud"
+            android:textColor="#D32F2F"
+            app:strokeColor="#D32F2F"
+            app:layout_constraintTop_toBottomOf="@id/btnSolicitar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"/>
+
         <!-- ═══ Botón Ver Valoración ═══ -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVerValoracion"
