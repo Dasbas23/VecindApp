@@ -511,8 +511,13 @@ SE DA COMIENZO AL SPRINT 6!
 		+ Solución : 
 		▼ Problema :
 		+ Solución :  
+※ Separar acciones de eliminar y cancelar solicitud en detalle de servicio. 
+	↳ Restringida la eliminación de servicios solo al estado ACTIVO (sin interesados).
+	↳ Añadido botón 'Cancelar Solicitud' para servicios en estado RESERVADO (pendientes).
+	↳ La cancelación revierte el servicio a ACTIVO y marca la transacción como CANCELADA.
+	↳ Añadidos diálogos de confirmación y recursos de texto para mejorar la UX del vendedor.
 
-※
+↪ 10.04.2026 :
 
 
 --- SÍMBOLOGÍA---
