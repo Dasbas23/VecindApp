@@ -184,9 +184,9 @@ class DetalleServicioFragment : Fragment() {
         val esPropietario = servicio.idUsuarioFk == usuarioActualId
         val estaActivo = servicio.estado == EstadoServicio.ACTIVO
 
-        // Editar/Eliminar: solo visible si ES propietario
-        btnEditar.visibility = if (esPropietario) View.VISIBLE else View.GONE
-        btnEliminar.visibility = if (esPropietario) View.VISIBLE else View.GONE
+        // Editar/Eliminar: solo visible si ES propietario y está ACTIVO
+        btnEditar.visibility = if (esPropietario && estaActivo) View.VISIBLE else View.GONE
+        btnEliminar.visibility = if (esPropietario && estaActivo) View.VISIBLE else View.GONE
 
         // Solicitar: solo visible si NO es propietario y el servicio está ACTIVO
         btnSolicitar.visibility = if (!esPropietario && estaActivo) View.VISIBLE else View.GONE
