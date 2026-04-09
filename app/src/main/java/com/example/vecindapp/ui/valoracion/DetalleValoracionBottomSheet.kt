@@ -121,10 +121,12 @@ class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
             }
 
             val textoCompleto = buildString {
-                append("Valoración. ")
+                append(tvTitulo.text , ".")
                 append("Pictogramas: ${textosPictogramas.joinToString(", ")}. ")
                 if (comentario.isNotBlank()) {
                     append("Comentario: $comentario")
+                }else {
+                    append("Sin comentario")
                 }
             }
             ttsHelper.speak(textoCompleto)
