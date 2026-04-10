@@ -506,11 +506,7 @@ SE DA COMIENZO AL SPRINT 6!
 		▼ Problema : El servicio se puede editar una vez cuando está en cualquier estado. No debería poder hacerse salvo sólo si está  "ACTIVO".
 		+ Solución : En DetalleServicioFragment se hace refactor y se condicionan los botones  Editar/Eliminar a solo visible si ES propietario y está ACTIVO
 		▼ Problema : Situar los tv y los botones de manera más ergonomica.
-		+ Solución : 
-		▼ Problema :
-		+ Solución : 
-		▼ Problema :
-		+ Solución :  
+		+ Solución : Mirar dia 10.04.2026
 ※ Separar acciones de eliminar y cancelar solicitud en detalle de servicio. 
 	↳ Restringida la eliminación de servicios solo al estado ACTIVO (sin interesados).
 	↳ Añadido botón 'Cancelar Solicitud' para servicios en estado RESERVADO (pendientes).
@@ -518,8 +514,32 @@ SE DA COMIENZO AL SPRINT 6!
 	↳ Añadidos diálogos de confirmación y recursos de texto para mejorar la UX del vendedor.
 
 ↪ 10.04.2026 :
+	Hoy he empezado bastante espeso. Creo que estoy consiquiendo avances buenos y según lo planeado.
+※ Para empezar, he terminado de aplicar el tema de la ergonomía.
+ 	▼ Problema : Creo que gemini me ha entedio mal asi que lo he tenido haciendo cosas que creo que no tocaban ahora pero que sí que me gustan como están marchando.
+		↳ Se agrupan las acciones del Detalle del Servicio en un 'LinearLayout' (Action Zone) para evitar el 'Layout Shift' (saltos de UI) cuando los botones cambian de visibilidad según el estado del servicio.
+		↳ Comportamiento Proactivo de la IA (Gemini IDE): Durante la implementación de la UI, el agente detectó que faltaba la lógica de negocio para el estado 'RESERVADO'. De forma autónoma, implementó la función `cancelarSolicitud()` en el ViewModel, manejando la actualización atómica de la Transacción (a CANCELADA) y el Servicio (a ACTIVO).
+	+ Solución : Pido y hago enfasis en que lo que yo quiero es  que los botones estén mas a mano , en una posición un poco mas accesible. Por ejemplo  que en el bottomSheet de la valoración el botón "enviar valoración" no queda del todo intuitivo que es un botón. Además todo el bottomsheet queda se puede desplazar porque queda en la pantalla que estoy probando es más pequeña entoces el  boton queda medio enterrado.
+	▼ Problema : Observo dentro de lo que llamo ergonomía (no sé si está bien llamado),  que las pantallas apenas ofrecen información al usuario y que los títulos de cada pantalla 
+※ Y para continuar he comenzado la implementación de los Snackbars porque a Gemini se le ha antojado así. 
+	↳ Migración a Snackbars (Fase 1): Se crea la función de extensión DRY `mostrarSnackbar()`, la cual detecta automáticamente si existe un `BottomNavigationView` para anclarse encima y no tapar la navegación. Se aplica con éxito en el Detalle del Servicio. Queda pendiente extenderlo al resto de Fragments.
+		▼ Problema : El snakbar se pone encima del botón de accesibilidad impidiendo su uso durante su aparición. 
+		+ Solución : Tendré que pedir que el botón del altavoz se mantenga siempre en primera fila.
+		▼ Problema : Habilitar "Deshacer" si se puede en los procesos que no sean atómicos. 
+		+ Solución : Creo que "editar" , "solicitar" ¿"enviar valoracio"?
+			▼ Problema : Si hay que refactorizar mucho ni se te ocurra hacerlo, demasiado trabajo, cerramos en 3 días máximo
+	↳ **Lo terminaré en casa con CCode**
 
 
+**Tareas para casa**
+Cuando lance el prompt de CCode para que continue con los Snackbars-> Continua donde lo has dejado. Tienes tener en cuenta que ya existe ui/common/SnackbarUtils.kt con mostrarSnackbar(). Reutilízalo, no crees otra utilidad.
+
+
+
+		▼ Problema :
+		+ Solución : 
+		▼ Problema :
+		+ Solución :  
 --- SÍMBOLOGÍA---
 Día nuevo:         ↪
 Paso / Tarea:      ※
