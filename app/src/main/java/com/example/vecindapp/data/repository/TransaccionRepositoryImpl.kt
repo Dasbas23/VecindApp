@@ -31,8 +31,8 @@ class TransaccionRepositoryImpl(
     override fun getByUsuario(usuarioId: Int): Flow<List<Transaccion>> =
         transaccionDao.getByUsuario(usuarioId)
 
-    override suspend fun getByServicio(servicioId: Int): Transaccion? =
-        transaccionDao.getByServicio(servicioId)
+    override suspend fun getByServicioYEstado(servicioId: Int, estado: String): Transaccion? =
+        transaccionDao.getByServicioYEstado(servicioId, estado)
 
     override suspend fun getByIdOnce(id: Int): Transaccion? =
         transaccionDao.getByIdOnce(id)

@@ -7,6 +7,7 @@ import com.example.vecindapp.data.entities.Servicio
 import com.example.vecindapp.data.entities.Transaccion
 import com.example.vecindapp.data.entities.Valoracion
 import com.example.vecindapp.domain.model.EstadoServicio
+import com.example.vecindapp.domain.model.EstadoTransaccion
 import com.example.vecindapp.domain.repository.ServicioRepository
 import com.example.vecindapp.domain.repository.TransaccionRepository
 import com.example.vecindapp.domain.repository.UsuarioRepository
@@ -91,7 +92,11 @@ class DetalleServicioViewModel(
     fun buscarValoracion(servicioId: Int) {
         viewModelScope.launch {
             try {
-                val transaccion = transaccionRepository.getByServicio(servicioId)
+                // Buscamos la transacción COMPLETADA para ver la valoración
+                val transaccion = transaccionRepository.getByServicioYEstado(
+                    servicioId,
+                    EstadoTransaccion.COMPLETADA.name
+                )
                 if (transaccion != null) {
                     val valoracion = valoracionRepository.getByTransaccion(transaccion.idTransaccion)
                     _valoracion.value = valoracion
@@ -163,25 +168,22 @@ class DetalleServicioViewModel(
      */
     fun cancelarSolicitud() {
         val servicioActual = _servicio.value ?: return
-        if (servicioActual.estado != EstadoServicio.RESERVADO) return
-
         viewModelScope.launch {
             try {
                 // 1. Buscar la transacción PENDIENTE asociada
-                val transaccion = transaccionRepository.getByServicio(servicioActual.idServicio)
-                if (transaccion != null) {
-                    // 2. Marcar la transacción como CANCELADA
-                    val transaccionCancelada = transaccion.copy(estado = com.example.vecindapp.domain.model.EstadoTransaccion.CANCELADA)
-                    transaccionRepository.update(transaccionCancelada)
-                }
-
-                // 3. Volver el servicio a estado ACTIVO
-                servicioRepository.cambiarEstado(
+                val transaccion = transaccionRepository.getByServicioYEstado(
                     servicioActual.idServicio,
-                    EstadoServicio.ACTIVO.name
+                    EstadoTransaccion.PENDIENTE.name
                 )
+                if (transaccion != null) {
+                    // 2. Marcar transacción como CANCELADA
+                    transaccionRepository.update(transaccion.copy(estado = EstadoTransaccion.CANCELADA))
 
-                _cancelado.value = true
+                    // 3. Devolver servicio a ACTIVO
+                    servicioRepository.cambiarEstado(servicioActual.idServicio, EstadoServicio.ACTIVO.name)
+
+                    _cancelado.value = true
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
                 _error.value = "Error al cancelar la solicitud"

@@ -62,6 +62,18 @@ interface TransaccionDao {
     suspend fun getByServicio(servicioId: Int): Transaccion?
 
     /**
+     * Obtiene la transacción asociada a un servicio concreto filtrando por estado.
+     *
+     * Útil para encontrar la transacción activa (PENDIENTE o ACEPTADA).
+     *
+     * @param servicioId ID del servicio.
+     * @param estado Estado de la transacción (nombre del enum).
+     * @return La [Transaccion] asociada o `null` si no existe.
+     */
+    @Query("SELECT * FROM transaccion WHERE id_servicio_fk = :servicioId AND estado = :estado")
+    suspend fun getByServicioYEstado(servicioId: Int, estado: String): Transaccion?
+
+    /**
      * Obtiene una transacción por su ID de forma puntual.
      *
      * @param id Clave primaria de la transacción.

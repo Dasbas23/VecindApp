@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -27,6 +28,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.example.vecindapp.ui.common.mostrarSnackbar
 
 /**
  * Fragment que muestra el detalle completo de un servicio.
@@ -64,10 +66,10 @@ class DetalleServicioFragment : Fragment() {
     private lateinit var tvDescripcion: TextView
     private lateinit var tvEstado: TextView
     private lateinit var tvFecha: TextView
+    private lateinit var layoutAccionesPropietario: LinearLayout
     private lateinit var btnSolicitar: MaterialButton
     private lateinit var btnEditar: MaterialButton
     private lateinit var btnEliminar: MaterialButton
-    private lateinit var btnCancelarSolicitud: MaterialButton
     private lateinit var btnVerValoracion: MaterialButton
     private lateinit var fabTts: FloatingActionButton
     private lateinit var ttsHelper: TtsHelper
@@ -111,10 +113,10 @@ class DetalleServicioFragment : Fragment() {
         tvDescripcion = view.findViewById(R.id.tvDescripcionDetalle)
         tvEstado = view.findViewById(R.id.tvEstadoDetalle)
         tvFecha = view.findViewById(R.id.tvFechaDetalle)
+        layoutAccionesPropietario = view.findViewById(R.id.layoutAccionesPropietario)
         btnSolicitar = view.findViewById(R.id.btnSolicitar)
         btnEditar = view.findViewById(R.id.btnEditar)
         btnEliminar = view.findViewById(R.id.btnEliminar)
-        btnCancelarSolicitud = view.findViewById(R.id.btnCancelarSolicitud)
         btnVerValoracion = view.findViewById(R.id.btnVerValoracion)
         fabTts = view.findViewById(R.id.fabTts)
     }
@@ -185,26 +187,42 @@ class DetalleServicioFragment : Fragment() {
 
         // Mostrar botones según quién mira y el estado del servicio
         val esPropietario = servicio.idUsuarioFk == usuarioActualId
-        val estaActivo = servicio.estado == EstadoServicio.ACTIVO
-        val estaPendiente = servicio.estado == EstadoServicio.RESERVADO
 
-        // Editar: solo visible si ES propietario y está ACTIVO
-        btnEditar.visibility = if (esPropietario && estaActivo) View.VISIBLE else View.GONE
-        
-        // Eliminar: solo visible si ES propietario y está ACTIVO (nadie esperando)
-        btnEliminar.visibility = if (esPropietario && estaActivo) View.VISIBLE else View.GONE
-
-        // Cancelar Solicitud: solo visible si ES propietario y está RESERVADO (alguien esperando)
-        btnCancelarSolicitud.visibility = if (esPropietario && estaPendiente) View.VISIBLE else View.GONE
-
-        // Solicitar: solo visible si NO es propietario y el servicio está ACTIVO
-        btnSolicitar.visibility = if (!esPropietario && estaActivo) View.VISIBLE else View.GONE
+        if (esPropietario) {
+            if (servicio.estado == EstadoServicio.ACTIVO) {
+                layoutAccionesPropietario.visibility = View.VISIBLE
+                btnSolicitar.visibility = View.GONE
+            } else if (servicio.estado == EstadoServicio.RESERVADO) {
+                layoutAccionesPropietario.visibility = View.GONE
+                btnSolicitar.visibility = View.VISIBLE
+                btnSolicitar.text = getString(R.string.btn_cancelar_solicitud)
+                btnSolicitar.isEnabled = true
+            } else {
+                layoutAccionesPropietario.visibility = View.GONE
+                btnSolicitar.visibility = View.GONE
+            }
+        } else {
+            layoutAccionesPropietario.visibility = View.GONE
+            // Si no es propietario, solo ve Solicitar si está ACTIVO
+            if (servicio.estado == EstadoServicio.ACTIVO) {
+                btnSolicitar.visibility = View.VISIBLE
+                btnSolicitar.text = getString(R.string.btn_solicitar)
+                btnSolicitar.isEnabled = true
+            } else {
+                btnSolicitar.visibility = View.GONE
+            }
+        }
 
         // Configurar clicks
-        btnSolicitar.setOnClickListener { mostrarDialogoConfirmarSolicitud(servicio) }
+        btnSolicitar.setOnClickListener {
+            if (esPropietario && servicio.estado == EstadoServicio.RESERVADO) {
+                mostrarDialogoConfirmarCancelarSolicitud()
+            } else {
+                mostrarDialogoConfirmarSolicitud(servicio)
+            }
+        }
         btnEditar.setOnClickListener { mostrarDialogoEditar(servicio) }
         btnEliminar.setOnClickListener { mostrarDialogoConfirmarEliminar() }
-        btnCancelarSolicitud.setOnClickListener { mostrarDialogoConfirmarCancelarSolicitud() }
     }
 
     /**
@@ -372,11 +390,7 @@ class DetalleServicioFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.actualizado.collect { actualizado ->
                     if (actualizado) {
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.servicio_actualizado,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        mostrarSnackbar(R.string.servicio_actualizado)
                         viewModel.limpiarActualizado()
                     }
                 }
@@ -392,7 +406,7 @@ class DetalleServicioFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.error.collect { mensaje ->
                     if (mensaje != null) {
-                        Toast.makeText(requireContext(), mensaje, Toast.LENGTH_SHORT).show()
+                        mostrarSnackbar(R.string.servicio_actualizado)
                         viewModel.limpiarError()
                     }
                 }

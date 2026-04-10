@@ -40,12 +40,13 @@ interface TransaccionRepository {
     fun getByUsuario(usuarioId: Int): Flow<List<Transaccion>>
 
     /**
-     * Obtiene la transacción asociada a un servicio concreto.
+     * Obtiene la transacción asociada a un servicio concreto filtrando por estado.
      *
      * @param servicioId ID del servicio.
-     * @return La [Transaccion] o `null` si no existe.
+     * @param estado Estado de la transacción (nombre del enum).
+     * @return La [Transaccion] asociada o `null` si no existe.
      */
-    suspend fun getByServicio(servicioId: Int): Transaccion?
+    suspend fun getByServicioYEstado(servicioId: Int, estado: String): Transaccion?
 
     /**
      * Obtiene una transacción por su ID de forma puntual.
