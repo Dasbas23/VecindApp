@@ -8,16 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.vecindapp.R
 import com.example.vecindapp.ui.common.TtsHelper
+import com.example.vecindapp.ui.common.mostrarSnackbar
 import com.example.vecindapp.VecindAppApplication
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 import androidx.core.graphics.toColorInt
@@ -202,11 +203,7 @@ class ValoracionBottomSheetFragment : BottomSheetDialogFragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.guardada.collect { guardada ->
                     if (guardada) {
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.valoracion_enviada,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        mostrarSnackbar(R.string.valoracion_enviada)
                         dismiss()
                     }
                 }
@@ -219,7 +216,7 @@ class ValoracionBottomSheetFragment : BottomSheetDialogFragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.error.collect { mensaje ->
                     if (mensaje != null) {
-                        Toast.makeText(requireContext(), mensaje, Toast.LENGTH_SHORT).show()
+                        mostrarSnackbar(mensaje, Snackbar.LENGTH_LONG)
                         viewModel.limpiarError()
                     }
                 }

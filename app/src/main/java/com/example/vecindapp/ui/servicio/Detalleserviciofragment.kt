@@ -22,13 +22,14 @@ import com.example.vecindapp.data.SesionUsuario
 import com.example.vecindapp.data.entities.Servicio
 import com.example.vecindapp.domain.model.EstadoServicio
 import com.example.vecindapp.ui.common.TtsHelper
+import com.example.vecindapp.ui.common.mostrarSnackbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import com.example.vecindapp.ui.common.mostrarSnackbar
 
 /**
  * Fragment que muestra el detalle completo de un servicio.
@@ -280,6 +281,7 @@ class DetalleServicioFragment : Fragment() {
                 val coste = sliderCoste.value.toDouble()
 
                 if (titulo.isBlank()) {
+                    // Toast intencional: validación inline del AlertDialog (Snackbar no es viable aquí)
                     Toast.makeText(
                         requireContext(),
                         R.string.error_titulo_vacio,
@@ -330,11 +332,7 @@ class DetalleServicioFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.solicitado.collect { solicitado ->
                     if (solicitado) {
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.servicio_solicitado,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        mostrarSnackbar(R.string.servicio_solicitado)
                         findNavController().popBackStack()
                     }
                 }
@@ -350,11 +348,7 @@ class DetalleServicioFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.cancelado.collect { cancelado ->
                     if (cancelado) {
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.solicitud_cancelada,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        mostrarSnackbar(R.string.solicitud_cancelada)
                         // No navegamos atrás, el servicio vuelve a estar ACTIVO y visible
                     }
                 }
@@ -370,11 +364,7 @@ class DetalleServicioFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.eliminado.collect { eliminado ->
                     if (eliminado) {
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.servicio_eliminado,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        mostrarSnackbar(R.string.servicio_eliminado)
                         findNavController().popBackStack()
                     }
                 }
@@ -406,7 +396,7 @@ class DetalleServicioFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.error.collect { mensaje ->
                     if (mensaje != null) {
-                        mostrarSnackbar(R.string.servicio_actualizado)
+                        mostrarSnackbar(mensaje, Snackbar.LENGTH_LONG)
                         viewModel.limpiarError()
                     }
                 }

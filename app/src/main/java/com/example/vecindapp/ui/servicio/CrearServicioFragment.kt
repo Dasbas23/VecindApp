@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -17,8 +16,10 @@ import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
 import com.example.vecindapp.data.SesionUsuario
 import com.example.vecindapp.domain.model.CategoriaServicio
+import com.example.vecindapp.ui.common.mostrarSnackbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.slider.Slider
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 /**
@@ -129,8 +130,8 @@ class CrearServicioFragment : Fragment() {
     /**
      * Observa los StateFlows del ViewModel para reaccionar al resultado.
      *
-     * - Si [guardado] es `true` → muestra Toast de éxito y navega atrás.
-     * - Si [error] tiene mensaje → muestra Toast con el error.
+     * - Si [guardado] es `true` → muestra Snackbar de éxito y navega atrás.
+     * - Si [error] tiene mensaje → muestra Snackbar con el error.
      */
     private fun observarResultado() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -138,11 +139,7 @@ class CrearServicioFragment : Fragment() {
                 launch {
                     viewModel.guardado.collect { guardado ->
                         if (guardado == true) {
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.servicio_guardado),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            mostrarSnackbar(R.string.servicio_guardado)
                             findNavController().popBackStack()
                         }
                     }
@@ -151,7 +148,7 @@ class CrearServicioFragment : Fragment() {
                 launch {
                     viewModel.error.collect { mensaje ->
                         if (mensaje != null) {
-                            Toast.makeText(requireContext(), mensaje, Toast.LENGTH_SHORT).show()
+                            mostrarSnackbar(mensaje, Snackbar.LENGTH_LONG)
                             viewModel.limpiarError()
                         }
                     }

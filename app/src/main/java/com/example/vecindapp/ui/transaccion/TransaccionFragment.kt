@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -18,8 +17,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
 import com.example.vecindapp.data.SesionUsuario
-import kotlinx.coroutines.launch
+import com.example.vecindapp.ui.common.mostrarSnackbar
 import com.example.vecindapp.ui.valoracion.ValoracionBottomSheetFragment
+import kotlinx.coroutines.launch
 
 /**
  * Fragment que muestra la lista de transacciones del usuario actual.
@@ -161,7 +161,7 @@ class TransaccionFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.mensaje.collect { mensaje ->
                     if (mensaje != null) {
-                        Toast.makeText(requireContext(), mensaje, Toast.LENGTH_SHORT).show()
+                        mostrarSnackbar(mensaje)
                         viewModel.limpiarMensaje()
                     }
                 }

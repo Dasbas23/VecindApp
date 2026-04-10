@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -17,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
 import com.example.vecindapp.data.SesionUsuario
+import com.example.vecindapp.ui.common.mostrarSnackbar
 import com.example.vecindapp.ui.valoracion.DetalleValoracionBottomSheet
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
@@ -142,7 +142,7 @@ class HistorialFragment : Fragment() {
                     }
                     bottomSheet.show(childFragmentManager, "detalleValoracion")
                 } else {
-                    Toast.makeText(requireContext(), "Sin valoración", Toast.LENGTH_SHORT).show()
+                    mostrarSnackbar("Sin valoración")
                 }
             }
         }
