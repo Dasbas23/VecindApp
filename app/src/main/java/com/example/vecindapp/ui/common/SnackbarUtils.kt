@@ -6,6 +6,7 @@ import com.example.vecindapp.R
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.core.view.isVisible
+import androidx.fragment.app.DialogFragment
 
 /**
  * Muestra un Snackbar anclado a la vista del fragment.
@@ -13,18 +14,28 @@ import androidx.core.view.isVisible
  */
 fun Fragment.mostrarSnackbar(
     mensaje: String,
-    duracion: Int = Snackbar.LENGTH_SHORT
+    duracion: Int = Snackbar.LENGTH_SHORT,
+    anchorView: View? = null
 ) {
     val vista = view ?: return
+
+    // En un DialogFragment usamos la propia vista del fragment (el CoordinatorLayout interno
+    // del layout del sheet) para que el Snackbar se muestre dentro del sheet.
     val snackbar = Snackbar.make(vista, mensaje, duracion)
-    
-    // Anclar encima del BottomNav si existe y está visible (MainActivity)
-    activity?.findViewById<BottomNavigationView>(R.id.bottomNav)?.let { bottomNav ->
-        if (bottomNav.isVisible) {
-            snackbar.anchorView = bottomNav
+
+    when {
+        // Ancla explícita tiene prioridad.
+        anchorView != null -> snackbar.anchorView = anchorView
+        // Solo anclamos al BottomNav si NO estamos en un diálogo.
+        this !is DialogFragment -> {
+            activity?.findViewById<BottomNavigationView>(R.id.bottomNav)?.let { bottomNav ->
+                if (bottomNav.isVisible) {
+                    snackbar.anchorView = bottomNav
+                }
+            }
         }
     }
-    
+
     snackbar.show()
 }
 
@@ -33,7 +44,8 @@ fun Fragment.mostrarSnackbar(
  */
 fun Fragment.mostrarSnackbar(
     mensajeResId: Int,
-    duracion: Int = Snackbar.LENGTH_SHORT
+    duracion: Int = Snackbar.LENGTH_SHORT,
+    anchorView: View? = null
 ) {
-    mostrarSnackbar(getString(mensajeResId), duracion)
+    mostrarSnackbar(getString(mensajeResId), duracion, anchorView)
 }

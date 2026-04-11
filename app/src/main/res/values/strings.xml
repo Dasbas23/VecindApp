@@ -107,6 +107,8 @@
     <string name="valoracion_hint_comentario">Comentario opcional</string>
     <string name="valoracion_btn_enviar">Enviar valoración</string>
     <string name="valoracion_enviada">¡Gracias por tu valoración!</string>
+    <string name="valoracion_error_sin_pictograma">Selecciona al menos un pictograma</string>
+    <string name="valoracion_error_guardar">Error al guardar la valoración</string>
     <string name="desc_pictograma_bien1">Excelente</string>
     <string name="desc_pictograma_bien2">Amable</string>
     <string name="desc_pictograma_bien3">Puntual</string>
