@@ -26,7 +26,7 @@ import com.example.vecindapp.domain.model.EstadoServicio
  * @property titulo           Título corto visible en la tarjeta del escaparate.
  * @property descripcion      Descripción detallada (opcional).
  * @property categoria        Categoría del servicio para filtrado. --Implementar en vías futuras--
- * @property pictogramaId     Identificador del pictograma ARASAAC asociado.
+ * @property pictogramaId     Deprecated. Mantenido por compatibilidad de esquema Room. El pictograma se asigna dinámicamente por [com.example.vecindapp.ui.common.CategoriaMapper].
  * @property costeHoras       Precio en horas que se debitará al comprador.
  * @property estado           Estado actual dentro de su ciclo de vida.
  * @property fechaPublicacion Timestamp (millis) de creación del servicio.
@@ -65,9 +65,9 @@ data class Servicio(
     @ColumnInfo(name = "categoria")
     val categoria: CategoriaServicio,
 
-    // Deprecated: El pictograma ahora se determina dinámicamente por la categoría usando CategoriaMapper.
+    @Deprecated("El pictograma se determina dinámicamente via CategoriaMapper. Este campo se mantiene por compatibilidad de esquema Room.")
     @ColumnInfo(name = "pictograma_id")
-    val pictogramaId: String,
+    val pictogramaId: String = "",
 
     @ColumnInfo(name = "coste_horas")
     val costeHoras: Double,

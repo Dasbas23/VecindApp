@@ -70,7 +70,7 @@ class CrearServicioViewModel(
             titulo = titulo.trim(),
             descripcion = descripcion.trim().ifBlank { null },
             categoria = categoria,
-            pictogramaId = categoria.name.lowercase(), // TODO: Selector de pictograma ARASAAC
+            pictogramaId = "", // Deprecated: gestionado dinámicamente por CategoriaMapper
             costeHoras = coste
         )
 
