@@ -16,6 +16,7 @@ import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
 import com.example.vecindapp.data.SesionUsuario
 import com.example.vecindapp.domain.model.CategoriaServicio
+import com.example.vecindapp.ui.common.TtsHelper
 import com.example.vecindapp.ui.common.mostrarSnackbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.slider.Slider
@@ -104,10 +105,16 @@ class CrearServicioFragment : Fragment() {
      * y actualiza el label de texto encima del slider al cambiar el valor.
      */
     private fun configurarSlider() {
-        sliderCoste.setLabelFormatter { valor -> formatearHoras(valor) }
-        tvLabelCoste.text = getString(R.string.label_coste_slider, formatearHoras(sliderCoste.value))
+        sliderCoste.setLabelFormatter { valor -> TtsHelper.formatearCosteHumano(valor.toDouble()) }
+        tvLabelCoste.text = getString(
+            R.string.label_coste_slider,
+            TtsHelper.formatearCosteHumano(sliderCoste.value.toDouble())
+        )
         sliderCoste.addOnChangeListener { _, valor, _ ->
-            tvLabelCoste.text = getString(R.string.label_coste_slider, formatearHoras(valor))
+            tvLabelCoste.text = getString(
+                R.string.label_coste_slider,
+                TtsHelper.formatearCosteHumano(valor.toDouble())
+            )
         }
     }
 
@@ -157,16 +164,4 @@ class CrearServicioFragment : Fragment() {
         }
     }
 
-    companion object {
-        /**
-         * Formatea un valor de horas (Float) en texto legible.
-         *
-         * Ejemplos: 2.0 → "2h", 1.25 → "1h 15min", 0.5 → "0h 30min".
-         */
-        fun formatearHoras(valor: Float): String {
-            val horas = valor.toInt()
-            val minutos = ((valor - horas) * 60).toInt()
-            return if (minutos == 0) "${horas}h" else "${horas}h ${minutos}min"
-        }
-    }
 }

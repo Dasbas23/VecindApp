@@ -262,13 +262,13 @@ class DetalleServicioFragment : Fragment() {
         sliderCoste.value = servicio.costeHoras.toFloat()
         tvLabelCoste.text = getString(
             R.string.label_coste_slider,
-            CrearServicioFragment.formatearHoras(sliderCoste.value)
+            TtsHelper.formatearCosteHumano(sliderCoste.value.toDouble())
         )
-        sliderCoste.setLabelFormatter { CrearServicioFragment.formatearHoras(it) }
+        sliderCoste.setLabelFormatter { TtsHelper.formatearCosteHumano(it.toDouble()) }
         sliderCoste.addOnChangeListener { _, valor, _ ->
             tvLabelCoste.text = getString(
                 R.string.label_coste_slider,
-                CrearServicioFragment.formatearHoras(valor)
+                TtsHelper.formatearCosteHumano(valor.toDouble())
             )
         }
 
