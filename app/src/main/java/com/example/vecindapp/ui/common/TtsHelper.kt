@@ -102,33 +102,56 @@ class TtsHelper(
     }
 
     companion object {
+
         /**
-         * Formatea un valor de horas para lectura en voz alta.
+         * Formatea un valor de horas (Double) para mostrar en la UI.
          *
-         * Elimina el decimal cuando es cero: `2.0` → `"2"`, `1.5` → `"1,5"`.
-         * Usa coma como separador decimal para sonar natural en español.
+         * Descompone el coste en horas y minutos enteros, eliminando decimales
+         * del tipo `"1,5 h"` en favor de un formato más humano:
+         * - `2.0` → `"2h"`
+         * - `1.5` → `"1h 30min"`
+         * - `0.25` → `"15min"`
+         * - `0.0` → `"0min"`
          *
          * @param coste Valor en horas (Double).
-         * @return String legible sin decimales innecesarios.
+         * @return String corto listo para pintar en un TextView.
          */
-        private fun formatearCoste(coste: Double): String {
-            return if (coste % 1.0 == 0.0) {
-                coste.toLong().toString()
-            } else {
-                String.format(Locale.forLanguageTag("es-ES"), "%.1f", coste)
+        fun formatearCosteHumano(coste: Double): String {
+            val totalMinutos = (coste * 60).toInt()
+            val horas = totalMinutos / 60
+            val minutos = totalMinutos % 60
+            return when {
+                horas == 0 -> "${minutos}min"
+                minutos == 0 -> "${horas}h"
+                else -> "${horas}h ${minutos}min"
             }
         }
 
         /**
-         * Comprueba si tiene que leer "una hora" en singular o plural.
+         * Formatea un valor de horas (Double) para lectura en voz alta por TTS.
+         *
+         * Usa unidades completamente con singular/plural correcto y conector "y"
+         * cuando hay horas y minutos:
+         * - `2.0` → `"2 horas"`
+         * - `1.0` → `"1 hora"`
+         * - `1.5` → `"1 hora y 30 minutos"`
+         * - `0.25` → `"15 minutos"`
+         * - `0.0` → `"0 horas"`
          *
          * @param coste Valor en horas (Double).
+         * @return String natural para ser pronunciado por el motor TTS.
          */
         fun formatearCosteConUnidad(coste: Double): String {
-            val texto = formatearCoste(coste)
-            val unidad = if (texto == "1") "hora" else "horas"
-            return "$texto $unidad"
-
+            val totalMinutos = (coste * 60).toInt()
+            val horas = totalMinutos / 60
+            val minutos = totalMinutos % 60
+            return if (horas == 0) {
+                if (minutos == 0) "" else "$minutos minutos"
+            } else {
+                val horasStr = if (horas == 1) "hora" else "horas"
+                val minutosStr = if (minutos == 0) "" else " y $minutos minutos"
+                "$horas $horasStr$minutosStr"
+            }
         }
     }
 }
