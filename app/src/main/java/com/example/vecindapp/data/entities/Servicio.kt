@@ -65,6 +65,7 @@ data class Servicio(
     @ColumnInfo(name = "categoria")
     val categoria: CategoriaServicio,
 
+    // Deprecated: El pictograma ahora se determina dinámicamente por la categoría usando CategoriaMapper.
     @ColumnInfo(name = "pictograma_id")
     val pictogramaId: String,
 
