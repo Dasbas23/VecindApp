@@ -2,11 +2,16 @@ package com.example.vecindapp
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.vecindapp.data.SesionUsuario
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.launch
 
 /**
  * Activity principal y única de VecindApp.
@@ -72,10 +77,29 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Si ya hay sesión, saltar al escaparate
+        // Si ya hay sesión, saltar al escaparate y activar badge reactivo
         val sesion = SesionUsuario(this)
         if (sesion.haySesion() && savedInstanceState == null) {
             navController.navigate(R.id.action_login_to_escaparate)
+
+            val app = application as VecindAppApplication
+            val viewModel: MainViewModel by viewModels {
+                MainViewModel.Factory(app.transaccionRepository, sesion.obtenerUsuarioId())
+            }
+
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.notificaciones.collect { conteo ->
+                        val badge = bottomNav.getOrCreateBadge(R.id.transaccionFragment)
+                        if (conteo > 0) {
+                            badge.isVisible = true
+                            badge.number = conteo
+                        } else {
+                            badge.isVisible = false
+                        }
+                    }
+                }
+            }
         }
     }
 }
