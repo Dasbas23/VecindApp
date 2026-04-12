@@ -21,6 +21,7 @@ import com.example.vecindapp.VecindAppApplication
 import com.example.vecindapp.data.SesionUsuario
 import com.example.vecindapp.data.entities.Servicio
 import com.example.vecindapp.domain.model.EstadoServicio
+import com.example.vecindapp.ui.common.CategoriaMapper
 import com.example.vecindapp.ui.common.TtsHelper
 import com.example.vecindapp.ui.common.mostrarSnackbar
 import com.google.android.material.button.MaterialButton
@@ -173,6 +174,7 @@ class DetalleServicioFragment : Fragment() {
      */
     private fun pintarDetalle(servicio: Servicio) {
         servicioActual = servicio
+        ivPictograma.setImageResource(CategoriaMapper.obtenerDrawable(servicio.categoria))
         tvTitulo.text = servicio.titulo
         tvCategoria.text = servicio.categoria.name
         tvCoste.text = TtsHelper.formatearCosteHumano(servicio.costeHoras)
