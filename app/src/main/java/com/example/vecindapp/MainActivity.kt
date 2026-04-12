@@ -2,9 +2,9 @@ package com.example.vecindapp
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
@@ -38,6 +38,9 @@ import kotlinx.coroutines.launch
  * @see SesionUsuario
  */
 class MainActivity : AppCompatActivity() {
+
+    /** Evita suscribirse al badge más de una vez por sesión. */
+    private var badgeIniciado = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,30 +76,46 @@ class MainActivity : AppCompatActivity() {
                     if (menuItem != null) {
                         menuItem.isChecked = true
                     }
+                    iniciarBadge(bottomNav)
                 }
             }
         }
 
-        // Si ya hay sesión, saltar al escaparate y activar badge reactivo
+        // Si ya hay sesión, saltar al escaparate
         val sesion = SesionUsuario(this)
         if (sesion.haySesion() && savedInstanceState == null) {
             navController.navigate(R.id.action_login_to_escaparate)
+        }
+    }
 
-            val app = application as VecindAppApplication
-            val viewModel: MainViewModel by viewModels {
-                MainViewModel.Factory(app.transaccionRepository, sesion.obtenerUsuarioId())
-            }
+    /**
+     * Inicia la observación reactiva del badge de notificaciones.
+     *
+     * Se ejecuta una sola vez por sesión, cuando el usuario navega a
+     * cualquier pantalla distinta de login/registro. Funciona tanto
+     * al reabrir la app con sesión guardada como tras un login nuevo.
+     */
+    private fun iniciarBadge(bottomNav: BottomNavigationView) {
+        if (badgeIniciado) return
+        val sesion = SesionUsuario(this)
+        if (!sesion.haySesion()) return
+        badgeIniciado = true
 
-            lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.notificaciones.collect { conteo ->
-                        val badge = bottomNav.getOrCreateBadge(R.id.transaccionFragment)
-                        if (conteo > 0) {
-                            badge.isVisible = true
-                            badge.number = conteo
-                        } else {
-                            badge.isVisible = false
-                        }
+        val app = application as VecindAppApplication
+        val viewModel = ViewModelProvider(
+            this,
+            MainViewModel.Factory(app.transaccionRepository, sesion.obtenerUsuarioId())
+        )[MainViewModel::class.java]
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.notificaciones.collect { conteo ->
+                    val badge = bottomNav.getOrCreateBadge(R.id.transaccionFragment)
+                    if (conteo > 0) {
+                        badge.isVisible = true
+                        badge.number = conteo
+                    } else {
+                        badge.isVisible = false
                     }
                 }
             }

@@ -37,4 +37,13 @@ interface ValoracionRepository {
      * @return La [Valoracion] o `null` si aún no se ha valorado.
      */
     suspend fun getByTransaccion(transaccionId: Int): Valoracion?
+
+    /**
+     * Obtiene la valoración de un usuario concreto para una transacción.
+     *
+     * @param transaccionId ID de la transacción.
+     * @param valoradorId   ID del usuario que valora.
+     * @return La [Valoracion] o `null` si este usuario aún no ha valorado.
+     */
+    suspend fun getByTransaccionYValorador(transaccionId: Int, valoradorId: Int): Valoracion?
 }
