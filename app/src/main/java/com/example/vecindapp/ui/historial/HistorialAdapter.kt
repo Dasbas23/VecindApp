@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vecindapp.R
+import com.example.vecindapp.ui.common.TtsHelper
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -67,11 +68,7 @@ class HistorialAdapter(
             tvTitulo.text = item.tituloServicio
 
             // Horas con signo y color
-            tvHoras.text = itemView.context.getString(
-                R.string.formato_historial_horas,
-                signo,
-                item.transaccion.horasTransferidas
-            )
+            tvHoras.text = signo + TtsHelper.formatearCosteHumano(item.transaccion.horasTransferidas)
             tvHoras.setTextColor(colorHoras)
 
             val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())

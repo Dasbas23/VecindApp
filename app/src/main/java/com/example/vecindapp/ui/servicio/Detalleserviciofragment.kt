@@ -175,7 +175,7 @@ class DetalleServicioFragment : Fragment() {
         servicioActual = servicio
         tvTitulo.text = servicio.titulo
         tvCategoria.text = servicio.categoria.name
-        tvCoste.text = getString(R.string.formato_coste_horas, servicio.costeHoras)
+        tvCoste.text = TtsHelper.formatearCosteHumano(servicio.costeHoras)
         tvDescripcion.text = servicio.descripcion ?: getString(R.string.sin_descripcion)
         tvEstado.text = getString(R.string.formato_estado, servicio.estado.name)
 
@@ -262,13 +262,13 @@ class DetalleServicioFragment : Fragment() {
         sliderCoste.value = servicio.costeHoras.toFloat()
         tvLabelCoste.text = getString(
             R.string.label_coste_slider,
-            CrearServicioFragment.formatearHoras(sliderCoste.value)
+            TtsHelper.formatearCosteHumano(sliderCoste.value.toDouble())
         )
-        sliderCoste.setLabelFormatter { CrearServicioFragment.formatearHoras(it) }
+        sliderCoste.setLabelFormatter { TtsHelper.formatearCosteHumano(it.toDouble()) }
         sliderCoste.addOnChangeListener { _, valor, _ ->
             tvLabelCoste.text = getString(
                 R.string.label_coste_slider,
-                CrearServicioFragment.formatearHoras(valor)
+                TtsHelper.formatearCosteHumano(valor.toDouble())
             )
         }
 
