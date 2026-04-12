@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vecindapp.R
 import com.example.vecindapp.data.entities.Servicio
+import com.example.vecindapp.ui.common.TtsHelper
 
 /**
  * Adapter del RecyclerView para mostrar las tarjetas de servicios en el escaparate.
@@ -64,10 +65,7 @@ class ServicioAdapter(
         fun bind(servicio: Servicio) {
             tvTitulo.text = servicio.titulo
             tvCategoria.text = servicio.categoria.name
-            tvCoste.text = itemView.context.getString(
-                R.string.formato_coste_horas,
-                servicio.costeHoras
-            )
+            tvCoste.text = TtsHelper.formatearCosteHumano(servicio.costeHoras)
 
             // TODO: Cargar pictograma ARASAAC desde assets usando Glide
             // Glide.with(itemView.context)
