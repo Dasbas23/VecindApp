@@ -175,7 +175,7 @@ class DetalleServicioFragment : Fragment() {
         servicioActual = servicio
         tvTitulo.text = servicio.titulo
         tvCategoria.text = servicio.categoria.name
-        tvCoste.text = getString(R.string.formato_coste_horas, servicio.costeHoras)
+        tvCoste.text = TtsHelper.formatearCosteHumano(servicio.costeHoras)
         tvDescripcion.text = servicio.descripcion ?: getString(R.string.sin_descripcion)
         tvEstado.text = getString(R.string.formato_estado, servicio.estado.name)
 
