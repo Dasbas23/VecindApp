@@ -1,5 +1,5 @@
-	↪ 06.03.2026 : 
-	He empezado con cierta incertidumbre ya que me han concedido el APTO. Como no sé muy bien por dónde empezar, he empezado por preguntar a Gemini y a Claude. He decidido que quiero un estilo moderno pero que sea sencillo e intuitivo. Ya veremos cómo hacerlo... 
+	↪ 06.03.2026 :
+	He empezado con cierta incertidumbre ya que me han concedido el APTO. Como no sé muy bien por dónde empezar, he empezado por preguntar a Gemini y a Claude. He decidido que quiero un estilo moderno pero que sea sencillo e intuitivo. Ya veremos cómo hacerlo...
 	Se piden varios bocetos para inspirarme en Gemini con Nano banana. Estoy viendo un vídeo de "Programador X" en YT para ver cómo empezar. Hace hincapié en la escalabilidad y el diseño, es casi que lo más importante. Una de las conclusiones que he sacado es que voy a utilizar una metodología ágil "SCRUM" con "Kanban" para tener un seguimiento y control, sprints de 1 semana.
 ※ Poner botón para activar el TTS parece ser una buena idea.
 ※ Me he descargado la App "Nextdoor" para ver un poco su funcionamiento.
@@ -16,17 +16,17 @@
 	↳ Como usuario quiero poder buscar/ver las distintas ofertas (y solicitudes) que se brindan por parte de los usuarios.
 	↳ Quiero poder publicar una alerta de ayuda y también quiero poder publicar una solicitud.
 
-↪ 10.03.2026 : 
-	Ayer Claude me preparó unos diagramas para entregarlos y poder recibir feedback. Como quiero desarrollar la app por mi cuenta y por mucho que me de las cosas hechas, quiero utilizarlo más bien de guía y así hacerlo un poco a mi estilo. Sí es cierto que sin ayuda de los LLM andaría bastante más perdido. 
+↪ 10.03.2026 :
+	Ayer Claude me preparó unos diagramas para entregarlos y poder recibir feedback. Como quiero desarrollar la app por mi cuenta y por mucho que me de las cosas hechas, quiero utilizarlo más bien de guía y así hacerlo un poco a mi estilo. Sí es cierto que sin ayuda de los LLM andaría bastante más perdido.
 ※ He clonado el repositorio de Git en el PC del trabajo para poder trabajar desde los dos lados.
 	▼ Problema -> En AndroidStudio no se me actualizaba la carpeta .gradle porque no se descargaba.
 	+ Solución -> He descargado los archivos manualmente y los he pegado (carpeta sin descomprimir) en la carpeta correspondiente. ¡hay que eliminar los archivos anteriores!
 ※ He creado el diagrama de casos de uso en `draw.io`. Ha quedado bastante decente. Me he basado en el diagrama que me ha generado una IA, en este caso Claude, pero lo he hecho yo desde cero usando la herramienta mencionada.
 ※ No encuentro mis memorias del día 2026.03.05_06 :(
 	▼ Problema: Volver a escribir todo de nuevo pero no recuerdo los problemas con los que me encontré. [SIN HACER, SEGUIRÉ BUSCANDO]
-	+ Solución: Los he encontrado debajo del ordenador. Los tenía escritos a mano, pero recordaba que itenté digitalizarlos con DocEngie. [SOLUCIONADO] Resulta que NanoBanana ha leido mi foto de maravilla y la ha maquetado en texto plano tal y como he venido haciendolo yo. 
+	+ Solución: Los he encontrado debajo del ordenador. Los tenía escritos a mano, pero recordaba que itenté digitalizarlos con DocEngie. [SOLUCIONADO] Resulta que NanoBanana ha leido mi foto de maravilla y la ha maquetado en texto plano tal y como he venido haciendolo yo.
 ※ He creado el diagrama de Entidad-Relación en base a lo que me ha sugerido la IA:
-	▼ Problema: Claude había generado el diagrama con un archivo .jsx de React muy chulo pero no quiero que parezca que haya sido hecho por IA. Además no encontraba la manera de usar esto y modificarlo a mi gusto. 
+	▼ Problema: Claude había generado el diagrama con un archivo .jsx de React muy chulo pero no quiero que parezca que haya sido hecho por IA. Además no encontraba la manera de usar esto y modificarlo a mi gusto.
 	+ Solución: He creado un esqueleto de diagrama sin datos reales y le he pedido a Gemini/Claude que me lo termine de completar pasándole todo el archivo de React como fuente de datos.
 	↳ He tenido dudas con las fk...
 		 ▼ Problema: Mi razonamiento inicial fue: "si la línea ya une las dos tablas, poner la FK dentro sobra". Pero al pensar en la implementación real en código (Room/SQLite), me daba cuenta de que si no estaban explícitas, la base de datos no iba a saber cómo enlazarlas. Además, me rayaba ver 4 flechas saliendo hacia la misma tabla USUARIO.
@@ -38,8 +38,8 @@
 	▼ Problema: Al importar el código XML generado por la IA en draw.io, los títulos de las clases no se renderizaban bien  y al tocar cualquier cosa se descuajeringaban de lugar las tablas.
 	+ Solución 1: Había que añadir la propiedad "html=1;" en el estilo de cada swimlane (contenedor de la clase) para que diagrams.net interpretara correctamente el código HTML de los títulos. He tenido que pedirle nuevamente a la IA que utilizara una template que había creado yo sombre como lo quería pero el trabajo tedioso de completarlo, se lo ha llevado la IA.
 
-↪ 12.03.2026 : 
-	Terminar de maquetar el diagrama de clases y ententer su funcionamiento: Tras añadir las clases que faltaban (DetalleViewModel, TransaccionRepository y ValoracionRepository), el diagrama queda cerrado con 13 clases en total estructuradas en 5 capas. 
+↪ 12.03.2026 :
+	Terminar de maquetar el diagrama de clases y ententer su funcionamiento: Tras añadir las clases que faltaban (DetalleViewModel, TransaccionRepository y ValoracionRepository), el diagrama queda cerrado con 13 clases en total estructuradas en 5 capas.
 	▼ Problema 1: Tenía una confusión  importante entre "Android Jetpack" y "Jetpack Compose" y pensaba que tendría que volver refolmular cassi todo.
 	+ Solución 1: Tras revisar la propuesta ("Generaré entornos gráficos basados en XML"), he aclarado que lo que no debo usar es Compose (que es la librería UI). El resto de la familia Android Jetpack (Room, ViewModel, WorkManager) es el estándar nativo y perfectamente válido. Gracias a haber elegido Clean Architecture, el único cambio que he tenido que hacer es modificar el diagrama para que la Vista sea "XML / Activity" en lugar de "Compose". Todo el núcleo lógico se mantiene intacto.
 	▼ Problema 2: En mi esquema mental inicial, creía que los repositorios podían alimentarse o llamarse entre sí (por ejemplo, ServicioRepository pidiendo datos a UsuarioRepository), eso no es correcto.
@@ -50,11 +50,11 @@
 	↳ Continuar creando la estructura de carpetas (paquetes) del proyecto en Android Studio.
 	↳ Ponerme con el diseño de la base de datos (Entidades de Room) o con el diseño de las interfaces en XML.
 
-↪ 13.03.2026 : 
+↪ 13.03.2026 :
 	No me ha cundido mucho hoy. Se ha abierto el plazo para la entrega del Feedback y me la he estado leyendo las condiciones.
 		↳ He pedido otro informe a Claude , basado en el de Gemini y me reafirma que no existe nada parecido a mi idea publicado hasta la fecha. Nada que combine la accesibilidad con ARASAAC y bancos dehoras vecinales.
 ※He preparado ClaudeCode en mi PC para que me ayude a futuro con la programación de la app.
- 
+
 ↪ 14.03.2026 :
 	He empezado la mañana un poco disperso. Creo que al ser mi primer trabajo "cientifico" no sé muy bien por donde tirar y me está costando centrarme.
 	▼ Problema: No se muy bien como maquetar la introducción en conctredo la moativación y el abstract.
@@ -62,20 +62,20 @@
 		↳  Aplicar el consejo de Irene: He reestructurado el "Estado del Arte" y la "Introducción". Ahora empiezo explicando qué son los Bancos de Tiempo y el sistema ARASAAC (el contexto) antes de pasar a la motivación y a criticar otras apps del mercado. Le da un enfoque mucho más académico y profesional.
 
 ↪ 15.03.2026 :
-	Por la mañana he estado redactado el "Abstract" y el "Estado del arte" y me ha  ido quedando muy  bien. Estoy basntante contento por como está quedando. 
+	Por la mañana he estado redactado el "Abstract" y el "Estado del arte" y me ha  ido quedando muy  bien. Estoy basntante contento por como está quedando.
 		↪Pienso que podría invesigar y ahondar aun más pero es muy probable que no reciba demasiada importancia toda esta ivestigación por parte del profesorado.
-※ Por la tarde he seguido ivestigando para terminar el estado del arte y lo he dejado bien bien. Creo que lo he defendido muy bien. Ahh y también una tabla comparativa de plataformas 
-※ He creado tablas para el punto 4 "Tecnologías y herramientas utilizadas en el proyecto " 
+※ Por la tarde he seguido ivestigando para terminar el estado del arte y lo he dejado bien bien. Creo que lo he defendido muy bien. Ahh y también una tabla comparativa de plataformas
+※ He creado tablas para el punto 4 "Tecnologías y herramientas utilizadas en el proyecto "
 ※ He añadido los tres diagramas para poder proceder con la entrega del Feedback explicando un poco de que trata cada uno en más detalle para poder defender que se han hecho bien pensados.
-	▼ Problema: A lo largo de la edición me he dado cuenta de que los borradores que me ha creado la IA son demasiado "cultos" por así llamarlo así llamarlo. 
+	▼ Problema: A lo largo de la edición me he dado cuenta de que los borradores que me ha creado la IA son demasiado "cultos" por así llamarlo así llamarlo.
 	▼ Problema 2 : En cuanto a las fuentes veo que lo que me hecho la IA tiene altas probabilidades que sea una inventada o que esté desactualizado como ha pasado con las tablas del punto 4.  He visto que la bibliografía es un poco tiquismiquis con el formato en Word, al menos en su versión web...
 	+ Solución: He tenido que reforlmular en distinas ocasiones párrafos entero porque creo que se notaba demasiado que estaban hechos por IA y he tenido que hacer que sonasen "más inculto" por miedo a que parezca IA y también por miedo a que salga PLAGIO porque pienso que la IA a veces coge información de los sitos web tal cuál está y me la cita, pero claro yo por ahora no he citado todo
 		↳ Tengo que repasar las fuentes y dejarlas bien en el punto 12.
 	+ Solución 2: En cuantto a las fuentes, he tenido que ir repasando una a una todas la citas y ver que estaba bien y que no para así estar seguro en el momento de dejarlo escrito o quitarlo. Asi que bueno la mayoría era información buena pero las citas de las fuentes es algo que tengo que dejar bien pulido para antes de la entrega.
-Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré mañana. Lo cierto es que me está gustando hacer las memorias aunque es algo complicado pero creo que me ayuda a poder organizarme los pensamientos a la hora de plasmar tanto conocimiento que estoy adquiriendo y creo que a futuro también me vendrá genial para poder repasarlo y volver a tener la oportunidad de volver a realizar tremendo documento técnico. 
+Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré mañana. Lo cierto es que me está gustando hacer las memorias aunque es algo complicado pero creo que me ayuda a poder organizarme los pensamientos a la hora de plasmar tanto conocimiento que estoy adquiriendo y creo que a futuro también me vendrá genial para poder repasarlo y volver a tener la oportunidad de volver a realizar tremendo documento técnico.
 
 ↪ 16.03.2026 :
-	Comienzo el día añadiendo el punto 3 "Metodología usada" a la entrega para el feedback. 
+	Comienzo el día añadiendo el punto 3 "Metodología usada" a la entrega para el feedback.
 		↳ Se ha copiado texto literal del libro "Entornos de Desarrollo".Se ha añadido una imagen representativa de SCRUM gerneada por NanoBanana(he añadido observacion "generada con IA")   ¿Debería citarlo en las fuentes? ¿De que manera? ¿Debería citar las IA como herramientas de uso en bibliografía o en metodología?
 ※ He añadido para la entrega del feedback el punto 6.1 "Requisitos funcionales" divididos en subpuntos [a,b,c,d] con tablas de 3 columnas [RF, descripcion , Estado]
 	↳ He separado cada módulo en decenas (RF01 para modulo A, RF10 para el módulo B) para que si tengo que añadir más cosas no tenga que correr +1 en toda la lista de RF. Me he quedado con la duda de si añadir o no la columna [prioridad]. No obstante se lo he incluido como comentario en el titulo del 6.1 para ver si el profesro contesta. [PENDIENTE RESPUESTA]
@@ -88,17 +88,17 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 	▼ Problema: El problema era que l intentar usar `kotlin("kapt")` en los plugins, Gradle petaba dando el error "Plugin not found". El motivo es que no tenía la versión definida en el nuevo catálogo de versiones (libs.versions.toml), por lo que Gradle no sabía de dónde descargarlo.
 	+ Solución: En vez de pelearme para arreglar KAPT, he decidido actualizar el proyecto y migrar directamente a KSP (Kotlin Symbol Processing), que es la herramienta moderna que lo sustituye. Para hacerlo funcionar, declaré el plugin KSP con su versión en el archivo .toml, lo registré en el build.gradle del proyecto general (Top-level) con `apply false`, y finalmente cambié los `kapt(...)` de las dependencias de Room por `ksp(...)` en el módulo de la app. Como beneficio extra, KSP es bastante más rápido compilando código Kotlin, ¡así que la app compilará mejor! Tras la modificacion de esas líneas ha compilado  bien. Espero que en ordenador del trabajo funcione bien a la primera y no tenga que tocar nada raro.
 
-↪ 17.03.2026 : 
+↪ 17.03.2026 :
 	Se da comienzo con el Sprint2 bbdd+escaparate, donde haré el módulo de servicios CRUD completo y el recyclerview del escaparate.
 ※ Lo primero es renombrar la rama main → desarrollo y después una nueva rama sprint2
-	↳ Cambiar el nombre a rama. Eliminar la rama "master" em local y en remoto habiendo puedo como default la rama "desarrollo" antes de eliminar.	
+	↳ Cambiar el nombre a rama. Eliminar la rama "master" em local y en remoto habiendo puedo como default la rama "desarrollo" antes de eliminar.
 ※ Se crean las entities y las  DAO para cada entidad.
 	↳ Las DAO son las interfaces que le indican a Room que operaciones puede hacer con cada tabla. Recuerdo haberlo leído en el libro para el examen pero no sabía como implementarlas y he tenido que pedirle a Claude que me las explique. Cierto es que me ha hecho las demás clases también pero las he tenido que repasar y  he visto que se ha dejado algún método de los que tenía en el diagrama de clases.
 		▼ Problema : Al revisar el código generado por la IA, me di cuenta de que se había dejado un método por implementar en la entidad Valoracion (`getPictogramasList()`) que sí estaba contemplado en mi diagrama de clases para parsear el JSON de los pictogramas.
 		+ Solución : Le avisé a la IA del error y me pasó la función exacta para añadirla manualmente. Me he dado cuenta de que es imprescindible revisar el código generado contrastándolo con los diagramas propios para que no se pierda la coherencia del diseño inicial.
 ※ Se pide a Claude que me documente con KDoc cada una de las clases
-	↳ Me he dado cuenta que en muchas ocasiones yo miro los builtins de python o de cualquier cosa que me llama la atención así que he pensado que a futuro me vendrá bien a mi mismo saber/recodrdar que hace caca cllase o método y por el motivo que sea esto lo voy a mejorar o escalo a un nivel superior. 
-※Se crea un README.md como buen proyecto que estoy haciendo. Claude me lo ha dejado bastante majo. 
+	↳ Me he dado cuenta que en muchas ocasiones yo miro los builtins de python o de cualquier cosa que me llama la atención así que he pensado que a futuro me vendrá bien a mi mismo saber/recodrdar que hace caca cllase o método y por el motivo que sea esto lo voy a mejorar o escalo a un nivel superior.
+※Se crea un README.md como buen proyecto que estoy haciendo. Claude me lo ha dejado bastante majo.
 ※Se crean los Repository bien documentados con KDoc.
 	▼ Problema : Me doy cuenta de que en algún repository hay métodos implementados demás, que no estaban contemplados en el diagrama de clases. También me doy cuenta de que faltan métodos por implementar y que a su vez repercuten en algun DAO.
 	+ Solución : Se pide a Claude que me lo repase y que me explique que pasa si hay métodos demás (En verdad son muy útiles y me habría dado cuenta más tarde) [Tendré que volver a rehacer el diagrama de clases].
@@ -110,8 +110,8 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 	↳ Se implementa `ServicioAdapter` heredando de `ListAdapter` y utilizando `DiffUtil.ItemCallback` (algoritmo de Eugene W. Myers). Esto optimiza el rendimiento del RecyclerView repintando solo los elementos que sufren cambios, en lugar de recargar toda la lista.
 	▼ Problema: El IDE marcaba warnings por usar `launchWhenStarted` en el Fragment, ya que está obsoleto (deprecated).
 	+ Solución: Se refactoriza el código sustituyéndolo por un simple `launch` combinado con `repeatOnLifecycle(Lifecycle.State.STARTED)`, que es la recomendación actual de Google para observar flujos de forma segura según el ciclo de vida de la vista.
- 
-↪ 18.03.2026 : 
+
+↪ 18.03.2026 :
 	Hoy no me ha cundido mucho porque por la mañana, en el trabajo, no he tenido la oportunidad de leer y entender bien la capa de UI. Además la tarde la he tenido liada con otras cosas asi que para hoy a última hora me he puesto un rato con:
 	↳ Implementacion de Navigation Component (`nav_graph.xml`) para que `MainActivity` cargue el `EscaparateFragment` al inicio.
 	↳ Desarrollar la operación "Create" del CRUD: Formulario de alta de servicio y navegación desde el Floating Action Button.
@@ -134,32 +134,32 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 ※ Se diseña e implementa la pantalla de "Detalle del Servicio" permitiendo la Edición y el Borrado.
 	▼ Problema 2: Al realizar pruebas funcionales, la operación "Create" daba error en la base de datos (Foreign Key constraint failed).
 	+ Solución 2: El servicio intentaba asociarse a un usuario que no existía. Se implementa `SeedDatabaseCallback` en `AppDatabase` para generar un usuario por defecto (ID=1) al crear la base de datos. Tras reinstalar la app, el guardado funciona correctamente.
-	▼ Problema 3: El RecyclerView del escaparate no mostraba tarjetas.  Mediante logs y debugging se descubrió que el LayoutManager y 
+	▼ Problema 3: El RecyclerView del escaparate no mostraba tarjetas.  Mediante logs y debugging se descubrió que el LayoutManager y
   el Adapter se estaban asignando dentro del lambda del onClick en vez de fuera, por lo que nunca se ejecutaban.
 	+ Solución 3: Mover las asignaciones de layoutManager y adapter fuera del lambda del constructor de ServicioAdapter. Las tarjetas comenzaron a renderizarse inmediatamente.
 ※ Gestión de ramas (Git Workflow): Se creó una rama paralela `bugfix/escaparate` para aislar la corrección del problema del RecyclerView. Una vez solucionado, se fusionó limpiamente en la rama del sprint.
 ※ !!!FIN DEL SPRINT 2!!!: Se realiza un `git merge --no-ff` de la rama `sprint2` hacia la rama `desarrollo` con el mensaje "feat: CRUD completo - Crear, Detalle, Editar, Eliminar servicios", dejando un historial claro y documentado.
 ※ !!!SE DA COMIENTO AL SPRINT 3: Módulo de transacciones!!!
 ※ Implementar , en pantalla del detalle de cada tarjeta funcionalidad para el botón "solicitar servicio".
-	↳ Agrego un segundo usuario "María" en la SeedDB y un servicio a su nombre para simular entorno real donde solicitar un servicio que no es del mismo usuario con el que estas falsamente registrado. 
-※ Pruebas funcionales: 
+	↳ Agrego un segundo usuario "María" en la SeedDB y un servicio a su nombre para simular entorno real donde solicitar un servicio que no es del mismo usuario con el que estas falsamente registrado.
+※ Pruebas funcionales:
 	↳ Se comprueba que el servicio creado desde la Seed se muestra correctamente en el escaparate. Al hacer clic sobre él se muestra el detalle y "solicitar servicio" funciona correctamente al hacer clic sobre el botón. El diálogo también funciona correctamente  y también el 'escape' al pulsar fuera del cuadro del dialogo. Al volver al escaparate ya no se ve el servicio debido a que ahora en en escaparate sólo se muestran los servicios activos. ..
-	▼ Problema: Se ve que cuando entras al layout detalles se muestran brevemente todos los botones y rápidamente se ocultan quedando sólamente el boton "solicitar servicio", lo que hace que la app tenga poco nivel. 
+	▼ Problema: Se ve que cuando entras al layout detalles se muestran brevemente todos los botones y rápidamente se ocultan quedando sólamente el boton "solicitar servicio", lo que hace que la app tenga poco nivel.
 	+ Solución : He corregido poniendo android:visibility="invisible" porque si pongo "gone" tendré problemas a futuro para dejarlos bonitos.
 
 ↪ 20.03.2026 :
 	La idea es continuar con el S3 donde voy a hacer la pantalla de transacciones  para ver las solicitudes pendientes para aceptarlas , completarlas o cancelarlas. Si me da tiempo comenzaré con la lógica "atómica".
-	↳ Me estoy dando cuenta de que Strings.xml es genial y super fácil más tarde para la hora de hacer que todo el sistema esté en otro idioma. Creo que la teoría es crear otro "strings_en" por ejemplo y cambiar los datos del español al inglés. 
+	↳ Me estoy dando cuenta de que Strings.xml es genial y super fácil más tarde para la hora de hacer que todo el sistema esté en otro idioma. Creo que la teoría es crear otro "strings_en" por ejemplo y cambiar los datos del español al inglés.
 	↳ Observo que cada día que ha ido pasando he ido escribiendo más y más cosas en mi diario. Lo cuál me indica que he pasado de montar algo básico como un esqueleto de una app que consulta datos en una base de datos y los pinta en 2 layouts. Y eso me encanta porque significa que estoy aprendiendo un montón :). De hecho me gustaría abrir un nuevo apartado, que creo que será dentro de este mismo diario, con las cosas que he ido aprendiendo y las dudas que he tenido. Además creo que me podrá servir a la hora de montar las memorias.
 	Si es que al final la app del diario... iba a servir para cosas como esta.. e incluso si se desarrollara mucho más se podría llevar a una metodología de trabajo, aunque a la vez que pienso esto, digo que para eso existen los ERPs. ¿No?
 ※ Para hacer la pantalla transacciones me he encontrado con que la lógica atómica era bastante compleja donde lo más importante era 'completarTransaccion()'
 	↳ Las *Pruebas funcionales* ※ han funcionado según lo esperado donde podía solicitar un servicio creado por María, usuario y servicio metido en la Seed par hacer pruebas. Este servicio aparece en mis transacciones como "pendiente" o "cancelado" que es lo que estabamos esperando. Tras cancelar la solicitud, esta aparece nuevamente en el escaparte como "disponible" y con la marca de tiempo inalterada, que era una cosa que a mi me preocupaba. Por otro lado también he comprobado la pantalla del perfil donde se mostraban el saldo de horas, el nivel y el contador de intercambios NO clicables. También aparecen los servicios que he publicado. Lo cierto es que me gustaría que al hacer clic sobre el servicio dede mi perfil, pueda accede al detalle de este y poder editarlo de la misma manera que lo hago a través del escaparate.
 ※ He cerrado el S3 !! ...casi sin darme cuenta... Ha sido bastante corto:
-※ Por lo pronto he tenido que reorganizar los sprints porque a Claude s ele ha ido la olla y no me ha hecho ni commits ni historias y me ha preguntando que por donde seguimos. He tenido que pararle los pies un poco pero vamos que al fin y al cabo es una IA y el que tiene que tomar las decisiones de como actuar soy yo así que es 100% mi culpa. 
+※ Por lo pronto he tenido que reorganizar los sprints porque a Claude s ele ha ido la olla y no me ha hecho ni commits ni historias y me ha preguntando que por donde seguimos. He tenido que pararle los pies un poco pero vamos que al fin y al cabo es una IA y el que tiene que tomar las decisiones de como actuar soy yo así que es 100% mi culpa.
 	↳ Como ya me olía que algo así iba a pasar yo ya me había adelantado con el commit para el perfil antes de introducir los cambios necesarios para implementar el historial.
 		**Tareas** para esta tarde (no se si borrar este apartado o adaptarlo a tareas heechas)
 - En TransacctionAdapter: Cambiar los botones de INVISIBLE a GONE. Se ponen así para que el desarrollo sea más facil por ahora. Finalmente será necesario GONE para que colapsen y no ocupen espacio. [NO]
-- Repasar nav_graph.xml: Entender y ver el objetivo de este archivo. Me gusta que desde escaparateFragment salen flechas hacia crearServicioFragment y detalleServicioFragment. Observo que que el resto no van relacionados con flechas y no sé si hace falta.[OK] Entiendo que no hacen falta las flechas po no ser una navegación secuecial. 
+- Repasar nav_graph.xml: Entender y ver el objetivo de este archivo. Me gusta que desde escaparateFragment salen flechas hacia crearServicioFragment y detalleServicioFragment. Observo que que el resto no van relacionados con flechas y no sé si hace falta.[OK] Entiendo que no hacen falta las flechas po no ser una navegación secuecial.
 -Para probar: desinstala y reinstala (por el seed). Crea un servicio tuyo → ve al servicio de María ("Clases de inglés") → solicitar → ve a la pestaña "Transacciones" → verás la transacción PENDIENTE como COMPRADOR. Como eres el comprador, solo puedes cancelar. Para probar "Aceptar" y "Completar" tendrías que simular ser María. [NOK] No he sabico como simular ser María
 - Que son las Factory class?? y que quiere decir ": ViewModelProvider.Factory {@Suppress("UNCHECKED_CAST")" [OK] Sirven para que Android sepa como crear los ViewModels según los parámetros que le pasamos. El supress es para avisar al compilador de que lo que estamos haciendo ya que la Factory es genérica y devuelve una clase T sin parámetros.
 ※ !!!SE DA COMIENZO AL SPRINT 4: Usuarios + Valoraciones!!!
@@ -168,7 +168,7 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 ↪ 21.03.2026 :
 	Contiuo con la implementación del S4:
 		▼ Problemón (creo) : No hemos llegado a usar @Transaction en la lógica de intercambios de horas para que sea atómica. Esto puede ocasionar problemas si dos usuarios solictan el mismo servicio a la vez?
-		+ Solución : Creo que al pasar el servicio a "PENDIENTE" para que el vendedor acepte dicha solicitud, no habrá problemas de este tipo. Aqui me surge la pregunta: ¿Podrá un usuario ofrecer el mismo servicio más de una vez? Yo creo que esto tiene que ser, oportunidad única y no "hacer necocio" de ello. 
+		+ Solución : Creo que al pasar el servicio a "PENDIENTE" para que el vendedor acepte dicha solicitud, no habrá problemas de este tipo. Aqui me surge la pregunta: ¿Podrá un usuario ofrecer el mismo servicio más de una vez? Yo creo que esto tiene que ser, oportunidad única y no "hacer necocio" de ello.
 ※ Para empezar, se crean los dos fragments para el inicio de sesión y registro de usuarios.
 ※ Añadir el botón de "cerrar sesión" en el fragment_perfil.
 ※ Crear SesionUsuario para almacenar el usuario que ha iniciado sesión para no tener que iniciar sesión cada vez que abra la app.
@@ -178,21 +178,21 @@ Por ahora ya no sé si me dejo nada en el tinero pero si acaso ya lo repasaré m
 ※ Creara también la lógica para estos modelos y el botón de cerrado de seion
 ※ He pasado *Pruebas funcionales* antes de hacer commit con lo implementado:
 	↳ La validación de usuario para el inicio de sesión y el manejo de errores es correcto porque no deja iniciar sesión si el usuario no existe en la base de datos.
-		▼ Problema : está que aún no se ha implementado correctamente el inicio de sesión y lo que hace la app es validar que el usuario existe pero inicia sesión  como "vecino demo" un usuario ha hardcodeado en la Seed. 
+		▼ Problema : está que aún no se ha implementado correctamente el inicio de sesión y lo que hace la app es validar que el usuario existe pero inicia sesión  como "vecino demo" un usuario ha hardcodeado en la Seed.
 		+ Solución : Se hará con el próximo fix porque hasta ahora me he centrado en las pantallas y el flujo entre ellas
 	↳ He observado un nuevo requerimiento para el sistema pero que creo que es bastante más complejo de lo que me imagino:
 		▼ Problema : Se que cada vez que haces clic en "atrás" la app vuelve a la pantalla que estaba anteriormente. Eso quiere decir que cada acción que se realiza en la app se suma a una especie de lista y que al accionar el botón atrás va recorriendo esa lista en orden inverso. Esto útil para algunos casos o pantallas pero no tanto cuando el usuario requiera salir de la app  y tenga que hacer 15 veces clic en el botón de volver atrás. Por ejemplo: recorro la barra inferior pulsando los 4 botones de izda a derecha uno cada vez en 2 ocasiones y he tenido que hacer clic 8X en botón atrás para poder salir de la app.
 		+ Solución : (fail) He invesigado muy poquito, 5 mins, y he visto que eso es normal cuando se utilizan fragments porque forman parte de la misma activity. Creo que la una de las soluciones para arreglar este comportamiento indeseado y las menos engorrosas,  es indicar como se debe comportar el botón o gesto de volver atrás diciéndole que vuelva a la pantalla del escaparate. De otra modo creo que habría que modificar la escructura de muhcas clases y layouts y será mucho mas complejo, pero de esto último no he llegado a averiguar nada, son solo pensamientos.[SOLUCIONADO EN REFACTOR]
 	↳ El fragment del registro funciona correctamente, según lo esperado y muestra los errores contemplados: nombre y barrio no pueden estar vacíos.
-		▼ Problema : He sido capaz de registrar usuarios nuevos con el mismo nombre y mismo barrio varias veces. Esto es algo que en el momento de la implementación no se tuvo en cuenta de manera específica pensando que  por alguna razón esto lo haría Room solo. 
-		+ Solución : Como decía anteriormente en mis memorias hay que mejorar de alguna manera tanto el inicio de sesión como el registro. Imagínate que hay dos usuarios con el mismo nombre pero distinto barrio ¿Qué pasaría? 
+		▼ Problema : He sido capaz de registrar usuarios nuevos con el mismo nombre y mismo barrio varias veces. Esto es algo que en el momento de la implementación no se tuvo en cuenta de manera específica pensando que  por alguna razón esto lo haría Room solo.
+		+ Solución : Como decía anteriormente en mis memorias hay que mejorar de alguna manera tanto el inicio de sesión como el registro. Imagínate que hay dos usuarios con el mismo nombre pero distinto barrio ¿Qué pasaría?
 	↳ Otra cosa que he podido detectar y que creo que tendré que mejorar a futuro y hacer un buen MVP, tendrá que ser la información que se muestra en las tarjetas: Creo que lo más sensato será incluir una lista con los barrios de la ciudad en Enums.kt y darle la opción al usuario a la hora de registrase en la app de escoger entre los barrios que se muestran en la lista y nada más porque si además dejamos que lo escriba él, se podría equivocar.
 ※ He heco un commit "feat: pantallas login + registro mantener sesión de usuario"  antes de ponerme con las sesiones de los usuarios.
 	↳ A partir de ahora haré los commits mucho más detallados:  (feat: pantalla login /nfeat: pantalla registro /nfeat: mantener sesión de usuario con SharedPreferences /nfeat: botón cerrar sesión /nrefactor: MainActivity)
 chore: Actualizar memorias
 ※ Se refactoriza el código para arreglar el back stack:
 	↳ Hacer que el bottmNav limpie la pila hasta llegar a escaparate con el resultado de que haciendo un clic hacia atrás vuelva a la pantalla del escaparate.
-		▼ Problema: resulta que el BottomNav, al navegar hacia atrás no se actualizaba el estado de la barra inferior dejando una mala sensación de uso. 
+		▼ Problema: resulta que el BottomNav, al navegar hacia atrás no se actualizaba el estado de la barra inferior dejando una mala sensación de uso.
 		+ Solución : Se refactoriza el Main (sinceramente no sé si es buena idea, pero funciona) haciendo que actualice el icono pero sin activar el listener. Ahora ya da mejora sensación.
 ※ Se refactoriza la capa UI para deshacernos de las sesión de usuario hardcodeada con anterioridad. Ahora obtiene el ID del usuario que ha iniciado sesión porque se guarda.
 En algún momento parece que Claude está perdiendo contexto... es cierto que esta app está empezando a tener un tamaño bastante considerable y no sé si le estaré pidiendo tareas muy largas. ¿Debería hacerle solicitudes más cortas?
@@ -207,17 +207,17 @@ En algún momento parece que Claude está perdiendo contexto... es cierto que es
 	↳ Caso 3, 6 y 9: Se pueden publicar y editar múltiples ofertas. La visualización en el escaparate se realiza de manera adecuada.
 		▼ Problema : La cancelación de un servicio sea comprado o publicado por uno mismo no se refleja en el historial
 		+ Solución : Habría que ver como marcar estos servicios. Estoy pensado en marcar de un color los servicios propios distinguiendo con otro color los servicios de otras personas y que mantengan los estados "completado" , "pendiente", y "cancelado".
-	↳ Caso 4, explorar los distintos anuncios: Lo anuncios en el escaparate se pueden explorar libremente y se pueden solicitar también libremente. 
+	↳ Caso 4, explorar los distintos anuncios: Lo anuncios en el escaparate se pueden explorar libremente y se pueden solicitar también libremente.
 		▼ Problema : El problema que encuentro aquí es que no se comprueba el saldo en horas del comprador quedando así anuncios  marcados como pendiente no dejando ver a otras personas el anuncio hasta que el vendedor intenta aceptarlo pero al aceptarlo se da cuenta de que no tiene horas y por tanto tiene que cancelar el servicio para que vuelva al escaparate.
 		+ Solución : Comprobar rápidamente el saldo de horas para ver si se puede o no mandar la solicitud del servicio. De esta manera no se bloquean anuncios innecesariamente.
 	↳ Caso 5, TTS : [SPRINT 5]
 	↳ Caso 6 implements Caso 7, Aceptar la propuesta de compra del servicio que implementa la valoración con ARASAAC: El proceso de aceptar un servicio no está funcionando según mis expectativas cuando realicé el diagrama de casos de uso. Lo que yo quería  es que el servicio una vez comprado y aceptado por el vendedor, entrara de inmediato el sistema de valoraciónes.
-		▼ Problema : En el mundo real esto no funciona así. Pues no puedes comprar algo y nada mas comprarlo, mandar una valoración. Lo que sí que puedes hacer , al igual que en BlaBlaCar, es ofrecer el servicio, realizarlo y al finalizarlo, en este caso marcarlo como completado ya por fin se podrá realizar la valoración. 
+		▼ Problema : En el mundo real esto no funciona así. Pues no puedes comprar algo y nada mas comprarlo, mandar una valoración. Lo que sí que puedes hacer , al igual que en BlaBlaCar, es ofrecer el servicio, realizarlo y al finalizarlo, en este caso marcarlo como completado ya por fin se podrá realizar la valoración.
 		+ Solución :Pues he tenido que replantear como quiero que sea el sistema de valoraciones y creo que, como se menciona anteriormente, lo ideal sería marcar cuales son tus servicios y cuales no. Puntualizando más en la lógica de la transacción creo que debería seguir el siguiente camino: [comprador] > solicita servicio > recibe respuesta > se descuentan horas (se suman al vendedor)> obligación de mandar valoración (la recibe el vendedor) >  recibe valoración (del vendedor) > se marca servicio como completado > se muestra en historial :? || [vendedor] > publica servicio > recibe solicitud del servicio > confirma solicitud > se le agregan las horas > realiza servicio > marca servicio como completado > obligación de realizar valoración > recibe su valoración > se muestra en historial :?
 	↳ Caso 8, visualizar perfil propio: Aquí tenemos otro melón por abrir. Primero se ve el nombre del usuario y debajo el barrio.  Se muestran las tarjetas con el saldo de horas, el nivel y el contador de intercambios. Se muestran las tarjetas "Mis servicios".
 		▼ Problema 1 : Las tarjetas con el sado de horas no se actualizan. El problema está en PerfilFragment donde pintarPerfil() no pilla bien los datos del saldo de las horas del usuario
 		+ Solución 1: [fail] Se intenta Cambiar 'tvSaldoHoras.text = String.format("%.1f", usuario.saldoHoras)' por 'tvSaldoHoras.text = usuario.saldoHoras.toString()' sin éxito aún.
-		▼ Problema 2 : La tarjeta que muestra el nivel no se adapta a la logitud del texto. Cuando se muestra del nivel de NOVATO está bien porque solo tiene seis caracteres, pero cuanado cambiamos a VETERANO o REFERENTE  que ya tienen más de >=7 char, las letras que no caben pasan a una nueva línea y se ve mal. 
+		▼ Problema 2 : La tarjeta que muestra el nivel no se adapta a la logitud del texto. Cuando se muestra del nivel de NOVATO está bien porque solo tiene seis caracteres, pero cuanado cambiamos a VETERANO o REFERENTE  que ya tienen más de >=7 char, las letras que no caben pasan a una nueva línea y se ve mal.
 		+ Solución 2: Cambiar el ' android:layout_weight="1.4"' para que el centro ocupe un poco más que el las dos tarjetas de los lados.
 		▼ Problema 3 : Esto es un problema sobre el cual tengo que investigar bastante  porque tiene que ver con Android MPChart. Se trata de las estadísticas. Para empezar, el gráfico está resulón . El problema es que es poco intuitivo porque funciona como un pantalla aparte donde puedes hacer zoom in y zoom out. Cuando haces doble clic sobre el gráfico se hace zoom im y para hacer zoom out de vuelta tiene que pellizcar la pantalla. Además te puedes desplazar por el. Me recuerda un poco a una GoogleMaps embebido pero con gráficos de 2 barras en vez de mapas. Se muestra correctamente el total de horas gastadas con el de horas cambiadas. Lo que pasa que para mi gusto personal no es lo que esperaba de primeras. Claro está que aun tiene mucho margen de mejora por delante, aplicar filtros en dos botones o mil cosas pero para el MVP no hará falta tanta floritura. Sólo que quede bien y quiero se sea intuitivo. *-*-
 		+ Solución 3: (fail) no sé como resolverlo o como quiero que sean los gráficos todavía.
@@ -235,7 +235,7 @@ En algún momento parece que Claude está perdiendo contexto... es cierto que es
 	**Tareas**
 	※ Comprobar lo que ha hecho Claude Code o si  ha pedido algún pull request. [Apuntar lo que he aprendico en cosas aprendidas]
 	※ Que es y como se hace un pull request.[Apuntar en cosas aprendidas]
-	※ Hacer lo que tienes apuntado en lateral del PC. [OK]	
+	※ Hacer lo que tienes apuntado en lateral del PC. [OK]
 
 ↪ 25.03.2026 :
 	Hoy he retomado el contacto con el desarrollo tras estar unos días con otras tareas del curso. Estos días he pasado de hacer parte del desarrollo con Claude en un chatbot normal a hacerlo con ClaudeCode. Este hace un clone de mi rama y después crea otra con los fixes que aporta. De esta manera yo sólo tengo que revisar lo que ha hecho, ponerlo a prueba y el curso normal de la programacíon es aceptar el PR , pero yo en este caso he hecho un cherry pick para que no se vea mucho rastro del uso de la IA en el TFG por si algún miebro del jurado le da por mirar e investigar (aunque no se habla de la prohibición de los LLM para el código, de igual manera esto es defendible porque es lo que más se acerca a un entorno laboral real).
@@ -247,7 +247,7 @@ En algún momento parece que Claude está perdiendo contexto... es cierto que es
 		↳ Bug 3 (Faltaba botón Valorar tras completar): Las tarjetas de transacciones COMPLETADAS no mostraban ninguna acción. Se añadió un campo puedeValorar a TransaccionUI que es true solo en estado COMPLETADA, y un botón "Valorar" en el adapter. Por ahora muestra un Toast "próximamente" hasta que se implemente el sistema de valoraciones con ARASAAC.
 		↳ Bug 4 (Tarjeta nivel no se adapta al texto): tvNivel tenía layout_width="wrap_content" lo que provocaba que nombres largos como VETERANO o REFERENTE se partieran en dos líneas. Se cambió a match_parent con maxLines="1" y autoSizeMinTextSize para que el texto se encoja en vez de partir línea.
 		↳ Bug 5 (Historial sin título de servicio): HistorialAdapter recibía objetos Transaccion que no contienen el título del servicio. Se creó un HistorialItem enriquecido con el título obtenido de ServicioRepository, y ahora muestra el nombre real del servicio con signo +/- en verde/rojo según sean horas ganadas o gastadas.
-		↳ Bug 6 (Canceladas no aparecen en historial): HistorialViewModel solo filtraba transacciones COMPLETADAS. Se añadió un segundo flow para CANCELADAS y una sección extra en el layout "Transacciones canceladas" que aparece solo si las hay.	
+		↳ Bug 6 (Canceladas no aparecen en historial): HistorialViewModel solo filtraba transacciones COMPLETADAS. Se añadió un segundo flow para CANCELADAS y una sección extra en el layout "Transacciones canceladas" que aparece solo si las hay.
 
 ↪ 26.03.2026 :
 	Hoy quiero meterle bastante avance. El objetivo es cerrar el sprint esta semana.
@@ -261,8 +261,8 @@ En algún momento parece que Claude está perdiendo contexto... es cierto que es
 	↳ Bug 4 — Tarjeta nivel se adapta [OK]
 	↳ Bug 5 — Historial muestra título del servicio: [OK] Se muestra título, horas en color adecuado y la fecha y hora
 	↳ Bug 6 — Canceladas aparecen en historial [OK1/2]: Se muestra el cancelado al final de la lista del histórico. La solución pasa por hacer una sección a parte porque tenemos un método observarCanceladas. O también se me ocurre hacer hacer que se muestren por orden de fecha, pero eso sí que no sé como hacerlo. Creo que lo más intuitivo sería 2 pestañas: completadas, canceladas y dentro de canceladas igual a futuro poner si se ha cancelado por ti o por el vendedor. [semiOK] se ha mejorado la lógica de mostdar los observers.
-※ Montar el módulo de valoraciones. Por ahora está marchando sin imprevistos. 
-	↳ Se muestran las 9 pseudopictogramas. 
+※ Montar el módulo de valoraciones. Por ahora está marchando sin imprevistos.
+	↳ Se muestran las 9 pseudopictogramas.
 	↳ No deja salirse de la vista sin validar nada.
 	↳ Se pide al menos un pictograma
 	↳ [Actualización Bug 3] -   Botón valorar tras completar [OK] Se refactorizó `TransaccionFragment` para que al pulsar el botón se calcule quién es el valorado y se abra el BottomSheet correctamente en lugar del Toast "próximamente".
@@ -280,10 +280,10 @@ Termino ya y me dejo cosas para mañana
 	▼ Problema: Pensaba que habría un mayor catálogo de pictogramas que representara las valoraciones pero no era así el caso.
 	+ Solución: He pasado por rebajar un poco mis espectativas que quizás eran un poco altas, y además he utilizado la lógica; por ejemplo para mostrar un pictograma contrario a "amable", la web de ARASAAC me daba la opción de tachar con una cruz roja todo el pictograma para que así se mostrara lo contrario.
 		↳ Finalmente a pesar de la solución lógica dilucidada, he optado por no tomar literalmente las descripciones de las imágenes y utilizar otras, porque me dice fío un poco más de mi intuición y creo que van a representar mejor esas escenas. Me he quedado contento con mi elección :)
-	
+
 
 ↪ 28.03.2026 :
-	Hoy parece que podré tabjar un par de horas. A ver con que me encuentro... 
+	Hoy parece que podré tabjar un par de horas. A ver con que me encuentro...
 	[OK] Tareas pendientes de ayer: lo planificado. Repasar todo el código sugerido Claude. [He probado una cosa nueva...Mientras he estado pensando en como hacer los comits anteriores, ClaudeCode me ha implementado los cambios sugeridos en el chat de Claude. Todo esto porque se lo hedado masticado y como tiene que hacerlo. No me he fiado mucho por si me la liaba pero parece que si le das las directrices claras lo hace bien. Aún así hay que ir con cuidado porque el modelo que tengo corriendo en local para ClaudeCode (qwen3-coder:30b) no tiene habilitado el thinking así que es un poquito más torpe y no es capaz de pensar si está haciendo bien o mal su tarea. Al menos esa es mi sensación comparado con un super modelo como Opus 4.6 con razonamiento extendido.]
 	[OK] Tareas para hoy: Rematar y testear el Sprint 4 (Valoraciones ARASAAC)**
 ※ Actualizar el diseño `bottom_sheet_valoracion.xml` para incluir esos `drawables` reales y poner los textos debajo de cada imagen (preparando el terreno para el TTS).
@@ -291,7 +291,7 @@ Termino ya y me dejo cosas para mañana
 		▼ Problema: Al descargar los pictogramas, uno se guardó con el nombre `regular_ok.png` en lugar de `regular_normal.png` (que era el que esperaba la lógica del código). Además, descargué un par de pictogramas extra ("duda_esperar" y "no_entiendo") que no encajaban en el Grid de 3x3.
 		+ Solución: En lugar de renombrar archivos o tocar la UI, se ajustó el mapeo interno en la función `obtenerDrawable()` para que el tag "regular_normal" devuelva `R.drawable.regular_ok`. Los iconos extra se han dejado en la carpeta para un posible tutorial/guía de uso futuro. Se evitó usar `assets` y se trabajó directamente con `res/drawable/` para mejorar el rendimiento y evitar código innecesario con `BitmapFactory`.
 ※ Revisar y repasar el código sugerido por Claude (los nuevos BottomSheets y la conexión con el Historial).
-	↪ No lo he revisado finalmente pero ha quedado bien. 
+	↪ No lo he revisado finalmente pero ha quedado bien.
 		▼ Problema 1: Quedaba una variable hardcodeada `usuarioActualId = 1` en el constructor del `HistorialAdapter`, lo que rompía la lógica de sesión dinámica que hicimos ayer.
 		+ Solución 1: Se eliminó el valor por defecto y se pasó el ID real del usuario instanciando `SesionUsuario(requireContext()).obtenerUsuarioId()` desde el Fragment.
 		▼ Problema 2: Al intentar compilar (Rebuild), Gradle lanzó un error crítico `processDebugResources FAILED`. Faltaban declaraciones de strings (`detalle_valoracion_titulo`, etc.) en el `strings.xml`. Además, en la lógica del Kotlin faltaba el método `obtenerDescripcion()` y había comentarios residuales de la IA.
@@ -307,11 +307,11 @@ En verdad antes de pasar al siguiente sprint, siento la gran necesidad de resolv
 	SE DA COMIENZO AL SPRINT 5!
 		↪ Lo cierto que es que he tomado la decisión de dividir el srpint 5 en tareas más simples para poder centrarme más en detalle y no abarcar tanto. Si que es cierto que al final los sprits han ido más rápido de lo que yo me esperaba. Pero claro, no me voy a estar alargando innecesariamente con cada sprint. Lo bueno que finalmente tendré una app casi casi como yo me la había imaginado desde el principio.
 ※ Diseño del TTS con Claude Code: Para empezar bien el día, he decidido meterle caña a ClaudeCode por consola CLI (quería aprender su funcionamiento). Quería hacerlo de esta manera e implementar esto, adaptándome a flujos de trabajo modernos asistidos por IA que tanto escucho hablar últimamente. *Detalle... es la primera vez que hago esto y además no he mirado tutoriales, solo IA a saco*
-	 ↳ Voy a explicar lo mejor que recuerdo como lo he hecho ya que a la fecha de escritura de estas líneas (1.5 días más tarde). 
+	 ↳ Voy a explicar lo mejor que recuerdo como lo he hecho ya que a la fecha de escritura de estas líneas (1.5 días más tarde).
 		↳ 1º Le he consultado que plugins necesarios para mi proyecto. Y he añadido superpowers porque tiene herramientas chulas. Las demás: claude-mem o claude- everything o UI/UX no las he metido porque no eran tan útiles por ahora.
 			Para ello he utilizado las IAs Claude y Gemini en sus modelos más potentes y thinking con la esperanza de conseguir un resultado adecuado. Debido a mi inexperiencia, esto viene bien porque según mis experiencias, las IAs te ayudan bien a aprender conceptos nuevos. Igual no pueden ayudarte a hilar muy fino pero para esto me ha venido de maravilla.
 		↳ 2º He valorado, con un chat "crítico" el prompt y la metodología que deberá seguir ClaudeCode para planear la implementación del TTS.
-			Se opta por sacrificar tiempos 
+			Se opta por sacrificar tiempos
 		↳ 3º Tras instalar los superpowers y analizar con 'brainstorming' el proyecto, decido que lo mejor es optar por una de las tres opciones propuestas. Se opta por una que tiene un retraso de ~200ms en incialicar el TTS pero es lo mismo que tarda en cargar el Fragment así que es asumible. Las demas opciones las he descartado porque o eran muy complicadas y había que refactorizar mucho o dejaba deuda técnica a futuro.
 			▼ Problema: ¿Dónde meto la inicialización y el shutdown del motor TTS para que no haya memory leaks sin tener que ensuciar todos los Fragments con código de limpieza?
 			+ Solución: Se aprueba usar DefaultLifecycleObserver. Básicamente el TTS se engancha al viewLifecycleOwner del Fragment y se inicializa, habla y hace shutdown() solito según el ciclo de vida de la vista. Ni me tengo que acordar de pararlo al salir de la pantalla. Me recuerda un poco a cuando descubrí repeatOnLifecycle, que también parecía magia al principio.
@@ -334,15 +334,15 @@ En verdad antes de pasar al siguiente sprint, siento la gran necesidad de resolv
 	Hoy he tenido que lidiar con la liada que me ha hecho qwen en casa. No ha sido pérdida de tiempo porque creo que he aprendido mucho y muy intenso.
 ※ Plan de contingencia: Tenía que "arreglar" el fallo de casa, lo digo entre comillas porque por suerte no ha pasado nada sino que todo se ha quedado en local y simplemente tendré que deshacer todo lo que ha liado qwen, además de manera fácil con un hard reset y se va todoa tomal pol saco.
 	↳ 1º He instalado CCode en el ordenador.
-		▼ Problema: Zscaler otra vez!!. Me daba errores ECONNREFUSED y ERR_BAD_REQUEST y no había manera de que arrancara Claude Code por consola. A pesar de estar unas pocas horas probando con certificados de la misma manera que lo hice con AndroidStudio no he sido capaz por 
+		▼ Problema: Zscaler otra vez!!. Me daba errores ECONNREFUSED y ERR_BAD_REQUEST y no había manera de que arrancara Claude Code por consola. A pesar de estar unas pocas horas probando con certificados de la misma manera que lo hice con AndroidStudio no he sido capaz por
 		+ Solución: He tirado por la interfaz web de Claude.ai/code. He creado el planning que tenía guardado a  la rama de git "sprint5" en local y lo he subido a remoto de github. Como desde esta página CCode se hace un clone, tiene acceso a todo el contexto. Así que hecho esto Claude se pone con el manual y se pone a implementar todos los camibios y me hace una PR maravillosa que más tarde tendré que mergear a la mía [OK]
 ※ Me traigo la rama de CCode a local para compilar y comprobar funcionamiento y posibles problemas:
 	▼ Problema: Build falla en PerfilFragment.kt por que en la tarea 5 se había cambiado el cosntructor de ServicioAdapter para añadir la lambda de TTS. En la tarea 7 nos e ha actualizado la llamada en el Perfil. Faltaba el parámetro onServicioClick.
-	+ Solución: Facilita, (pero con ayuda de la IA) lo he arreglado a mano en el IDE. Han sido 3 líneas que he tenido que meter onservicioCick como parametro que recibe ServicioAdapter. 
+	+ Solución: Facilita, (pero con ayuda de la IA) lo he arreglado a mano en el IDE. Han sido 3 líneas que he tenido que meter onservicioCick como parametro que recibe ServicioAdapter.
 ※ En casa ya descansado me pongo con la limpieza y lo termino dejando de maravilla ^_^
-	↳ Lo primero que hago es ponerme en mi rama sprint5. Para a continuacion traerme uno por uno  mediante cherry pick los cambios que quiero. Lo he hecho por la intezfaz gráfica del IDE con unos pocos clics (más facil). 
-	↳ Tras tener los cherrypicks en mi rama se hace esta movida [git rebase -i (<tu SHA aqui>) --exec "git commit --amend --reset-author --no-edit"]. Esto recorre los commits automáticamente y me pone a mi como autor único de cada uno. Esto deja el grafo bien limpio y sin comits de terceros. 
-Como me gusta git! Tengo pensdo dejar que ClaudeCode haga de las suyas y me mejores el DocEngie, al ser un proyecto poersonal puedo hacer alarde de que se usar la IA a mi favor. 
+	↳ Lo primero que hago es ponerme en mi rama sprint5. Para a continuacion traerme uno por uno  mediante cherry pick los cambios que quiero. Lo he hecho por la intezfaz gráfica del IDE con unos pocos clics (más facil).
+	↳ Tras tener los cherrypicks en mi rama se hace esta movida [git rebase -i (<tu SHA aqui>) --exec "git commit --amend --reset-author --no-edit"]. Esto recorre los commits automáticamente y me pone a mi como autor único de cada uno. Esto deja el grafo bien limpio y sin comits de terceros.
+Como me gusta git! Tengo pensdo dejar que ClaudeCode haga de las suyas y me mejores el DocEngie, al ser un proyecto poersonal puedo hacer alarde de que se usar la IA a mi favor.
 ※ Comprobar que la app se puede istalar y que de manera general funciona correctamente. Faltará hacer y documentar las pruebas funcionales.
 
 ↪ 31.03.2026 :
@@ -350,18 +350,18 @@ Como me gusta git! Tengo pensdo dejar que ClaudeCode haga de las suyas y me mejo
 
 ↪ 01.04.2026 :
 	Hoy no he trabajado. Tenía cosas pendientes que hacer así que aprovecharé la noche del 2 al 3 para avanzar mucho. Esta noche del 1 al 2 tengo planeado terminar de documentar las pruebas funcionales y arreglarlo antes de avanzar con los detalles.
-	
+
 ↪ 01.04.2026 :
 	Estoy bastante vaguete y no me apetece mucho trabajal... a ver como se me da la noche.
-※ Pruebas funcionales: Se hacen pruebas funcionales sobre la app y se descubren cositas que creo que tengo que corregir y añadir antes de seguir con el desarrollo. 
+※ Pruebas funcionales: Se hacen pruebas funcionales sobre la app y se descubren cositas que creo que tengo que corregir y añadir antes de seguir con el desarrollo.
 	↳ Escaparate - Lectura Global: El botón lee todas las tarjetas que están a la vista en la pantalla. Solo lee las tarjetas completas y se deja las que se ven a medias. Las lee todas haciendo  una pausa entre cada una. Las horas las lee bien.Hace una pausa natural entre tarjeta y tarjeta(gracias al .  que le pusimos)
-		▼ Problema:  El TTS lee el valor real del coste. Esto pasa porque no se ha limitado la cantidad de decimales que se pueden introducir, entoces el TTS leerá 1,9999999983 horas. Las horas que se muestran en pantalla sí que se había contemplado que pasara eso así que se hace aproximación para mostrarlo bien. El problema de verdad es cuando en la BBDD no se gestiona ese tipo de errores.	
-		+Solución: refactorizar TtsHelper.kt donde he mejorado la lógica de formatearCoste() para gestionar correctamente los decimales. 
+		▼ Problema:  El TTS lee el valor real del coste. Esto pasa porque no se ha limitado la cantidad de decimales que se pueden introducir, entoces el TTS leerá 1,9999999983 horas. Las horas que se muestran en pantalla sí que se había contemplado que pasara eso así que se hace aproximación para mostrarlo bien. El problema de verdad es cuando en la BBDD no se gestiona ese tipo de errores.
+		+Solución: refactorizar TtsHelper.kt donde he mejorado la lógica de formatearCoste() para gestionar correctamente los decimales.
 			↳ En detalle: El problema no era solo de UI, sino de cómo se representan los Double internamente. Los decimales en binario no siempre son exactos, por eso aparecen valores raros como 1.9999999983.
-			 Antes:	- Se usaba toString() directamente → sacaba todos los decimales “reales” 
-				- Se hacía un replace('.', ',') → parche visual, pero no solucionaba el problema 
-			Ahora: 	- Se comprueba si el número es entero con (coste % 1.0 == 0.0) 
-				- Si es entero → se convierte a Long y se muestra sin decimales 
+			 Antes:	- Se usaba toString() directamente → sacaba todos los decimales “reales”
+				- Se hacía un replace('.', ',') → parche visual, pero no solucionaba el problema
+			Ahora: 	- Se comprueba si el número es entero con (coste % 1.0 == 0.0)
+				- Si es entero → se convierte a Long y se muestra sin decimales
 				- Si no → se formatea con String.format y Locale "es-ES"
 		▼ Problema: Cuando es 1 hora, lee "una horas" en plural
 		+ Solución: Refactorizar nuevamente TtsHelper.kt donde añado formatearCosteConUnidad(). Llama a la funcion anterior mencionada y además  comprueba si tienque que hablar en plurar o en singular. ¿Overkill? No lo sé pero me ha gustado solucionar esto por mi cuenta :)
@@ -385,24 +385,24 @@ Como me gusta git! Tengo pensdo dejar que ClaudeCode haga de las suyas y me mejo
 	↳ Perfil:
 		▼ Problema: Tts lee pero no indica el qué!
 		+ Solución: Refactorizo PerfilFragment.kt hardcodeando "lugar" y "saldo" para que indique a que hace referencia. [Si da tiempo , refactorizar en siguiente Sprint, el  6, para meter esos datos en strings.xml]
-	↳ Prueba de Fuego (Ciclo de Vida):  Esta prueba es todo un logro! Se calla de golpe cuando cambias de pantalla o haces un longTap o sales de la pantalla. 
+	↳ Prueba de Fuego (Ciclo de Vida):  Esta prueba es todo un logro! Se calla de golpe cuando cambias de pantalla o haces un longTap o sales de la pantalla.
 	↳ Valoraciones (BottomSheet): pffff por donde empezar... No me gusta como ha quedado. La cosa funciona sólo cuando terminas de completar el servicio. Me gustaría que la misma funcionalidad estuviera en el historial > valoración recibida. [OK]
 		▼ Problema: El Tts funciona bien, pero no como yo me esperaba. El Tts lee correctamente las descripciones de los prictogramas. Además los lee en orden en el que se han seleccionado. Lo que no me gustaba, es que no se leía el comentario opcional.
 		+ Solución: Añado un lateinit "comentarioValoracion" que se procesa en 'configurarBotonTts()'cuando haces tap en el icono de escuchar. Comprueba si está vacío y recita mensaje guardado en strings. Extrae la infomación del campo comentario en vivo y la recita (no se conecta a la BBDD porque aún no se ha guardado nada.)
 !!!TTS lee los emojiiis!!!! :D  Finalmente no me ha cundido mucho en cuanto a progreso pero sí que he aprendido cosas guays.
 
 ↪ 05.04.2026 :
-	Bueno vamos a ver si avanzo un poquito ahora por la mañana. Me he quedado en la prueba funcional del BottomSheet de las Valoracioes, pero ahora me quiero centrar en el Historial ya que allí también se muestran las valoraciones pero por ahora no se leen. 
+	Bueno vamos a ver si avanzo un poquito ahora por la mañana. Me he quedado en la prueba funcional del BottomSheet de las Valoracioes, pero ahora me quiero centrar en el Historial ya que allí también se muestran las valoraciones pero por ahora no se leen.
 		▼ Problema: Se muestra la información de la valoración , pero no hay forma de escucharla. El BottomSheet de solo lectura no tiene botón de altavoz ni integración con TtsHelper. [En srpint 6 implementar la edición de la valoración][Sprint 6 refactorizar bottom_sheet_detalle_valoracion.xml y strings.xml para que nuestre "<string name="detalle_valoracion_titulo">Valoración recibida</string> " "<string name="detalle_valoracion_titulo">Valoración enviada</string>" e implementar la edicion del comentario (Creo que es un refactor gordo ya se verá si se implementa o no.)]
 		+ Solución: Se añade un ImageButton de altavoz junto al título del BottomSheet. Al pulsarlo , el TtsHelper lee los pictogramas  seleccionados usando PictogramaMapper para obtener las descripciones legibles y, si existe comentario opcional, lo recita también. El helper se liga al ciclo del vida del BottomSheet para que se destruya solo al cerrar.
 
 ↪ 06.04.2026 :
-	Hoy termino con el S5. 
+	Hoy termino con el S5.
 ※ Quiero darselo a ClaudeCode y para ello he estado un buen rato repasando la estructura de carpetas del proyecto y organizado bien el README y el Claude.md. También he forjado un buen pormpt para CCode.
 	▼ Problema: La he liado con el chat "Iniciando desarrollo en Android Studio con Clean Architecture". He actualizado el contexto que tenía el chat sobre el repositorio de git y acto seguido quería que rehiciera la respuesta tendiendo en cuenta las actualizaciones. Al darle al boton reintantar, no me he fijado que era el primer mensaje del hilo del chat y se ha perdido todo lo hablado a lo largo del mes...
 	+ Solución: Ninguna. Menos mal que tengo las memorias estas actualizadas con lo que voy haciendo porque sino... la liada hubiera sido parda.
 ※ Al quedarme sin límite de uso en Claude, he optado por pedirle al modo agente de Gemini en Android Studio que me hiciera las tareas que tenía contempladas para CCode. Aparentemente está bien porque la app funciona, y sólo he tenido que tocar un par de cosas pero no se si me termina de gustar lo que ha hecho o es que estoy acostumbrado al estilo de Claude. Poor ahora la he dejado en una rama aparte para ver como me hace los cambios CCode y ver cuál me gusta más.
-	↳ Finalmente me quedo con la version de Claude que me gusta más como manejalas variables y separa las funcionalicades en las distinas clases. Creo que es más de mi estilo. 
+	↳ Finalmente me quedo con la version de Claude que me gusta más como manejalas variables y separa las funcionalicades en las distinas clases. Creo que es más de mi estilo.
 		▼ Problema : Me he enocntrado en la problemática de comparar las dos ramas, CCode y Gemini, que tenía guardadas en local. Sólo era capaz de comparar la rama que en la que estaba contra la que había hecho la IA ya que no tenían los mismos commits.
 		+ Solución: Tras mucho tocar he podido hacerlo gracias al IDE haciendo checkout en una de las ramas y despues haciendo un "compare worktree" o algo similar, ha sido un poco de casualidad que he dado con ello, pero vamos que me ha venido de locos. CCode me gusta más pero se chupa los tokens que da gusto (¿Será porque tiene demasiando contexto? Yo creo que sí que tiene muchas cosas que procesar y tener en cuenta y que Gemini suele ser más perezoso en cuato a buscar contexto)
 ※ He añadido también el spinner de los barrios y he actualizado Enums.kt con los barrios de Zaragoza y cada barrio recibe un displayName. Esto mata dos pajaros de un tiro porque sive para que el usuario no se vuelva loco leyendo todo mayúsculas y el TTS lo lea normal, no como si le fuera a dar un cortocircuito.
@@ -410,12 +410,12 @@ Como me gusta git! Tengo pensdo dejar que ClaudeCode haga de las suyas y me mejo
 ※ He creado las pestañas que tenía pendientes de hacer en HistorialFragment donde se muestra por un lado "Transacciones completadas" y por otro lado "Transacciones canceladas".
 	▼ Problema : Las tarjetas ques se muestran en ese RecyclerView, canceladas, se muestran de la misma manera que en  "completadas" donde el saldo se muestra como gastado y/o ganado pero realmente no computa en el gráfico ni afecta el saldo de cada usuario.
 	+ Solución: En el spint 6, ver de qué manera esto se puede solucionar pero ya no quiero pasar más tiempo con estos arreglos porque ya acumularé  mucho atraso con el cominezo del último srpint sino.
-※ Quiero detallar un poco más la forma de hacer merge de una rama en otra porque aun con el flujo de trabajo avanzado de git y los alias que me he montado he terminado por hacerme un lío porque justo en el momento mas inadecuado ha saltado una actualizacion de VsCode y me ha hecho dudar pero más tarde la hubiera liado igualmente porque no había proporcionado los parámetros adecuados:	
+※ Quiero detallar un poco más la forma de hacer merge de una rama en otra porque aun con el flujo de trabajo avanzado de git y los alias que me he montado he terminado por hacerme un lío porque justo en el momento mas inadecuado ha saltado una actualizacion de VsCode y me ha hecho dudar pero más tarde la hubiera liado igualmente porque no había proporcionado los parámetros adecuados:
 	↳ 1. Para empezar, si estás en la rama secundaria tienes que tener todo al dia commit y push por si la cagas.
 		↳ Como yo la he cagado dejando los commits que hizo Claude sin hacer un cherrypick pues lo desribo brevemente: Hay que hacer un rebase de los hashes (si te atreves o te acuerdas hacerlo dando un rango desde -i hasta el hash) que quiere cambiar con el parámetro --exec para que ejecute " git commit --amend --reset-author --no-edit". Se abirá un editor y lo dejas tal cuál está con " :qw " para que se cierre y se guarde y se ejecute tal cual.
 	  2. Haces checkout a la rama principal , en este caso desarrollo y te pones al día con un pull con lo que pudiera haber.
 	  3. Usando el alias mergeff ( merge --no-ff), tienes que indicar que rama quieres mergear dentro de la que estas ahora y además tienes que añadir un mensajito diciendo que haces con "-m"
-  
+
 !!!FINAL DEL SPRINT 5!!!!
 
 SE DA COMIENZO AL SPRINT 6!
@@ -423,8 +423,8 @@ SE DA COMIENZO AL SPRINT 6!
 ※ En este rato he redactado lo que se ha hecho para finalizar el Sprint 5 y me quiero preparar un poco  lo que me he ido dejando para el sprint 6 e ir separandolo en tareas más pequeñas para no tener que hacerlo todo de golpe.
 ※ He estado trasteando con conocimienteos básicos sobre bash, y es que me está gustando basntante. Estoy planteandome seriamente el cambio a Linux de aqui al verano cuando termine el grado y meterle caña a mi objetivo de aprender ciberseguridad. Realmente pensaba que era mucho más de lo que me imagino pero para comenzar a trastear me está molando bastante.
 
-↪ 07.04.2026: 
-	Creo que ya tengo todo lo necesario para comenzar a preparar la separación de tareas del S6. 
+↪ 07.04.2026:
+	Creo que ya tengo todo lo necesario para comenzar a preparar la separación de tareas del S6.
 ※ Lo primero que he hecho ha sido crear una nueva rama "sprint6/worker+ui&ux". Ahora toca pensar e idear.
 	↳ Tengo algo en mente pero necesito algo de ayuda sobre lo que he estado repasadndo a ver si me dejo algo o no me dejo nada.
 		Me apetece meterme primero con la UI/UX (el órden NO implica prioridades):
@@ -435,9 +435,9 @@ SE DA COMIENZO AL SPRINT 6!
 		4. Editar las valoraciones. Aquí me asalta la duda de si es un básico del CRUD o sólo es una pijada que se me antojó a mí en el momento. Mi intuición me dice que se quede así y que no toque nada al tratarse de un MVP y dados los plazos en los que nos manejamos para la entrega del proyecto. En todo caso dejar para [vías futuras] o esto sí, darle prioridad baja.
 		5. Saldo de horas con decimales raros en la BBDD. Hay que limitar la cantidad de decimales que el usuario puede introducir. Aquí lo tengo bastante claro: Quiero máximo 2 decimales y además que se puedan digitar tanto una coma "," como un punto "."; ha de ser con este atributo android:digits="0123456789.," en el TextInputEditText. Después habrá que normalizarlo en Room y no sé si en algún lugar más.
 			▼ Problema :  Aquí dice "máximo 2 decimales" pero antes hablaba incrementos de horas como 0.5 o 1.5 (en las primeras ideas). ¿Tiene sentido que alguien ofrezca un servicio por 1.37 horas? Pues no!
-			+ Solución : Sería más limpio un Spinner o un Slider con pasos de 0.5 en vez de un campo libre con validación de decimales. 
+			+ Solución : Sería más limpio un Spinner o un Slider con pasos de 0.5 en vez de un campo libre con validación de decimales.
 		6. Tarjetas canceladas en el historial que se muestran son saldos gastado/ganado. Hay que quitar el indicador de horas pero preferiblemente yo lo mostraría tachado y en gris para que se sepa que no se ha realizado la transacción. Además me gusta la idea de mostrar un mensajito  "No se han descontado/sumado horas de tu saldo"  o "sin cargo"
-		7. Acceder al detalle del servicio desde el Perfil ("Mis servicios").Cierto es que lo he mencionado pero creo que no ha quedado claro en el punto 2 de esta lista. He añadido el subpaso de como creo que debería ser la lógica y creo que aplica lo mismo aquí. 
+		7. Acceder al detalle del servicio desde el Perfil ("Mis servicios").Cierto es que lo he mencionado pero creo que no ha quedado claro en el punto 2 de esta lista. He añadido el subpaso de como creo que debería ser la lógica y creo que aplica lo mismo aquí.
 		8. Ahora que he estado redactado un poco más, me está fluyendo la idea de implemetar desde la vista del detalle en las transacciones completadas, de la misma manera que implemetaría un botón desde la valoración para ver el detalle, pues hacer lo contrario; ver la valoración recibida o enviada desde el detalle que habré creado. (no sé si ha quedado claro).
 			▼ Problema: Se crea una navegación circular: tarjeta → detalle servicio → valoración → detalle servicio → valoración... Necesitas decidir ahora cómo cortar el bucle.
 			+ Solución: Lo más limpio: que el botón "Ver valoración" del detalle abra el BottomSheet (que es modal y no se apila en el back stack), y que el BottomSheet no tenga botón de vuelta al detalle. Así el flujo es siempre tarjeta → detalle → BottomSheet (cierra) → detalle.
@@ -465,8 +465,8 @@ SE DA COMIENZO AL SPRINT 6!
 	↳ Resultado del paquete 2 (Slider para coste de horas en lugar de textInput).
 		- Se implementa un slider nativo de MaterialDesign con 32 posiciones en lugar de dejar el campo con texto libre.			↳ Se configura de manera que tenga valores desde 0.25 hasta 8.0 con pasos de 0.25. Para que sea más 'humano', integro un globo flotante (LabelFormater) que sigue la ubicación del puntero  muestra 1h15min en vez de 1.25 horas[en la la siguiente iteracción haré que el formato humano esté para toda la app, es que hora el TTs lee 1,8 horas para 1h45mins]
 			↳ Refactorizar CrearServicioViewModel y DetalleServicioFragment:  Al estar la entrada de datos blindada desde la UI, se ha eliminado toda la lógica de validación de decimales y rangos que había . De esta manera me aseguro que sólo se introduzcan datos correctos.
-※ Ejecución del Paquete 3: Este paquete era el más sensible y el que más iba a costar implementar. Como me iba a quedar sin tokens le pedí a CCode que sólamente me elaborara un plan de 4 tareas para la implementación de este paquete. 
-	
+※ Ejecución del Paquete 3: Este paquete era el más sensible y el que más iba a costar implementar. Como me iba a quedar sin tokens le pedí a CCode que sólamente me elaborara un plan de 4 tareas para la implementación de este paquete.
+
 ↪ 08.04.2026:
 ※ Continuar donde lo había dejado en casa.
 	↳ Al llegar al trabajo lo que hice fue discurir un poco y finalmente lo hice con el modo agente del IDE Android Studio aprovechando que tengo la suscripción PRO de Gemini.
@@ -485,16 +485,16 @@ SE DA COMIENZO AL SPRINT 6!
 			- Pasar un booleano (esEnviada) por los arguments.
 			- Lógica para que el título muestre "Valoración enviada" o "Valoración recibida" dependiendo de quién sea el usuario en esa transacción.
 ※ He metido una fucnión nueva en la entidad Servicio.kt "estaCompletado" que utilizaré para terminar los pulidos en la siguiente iteracción.
-※ He tenido una sesión de auditorIA porque he perdido el hilo de por donde queda mi planificación. 
+※ He tenido una sesión de auditorIA porque he perdido el hilo de por donde queda mi planificación.
 	▼ Problema : Entre dividir el sprint en fases y las fases en subfases y la ultima subase en tareas individuales... me he perdido.
 	+ Solución : Gemini se ha ecargado de ayudarme a reconsutruir el flujo de trabajo sacandome así de dudas.
 ※ Estructurar los siguientes pasos a seguir.
 	- Hacer las pruebas fucionales y tratar de corregirlas entre hoy y el día 9.
-	- Los colores. 
+	- Los colores.
 	- El worker. No sé aún de que manera hacerlo para la demo.
 ※ Me ha dado tiempo a pedirle CCode que me implemente los colores y themes. Luego les echo un vistazo
 
-↪ 09.04.2026 : 
+↪ 09.04.2026 :
 	He trasteado un poco con los colores y he dado con unos que me gustan pero que hay que retocar porque los que hay ahora mismo no me terminan de convencer, la app es muy plana.
 	Creo que voy a edirtar las memorias desde VsCode a partir de ahora. Me corrige más y me autocompleta palabras. Además de poder tabular más y mejor buscardor. Y tambíen el tema  que tengo configurado y la letra mucho mejor.
 ※ Pruebas funcionales. He descubierto unas poquitas cosas que no me termian de convencer...
@@ -507,7 +507,7 @@ SE DA COMIENZO AL SPRINT 6!
 		+ Solución : En DetalleServicioFragment se hace refactor y se condicionan los botones  Editar/Eliminar a solo visible si ES propietario y está ACTIVO
 		▼ Problema : Situar los tv y los botones de manera más ergonomica.
 		+ Solución : Mirar dia 10.04.2026
-※ Separar acciones de eliminar y cancelar solicitud en detalle de servicio. 
+※ Separar acciones de eliminar y cancelar solicitud en detalle de servicio.
 	↳ Restringida la eliminación de servicios solo al estado ACTIVO (sin interesados).
 	↳ Añadido botón 'Cancelar Solicitud' para servicios en estado RESERVADO (pendientes).
 	↳ La cancelación revierte el servicio a ACTIVO y marca la transacción como CANCELADA.
@@ -520,30 +520,53 @@ SE DA COMIENZO AL SPRINT 6!
 		↳ Se agrupan las acciones del Detalle del Servicio en un 'LinearLayout' (Action Zone) para evitar el 'Layout Shift' (saltos de UI) cuando los botones cambian de visibilidad según el estado del servicio.
 		↳ Comportamiento Proactivo de la IA (Gemini IDE): Durante la implementación de la UI, el agente detectó que faltaba la lógica de negocio para el estado 'RESERVADO'. De forma autónoma, implementó la función `cancelarSolicitud()` en el ViewModel, manejando la actualización atómica de la Transacción (a CANCELADA) y el Servicio (a ACTIVO).
 	+ Solución : Pido y hago enfasis en que lo que yo quiero es  que los botones estén mas a mano , en una posición un poco mas accesible. Por ejemplo  que en el bottomSheet de la valoración el botón "enviar valoración" no queda del todo intuitivo que es un botón. Además todo el bottomsheet queda se puede desplazar porque queda en la pantalla que estoy probando es más pequeña entoces el  boton queda medio enterrado.
-	▼ Problema : Observo dentro de lo que llamo ergonomía (no sé si está bien llamado),  que las pantallas apenas ofrecen información al usuario y que los títulos de cada pantalla 
-※ Y para continuar he comenzado la implementación de los Snackbars porque a Gemini se le ha antojado así. 
+	▼ Problema : Observo dentro de lo que llamo ergonomía (no sé si está bien llamado),  que las pantallas apenas ofrecen información al usuario y que los títulos de cada pantalla
+※ Y para continuar he comenzado la implementación de los Snackbars porque a Gemini se le ha antojado así.
 	↳ Migración a Snackbars (Fase 1): Se crea la función de extensión DRY `mostrarSnackbar()`, la cual detecta automáticamente si existe un `BottomNavigationView` para anclarse encima y no tapar la navegación. Se aplica con éxito en el Detalle del Servicio. Queda pendiente extenderlo al resto de Fragments.
-		▼ Problema : El snakbar se pone encima del botón de accesibilidad impidiendo su uso durante su aparición. 
+		▼ Problema : El snackbar se pone encima del botón de accesibilidad impidiendo su uso durante su aparición.
 		+ Solución : Tendré que pedir que el botón del altavoz se mantenga siempre en primera fila.
-		▼ Problema : Habilitar "Deshacer" si se puede en los procesos que no sean atómicos. 
+		▼ Problema : Habilitar "Deshacer" si se puede en los procesos que no sean atómicos.
 		+ Solución : Creo que "editar" , "solicitar" ¿"enviar valoracio"?
-			▼ Problema : Si hay que refactorizar mucho ni se te ocurra hacerlo, demasiado trabajo, cerramos en 3 días máximo
-	↳ **Lo terminaré en casa con CCode**
+			▼ Problema : He estado invesigando un poco  y resulta que hay que cambiar lógica de negocio para implemetar "soft deletes" (borrar pero sin borrar de la BBDD hasta que no se cumpla alguna condición) y hacer muchas pruebas y tests.
+            + Solución : NO SE TOCA
+    ↳ He terminado de migrar el SnackBar en casa con CCode donde me ha arreglado un pequeño bug donde observarErrores pasaba R.string.servicio_actualizado en vez del mensaje dinámico.
 
+↪ 11.04.2026 :
+	Hoy mi ojbejitvo es recuperar el botton sheet que tenía antes de emepzar a modificarlo porque no me está gustando los cambios realizados. Sí que se ve mejor pero los snackbars se esconden detrás y ademas el sticky botton del bottomSheet no está funcionando. La idea es dejarlo como estaba porque no quiero tener que perder más tiempo con ello.
+※ He corregido unos de los problemas del  ergonomía encontrados: Terminados el día 12.
+	↳ Horas en formato humano para toda la app.
+	↳ Modo pantalla completa.
+		No la voy a tocar porque en otro móvil se ve bien la barra así que asumo que es cosa de mi movil. Se arreglará con los colores.
+	↳ Imágenes para que la app parezca más viva. 
+		Meteré pictogramas y los mapearé para que se muestren según cada categoría.	
+※ Me he metido en un buen lío con Git intentando deshacer los commits malos del BottomSheet.
+	▼ Problema: Gemini me ha llevado por un laberinto de stash parcial, detached HEAD y tres ramas distintas. He acabado con un desastre de ramas:
+		↳ sprint6/worker+ui&ux → con los commits malos (el agujero del BottomSheet)
+		↳ sprint6/intento-limpio → un intento fallido de arreglarlo
+		↳ sprint6/solucion-definitiva → donde finalmente estaba el código bueno
+	+ Solución: Claude me ha sacado del lío con 3 comandos limpios:
+		↳ 1. git co sprint6/worker+ui&ux → volver a la rama oficial que tiene el tracking remoto
+		↳ 2. git reset --hard sprint6/solucion-definitiva → mover el puntero al código bueno
+		↳ 3. Borrar las dos ramas muertas con git brd y git branch -D
+		↳ 4. hacer commit de memorias y git p --force para sincronizar remoto.
+		↳ Lo peor de todo es que habría bastado con hacer git reset --hard al hash bueno desde el principio y punto. Cuatro comandos, una rama, sin drama. Pero claro, Gemini me metió por el camino largo y yo le hice caso.
+	↳ Aprendizaje: Cuando los commits malos son solo locales, git reset --hard es el camino. No necesitas ramas de backup, ni detached HEAD, ni renames. El reflog te guarda las espaldas durante 30 días por si te arrepientes. Simple gana a ingenioso. Me lo apunto bien apuntado porque ya es la segunda vez que me pasa algo parecido (la primera fue con qwen en el Sprint 5).
 
-**Tareas para casa**
-Cuando lance el prompt de CCode para que continue con los Snackbars-> Continua donde lo has dejado. Tienes tener en cuenta que ya existe ui/common/SnackbarUtils.kt con mostrarSnackbar(). Reutilízalo, no crees otra utilidad.
+↪ 12.04.2026 :
 
+※ Me pongo con el formateo de horas/minuto en toda la app. 
+	↳ Ver plan 2026-04-12-formato-horas-humano.
+		Se lo voy a pedir en gemma4 en otra rama... veremos que tal 
 
 
 		▼ Problema :
-		+ Solución : 
+		+ Solución :
 		▼ Problema :
-		+ Solución :  
+		+ Solución :
 --- SÍMBOLOGÍA---
 Día nuevo:         ↪
 Paso / Tarea:      ※
-Subpaso / Detalle: ↳ 
+Subpaso / Detalle: ↳
 Problema:          ▼
 Solución:          +
 ----------------------------------
@@ -576,6 +599,7 @@ Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir 
 	↳ SSL y Zscaler: Menuda odisea en el PC del trabajo. El firewall corporativo intercepta el tráfico HTTPS y Java no reconocía su certificado, así que Gradle no podía descargar dependencias. La solución fue extraer el certificado de Zscaler, importarlo al trustStore de Java con keytool y configurar gradle.properties. Aprendizaje duro pero muy útil.
 	↳ Migración KAPT → KSP: En vez de pelearme para arreglar KAPT (que ya estaba deprecado), investigué la documentación y migré directamente a KSP (Kotlin Symbol Processing), que es la herramienta moderna que lo sustituye. Además compila más rápido. Conclusión: si algo está obsoleto, mejor actualizarse que parchear.
 	↳ SCRUM en la vida real: He comprobado que SCRUM tiene más flexibilidad de la que pensaba. En el Sprint 3 fui más rápido de lo previsto y absorbí trabajo de los Sprints  5 ( Historial y estadísicas). Eso es perfectamente válido, se defiende como "se adelantó trabajo del backlog al tener las dependencias ya resueltas". Lo apunto para la memoria. ;)
+	↳ Simple gana a ingenioso: Me he metido dos veces en líos gordos con Git (Sprint 5 con qwen y Sprint 6 con el BottomSheet) por complicarme con ramas de backup, detached HEAD y stash parciales cuando la solución era un `git reset --hard` al hash bueno y punto. El reflog te guarda las espaldas 30 días así que no hay riesgo real. La próxima vez que un agente de IA me sugiera crear una rama nueva para "ir sobre seguro", voy a acordarme de esto.
 (Actualizado a fin del Sprint 3 - 20.03.2026)
 
 (Actualizado a mediados del Sprint 4 - 25.03.2026)
