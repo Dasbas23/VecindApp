@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.vecindapp.ui.common.TtsHelper
 import com.example.vecindapp.R
 import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
@@ -71,10 +72,7 @@ class TransaccionAdapter(
             tvRol.text = item.rol
             tvEstado.text = item.estado.name
             tvTitulo.text = item.tituloServicio
-            tvHoras.text = itemView.context.getString(
-                R.string.formato_coste_horas,
-                item.horas
-            )
+            tvHoras.text = TtsHelper.formatearCosteHumano(item.horas)
 
             val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
             tvFecha.text = sdf.format(Date(item.timestamp))
