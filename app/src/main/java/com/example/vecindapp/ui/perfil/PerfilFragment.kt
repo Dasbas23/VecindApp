@@ -141,7 +141,7 @@ class PerfilFragment : Fragment() {
         usuarioActual = usuario
         tvNombre.text = usuario.nombre
         tvBarrio.text = usuario.barrio.displayName
-        tvSaldoHoras.text = String.format("%.1f", usuario.saldoHoras)
+        tvSaldoHoras.text = TtsHelper.formatearCosteHumano(usuario.saldoHoras)
         tvNivel.text = usuario.nivel.name
         tvIntercambios.text = usuario.intercambiosTotal.toString()
 
