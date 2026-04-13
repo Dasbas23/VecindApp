@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +24,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 import androidx.navigation.fragment.findNavController
+import com.example.vecindapp.MainViewModel
 
 /**
  * Fragment de perfil del vecino.
@@ -93,12 +95,19 @@ class PerfilFragment : Fragment() {
         fabTts = view.findViewById(R.id.fabTts)
         val btnCerrarSesion = view.findViewById<MaterialButton>(R.id.btnCerrarSesion)
         btnCerrarSesion.setOnClickListener {
+            // Limpiar badge antes de cerrar sesión
+            val app = requireActivity().application as VecindAppApplication
+            ViewModelProvider(
+                requireActivity(),
+                MainViewModel.Factory(app.transaccionRepository)
+            )[MainViewModel::class.java].setUsuarioId(SesionUsuario.SIN_SESION)
+
             SesionUsuario(requireContext()).cerrarSesion()
             findNavController().navigate(
                 R.id.loginFragment,
                 null,
                 androidx.navigation.NavOptions.Builder()
-                    .setPopUpTo(R.id.nav_graph, true)  // Limpia TODA la pila
+                    .setPopUpTo(R.id.nav_graph, true)
                     .build()
             )
         }
