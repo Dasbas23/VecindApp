@@ -55,4 +55,13 @@ interface TransaccionRepository {
      * @return La [Transaccion] o `null` si no existe.
      */
     suspend fun getByIdOnce(id: Int): Transaccion?
+
+    /**
+     * Cuenta las transacciones que requieren atención del usuario:
+     * pendientes de gestionar o completadas sin valorar.
+     *
+     * @param usuarioId ID del usuario activo.
+     * @return [Flow] reactivo con el conteo de notificaciones.
+     */
+    fun getConteoNotificaciones(usuarioId: Int): Flow<Int>
 }

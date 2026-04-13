@@ -36,4 +36,7 @@ class TransaccionRepositoryImpl(
 
     override suspend fun getByIdOnce(id: Int): Transaccion? =
         transaccionDao.getByIdOnce(id)
+
+    override fun getConteoNotificaciones(usuarioId: Int): Flow<Int> =
+        transaccionDao.getConteoNotificaciones(usuarioId)
 }

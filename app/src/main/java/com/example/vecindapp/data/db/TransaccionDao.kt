@@ -81,4 +81,31 @@ interface TransaccionDao {
      */
     @Query("SELECT * FROM transaccion WHERE id_transaccion = :id")
     suspend fun getByIdOnce(id: Int): Transaccion?
+
+    /**
+     * Cuenta las transacciones que requieren atención del usuario:
+     * - Estado PENDIENTE (por aceptar/cancelar) — cualquier participante.
+     * - Estado COMPLETADA sin valoración — **solo si el usuario es el comprador**.
+     *
+     * Devuelve un [Flow] reactivo que se actualiza automáticamente
+     * cuando cambian las tablas `transaccion` o `valoracion`.
+     *
+     * @param usuarioId ID del usuario activo.
+     * @return [Flow] con el número de transacciones pendientes de atención.
+     */
+    @Query("""
+        SELECT COUNT(*) FROM transaccion t
+        WHERE (t.id_comprador_fk = :usuarioId OR t.id_vendedor_fk = :usuarioId)
+        AND (
+            t.estado = 'PENDIENTE'
+            OR (t.estado = 'COMPLETADA'
+                AND t.id_comprador_fk = :usuarioId
+                AND NOT EXISTS (
+                    SELECT 1 FROM valoracion v
+                    WHERE v.id_transaccion_fk = t.id_transaccion
+                    AND v.id_valorador_fk = :usuarioId
+                ))
+        )
+    """)
+    fun getConteoNotificaciones(usuarioId: Int): Flow<Int>
 }

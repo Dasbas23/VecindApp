@@ -26,7 +26,7 @@ import java.util.Locale
  * |-----------|-----------------------|------------------|
  * | PENDIENTE | Aceptar / Rechazar    | Cancelar         |
  * | ACEPTADA  | Completar             | Cancelar         |
- * | COMPLETADA| (sin botones)         | (sin botones)    |
+ * | COMPLETADA| (sin botones)         | Valorar          |
  * | CANCELADA | (sin botones)         | (sin botones)    |
  *
  * @property onAceptar   Lambda al pulsar "Aceptar".

@@ -95,7 +95,12 @@ class LoginFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.error.collect { mensaje ->
                     if (mensaje != null) {
-                        mostrarSnackbar(mensaje, Snackbar.LENGTH_LONG)
+                        val btnIniciarSesion = view?.findViewById<MaterialButton>(R.id.btnIniciarSesion)
+                        mostrarSnackbar(
+                            mensaje,
+                            Snackbar.LENGTH_LONG,
+                            anchorView = btnIniciarSesion
+                        )
                         viewModel.limpiarError()
                     }
                 }

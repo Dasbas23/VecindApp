@@ -3,10 +3,14 @@ package com.example.vecindapp
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
 import com.example.vecindapp.data.SesionUsuario
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.launch
 
 /**
  * Activity principal y única de VecindApp.
@@ -33,6 +37,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
  * @see SesionUsuario
  */
 class MainActivity : AppCompatActivity() {
+
+    /** Evita suscribirse al badge más de una vez por sesión. */
+    private var badgeIniciado = false
+
+    /** ViewModel principal — se inicializa en [iniciarBadge]. */
+    private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +78,7 @@ class MainActivity : AppCompatActivity() {
                     if (menuItem != null) {
                         menuItem.isChecked = true
                     }
+                    iniciarBadge(bottomNav)
                 }
             }
         }
@@ -76,6 +87,49 @@ class MainActivity : AppCompatActivity() {
         val sesion = SesionUsuario(this)
         if (sesion.haySesion() && savedInstanceState == null) {
             navController.navigate(R.id.action_login_to_escaparate)
+        }
+    }
+
+    /**
+     * Inicia la observación reactiva del badge de notificaciones.
+     *
+     * Se ejecuta en cada navegación fuera de login/registro.
+     * - La primera vez: crea el ViewModel y arranca el collector.
+     * - Las siguientes: solo actualiza el [MainViewModel.setUsuarioId]
+     *   para que [flatMapLatest] resubscriba al usuario correcto.
+     */
+    private fun iniciarBadge(bottomNav: BottomNavigationView) {
+        val sesion = SesionUsuario(this)
+        if (!sesion.haySesion()) return
+
+        // Inicializar ViewModel una sola vez (sin usuarioId en Factory)
+        if (!::mainViewModel.isInitialized) {
+            val app = application as VecindAppApplication
+            mainViewModel = ViewModelProvider(
+                this,
+                MainViewModel.Factory(app.transaccionRepository)
+            )[MainViewModel::class.java]
+        }
+
+        // Siempre actualizar el ID — flatMapLatest resubscribe automáticamente
+        mainViewModel.setUsuarioId(sesion.obtenerUsuarioId())
+
+        // Arrancar collector una sola vez
+        if (!badgeIniciado) {
+            badgeIniciado = true
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    mainViewModel.notificaciones.collect { conteo ->
+                        val badge = bottomNav.getOrCreateBadge(R.id.transaccionFragment)
+                        if (conteo > 0) {
+                            badge.isVisible = true
+                            badge.number = conteo
+                        } else {
+                            badge.isVisible = false
+                        }
+                    }
+                }
+            }
         }
     }
 }
