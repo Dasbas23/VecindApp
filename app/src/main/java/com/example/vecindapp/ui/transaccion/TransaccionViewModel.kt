@@ -30,6 +30,10 @@ import kotlinx.coroutines.launch
  *  CANCELADA  CANCELADA
  * ```
  *
+ * ## Regla de valoración (unidireccional)
+ * - El **Vendedor** completa la transacción. Su ciclo termina aquí.
+ * - El **Comprador** es el único que puede valorar tras COMPLETADA.
+ *
  * ## Lógica al COMPLETAR (operación atómica)
  * 1. Debitar horas del comprador.
  * 2. Acreditar horas al vendedor.

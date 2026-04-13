@@ -84,8 +84,8 @@ interface TransaccionDao {
 
     /**
      * Cuenta las transacciones que requieren atención del usuario:
-     * - Estado PENDIENTE (por aceptar/cancelar).
-     * - Estado COMPLETADA sin valoración del usuario actual.
+     * - Estado PENDIENTE (por aceptar/cancelar) — cualquier participante.
+     * - Estado COMPLETADA sin valoración — **solo si el usuario es el comprador**.
      *
      * Devuelve un [Flow] reactivo que se actualiza automáticamente
      * cuando cambian las tablas `transaccion` o `valoracion`.
