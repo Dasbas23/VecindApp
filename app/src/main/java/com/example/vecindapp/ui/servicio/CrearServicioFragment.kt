@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -17,8 +16,11 @@ import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
 import com.example.vecindapp.data.SesionUsuario
 import com.example.vecindapp.domain.model.CategoriaServicio
+import com.example.vecindapp.ui.common.TtsHelper
+import com.example.vecindapp.ui.common.mostrarSnackbar
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.slider.Slider
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 /**
@@ -46,10 +48,11 @@ class CrearServicioFragment : Fragment() {
         CrearServicioViewModel.Factory(app.servicioRepository)
     }
 
-    private lateinit var etTitulo: TextInputEditText
-    private lateinit var etDescripcion: TextInputEditText
+    private lateinit var etTitulo: com.google.android.material.textfield.TextInputEditText
+    private lateinit var etDescripcion: com.google.android.material.textfield.TextInputEditText
     private lateinit var spinnerCategoria: Spinner
-    private lateinit var etCoste: TextInputEditText
+    private lateinit var sliderCoste: Slider
+    private lateinit var tvLabelCoste: android.widget.TextView
     private lateinit var btnGuardar: MaterialButton
 
     override fun onCreateView(
@@ -75,8 +78,10 @@ class CrearServicioFragment : Fragment() {
         etTitulo = view.findViewById(R.id.etTitulo)
         etDescripcion = view.findViewById(R.id.etDescripcion)
         spinnerCategoria = view.findViewById(R.id.spinnerCategoria)
-        etCoste = view.findViewById(R.id.etCoste)
+        sliderCoste = view.findViewById(R.id.sliderCoste)
+        tvLabelCoste = view.findViewById(R.id.tvLabelCoste)
         btnGuardar = view.findViewById(R.id.btnGuardar)
+        configurarSlider()
     }
 
     /**
@@ -96,6 +101,24 @@ class CrearServicioFragment : Fragment() {
     }
 
     /**
+     * Configura el Slider de coste con un [Slider.LabelFormatter] personalizado
+     * y actualiza el label de texto encima del slider al cambiar el valor.
+     */
+    private fun configurarSlider() {
+        sliderCoste.setLabelFormatter { valor -> TtsHelper.formatearCosteHumano(valor.toDouble()) }
+        tvLabelCoste.text = getString(
+            R.string.label_coste_slider,
+            TtsHelper.formatearCosteHumano(sliderCoste.value.toDouble())
+        )
+        sliderCoste.addOnChangeListener { _, valor, _ ->
+            tvLabelCoste.text = getString(
+                R.string.label_coste_slider,
+                TtsHelper.formatearCosteHumano(valor.toDouble())
+            )
+        }
+    }
+
+    /**
      * Configura el click del botón "Guardar" para recoger los datos
      * del formulario y pasarlos al ViewModel.
      */
@@ -104,7 +127,7 @@ class CrearServicioFragment : Fragment() {
             val titulo = etTitulo.text.toString()
             val descripcion = etDescripcion.text.toString()
             val categoria = CategoriaServicio.entries[spinnerCategoria.selectedItemPosition]
-            val coste = etCoste.text.toString()
+            val coste = sliderCoste.value.toDouble()
 
             val sesion = SesionUsuario(requireContext())
             viewModel.guardarServicio(titulo, descripcion, categoria, coste, sesion.obtenerUsuarioId())
@@ -114,8 +137,8 @@ class CrearServicioFragment : Fragment() {
     /**
      * Observa los StateFlows del ViewModel para reaccionar al resultado.
      *
-     * - Si [guardado] es `true` → muestra Toast de éxito y navega atrás.
-     * - Si [error] tiene mensaje → muestra Toast con el error.
+     * - Si [guardado] es `true` → muestra Snackbar de éxito y navega atrás.
+     * - Si [error] tiene mensaje → muestra Snackbar con el error.
      */
     private fun observarResultado() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -123,11 +146,7 @@ class CrearServicioFragment : Fragment() {
                 launch {
                     viewModel.guardado.collect { guardado ->
                         if (guardado == true) {
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.servicio_guardado),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            mostrarSnackbar(R.string.servicio_guardado)
                             findNavController().popBackStack()
                         }
                     }
@@ -136,7 +155,7 @@ class CrearServicioFragment : Fragment() {
                 launch {
                     viewModel.error.collect { mensaje ->
                         if (mensaje != null) {
-                            Toast.makeText(requireContext(), mensaje, Toast.LENGTH_SHORT).show()
+                            mostrarSnackbar(mensaje, Snackbar.LENGTH_LONG)
                             viewModel.limpiarError()
                         }
                     }
@@ -144,4 +163,5 @@ class CrearServicioFragment : Fragment() {
             }
         }
     }
+
 }

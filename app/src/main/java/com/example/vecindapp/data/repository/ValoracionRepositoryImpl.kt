@@ -29,4 +29,7 @@ class ValoracionRepositoryImpl(
 
     override suspend fun getByTransaccion(transaccionId: Int): Valoracion? =
         valoracionDao.getByTransaccion(transaccionId)
+
+    override suspend fun getByTransaccionYValorador(transaccionId: Int, valoradorId: Int): Valoracion? =
+        valoracionDao.getByTransaccionYValorador(transaccionId, valoradorId)
 }

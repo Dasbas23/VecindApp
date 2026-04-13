@@ -27,12 +27,17 @@ import java.util.Locale
  * - `pictogramasJson`: JSON con los IDs de pictogramas.
  * - `comentario`: Texto del comentario (puede ser vacío).
  * - `timestamp`: Fecha de la valoración en millis.
+ * - `esEnviada`: Booleano para cambiar el título.
  */
 class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
 
     private var pictogramasJson: String = "[]"
     private var comentario: String = ""
     private var timestamp: Long = 0L
+    private var servicioId: Int = -1
+    private var esEnviada: Boolean = false
+
+    var onVerServicioCallback: ((Int) -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +45,8 @@ class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
             pictogramasJson = it.getString(ARG_PICTOGRAMAS, "[]")
             comentario = it.getString(ARG_COMENTARIO, "")
             timestamp = it.getLong(ARG_TIMESTAMP, 0L)
+            servicioId = it.getInt(ARG_SERVICIO_ID, -1)
+            esEnviada = it.getBoolean(ARG_ES_ENVIADA, false)
         }
     }
 
@@ -54,11 +61,31 @@ class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val tvTitulo = view.findViewById<TextView>(R.id.tvTituloValoracion)
         val llPictogramas = view.findViewById<LinearLayout>(R.id.llPictogramasDetalle)
         val tvComentario = view.findViewById<TextView>(R.id.tvComentarioDetalle)
         val tvLabelComentario = view.findViewById<TextView>(R.id.tvLabelComentarioDetalle)
         val tvFecha = view.findViewById<TextView>(R.id.tvFechaValoracion)
+        val btnVerServicio = view.findViewById<MaterialButton>(R.id.btnVerServicio)
         val btnCerrar = view.findViewById<MaterialButton>(R.id.btnCerrarDetalle)
+
+        // Título dinámico
+        tvTitulo.text = if (esEnviada) {
+            getString(R.string.titulo_valoracion_enviada)
+        } else {
+            getString(R.string.titulo_valoracion_recibida)
+        }
+
+        // Botón Ver Servicio
+        if (servicioId > 0) {
+            btnVerServicio.visibility = View.VISIBLE
+            btnVerServicio.setOnClickListener {
+                dismiss()
+                onVerServicioCallback?.invoke(servicioId)
+            }
+        } else {
+            btnVerServicio.visibility = View.GONE
+        }
 
         // Parsear y mostrar pictogramas
         val pictogramas = parsearPictogramas(pictogramasJson)
@@ -94,10 +121,12 @@ class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
             }
 
             val textoCompleto = buildString {
-                append("Valoración. ")
+                append(tvTitulo.text , ".")
                 append("Pictogramas: ${textosPictogramas.joinToString(", ")}. ")
                 if (comentario.isNotBlank()) {
                     append("Comentario: $comentario")
+                }else {
+                    append("Sin comentario")
                 }
             }
             ttsHelper.speak(textoCompleto)
@@ -160,6 +189,8 @@ class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
         private const val ARG_PICTOGRAMAS = "pictogramasJson"
         private const val ARG_COMENTARIO = "comentario"
         private const val ARG_TIMESTAMP = "timestamp"
+        private const val ARG_SERVICIO_ID = "servicioId"
+        private const val ARG_ES_ENVIADA = "esEnviada"
 
         /**
          * Crea una instancia para visualizar una valoración.
@@ -167,13 +198,17 @@ class DetalleValoracionBottomSheet : BottomSheetDialogFragment() {
         fun newInstance(
             pictogramasJson: String,
             comentario: String?,
-            timestamp: Long
+            timestamp: Long,
+            servicioId: Int,
+            esEnviada: Boolean = false
         ): DetalleValoracionBottomSheet {
             return DetalleValoracionBottomSheet().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PICTOGRAMAS, pictogramasJson)
                     putString(ARG_COMENTARIO, comentario ?: "")
                     putLong(ARG_TIMESTAMP, timestamp)
+                    putInt(ARG_SERVICIO_ID, servicioId)
+                    putBoolean(ARG_ES_ENVIADA, esEnviada)
                 }
             }
         }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -20,9 +21,12 @@ import com.example.vecindapp.VecindAppApplication
 import com.example.vecindapp.data.SesionUsuario
 import com.example.vecindapp.data.entities.Servicio
 import com.example.vecindapp.domain.model.EstadoServicio
+import com.example.vecindapp.ui.common.CategoriaMapper
 import com.example.vecindapp.ui.common.TtsHelper
+import com.example.vecindapp.ui.common.mostrarSnackbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -52,7 +56,8 @@ class DetalleServicioFragment : Fragment() {
         DetalleServicioViewModel.Factory(
             app.servicioRepository,
             app.transaccionRepository,
-            app.usuarioRepository
+            app.usuarioRepository,
+            app.valoracionRepository
         )
     }
 
@@ -63,9 +68,11 @@ class DetalleServicioFragment : Fragment() {
     private lateinit var tvDescripcion: TextView
     private lateinit var tvEstado: TextView
     private lateinit var tvFecha: TextView
+    private lateinit var layoutAccionesPropietario: LinearLayout
     private lateinit var btnSolicitar: MaterialButton
     private lateinit var btnEditar: MaterialButton
     private lateinit var btnEliminar: MaterialButton
+    private lateinit var btnVerValoracion: MaterialButton
     private lateinit var fabTts: FloatingActionButton
     private lateinit var ttsHelper: TtsHelper
     private var servicioActual: Servicio? = null
@@ -90,8 +97,11 @@ class DetalleServicioFragment : Fragment() {
         }
 
         viewModel.cargarServicio(servicioId)
+        viewModel.buscarValoracion(servicioId)
         observarServicio()
+        observarValoracion()
         observarSolicitud()
+        observarCancelacion()
         observarEliminacion()
         observarActualizacion()
         observarErrores()
@@ -105,9 +115,11 @@ class DetalleServicioFragment : Fragment() {
         tvDescripcion = view.findViewById(R.id.tvDescripcionDetalle)
         tvEstado = view.findViewById(R.id.tvEstadoDetalle)
         tvFecha = view.findViewById(R.id.tvFechaDetalle)
+        layoutAccionesPropietario = view.findViewById(R.id.layoutAccionesPropietario)
         btnSolicitar = view.findViewById(R.id.btnSolicitar)
         btnEditar = view.findViewById(R.id.btnEditar)
         btnEliminar = view.findViewById(R.id.btnEliminar)
+        btnVerValoracion = view.findViewById(R.id.btnVerValoracion)
         fabTts = view.findViewById(R.id.fabTts)
     }
 
@@ -125,13 +137,47 @@ class DetalleServicioFragment : Fragment() {
     }
 
     /**
+     * Observa si hay una valoración para mostrar el botón correspondiente.
+     */
+    private fun observarValoracion() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.valoracion.collect { valoracion ->
+                    if (valoracion != null) {
+                        btnVerValoracion.visibility = View.VISIBLE
+                        btnVerValoracion.setOnClickListener {
+                            // En el detalle del servicio, si yo soy el que valoró (valorador),
+                            // la valoración que veo es la ENVIADA (esEnviada = true).
+                            val esEnviada = valoracion.idValoradorFk == usuarioActualId
+
+                            val bottomSheet =
+                                com.example.vecindapp.ui.valoracion.DetalleValoracionBottomSheet.newInstance(
+                                    pictogramasJson = valoracion.pictogramasJson,
+                                    comentario = valoracion.comentario,
+                                    timestamp = valoracion.timestamp,
+                                    servicioId = servicioActual?.idServicio
+                                        ?: -1, // No mostrar botón "Ver servicio" desde aquí
+                                    esEnviada = esEnviada // False o True
+                                )
+                            bottomSheet.show(childFragmentManager, "DetalleValoracion")
+                        }
+                    } else {
+                        btnVerValoracion.visibility = View.GONE
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Rellena las vistas y muestra/oculta botones según el contexto.
      */
     private fun pintarDetalle(servicio: Servicio) {
         servicioActual = servicio
+        ivPictograma.setImageResource(CategoriaMapper.obtenerDrawable(servicio.categoria))
         tvTitulo.text = servicio.titulo
         tvCategoria.text = servicio.categoria.name
-        tvCoste.text = getString(R.string.formato_coste_horas, servicio.costeHoras)
+        tvCoste.text = TtsHelper.formatearCosteHumano(servicio.costeHoras)
         tvDescripcion.text = servicio.descripcion ?: getString(R.string.sin_descripcion)
         tvEstado.text = getString(R.string.formato_estado, servicio.estado.name)
 
@@ -144,17 +190,40 @@ class DetalleServicioFragment : Fragment() {
 
         // Mostrar botones según quién mira y el estado del servicio
         val esPropietario = servicio.idUsuarioFk == usuarioActualId
-        val estaActivo = servicio.estado == EstadoServicio.ACTIVO
 
-        // Editar/Eliminar: solo visible si ES propietario
-        btnEditar.visibility = if (esPropietario) View.VISIBLE else View.GONE
-        btnEliminar.visibility = if (esPropietario) View.VISIBLE else View.GONE
-
-        // Solicitar: solo visible si NO es propietario y el servicio está ACTIVO
-        btnSolicitar.visibility = if (!esPropietario && estaActivo) View.VISIBLE else View.GONE
+        if (esPropietario) {
+            if (servicio.estado == EstadoServicio.ACTIVO) {
+                layoutAccionesPropietario.visibility = View.VISIBLE
+                btnSolicitar.visibility = View.GONE
+            } else if (servicio.estado == EstadoServicio.RESERVADO) {
+                layoutAccionesPropietario.visibility = View.GONE
+                btnSolicitar.visibility = View.VISIBLE
+                btnSolicitar.text = getString(R.string.btn_cancelar_solicitud)
+                btnSolicitar.isEnabled = true
+            } else {
+                layoutAccionesPropietario.visibility = View.GONE
+                btnSolicitar.visibility = View.GONE
+            }
+        } else {
+            layoutAccionesPropietario.visibility = View.GONE
+            // Si no es propietario, solo ve Solicitar si está ACTIVO
+            if (servicio.estado == EstadoServicio.ACTIVO) {
+                btnSolicitar.visibility = View.VISIBLE
+                btnSolicitar.text = getString(R.string.btn_solicitar)
+                btnSolicitar.isEnabled = true
+            } else {
+                btnSolicitar.visibility = View.GONE
+            }
+        }
 
         // Configurar clicks
-        btnSolicitar.setOnClickListener { mostrarDialogoConfirmarSolicitud(servicio) }
+        btnSolicitar.setOnClickListener {
+            if (esPropietario && servicio.estado == EstadoServicio.RESERVADO) {
+                mostrarDialogoConfirmarCancelarSolicitud()
+            } else {
+                mostrarDialogoConfirmarSolicitud(servicio)
+            }
+        }
         btnEditar.setOnClickListener { mostrarDialogoEditar(servicio) }
         btnEliminar.setOnClickListener { mostrarDialogoConfirmarEliminar() }
     }
@@ -185,11 +254,25 @@ class DetalleServicioFragment : Fragment() {
 
         val etTitulo = dialogView.findViewById<EditText>(R.id.etEditarTitulo)
         val etDescripcion = dialogView.findViewById<EditText>(R.id.etEditarDescripcion)
-        val etCoste = dialogView.findViewById<EditText>(R.id.etEditarCoste)
+        val sliderCoste = dialogView.findViewById<com.google.android.material.slider.Slider>(
+            R.id.sliderEditarCoste
+        )
+        val tvLabelCoste = dialogView.findViewById<TextView>(R.id.tvEditarLabelCoste)
 
         etTitulo.setText(servicio.titulo)
         etDescripcion.setText(servicio.descripcion ?: "")
-        etCoste.setText(servicio.costeHoras.toString())
+        sliderCoste.value = servicio.costeHoras.toFloat()
+        tvLabelCoste.text = getString(
+            R.string.label_coste_slider,
+            TtsHelper.formatearCosteHumano(sliderCoste.value.toDouble())
+        )
+        sliderCoste.setLabelFormatter { TtsHelper.formatearCosteHumano(it.toDouble()) }
+        sliderCoste.addOnChangeListener { _, valor, _ ->
+            tvLabelCoste.text = getString(
+                R.string.label_coste_slider,
+                TtsHelper.formatearCosteHumano(valor.toDouble())
+            )
+        }
 
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.titulo_editar_servicio)
@@ -197,14 +280,15 @@ class DetalleServicioFragment : Fragment() {
             .setPositiveButton(R.string.btn_guardar) { _, _ ->
                 val titulo = etTitulo.text.toString()
                 val descripcion = etDescripcion.text.toString()
-                val coste = etCoste.text.toString().toDoubleOrNull()
+                val coste = sliderCoste.value.toDouble()
 
                 if (titulo.isBlank()) {
-                    Toast.makeText(requireContext(), R.string.error_titulo_vacio, Toast.LENGTH_SHORT).show()
-                    return@setPositiveButton
-                }
-                if (coste == null || coste <= 0) {
-                    Toast.makeText(requireContext(), R.string.error_coste_invalido, Toast.LENGTH_SHORT).show()
+                    // Toast intencional: validación inline del AlertDialog (Snackbar no es viable aquí)
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.error_titulo_vacio,
+                        Toast.LENGTH_SHORT
+                    ).show()
                     return@setPositiveButton
                 }
 
@@ -229,6 +313,20 @@ class DetalleServicioFragment : Fragment() {
     }
 
     /**
+     * Muestra un diálogo de confirmación antes de cancelar la solicitud.
+     */
+    private fun mostrarDialogoConfirmarCancelarSolicitud() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.titulo_confirmar_cancelar_solicitud)
+            .setMessage(R.string.mensaje_confirmar_cancelar_solicitud)
+            .setPositiveButton(R.string.btn_confirmar_cancelar) { _, _ ->
+                viewModel.cancelarSolicitud()
+            }
+            .setNegativeButton(R.string.btn_cancelar, null)
+            .show()
+    }
+
+    /**
      * Observa si la solicitud fue exitosa para navegar de vuelta.
      */
     private fun observarSolicitud() {
@@ -236,12 +334,24 @@ class DetalleServicioFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.solicitado.collect { solicitado ->
                     if (solicitado) {
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.servicio_solicitado,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        mostrarSnackbar(R.string.servicio_solicitado)
                         findNavController().popBackStack()
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Observa si la cancelación fue exitosa.
+     */
+    private fun observarCancelacion() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.cancelado.collect { cancelado ->
+                    if (cancelado) {
+                        mostrarSnackbar(R.string.solicitud_cancelada)
+                        // No navegamos atrás, el servicio vuelve a estar ACTIVO y visible
                     }
                 }
             }
@@ -256,7 +366,7 @@ class DetalleServicioFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.eliminado.collect { eliminado ->
                     if (eliminado) {
-                        Toast.makeText(requireContext(), R.string.servicio_eliminado, Toast.LENGTH_SHORT).show()
+                        mostrarSnackbar(R.string.servicio_eliminado)
                         findNavController().popBackStack()
                     }
                 }
@@ -272,7 +382,7 @@ class DetalleServicioFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.actualizado.collect { actualizado ->
                     if (actualizado) {
-                        Toast.makeText(requireContext(), R.string.servicio_actualizado, Toast.LENGTH_SHORT).show()
+                        mostrarSnackbar(R.string.servicio_actualizado)
                         viewModel.limpiarActualizado()
                     }
                 }
@@ -288,7 +398,7 @@ class DetalleServicioFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.error.collect { mensaje ->
                     if (mensaje != null) {
-                        Toast.makeText(requireContext(), mensaje, Toast.LENGTH_SHORT).show()
+                        mostrarSnackbar(mensaje, Snackbar.LENGTH_LONG)
                         viewModel.limpiarError()
                     }
                 }
@@ -309,7 +419,8 @@ class DetalleServicioFragment : Fragment() {
             val s = servicioActual ?: return@setOnClickListener
             val desc = s.descripcion ?: getString(R.string.sin_descripcion)
             val costeTexto = TtsHelper.formatearCosteConUnidad(s.costeHoras)
-            val texto = "${s.titulo}. Categoría: ${s.categoria.name}. Coste: $costeTexto . Descripción: $desc. Estado: ${s.estado.name}"
+            val texto =
+                "${s.titulo}. Categoría: ${s.categoria.name}. Coste: $costeTexto . Descripción: $desc. Estado: ${s.estado.name}"
             ttsHelper.speak(texto)
         }
     }

@@ -51,4 +51,17 @@ interface ValoracionDao {
      */
     @Query("SELECT * FROM valoracion WHERE id_transaccion_fk = :transaccionId")
     suspend fun getByTransaccion(transaccionId: Int): Valoracion?
+
+    /**
+     * Obtiene la valoración de un usuario concreto para una transacción.
+     *
+     * Permite comprobar si el usuario activo ya ha valorado, independientemente
+     * de si la otra parte lo hizo.
+     *
+     * @param transaccionId ID de la transacción.
+     * @param valoradorId   ID del usuario que valora.
+     * @return La [Valoracion] o `null` si este usuario aún no ha valorado.
+     */
+    @Query("SELECT * FROM valoracion WHERE id_transaccion_fk = :transaccionId AND id_valorador_fk = :valoradorId")
+    suspend fun getByTransaccionYValorador(transaccionId: Int, valoradorId: Int): Valoracion?
 }

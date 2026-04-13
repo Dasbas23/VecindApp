@@ -62,6 +62,18 @@ interface TransaccionDao {
     suspend fun getByServicio(servicioId: Int): Transaccion?
 
     /**
+     * Obtiene la transacción asociada a un servicio concreto filtrando por estado.
+     *
+     * Útil para encontrar la transacción activa (PENDIENTE o ACEPTADA).
+     *
+     * @param servicioId ID del servicio.
+     * @param estado Estado de la transacción (nombre del enum).
+     * @return La [Transaccion] asociada o `null` si no existe.
+     */
+    @Query("SELECT * FROM transaccion WHERE id_servicio_fk = :servicioId AND estado = :estado")
+    suspend fun getByServicioYEstado(servicioId: Int, estado: String): Transaccion?
+
+    /**
      * Obtiene una transacción por su ID de forma puntual.
      *
      * @param id Clave primaria de la transacción.
@@ -69,4 +81,31 @@ interface TransaccionDao {
      */
     @Query("SELECT * FROM transaccion WHERE id_transaccion = :id")
     suspend fun getByIdOnce(id: Int): Transaccion?
+
+    /**
+     * Cuenta las transacciones que requieren atención del usuario:
+     * - Estado PENDIENTE (por aceptar/cancelar) — cualquier participante.
+     * - Estado COMPLETADA sin valoración — **solo si el usuario es el comprador**.
+     *
+     * Devuelve un [Flow] reactivo que se actualiza automáticamente
+     * cuando cambian las tablas `transaccion` o `valoracion`.
+     *
+     * @param usuarioId ID del usuario activo.
+     * @return [Flow] con el número de transacciones pendientes de atención.
+     */
+    @Query("""
+        SELECT COUNT(*) FROM transaccion t
+        WHERE (t.id_comprador_fk = :usuarioId OR t.id_vendedor_fk = :usuarioId)
+        AND (
+            t.estado = 'PENDIENTE'
+            OR (t.estado = 'COMPLETADA'
+                AND t.id_comprador_fk = :usuarioId
+                AND NOT EXISTS (
+                    SELECT 1 FROM valoracion v
+                    WHERE v.id_transaccion_fk = t.id_transaccion
+                    AND v.id_valorador_fk = :usuarioId
+                ))
+        )
+    """)
+    fun getConteoNotificaciones(usuarioId: Int): Flow<Int>
 }

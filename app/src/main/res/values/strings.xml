@@ -3,7 +3,6 @@
     <!-- ═══ Escaparate ═══ -->
     <string name="titulo_escaparate">Escaparate</string>
     <string name="escaparate_vacio">No hay servicios disponibles</string>
-    <string name="formato_coste_horas">%.1f h</string>
     <string name="desc_pictograma">Pictograma del servicio</string>
     <string name="desc_crear_servicio">Crear nuevo servicio</string>
 
@@ -20,6 +19,7 @@
     <string name="hint_descripcion">Descripción (opcional)</string>
     <string name="label_categoria">Categoría</string>
     <string name="hint_coste">Coste en horas</string>
+    <string name="label_coste_slider">Coste en horas: %s</string>
     <string name="btn_guardar">Guardar servicio</string>
     <string name="servicio_guardado">Servicio publicado correctamente</string>
 
@@ -36,6 +36,10 @@
     <string name="mensaje_confirmar_eliminar">¿Estás seguro de que quieres eliminar este servicio?</string>
     <string name="servicio_eliminado">Servicio eliminado</string>
     <string name="servicio_actualizado">Servicio actualizado</string>
+    <string name="solicitud_cancelada">Solicitud cancelada. El servicio vuelve a estar activo.</string>
+    <string name="btn_cancelar_solicitud">Cancelar solicitud</string>
+    <string name="titulo_confirmar_cancelar_solicitud">Cancelar solicitud</string>
+    <string name="mensaje_confirmar_cancelar_solicitud">¿Estás seguro de que quieres cancelar la solicitud actual? El servicio volverá a estar disponible para otros vecinos.</string>
     <string name="error_titulo_vacio">El título no puede estar vacío</string>
     <string name="error_coste_invalido">Introduce un coste válido</string>
 
@@ -51,6 +55,8 @@
     <string name="btn_aceptar">Aceptar</string>
     <string name="btn_completar">Completar</string>
     <string name="btn_valorar">Valorar</string>
+    <string name="rol_comprador">Comprador</string>
+    <string name="rol_vendedor">Vendedor</string>
     <string name="btn_confirmar_cancelar">Sí, cancelar</string>
     <string name="titulo_confirmar_aceptar">Aceptar solicitud</string>
     <string name="mensaje_confirmar_aceptar">¿Quieres aceptar esta solicitud de servicio?</string>
@@ -71,8 +77,8 @@
     <string name="label_completadas">Transacciones completadas</string>
     <string name="label_canceladas">Transacciones canceladas</string>
     <string name="historial_vacio">Aún no has completado ninguna transacción</string>
+    <string name="historial_sin_cargo">Sin cargo</string>
     <string name="grafico_sin_datos">Sin datos para el gráfico</string>
-    <string name="formato_historial_horas">%1$s%2$.1f h</string>
 
     <!-- ═══ Login / Registro ═══ -->
     <string name="titulo_login">Iniciar sesión</string>
@@ -99,6 +105,8 @@
     <string name="valoracion_hint_comentario">Comentario opcional</string>
     <string name="valoracion_btn_enviar">Enviar valoración</string>
     <string name="valoracion_enviada">¡Gracias por tu valoración!</string>
+    <string name="valoracion_error_sin_pictograma">Selecciona al menos un pictograma</string>
+    <string name="valoracion_error_guardar">Error al guardar la valoración</string>
     <string name="desc_pictograma_bien1">Excelente</string>
     <string name="desc_pictograma_bien2">Amable</string>
     <string name="desc_pictograma_bien3">Puntual</string>
@@ -110,11 +118,15 @@
     <string name="desc_pictograma_mal3">No realizado</string>
 
     <!-- ═══ Detalle Valoración ═══ -->
-    <string name="detalle_valoracion_titulo">Valoración recibida</string>
+    <string name="detalle_valoracion_titulo">Detalle de valoración</string>
+    <string name="titulo_valoracion_enviada">Valoración enviada</string>
+    <string name="titulo_valoracion_recibida">Valoración recibida</string>
     <string name="detalle_valoracion_pictogramas">Pictogramas seleccionados</string>
     <string name="detalle_valoracion_comentario">Comentario</string>
     <string name="detalle_valoracion_fecha">Valorado el %s</string>
     <string name="btn_cerrar">Cerrar</string>
+    <string name="btn_ver_servicio">Ver servicio</string>
+    <string name="btn_ver_valoracion">Ver valoración</string>
 
     <!-- ═══ Accesibilidad TTS ═══ -->
     <string name="desc_tts">Leer en voz alta</string>

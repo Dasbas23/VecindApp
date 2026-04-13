@@ -7,6 +7,7 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -91,24 +92,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Campo: Coste en horas -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilCoste"
+        <!-- Label del coste (se actualiza dinámicamente) -->
+        <TextView
+            android:id="@+id/tvLabelCoste"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="@string/hint_coste"
-            app:suffixText="h"
+            android:layout_marginTop="16dp"
+            android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@id/spinnerCategoria"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Coste en horas: 1h" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etCoste"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <!-- Slider: Coste en horas (0.25–8.0, paso 0.25) -->
+        <com.google.android.material.slider.Slider
+            android:id="@+id/sliderCoste"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:value="1.0"
+            android:valueFrom="0.25"
+            android:valueTo="8.0"
+            android:stepSize="0.25"
+            app:layout_constraintTop_toBottomOf="@id/tvLabelCoste"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- Botón: Guardar servicio -->
         <com.google.android.material.button.MaterialButton
@@ -117,7 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="@string/btn_guardar"
-            app:layout_constraintTop_toBottomOf="@id/tilCoste"
+            app:layout_constraintTop_toBottomOf="@id/sliderCoste"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

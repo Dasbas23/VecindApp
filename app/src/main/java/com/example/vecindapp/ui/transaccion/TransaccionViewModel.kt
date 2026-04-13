@@ -30,6 +30,10 @@ import kotlinx.coroutines.launch
  *  CANCELADA  CANCELADA
  * ```
  *
+ * ## Regla de valoración (unidireccional)
+ * - El **Vendedor** completa la transacción. Su ciclo termina aquí.
+ * - El **Comprador** es el único que puede valorar tras COMPLETADA.
+ *
  * ## Lógica al COMPLETAR (operación atómica)
  * 1. Debitar horas del comprador.
  * 2. Acreditar horas al vendedor.
@@ -59,10 +63,6 @@ class TransaccionViewModel(
     /** Mensaje de feedback para el usuario. */
     private val _mensaje = MutableStateFlow<String?>(null)
     val mensaje: StateFlow<String?> = _mensaje
-
-    /** Transacción recién completada (para abrir el BottomSheet de valoración). */
-    private val _transaccionCompletada = MutableStateFlow<TransaccionUI?>(null)
-    val transaccionCompletada: StateFlow<TransaccionUI?> = _transaccionCompletada
 
     init {
         cargarTransacciones()
@@ -100,8 +100,12 @@ class TransaccionViewModel(
         val puedeCompletar = esVendedor && transaccion.estado == EstadoTransaccion.ACEPTADA
         val puedeCancelar = transaccion.estado == EstadoTransaccion.PENDIENTE ||
                 transaccion.estado == EstadoTransaccion.ACEPTADA
-        val yaValorada = valoracionRepository.getByTransaccion(transaccion.idTransaccion) != null
-        val puedeValorar = transaccion.estado == EstadoTransaccion.COMPLETADA && !yaValorada
+        val yaValoradaPorUsuario = valoracionRepository.getByTransaccionYValorador(
+            transaccion.idTransaccion, usuarioActualId
+        ) != null
+        val puedeValorar = !esVendedor
+                && transaccion.estado == EstadoTransaccion.COMPLETADA
+                && !yaValoradaPorUsuario
 
         return TransaccionUI(
             transaccion = transaccion,
@@ -193,21 +197,12 @@ class TransaccionViewModel(
                 )
 
                 _mensaje.value = "¡Horas transferidas con éxito!"
-                _transaccionCompletada.value = item
-
 
             } catch (e: Exception) {
                 e.printStackTrace()
                 _mensaje.value = "Error al completar la transacción"
             }
         }
-    }
-
-    /**
-     * Limpia el mensaje de feedback.
-     */
-    fun limpiarTransaccionCompletada() {
-        _transaccionCompletada.value = null
     }
 
     /**

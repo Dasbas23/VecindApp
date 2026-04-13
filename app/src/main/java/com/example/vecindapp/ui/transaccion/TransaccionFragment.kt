@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -14,11 +13,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.fragment.findNavController
 import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
 import com.example.vecindapp.data.SesionUsuario
-import kotlinx.coroutines.launch
+import com.example.vecindapp.ui.common.mostrarSnackbar
 import com.example.vecindapp.ui.valoracion.ValoracionBottomSheetFragment
+import kotlinx.coroutines.launch
 
 /**
  * Fragment que muestra la lista de transacciones del usuario actual.
@@ -62,7 +63,6 @@ class TransaccionFragment : Fragment() {
         configurarRecyclerView()
         observarTransacciones()
         observarMensajes()
-        observarTransaccionCompletada()
     }
 
     private fun configurarVistas(view: View) {
@@ -125,6 +125,12 @@ class TransaccionFragment : Fragment() {
                 bottomSheet.dialog?.setOnDismissListener {
                     viewModel.cargarTransacciones()
                 }
+            },
+            onItemClick = { item ->
+                val bundle = Bundle().apply {
+                    putInt("servicioId", item.transaccion.idServicioFk)
+                }
+                findNavController().navigate(R.id.action_global_to_detalle, bundle)
             }
         )
 
@@ -154,7 +160,7 @@ class TransaccionFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.mensaje.collect { mensaje ->
                     if (mensaje != null) {
-                        Toast.makeText(requireContext(), mensaje, Toast.LENGTH_SHORT).show()
+                        mostrarSnackbar(mensaje)
                         viewModel.limpiarMensaje()
                     }
                 }
@@ -162,38 +168,4 @@ class TransaccionFragment : Fragment() {
         }
     }
 
-    /**
-     * Observa la transacción completada y muestra el BottomSheet.
-     */
-
-    private fun observarTransaccionCompletada() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.transaccionCompletada.collect { item ->
-                    if (item != null) {
-                        val sesion = SesionUsuario(requireContext())
-                        val miId = sesion.obtenerUsuarioId()
-                        // El valorado es la otra parte de la transacción
-                        val valoradoId = if (item.transaccion.idVendedorFk == miId) {
-                            item.transaccion.idCompradorFk
-                        } else {
-                            item.transaccion.idVendedorFk
-                        }
-
-                        val bottomSheet = ValoracionBottomSheetFragment.newInstance(
-                            transaccionId = item.transaccion.idTransaccion,
-                            valoradorId = miId,
-                            valoradoId = valoradoId
-                        )
-                        bottomSheet.onDismissCallback = {
-                            viewModel.cargarTransacciones()
-                        }
-                        bottomSheet.show(childFragmentManager, "valoracion")
-
-                        viewModel.limpiarTransaccionCompletada()
-                    }
-                }
-            }
-        }
-    }
 }

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -17,7 +16,9 @@ import com.example.vecindapp.R
 import com.example.vecindapp.VecindAppApplication
 import com.example.vecindapp.data.SesionUsuario
 import com.example.vecindapp.domain.model.Barrio
+import com.example.vecindapp.ui.common.mostrarSnackbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 
@@ -105,11 +106,7 @@ class RegistroFragment : Fragment() {
                 viewModel.registrado.collect { userId ->
                     if (userId != null) {
                         sesion.guardarUsuarioId(userId)
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.registro_exitoso,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        mostrarSnackbar(R.string.registro_exitoso)
                         findNavController().navigate(R.id.action_registro_to_escaparate)
                     }
                 }
@@ -122,7 +119,7 @@ class RegistroFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.error.collect { mensaje ->
                     if (mensaje != null) {
-                        Toast.makeText(requireContext(), mensaje, Toast.LENGTH_SHORT).show()
+                        mostrarSnackbar(mensaje, Snackbar.LENGTH_LONG)
                         viewModel.limpiarError()
                     }
                 }

@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="Theme.VecindApp" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Colores primarios (verde) -->
+        <item name="colorPrimary">@color/verde_vecindapp_principal</item>
+        <item name="colorPrimaryVariant">@color/verde_vecindapp_oscuro</item>
+        <item name="colorOnPrimary">@color/blanco_tarjetas</item>
 
-    <style name="Theme.VecindApp" parent="Theme.MaterialComponents.Light.NoActionBar" />
+        <!-- Colores secundarios (naranja) -->
+        <item name="colorSecondary">@color/naranja_acento</item>
+        <item name="colorSecondaryVariant">@color/naranja_claro</item>
+        <item name="colorOnSecondary">@color/blanco_tarjetas</item>
+
+        <!-- Fondos y superficies -->
+        <item name="android:colorBackground">@color/fondo_app</item>
+        <item name="colorSurface">@color/blanco_tarjetas</item>
+        <item name="colorOnSurface">@color/texto_principal</item>
+    </style>
 </resources>

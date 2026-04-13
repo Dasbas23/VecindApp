@@ -125,49 +125,62 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- ═══ Botón Solicitar (para otros vecinos) ═══ -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSolicitar"
+        <!-- ═══ Contenedor de Acciones (Evita saltos de UI) ═══ -->
+        <LinearLayout
+            android:id="@+id/layoutAcciones"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_marginTop="24dp"
-            android:text="@string/btn_solicitar"
             app:layout_constraintTop_toBottomOf="@id/tvFechaDetalle"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="invisible"/>
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- ═══ Botones del propietario ═══ -->
+            <LinearLayout
+                android:id="@+id/layoutAccionesPropietario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
 
-        <!-- Botón Editar -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnEditar"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:text="@string/btn_editar"
-            app:layout_constraintTop_toBottomOf="@id/btnSolicitar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnEliminar"
-            android:visibility="invisible"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEditar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/btn_editar" />
 
-        <!-- Botón Eliminar -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnEliminar"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="8dp"
-            android:text="@string/btn_eliminar"
-            app:backgroundTint="#D32F2F"
-            app:layout_constraintTop_toBottomOf="@id/btnSolicitar"
-            app:layout_constraintStart_toEndOf="@id/btnEditar"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="invisible"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEliminar"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/btn_eliminar"
+                    app:strokeColor="#D32F2F"
+                    android:textColor="#D32F2F" />
+            </LinearLayout>
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSolicitar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/btn_solicitar"
+                android:visibility="gone" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnVerValoracion"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/btn_ver_valoracion"
+                android:visibility="gone" />
+
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>

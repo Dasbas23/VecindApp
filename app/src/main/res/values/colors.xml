@@ -1,10 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+    <!-- ═══ Paleta VecindApp ═══ -->
+    <color name="verde_vecindapp_principal">#2E8B57</color>
+    <color name="verde_vecindapp_oscuro">#1B5E38</color>
+    <color name="verde_vecindapp_claro">#A8D5BA</color>
+    <color name="naranja_acento">#E76F51</color>
+    <color name="naranja_claro">#F4A261</color>
+    <color name="fondo_app">#F4F7F5</color>
+    <color name="blanco_tarjetas">#FFFFFF</color>
+    <color name="texto_principal">#2D3436</color>
+    <color name="texto_secundario">#636E72</color>
+
+    <!-- Alias para compatibilidad -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Roles en transacciones -->
+    <color name="rol_comprador">#FFE3F2FD</color>
+    <color name="rol_comprador_text">#FF1565C0</color>
+    <color name="rol_comprador_borde">#FF42A5F5</color>
+    <color name="rol_vendedor">#FFE8F5E9</color>
+    <color name="rol_vendedor_text">#FF2E7D32</color>
+    <color name="rol_vendedor_borde">#FF66BB6A</color>
+
+    <!-- Estado cancelada -->
+    <color name="cancelada_fondo">#FFF5F5F5</color>
+    <color name="cancelada_texto">#FF9E9E9E</color>
 </resources>

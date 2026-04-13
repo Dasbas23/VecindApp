@@ -8,16 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.vecindapp.R
 import com.example.vecindapp.ui.common.TtsHelper
+import com.example.vecindapp.ui.common.mostrarSnackbar
 import com.example.vecindapp.VecindAppApplication
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 import androidx.core.graphics.toColorInt
@@ -82,6 +84,21 @@ class ValoracionBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onDismiss(dialog: android.content.DialogInterface) {
         super.onDismiss(dialog)
         onDismissCallback?.invoke()
+    }
+
+    /**
+     * Fuerza que el bottom sheet ocupe el 60% de la altura de pantalla al abrirse,
+     * en lugar del ~50% por defecto de Material.
+     */
+    override fun onStart() {
+        super.onStart()
+        val sheet = dialog?.findViewById<View>(
+            com.google.android.material.R.id.design_bottom_sheet
+        ) ?: return
+        val alturaObjetivo = (resources.displayMetrics.heightPixels * 0.85).toInt()
+        val behavior = BottomSheetBehavior.from(sheet)
+        behavior.peekHeight = alturaObjetivo
+        behavior.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     override fun onCreateView(
@@ -202,11 +219,9 @@ class ValoracionBottomSheetFragment : BottomSheetDialogFragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.guardada.collect { guardada ->
                     if (guardada) {
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.valoracion_enviada,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        // El Snackbar se muestra desde el fragment padre porque al hacer dismiss()
+                        // el bottom sheet (y su Snackbar adjunto) se destruyen antes de renderizarse.
+                        parentFragment?.mostrarSnackbar(R.string.valoracion_enviada)
                         dismiss()
                     }
                 }
@@ -217,9 +232,14 @@ class ValoracionBottomSheetFragment : BottomSheetDialogFragment() {
     private fun observarErrores() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.error.collect { mensaje ->
-                    if (mensaje != null) {
-                        Toast.makeText(requireContext(), mensaje, Toast.LENGTH_SHORT).show()
+                viewModel.error.collect { mensajeResId ->
+                    if (mensajeResId != null) {
+                        val btnEnviar = view?.findViewById<MaterialButton>(R.id.btnEnviarValoracion)
+                        mostrarSnackbar(
+                            mensajeResId = mensajeResId,
+                            duracion = Snackbar.LENGTH_SHORT,
+                            anchorView = btnEnviar
+                        )
                         viewModel.limpiarError()
                     }
                 }

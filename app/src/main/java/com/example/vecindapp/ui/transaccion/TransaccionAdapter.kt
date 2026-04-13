@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.vecindapp.ui.common.TtsHelper
 import com.example.vecindapp.R
 import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
@@ -25,7 +26,7 @@ import java.util.Locale
  * |-----------|-----------------------|------------------|
  * | PENDIENTE | Aceptar / Rechazar    | Cancelar         |
  * | ACEPTADA  | Completar             | Cancelar         |
- * | COMPLETADA| (sin botones)         | (sin botones)    |
+ * | COMPLETADA| (sin botones)         | Valorar          |
  * | CANCELADA | (sin botones)         | (sin botones)    |
  *
  * @property onAceptar   Lambda al pulsar "Aceptar".
@@ -36,7 +37,8 @@ class TransaccionAdapter(
     private val onAceptar: (TransaccionUI) -> Unit,
     private val onCompletar: (TransaccionUI) -> Unit,
     private val onCancelar: (TransaccionUI) -> Unit,
-    private val onValorar: (TransaccionUI) -> Unit
+    private val onValorar: (TransaccionUI) -> Unit,
+    private val onItemClick: (TransaccionUI) -> Unit
 ) : ListAdapter<TransaccionUI, TransaccionAdapter.TransaccionViewHolder>(TransaccionDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransaccionViewHolder {
@@ -70,10 +72,7 @@ class TransaccionAdapter(
             tvRol.text = item.rol
             tvEstado.text = item.estado.name
             tvTitulo.text = item.tituloServicio
-            tvHoras.text = itemView.context.getString(
-                R.string.formato_coste_horas,
-                item.horas
-            )
+            tvHoras.text = TtsHelper.formatearCosteHumano(item.horas)
 
             val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
             tvFecha.text = sdf.format(Date(item.timestamp))
@@ -90,6 +89,8 @@ class TransaccionAdapter(
 
             // Configurar botones según permisos
             configurarBotones(item)
+
+            itemView.setOnClickListener { onItemClick(item) }
         }
 
         /**

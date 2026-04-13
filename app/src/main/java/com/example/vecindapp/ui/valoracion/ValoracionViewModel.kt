@@ -3,6 +3,7 @@ package com.example.vecindapp.ui.valoracion
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.vecindapp.R
 import com.example.vecindapp.data.entities.Valoracion
 import com.example.vecindapp.domain.repository.ValoracionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,9 +29,9 @@ class ValoracionViewModel(
     private val _guardada = MutableStateFlow(false)
     val guardada: StateFlow<Boolean> = _guardada
 
-    /** Mensaje de error. */
-    private val _error = MutableStateFlow<String?>(null)
-    val error: StateFlow<String?> = _error
+    /** Mensaje de error como ID de recurso de strings.xml. */
+    private val _error = MutableStateFlow<Int?>(null)
+    val error: StateFlow<Int?> = _error
 
     /**
      * Guarda una valoración en la base de datos.
@@ -52,7 +53,7 @@ class ValoracionViewModel(
         comentario: String
     ) {
         if (pictogramas.isEmpty()) {
-            _error.value = "Selecciona al menos un pictograma"
+            _error.value = R.string.valoracion_error_sin_pictograma
             return
         }
 
@@ -77,7 +78,7 @@ class ValoracionViewModel(
                 _guardada.value = true
             } catch (e: Exception) {
                 e.printStackTrace()
-                _error.value = "Error al guardar la valoración"
+                _error.value = R.string.valoracion_error_guardar
             }
         }
     }
