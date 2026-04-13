@@ -16,8 +16,8 @@
 | Sprint 2 | Completado | BBDD Room + CRUD servicios + escaparate                      |
 | Sprint 3 | Completado | Transacciones + Perfil + Historial (MPAndroidChart)          |
 | Sprint 4 | Completado | Selección de usuario + Valoraciones con pictogramas ARASAAC  |
-| Sprint 5 | En proceso | Accesibilidad + TTS                                          |
-| Sprint 6 | Pendiente  | WorkManager y pulido visual                                  |
+| Sprint 5 | Completado | Accesibilidad + TTS                                          |
+| Sprint 6 | Completado | WorkManager y pulido visual                                  |
 
 ---
 
@@ -38,23 +38,24 @@ El proyecto sigue el patrón **MVVM + Clean Architecture** organizado en 5 capas
 app/src/main/java/com/example/vecindapp/
 ├── VecindAppApplication.kt  → Singleton DI container (DB + Repos)
 ├── MainActivity.kt          → Single Activity (NavHost + BottomNav)
+├── MainViewModel.kt         → Badge de notificaciones reactivo (LiveData)
 ├── data/
-│   ├── db/              → AppDatabase, DAOs, Converters, SeedDatabaseCallback
+│   ├── db/              → AppDatabase, DAOs (Usuario/Servicio/Transaccion/Valoracion), Converters, SeedDatabaseCallback
 │   ├── entities/        → Room entities (Usuario, Servicio, Transaccion, Valoracion)
-│   └── repository/      → Repository implementations (*Impl)
+│   ├── repository/      → Repository implementations (*Impl)
+│   └── SesionUsuario    → Helper singleton para gestionar la sesión activa
 ├── domain/
-│   ├── model/           → Enums (NivelVecino, CategoriaServicio, EstadoServicio, EstadoTransaccion)
+│   ├── model/           → Enums (NivelVecino, CategoriaServicio, EstadoServicio, EstadoTransaccion, Barrio)
 │   ├── repository/      → Repository interfaces (contracts)
-│   └── usecase/         → Use cases (business logic) [pendiente]
 ├── ui/
 |   ├── auth/            → LoginFragment, RegistroFragment + ViewModels
-|   ├── common/          → Clases utilitarias transversales (TtsHelper.kt)
+|   ├── common/          → TtsHelper.kt, CategoriaMapper.kt, SnackbarUtils.kt
 │   ├── escaparate/      → EscaparateFragment + ViewModel + ServicioAdapter
 │   ├── servicio/        → CrearServicioFragment + DetalleServicioFragment + ViewModels
 │   ├── transaccion/     → TransaccionFragment + ViewModel + Adapter + TransaccionUI
-│   ├── perfil/          → PerfilFragment + ViewModel (reuses ServicioAdapter)
+│   ├── perfil/          → PerfilFragment + ViewModel 
 │   ├── historial/       → HistorialFragment + ViewModel + Adapter + MPAndroidChart
-|   └── valoracion/      → ValoracionBottomSheetFragment + ViewModel + PictogramaMapper (ARASAAC)
+|   └── valoracion/      → ValoracionBottomSheetFragment + ViewModel + PictogramaMapper (ARASAAC) + DetalleValoracionBottomSheet 
 └── worker/              → WorkManager (local notifications) [pendiente]
 ```
 
@@ -118,7 +119,7 @@ app/src/main/java/com/example/vecindapp/
 | `sprint3/transacciones`    | Transacciones + Perfil + Historial                 |
 | `sprint4/ usuarios+valorac`| Login sencillo de usuarius + sistema valoraciones  |
 | `sprint5/ accesibilidad `  | TTS en escaparate + servicio + valoración + perfil |
-| `sprint6/ worker+ui&ux `   | Workmanager(tareas 2º plano) + Mejoras diseño UX/UI|
+| `sprint6/ worker+ui&ux `   | Mejoras diseño UX/UI + ~~Workmanager(tareas 2º plano)~~|
 
 
 ## | Utilidades
@@ -143,7 +144,7 @@ app/src/main/java/com/example/vecindapp/
 - **`brd`** = `branch -d` #[ok] **(Elimina la rama que digas como argumento en local)**
 - **`brr`** = `push origin --delete` #[ok] **(Borra una rama del remoto)**
 - **`merged`** = `branch --merged` #[ok] **(Lista ramas ya mergeadas que puedes borrar tranquilamente. Para limpiar ramas muertas)**
-- **`mergeff`** = `merge --no-ff` #[@] **(Merge forzando commit de merge. Para cerrar sprints con marca visible en el historial. Indicar rama a mergear en la que estas. Requieres mensaje "-m")**
+- **`mergeff`** = `merge --no-ff` #[ok] **(Merge forzando commit de merge. Para cerrar sprints con marca visible en el historial. Indicar rama a mergear en la que estas. Requieres mensaje "-m")**
 
 #### === HISTORIAL ===
 
