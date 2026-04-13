@@ -103,7 +103,9 @@ class TransaccionViewModel(
         val yaValoradaPorUsuario = valoracionRepository.getByTransaccionYValorador(
             transaccion.idTransaccion, usuarioActualId
         ) != null
-        val puedeValorar = transaccion.estado == EstadoTransaccion.COMPLETADA && !yaValoradaPorUsuario
+        val puedeValorar = !esVendedor
+                && transaccion.estado == EstadoTransaccion.COMPLETADA
+                && !yaValoradaPorUsuario
 
         return TransaccionUI(
             transaccion = transaccion,
