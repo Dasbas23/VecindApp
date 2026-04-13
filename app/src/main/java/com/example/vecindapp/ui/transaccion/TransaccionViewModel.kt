@@ -60,10 +60,6 @@ class TransaccionViewModel(
     private val _mensaje = MutableStateFlow<String?>(null)
     val mensaje: StateFlow<String?> = _mensaje
 
-    /** Transacción recién completada (para abrir el BottomSheet de valoración). */
-    private val _transaccionCompletada = MutableStateFlow<TransaccionUI?>(null)
-    val transaccionCompletada: StateFlow<TransaccionUI?> = _transaccionCompletada
-
     init {
         cargarTransacciones()
     }
@@ -197,21 +193,12 @@ class TransaccionViewModel(
                 )
 
                 _mensaje.value = "¡Horas transferidas con éxito!"
-                _transaccionCompletada.value = item
-
 
             } catch (e: Exception) {
                 e.printStackTrace()
                 _mensaje.value = "Error al completar la transacción"
             }
         }
-    }
-
-    /**
-     * Limpia el mensaje de feedback.
-     */
-    fun limpiarTransaccionCompletada() {
-        _transaccionCompletada.value = null
     }
 
     /**
