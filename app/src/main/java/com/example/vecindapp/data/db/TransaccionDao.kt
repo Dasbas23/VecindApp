@@ -98,11 +98,13 @@ interface TransaccionDao {
         WHERE (t.id_comprador_fk = :usuarioId OR t.id_vendedor_fk = :usuarioId)
         AND (
             t.estado = 'PENDIENTE'
-            OR (t.estado = 'COMPLETADA' AND NOT EXISTS (
-                SELECT 1 FROM valoracion v
-                WHERE v.id_transaccion_fk = t.id_transaccion
-                AND v.id_valorador_fk = :usuarioId
-            ))
+            OR (t.estado = 'COMPLETADA'
+                AND t.id_comprador_fk = :usuarioId
+                AND NOT EXISTS (
+                    SELECT 1 FROM valoracion v
+                    WHERE v.id_transaccion_fk = t.id_transaccion
+                    AND v.id_valorador_fk = :usuarioId
+                ))
         )
     """)
     fun getConteoNotificaciones(usuarioId: Int): Flow<Int>
