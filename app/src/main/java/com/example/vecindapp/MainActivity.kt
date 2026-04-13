@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
 import com.example.vecindapp.data.SesionUsuario
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
@@ -41,6 +40,9 @@ class MainActivity : AppCompatActivity() {
 
     /** Evita suscribirse al badge más de una vez por sesión. */
     private var badgeIniciado = false
+
+    /** ViewModel principal — se inicializa en [iniciarBadge]. */
+    private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,31 +93,40 @@ class MainActivity : AppCompatActivity() {
     /**
      * Inicia la observación reactiva del badge de notificaciones.
      *
-     * Se ejecuta una sola vez por sesión, cuando el usuario navega a
-     * cualquier pantalla distinta de login/registro. Funciona tanto
-     * al reabrir la app con sesión guardada como tras un login nuevo.
+     * Se ejecuta en cada navegación fuera de login/registro.
+     * - La primera vez: crea el ViewModel y arranca el collector.
+     * - Las siguientes: solo actualiza el [MainViewModel.setUsuarioId]
+     *   para que [flatMapLatest] resubscriba al usuario correcto.
      */
     private fun iniciarBadge(bottomNav: BottomNavigationView) {
-        if (badgeIniciado) return
         val sesion = SesionUsuario(this)
         if (!sesion.haySesion()) return
-        badgeIniciado = true
 
-        val app = application as VecindAppApplication
-        val viewModel = ViewModelProvider(
-            this,
-            MainViewModel.Factory(app.transaccionRepository, sesion.obtenerUsuarioId())
-        )[MainViewModel::class.java]
+        // Inicializar ViewModel una sola vez (sin usuarioId en Factory)
+        if (!::mainViewModel.isInitialized) {
+            val app = application as VecindAppApplication
+            mainViewModel = ViewModelProvider(
+                this,
+                MainViewModel.Factory(app.transaccionRepository)
+            )[MainViewModel::class.java]
+        }
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.notificaciones.collect { conteo ->
-                    val badge = bottomNav.getOrCreateBadge(R.id.transaccionFragment)
-                    if (conteo > 0) {
-                        badge.isVisible = true
-                        badge.number = conteo
-                    } else {
-                        badge.isVisible = false
+        // Siempre actualizar el ID — flatMapLatest resubscribe automáticamente
+        mainViewModel.setUsuarioId(sesion.obtenerUsuarioId())
+
+        // Arrancar collector una sola vez
+        if (!badgeIniciado) {
+            badgeIniciado = true
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    mainViewModel.notificaciones.collect { conteo ->
+                        val badge = bottomNav.getOrCreateBadge(R.id.transaccionFragment)
+                        if (conteo > 0) {
+                            badge.isVisible = true
+                            badge.number = conteo
+                        } else {
+                            badge.isVisible = false
+                        }
                     }
                 }
             }
