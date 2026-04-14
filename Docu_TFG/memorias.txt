@@ -550,13 +550,43 @@ SE DA COMIENZO AL SPRINT 6!
 		↳ 3. Borrar las dos ramas muertas con git brd y git branch -D
 		↳ 4. hacer commit de memorias y git p --force para sincronizar remoto.
 		↳ Lo peor de todo es que habría bastado con hacer git reset --hard al hash bueno desde el principio y punto. Cuatro comandos, una rama, sin drama. Pero claro, Gemini me metió por el camino largo y yo le hice caso.
-	↳ Aprendizaje: Cuando los commits malos son solo locales, git reset --hard es el camino. No necesitas ramas de backup, ni detached HEAD, ni renames. El reflog te guarda las espaldas durante 30 días por si te arrepientes. Simple gana a ingenioso. Me lo apunto bien apuntado porque ya es la segunda vez que me pasa algo parecido (la primera fue con qwen en el Sprint 5).
+	↳ Me he dado cuenta que cuando los commits malos son solo locales, git reset --hard es el camino. No necesitas ramas de backup, ni detached HEAD, ni renames. El reflog te guarda las espaldas durante 30 días por si te arrepientes. Simple gana a ingenioso. Me lo apunto bien apuntado porque ya es la segunda vez que me pasa algo parecido (la primera fue con qwen en el Sprint 5).
 
 ↪ 12.04.2026 :
 
 ※ Me pongo con el formateo de horas/minuto en toda la app. 
 	↳ Ver plan 2026-04-12-formato-horas-humano.
-		Se lo voy a pedir en gemma4 en otra rama... veremos que tal 
+		Se lo voy a pedir en gemma4 en otra rama... veremos que tal. 
+			He ido paso por paso y finalmente me lo ha hecho bastante bien. Lento, pero bien.
+		▼ Problema : Perdía el contexto bastante a menudo y como no sabía que hacer se quedaba sin hacerlo
+		+ Solución : Pedirle que hiciera las tareas explicitamente. Los pasos que no seguía o tenía que insistirle, finalmente los hacía yo a mano por ser más rápido.
+※ Implementación de Pictogramas dinámicos por Categoría.
+	↳ Se crea `CategoriaMapper` para centralizar la lógica y no ensuciar los Adapters.
+	↳ Se aplica en Escaparate, Perfil y Detalle de Servicio.
+	▼ Problema : El campo `pictogramaId` de la base de datos queda obsoleto tras este cambio.
+	+ Solución : Se decide no tocar la BBDD para evitar migraciones complejas ahora mismo. Se usa la etiqueta `@Deprecated` y se documenta la deuda técnica.
+
+↪ 13.04.2026 :
+	Hoy toca rematar el Sprint 6. Hay que implementar las notificaciones y pulir los casos límite que van saliendo.
+	
+※ Sistema Reactivo de Notificaciones (Badge en el BottomNav).
+	↳ Se crea un flujo completo MVVM: Query `getConteoNotificaciones` (Room) -> `TransaccionRepository` -> `MainViewModel` -> `MainActivity`.
+	▼ Problema : [Rellena aquí: El badge no se actualizaba correctamente al cambiar de usuario o iniciar sesión con una cuenta distinta]
+	+ Solución : [Rellena aquí: Cómo hiciste que MainViewModel fuera reactivo al cambio de usuario]
+	▼ Problema : [Rellena aquí: El badge se quedaba "pegado" al cerrar sesión]
+	+ Solución : [Rellena aquí: Fix para limpiar el badge al hacer logout]
+※ Refactorización profunda de la Lógica de Valoraciones.
+	↳ Se descubre que la regla de negocio para valorar estaba mal planteada y generaba inconsistencias con el punto rojo.
+	▼ Problema : [Rellena aquí: ¿Por qué tuviste que restringir `puedeValorar` exclusivamente al comprador? ¿Qué pasaba si el vendedor también podía valorar?]
+	+ Solución : [Rellena aquí: Explicación de la regla unidireccional y el fix en el DAO]
+	▼ Problema : [Rellena aquí: El auto-popup de valoración saltaba cuando no debía al completar una transacción]
+	+ Solución : Se elimina el auto-popup al completar la transacción para dar más control al usuario.
+※ Pulido de UI final.
+	▼ Problema : [Rellena aquí: El snackbar de error en el login se quedaba escondido o se veía mal]
+	+ Solución : Se ajusta la posición para mostrar el snackbar por encima del botón "Iniciar sesión".
+※ CIERRE DEL SPRINT 6.
+	↳ Se fusionan las ramas experimentales (`sprint6/badge`, `sprint6/formatear_horas`) a `sprint6/worker+ui&ux`.
+	↳ Se fusiona la rama del sprint a `desarrollo`. ¡Sprint 6 completado con éxito!
 
 
 		▼ Problema :
