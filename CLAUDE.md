@@ -21,24 +21,29 @@ TFG DAM · ILERNA · 2S2526
 app/src/main/java/com/example/vecindapp/
 ├── VecindAppApplication.kt  → Singleton DI container (DB + Repos)
 ├── MainActivity.kt          → Single Activity (NavHost + BottomNav)
+├── MainViewModel.kt         → Badge de notificaciones reactivo (LiveData)
 ├── data/
-│   ├── db/              → AppDatabase, DAOs, Converters, SeedDatabaseCallback
+│   ├── SesionUsuario.kt     → Singleton para gestionar la sesión activa
+│   ├── db/              → AppDatabase, Converters, SeedDatabaseCallback
+│   │   ├── UsuarioDao.kt
+│   │   ├── ServicioDao.kt
+│   │   ├── TransaccionDao.kt
+│   │   └── ValoracionDao.kt
 │   ├── entities/        → Room entities (Usuario, Servicio, Transaccion, Valoracion)
 │   └── repository/      → Repository implementations (*Impl)
 ├── domain/
 │   ├── model/           → Enums (NivelVecino, CategoriaServicio, EstadoServicio, EstadoTransaccion, Barrio)
-│   ├── repository/      → Repository interfaces (contracts)
-│   └── usecase/         → Use cases (business logic) [pendiente]
+│   └── repository/      → Repository interfaces (contracts)
 ├── ui/
-|   ├── auth/            → LoginFragment, RegistroFragment + ViewModels
-|   ├── common/          → Clases utilitarias transversales (TtsHelper.kt)
+│   ├── auth/            → LoginFragment, RegistroFragment + ViewModels
+│   ├── common/          → TtsHelper.kt, CategoriaMapper.kt, SnackbarUtils.kt
 │   ├── escaparate/      → EscaparateFragment + ViewModel + ServicioAdapter
 │   ├── servicio/        → CrearServicioFragment + DetalleServicioFragment + ViewModels
 │   ├── transaccion/     → TransaccionFragment + ViewModel + Adapter + TransaccionUI
-│   ├── perfil/          → PerfilFragment + ViewModel (reuses ServicioAdapter)
+│   ├── perfil/          → PerfilFragment + ViewModel
 │   ├── historial/       → HistorialFragment + ViewModel + Adapter + MPAndroidChart
-|   └── valoracion/      → ValoracionBottomSheetFragment + ViewModel + PictogramaMapper (ARASAAC)
-└── worker/              → WorkManager (local notifications) [pendiente]
+│   └── valoracion/      → ValoracionBottomSheetFragment + DetalleValoracionBottomSheet + ViewModel + PictogramaMapper (ARASAAC)
+└── worker/              → [Deuda técnica] WorkManager no implementado por tiempo — ver sección Deuda técnica
 ```
 
 ## Key Libraries
@@ -69,7 +74,7 @@ Use fallbackToDestructiveMigration(true) during development.
 | Sprint 3 | Done       | Transactions + Profile + History (MPAndroidChart)         |
 | Sprint 4 | Done       | User selection + Ratings with ARASAAC pictograms          |
 | Sprint 5 | Done       | Accessibility +TTS + unique users + spinner + history tabs|
-| Sprint 6 | In progress| WorkManager (local notifs), visual UI/UX polish & images  |
+| Sprint 6 | Done       | Badge reactivo, formateo de horas, refactor UI/UX, mejoras de valoración |
 
 ## Navigation (nav_graph.xml)
 
@@ -77,9 +82,9 @@ Use fallbackToDestructiveMigration(true) during development.
 - BottomNav tabs: Escaparate → Transacciones → Historial → Perfil
 - Secondary: crearServicioFragment, detalleServicioFragment (with arg servicioId)
 
-## Known TODOs
+## Known TODOs / Deuda técnica
 
-- WorkManager notifications not yet implemented (Sprint 6)
+- **WorkManager** — Las notificaciones locales en segundo plano no se implementaron en Sprint 6 por falta de tiempo. El directorio `worker/` está reservado para esta funcionalidad. Queda documentado como deuda técnica justificada.
 
 ## Conventions
 
