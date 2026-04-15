@@ -111,13 +111,6 @@ app/src/main/java/com/example/vecindapp/
 ./gradlew clean
 ```
 
-## Deuda técnica
-
-| Componente | Descripción | Justificación |
-|---|---|---|
-| **WorkManager** | Notificaciones locales en segundo plano | No implementado en Sprint 6 por falta de tiempo. El directorio `worker/` está pendiente de crear. |
-| **Use cases (Clean Architecture)** | Capa `domain/usecase/` | La lógica de negocio reside en ViewModels/Repositorios. Mejora arquitectónica pendiente. |
-
 ## Convenciones del proyecto
 
 - Interfaz gráfica en **XML**, nunca Jetpack Compose.
