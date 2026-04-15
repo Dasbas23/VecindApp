@@ -40,10 +40,10 @@ app/src/main/java/com/example/vecindapp/
 │   ├── escaparate/      → EscaparateFragment + ViewModel + ServicioAdapter
 │   ├── servicio/        → CrearServicioFragment + DetalleServicioFragment + ViewModels
 │   ├── transaccion/     → TransaccionFragment + ViewModel + Adapter + TransaccionUI
-│   ├── perfil/          → PerfilFragment + ViewModel
+│   ├── perfil/          → PerfilFragment + ViewModel (reutiliza ServicioAdapter)
 │   ├── historial/       → HistorialFragment + ViewModel + Adapter + MPAndroidChart
 │   └── valoracion/      → ValoracionBottomSheetFragment + DetalleValoracionBottomSheet + ViewModel + PictogramaMapper (ARASAAC)
-└── worker/              → [Deuda técnica] WorkManager no implementado por tiempo — ver sección Deuda técnica
+└── worker/              → (pendiente de crear — ver Deuda técnica)
 ```
 
 ## Key Libraries
@@ -74,7 +74,7 @@ Use fallbackToDestructiveMigration(true) during development.
 | Sprint 3 | Done       | Transactions + Profile + History (MPAndroidChart)         |
 | Sprint 4 | Done       | User selection + Ratings with ARASAAC pictograms          |
 | Sprint 5 | Done       | Accessibility +TTS + unique users + spinner + history tabs|
-| Sprint 6 | Done       | Badge reactivo, formateo de horas, refactor UI/UX, mejoras de valoración |
+| Sprint 6 | Done       | Reactive badge, time formatting, UI/UX refactor, rating improvements     |
 
 ## Navigation (nav_graph.xml)
 
@@ -84,7 +84,8 @@ Use fallbackToDestructiveMigration(true) during development.
 
 ## Known TODOs / Deuda técnica
 
-- **WorkManager** — Las notificaciones locales en segundo plano no se implementaron en Sprint 6 por falta de tiempo. El directorio `worker/` está reservado para esta funcionalidad. Queda documentado como deuda técnica justificada.
+- **WorkManager** — Las notificaciones locales en segundo plano no se implementaron en Sprint 6 por falta de tiempo. El directorio `worker/` está pendiente de crear. Queda documentado como deuda técnica justificada. Podría abordarse en una iteración futura si el proyecto continúa.
+- **Use cases (Clean Architecture)** — La capa `domain/usecase/` no se implementó. La lógica de negocio reside actualmente en los ViewModels y repositorios. Queda pendiente como mejora arquitectónica si el proyecto evoluciona.
 
 ## Conventions
 
