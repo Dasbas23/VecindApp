@@ -592,13 +592,14 @@ SE DA COMIENZO AL SPRINT 6!
 ※ Me estoy organizado un poco leyendo la normativa y sabiendo que tengo que poner en cada apartado. 
 	▼ Problema : Veo que los diagramas de claes y casos de usos parece que se han modificado un poco. Mi diagrama de clasesm en primera isntancia estaba muy bien detallado con todas las funciones y los parámetros pero el proyecto ha crecido mucho y creo que meter un diagramatan tocho sería perder mucho timepo y no lo valorarán tanto.
 	+ Solución :  [Pendiente] Ver si CCode , en base a la estructura de mi poyecto puede elaborar algo sencillo y no tan chulo y complicado como he hehco el primero separado por colores y demás cosas. 
- **Tareas para esta nocche**
+
+↪ 15.04.2026 :
+	Hoy quiero avanzar a tope porque Irene hoy he visto que le ha cundido un mogollón así que yo también quiero lo mismo que ella.	
+
+ACTUALIZAR PLANTILLA MEMPORIA ESCRITA DE GIT Y ONEDRIVE(Actualmente estoy trabajando en el de drive pero el de git está mas completo porque es el que he presentado en el feedfback)
+ **Tareas pendientes**
 	Estudiarme como han hecho las presentaciones los demás.
 		↳ En base a esto y la Normativa y guión de Proyectos donde explica qué meter en cada apartado lo tendré muy claro.
-	Actualizar los layouts con un pequeño apartado donde se diga que puede hacer el usuario en cada pantalla.
-	Ver si CCode me puede hacer un diagrama de clases UML.
-
-
 
 
 --- SÍMBOLOGÍA---
@@ -616,8 +617,9 @@ Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir 
 [ ] Me tengo que enredar con MarkItDown para intentar hacer que la IA me pueda completar los pptx o los docx.
 [X] Carpeta de Drive creada.
 [!] He cargado más presentaciones en la misma carpeta de OneDrive
-[ ]
-[ ]
+[ ] Actualizar los layouts con un pequeño apartado donde se diga que puede hacer el usuario en cada pantalla.
+[ ] Ver si CCode me puede hacer un diagrama de clases UML.
+[ ] Actualizar el CLAUDE.md
 [ ]
 [ ]
 [ ]
