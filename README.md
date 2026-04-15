@@ -17,7 +17,7 @@
 | Sprint 3 | Completado | Transacciones + Perfil + Historial (MPAndroidChart)          |
 | Sprint 4 | Completado | Selección de usuario + Valoraciones con pictogramas ARASAAC  |
 | Sprint 5 | Completado | Accesibilidad + TTS                                          |
-| Sprint 6 | Completado | WorkManager y pulido visual                                  |
+| Sprint 6 | Completado | Badge reactivo, formateo de horas, refactor UI/UX, mejoras de valoración |
 
 ---
 
@@ -56,7 +56,7 @@ app/src/main/java/com/example/vecindapp/
 │   ├── perfil/          → PerfilFragment + ViewModel 
 │   ├── historial/       → HistorialFragment + ViewModel + Adapter + MPAndroidChart
 |   └── valoracion/      → ValoracionBottomSheetFragment + ViewModel + PictogramaMapper (ARASAAC) + DetalleValoracionBottomSheet 
-└── worker/              → WorkManager (local notifications) [pendiente]
+└── worker/              → (pendiente de crear — ver Deuda técnica)
 ```
 
 ## Stack tecnológico
@@ -100,6 +100,13 @@ app/src/main/java/com/example/vecindapp/
 # Limpiar build
 ./gradlew clean
 ```
+
+## Deuda técnica
+
+| Componente | Descripción | Justificación |
+|---|---|---|
+| **WorkManager** | Notificaciones locales en segundo plano | No implementado en Sprint 6 por falta de tiempo. El directorio `worker/` está pendiente de crear. |
+| **Use cases (Clean Architecture)** | Capa `domain/usecase/` | La lógica de negocio reside en ViewModels/Repositorios. Mejora arquitectónica pendiente. |
 
 ## Convenciones del proyecto
 
