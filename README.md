@@ -21,6 +21,15 @@
 
 ---
 
+## Deuda técnica
+
+| Componente | Descripción | Justificación |
+|---|---|---|
+| **WorkManager** | Notificaciones locales en segundo plano | Descartado del Sprint 6 para priorizar la estabilidad de las funcionalidades core y el pulido UX. El directorio `worker/` queda preparado como punto de extensión. |
+| **Use cases (Clean Architecture)** | Capa `domain/usecase/` | La lógica de negocio reside en ViewModels/Repositorios. Mejora arquitectónica pendiente. |
+
+---
+
 ## Descripción
 
 VecindApp es una App Android que funciona como un banco de tiempo vecinal donde los usuarios
@@ -47,6 +56,7 @@ app/src/main/java/com/example/vecindapp/
 ├── domain/
 │   ├── model/           → Enums (NivelVecino, CategoriaServicio, EstadoServicio, EstadoTransaccion, Barrio)
 │   ├── repository/      → Repository interfaces (contracts)
+│   └── usecase/         → (pendiente de crear — ver Deuda técnica)
 ├── ui/
 |   ├── auth/            → LoginFragment, RegistroFragment + ViewModels
 |   ├── common/          → TtsHelper.kt, CategoriaMapper.kt, SnackbarUtils.kt
