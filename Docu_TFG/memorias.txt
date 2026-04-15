@@ -595,8 +595,17 @@ SE DA COMIENZO AL SPRINT 6!
 
 ↪ 15.04.2026 :
 	Hoy quiero avanzar a tope porque Irene hoy he visto que le ha cundido un mogollón así que yo también quiero lo mismo que ella.	
+※ He conseguido avanzar dejadodo bien el punto 1.2 Abstract un poco mejor de lo que estaba. 
+※ También he arregaldo los objetivos espcíficos del 1.3
+※ En cuanto al punto 2, el estado del arte, creo que está muy bien así y por tanto no lo voy a toccar.
+	↳Pensaba meterls capturas o gráficos dela competencia pero he decidido que no poque no es con fines educativos de esa manera.
+※ Me he puesto con el punto 3 , metodología usada.
+	▼ Problema : Resulta que tengo distintas vesiones del mismo archivo desperdigadas en distintas carpetas porque en su día me guardé una copia en git, otra en OneDrive,, otra en GoogleDrive y otra para trabajar en local con el PC del trabajo. 
+		↳ ¿Que pasa?  Que  en el trabajo me he puesto a trabajar sobre una que tenía medio completada en local y en los demás sitios la tenía más completa y ademas a Claude le he subido una más completa y comparado con lo que tenía yo en local no me cuadraban las cosas que me decía éste y yo me volvía loco. Hasta que por fin me he dado cuenta que  tengo avance en la copia local y los tendré que meter en la copia que tengo más adelantada.
+	+ Solución : Por ahora en casa , voy a trabajar con  lo que pueda, luego unificaré los cambios de la copia en local a la que estoy trabajando actualmete. Dejaré un sólo archivo en git con copia de seguridad esporádica en git.
 
 ACTUALIZAR PLANTILLA MEMPORIA ESCRITA DE GIT Y ONEDRIVE(Actualmente estoy trabajando en el de drive pero el de git está mas completo porque es el que he presentado en el feedfback)
+	He metido el punto 3 en el archivo compartido en git
  **Tareas pendientes**
 	Estudiarme como han hecho las presentaciones los demás.
 		↳ En base a esto y la Normativa y guión de Proyectos donde explica qué meter en cada apartado lo tendré muy claro.
@@ -618,7 +627,7 @@ Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir 
 [X] Carpeta de Drive creada.
 [!] He cargado más presentaciones en la misma carpeta de OneDrive
 [ ] Actualizar los layouts con un pequeño apartado donde se diga que puede hacer el usuario en cada pantalla.
-[ ] Ver si CCode me puede hacer un diagrama de clases UML.
+[!] Ver si CCode me puede hacer un diagrama de clases UML. [SI] Puede hacerlo y me lo ha hecho en mermaid pero tengo que compactar eso un poco.   
 [ ] Actualizar el CLAUDE.md
 [ ]
 [ ]
