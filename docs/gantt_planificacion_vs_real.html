@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VecindApp — Planificación vs Ejecución Real</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            padding: 30px;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 6px;
+            font-size: 1.6rem;
+            color: #1a1a2e;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 24px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .legend-color {
+            width: 20px;
+            height: 14px;
+            border-radius: 3px;
+        }
+        .export-bar {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .export-btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .export-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .export-btn.svg-btn {
+            background: #4a90d9;
+            color: #fff;
+        }
+        .chart-container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 30px;
+            overflow-x: auto;
+        }
+        .gantt {
+            position: relative;
+            min-width: 900px;
+        }
+        .gantt-header {
+            display: flex;
+            margin-left: 200px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 8px;
+            margin-bottom: 4px;
+        }
+        .gantt-header span {
+            font-size: 0.75rem;
+            color: #888;
+            font-weight: 600;
+            text-align: center;
+        }
+        .sprint-row {
+            display: flex;
+            align-items: stretch;
+            margin-bottom: 6px;
+        }
+        .sprint-label {
+            width: 200px;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-right: 16px;
+        }
+        .sprint-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #1a1a2e;
+        }
+        .sprint-desc {
+            font-size: 0.72rem;
+            color: #777;
+            margin-top: 2px;
+            line-height: 1.3;
+        }
+        .bars-area {
+            flex: 1;
+            position: relative;
+            min-height: 56px;
+        }
+        .bar {
+            position: absolute;
+            height: 22px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            white-space: nowrap;
+            cursor: default;
+        }
+        .bar.planned {
+            top: 4px;
+            background: #b3d4f7;
+        }
+        .bar.actual {
+            top: 30px;
+            background: #a8e6c1;
+        }
+        .grid-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: #f0f0f0;
+        }
+        .separator {
+            margin-left: 200px;
+            height: 1px;
+            background: #f0f0f0;
+            margin-bottom: 6px;
+        }
+        .bar-date {
+            font-size: 0.6rem;
+            opacity: 0.9;
+            margin-left: 4px;
+        }
+        .summary {
+            margin-top: 24px;
+            padding: 16px 20px;
+            background: #f8f9fb;
+            border-radius: 8px;
+            border-left: 4px solid #4a90d9;
+        }
+        .summary h3 {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            color: #1a1a2e;
+        }
+        .summary p {
+            font-size: 0.85rem;
+            color: #555;
+            line-height: 1.5;
+        }
+        .summary .highlight { font-weight: 600; color: #27ae60; }
+        .summary .warn { font-weight: 600; color: #e67e22; }
+    </style>
+</head>
+<body>
+    <h1>VecindApp — Diagrama de Gantt</h1>
+    <p class="subtitle">Planificación vs. Ejecución Real &nbsp;·&nbsp; TFG DAM · ILERNA · 2S2526</p>
+
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-color" style="background: linear-gradient(135deg, #4a90d9, #357abd);"></div>
+            Tiempo estimado
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: linear-gradient(135deg, #27ae60, #1e8449);"></div>
+            Tiempo empleado
+        </div>
+    </div>
+
+    <div class="export-bar">
+        <button class="export-btn svg-btn" onclick="exportSVG()">Exportar SVG</button>
+    </div>
+
+    <div class="chart-container" id="exportArea">
+        <div class="gantt" id="gantt"></div>
+
+        <div class="summary">
+            <h3>Resumen del proyecto</h3>
+            <p>
+                Los Sprints 2-6 se completaron <span class="highlight">antes de la fecha planificada</span>,
+                lo que permitió iniciar el Sprint 7 con 3 días de adelanto.
+                El Sprint 1 tuvo un <span class="warn">retraso de 3 días</span> debido al setup inicial,
+                pero se recuperó rápidamente en los sprints siguientes.
+                En conjunto, el proyecto avanza <span class="highlight">dentro del plazo</span> previsto.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const sprints = [
+            {
+                name: "Sprint 1",
+                desc: "Diseño funcional, UML, Setup, KSP",
+                planStart: "2026-03-06", planEnd: "2026-03-13",
+                realStart: "2026-03-06", realEnd: "2026-03-16"
+            },
+            {
+                name: "Sprint 2",
+                desc: "BBDD Room, CRUD, RecyclerView",
+                planStart: "2026-03-13", planEnd: "2026-03-20",
+                realStart: "2026-03-17", realEnd: "2026-03-19"
+            },
+            {
+                name: "Sprint 3",
+                desc: "Transacciones, Perfil, Charts",
+                planStart: "2026-03-20", planEnd: "2026-03-27",
+                realStart: "2026-03-19", realEnd: "2026-03-20"
+            },
+            {
+                name: "Sprint 4",
+                desc: "Login, Valoraciones ARASAAC",
+                planStart: "2026-03-27", planEnd: "2026-04-03",
+                realStart: "2026-03-21", realEnd: "2026-03-29"
+            },
+            {
+                name: "Sprint 5",
+                desc: "TTS, Usuarios, Spinner Barrios",
+                planStart: "2026-04-03", planEnd: "2026-04-10",
+                realStart: "2026-03-29", realEnd: "2026-04-06"
+            },
+            {
+                name: "Sprint 6",
+                desc: "Notificaciones, Pictos, UI/UX",
+                planStart: "2026-04-10", planEnd: "2026-04-17",
+                realStart: "2026-04-07", realEnd: "2026-04-13"
+            },
+            {
+                name: "Sprint 7",
+                desc: "Memoria, Diapositivas, Vídeo",
+                planStart: "2026-04-17", planEnd: "2026-04-24",
+                realStart: "2026-04-14", realEnd: "2026-04-24"
+            }
+        ];
+
+        const timelineStart = new Date("2026-03-04");
+        const timelineEnd = new Date("2026-04-26");
+        const totalDays = (timelineEnd - timelineStart) / (1000 * 60 * 60 * 24);
+
+        function dateToPercent(dateStr) {
+            const d = new Date(dateStr);
+            const days = (d - timelineStart) / (1000 * 60 * 60 * 24);
+            return (days / totalDays) * 100;
+        }
+
+        function formatDate(dateStr) {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
+        }
+
+        function daysBetween(start, end) {
+            return Math.round((new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24));
+        }
+
+        const gantt = document.getElementById('gantt');
+
+        // Header with dates
+        const header = document.createElement('div');
+        header.className = 'gantt-header';
+        const startDate = new Date(timelineStart);
+        for (let i = 0; i <= totalDays; i += 7) {
+            const d = new Date(startDate.getTime() + i * 86400000);
+            const span = document.createElement('span');
+            span.textContent = d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
+            span.style.width = (7 / totalDays * 100) + '%';
+            header.appendChild(span);
+        }
+        gantt.appendChild(header);
+
+        // Sprint rows
+        sprints.forEach((sprint, idx) => {
+            const row = document.createElement('div');
+            row.className = 'sprint-row';
+
+            // Label
+            const label = document.createElement('div');
+            label.className = 'sprint-label';
+            label.innerHTML = `
+                <span class="sprint-name">${sprint.name}</span>
+                <span class="sprint-desc">${sprint.desc}</span>
+            `;
+            row.appendChild(label);
+
+            // Bars area
+            const area = document.createElement('div');
+            area.className = 'bars-area';
+
+            // Grid lines
+            for (let i = 0; i <= totalDays; i += 7) {
+                const line = document.createElement('div');
+                line.className = 'grid-line';
+                line.style.left = (i / totalDays * 100) + '%';
+                area.appendChild(line);
+            }
+
+            // Planned bar
+            const planLeft = dateToPercent(sprint.planStart);
+            const planWidth = dateToPercent(sprint.planEnd) - planLeft;
+            const planBar = document.createElement('div');
+            planBar.className = 'bar planned';
+            planBar.style.left = planLeft + '%';
+            planBar.style.width = planWidth + '%';
+            const planDays = daysBetween(sprint.planStart, sprint.planEnd);
+            planBar.innerHTML = `${formatDate(sprint.planStart)} → ${formatDate(sprint.planEnd)} <span class="bar-date">(${planDays}d)</span>`;
+            planBar.title = `Tiempo estimado: ${formatDate(sprint.planStart)} – ${formatDate(sprint.planEnd)} (${planDays} días)`;
+            area.appendChild(planBar);
+
+            // Actual bar
+            const realLeft = dateToPercent(sprint.realStart);
+            const realWidth = dateToPercent(sprint.realEnd) - realLeft;
+            const realBar = document.createElement('div');
+            realBar.className = 'bar actual';
+            realBar.style.left = realLeft + '%';
+            realBar.style.width = realWidth + '%';
+            const realDays = daysBetween(sprint.realStart, sprint.realEnd);
+            realBar.innerHTML = `${formatDate(sprint.realStart)} → ${formatDate(sprint.realEnd)} <span class="bar-date">(${realDays}d)</span>`;
+            realBar.title = `Tiempo empleado: ${formatDate(sprint.realStart)} – ${formatDate(sprint.realEnd)} (${realDays} días)`;
+            area.appendChild(realBar);
+
+            row.appendChild(area);
+            gantt.appendChild(row);
+
+            // Separator
+            if (idx < sprints.length - 1) {
+                const sep = document.createElement('div');
+                sep.className = 'separator';
+                gantt.appendChild(sep);
+            }
+        });
+
+        // ── Export functions ──
+
+        function getExportStyles() {
+            return `
+                .chart-container { background: #fff; border-radius: 12px; padding: 30px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333; }
+                .gantt { position: relative; min-width: 900px; }
+                .gantt-header { display: flex; margin-left: 200px; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; margin-bottom: 4px; }
+                .gantt-header span { font-size: 0.75rem; color: #888; font-weight: 600; text-align: center; }
+                .sprint-row { display: flex; align-items: stretch; margin-bottom: 6px; }
+                .sprint-label { width: 200px; min-width: 200px; display: flex; flex-direction: column; justify-content: center; padding-right: 16px; }
+                .sprint-name { font-weight: 700; font-size: 0.95rem; color: #1a1a2e; }
+                .sprint-desc { font-size: 0.72rem; color: #777; margin-top: 2px; line-height: 1.3; }
+                .bars-area { flex: 1; position: relative; min-height: 56px; }
+                .bar { position: absolute; height: 22px; border-radius: 4px; display: flex; align-items: center; padding: 0 8px; font-size: 0.68rem; font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+                .bar.planned { top: 4px; background: #b3d4f7; }
+                .bar.actual { top: 30px; background: #a8e6c1; }
+                .grid-line { position: absolute; top: 0; bottom: 0; width: 1px; background: #f0f0f0; }
+                .separator { margin-left: 200px; height: 1px; background: #f0f0f0; margin-bottom: 6px; }
+                .bar-date { font-size: 0.6rem; opacity: 0.9; margin-left: 4px; }
+                .summary { margin-top: 24px; padding: 16px 20px; background: #f8f9fb; border-radius: 8px; border-left: 4px solid #4a90d9; }
+                .summary h3 { font-size: 0.95rem; margin-bottom: 8px; color: #1a1a2e; }
+                .summary p { font-size: 0.85rem; color: #555; line-height: 1.5; }
+                .summary .highlight { font-weight: 600; color: #27ae60; }
+                .summary .warn { font-weight: 600; color: #e67e22; }
+            `;
+        }
+
+        function buildSVG() {
+            const source = document.getElementById('exportArea');
+            const rect = source.getBoundingClientRect();
+            const width = Math.ceil(rect.width);
+            const height = Math.ceil(rect.height);
+            const html = source.outerHTML;
+
+            const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <style>${getExportStyles()}</style>
+      ${html}
+    </div>
+  </foreignObject>
+</svg>`;
+            return { svg, width, height };
+        }
+
+        function exportSVG() {
+            const { svg } = buildSVG();
+            const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+            downloadBlob(blob, 'gantt_vecindapp.svg');
+        }
+
+        function downloadBlob(blob, filename) {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+        }
+    </script>
+</body>
+</html>
