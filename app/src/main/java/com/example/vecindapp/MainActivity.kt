@@ -45,6 +45,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Cerramos el splash: restablecemos el tema normal antes de super.onCreate
+        setTheme(R.style.Theme_VecindApp)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         configurarNavegacion(savedInstanceState)
