@@ -608,9 +608,19 @@ SE DA COMIENZO AL SPRINT 6!
 
 ↪ 16.04.2026 :
 	Actualizar plantilla memporia escrita de Git y Onedrive(Actualmente estoy trabajando en el de drive pero el de git está mas completo porque es el que he presentado en el feedfback)
-※He metido el punto 3 en el archivo compartido en git. Ahora el de git lo he unido con lo que tenía avanzado en el otro y por fin tengo la versión buena en la que poder seguir trabajando.
- 
- 
+※ He metido el punto 3 en el archivo compartido en git. Ahora el de git lo he unido con lo que tenía avanzado en el otro y por fin tengo la versión buena en la que poder seguir trabajando.
+※ He terminado el punto 4 por la noche entero dejándolo en un 80% a mi gusto. No le voy a meter más porque no me da la vida.
+※ Esta tarde he empezado con el punto 5. 
+	▼ Problema : Para hacer al maldito diagrama de Gantt me las he visto canutas, menuda condena tener que hacer eso en excel o en cualquier otra cosa que no sea papel.
+	+ Solución : Tras 4 horas intentando hacer semejante miseria, DIOS, dico ClaudeCode me ha vuelto a salvar la papeleta. 
+		↳ Le he pedido que me hiciera un diagrama y me lo ha clavado en HTML mas bien que paa que. Hasta lo puedo exportar en SVG.. 
+	↳ He modificado el diagrama para dejarlo bien a mi gusto y lo integrado en el Word tras convertirlo en png en un web externa ya que mi convertidor no andaba del todo bien.
+	↳ He metido la talba de análisis DAFO.
+	↳ TERMINADO.
+
+ ↪ 17.04.2026
+	Empezar el punto 6 y engañar a copilot a que lo haga.
+
  **Tareas pendientes**
 	Estudiarme como han hecho las presentaciones los demás.
 		↳ En base a esto y la Normativa y guión de Proyectos donde explica qué meter en cada apartado lo tendré muy claro.
