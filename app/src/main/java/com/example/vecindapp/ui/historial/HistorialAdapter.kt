@@ -1,15 +1,19 @@
 package com.example.vecindapp.ui.historial
 
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vecindapp.R
+import com.example.vecindapp.domain.model.EstadoTransaccion
 import com.example.vecindapp.ui.common.TtsHelper
+import com.google.android.material.card.MaterialCardView
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -76,10 +80,44 @@ class HistorialAdapter(
 
             // Historial es solo lectura
             llBotones.visibility = View.GONE
+            aplicarEstiloCancelada(item)
 
             // Add click listener
             itemView.setOnClickListener {
                 onItemClick?.invoke(item)
+            }
+        }
+
+        /**
+         * Aplica o retira el tratamiento visual de transacción cancelada:
+         * - Tarjeta oscurecida (fondo gris + alpha 0.75).
+         * - Texto del título tachado.
+         * - Horas sustituidas por "Sin cargo" tachado en gris.
+         *
+         * Se llama SIEMPRE en bind() para resetear correctamente al reciclarse
+         * el ViewHolder en un ítem no cancelado.
+         */
+        private fun aplicarEstiloCancelada(item: HistorialItem) {
+            val ctx = itemView.context
+            val card = itemView as MaterialCardView
+            val cancelada = item.transaccion.estado == EstadoTransaccion.CANCELADA
+
+            if (cancelada) {
+                card.setCardBackgroundColor(ContextCompat.getColor(ctx, R.color.cancelada_fondo))
+                card.alpha = 0.75f
+
+                tvTitulo.paintFlags = tvTitulo.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+
+                tvHoras.text = ctx.getString(R.string.historial_sin_cargo)
+                tvHoras.setTextColor(ContextCompat.getColor(ctx, R.color.cancelada_texto))
+                tvHoras.paintFlags = tvHoras.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            } else {
+                card.setCardBackgroundColor(ContextCompat.getColor(ctx, R.color.blanco_tarjetas))
+                card.alpha = 1f
+
+                tvTitulo.paintFlags = tvTitulo.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                tvHoras.paintFlags = tvHoras.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                // tvHoras.text y su color los vuelve a fijar bind() cada vez antes de llamar aquí.
             }
         }
     }
