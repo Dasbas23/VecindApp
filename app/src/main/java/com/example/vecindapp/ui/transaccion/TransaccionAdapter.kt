@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -69,7 +70,7 @@ class TransaccionAdapter(
          * Vincula los datos de una [TransaccionUI] a las vistas.
          */
         fun bind(item: TransaccionUI) {
-            tvRol.text = item.rol
+            pintarChipRol(item.rol)
             tvEstado.text = item.estado.name
             tvTitulo.text = item.tituloServicio
             tvHoras.text = TtsHelper.formatearCosteHumano(item.horas)
@@ -91,6 +92,32 @@ class TransaccionAdapter(
             configurarBotones(item)
 
             itemView.setOnClickListener { onItemClick(item) }
+        }
+
+        /**
+         * Pinta el chip de rol según el rol del usuario en la transacción.
+         * - "COMPRADOR" → fondo azul + texto azul oscuro + label "Comprador".
+         * - "VENDEDOR"  → fondo verde + texto verde oscuro + label "Vendedor".
+         */
+        private fun pintarChipRol(rol: String) {
+            val ctx = itemView.context
+            when (rol) {
+                "COMPRADOR" -> {
+                    tvRol.setBackgroundResource(R.drawable.bg_chip_comprador)
+                    tvRol.setTextColor(ContextCompat.getColor(ctx, R.color.rol_comprador_text))
+                    tvRol.text = ctx.getString(R.string.rol_comprador)
+                }
+                "VENDEDOR" -> {
+                    tvRol.setBackgroundResource(R.drawable.bg_chip_vendedor)
+                    tvRol.setTextColor(ContextCompat.getColor(ctx, R.color.rol_vendedor_text))
+                    tvRol.text = ctx.getString(R.string.rol_vendedor)
+                }
+                else -> {
+                    tvRol.setBackgroundResource(R.drawable.bg_chip_rol)
+                    tvRol.setTextColor(ContextCompat.getColor(ctx, R.color.texto_ink))
+                    tvRol.text = rol
+                }
+            }
         }
 
         /**
