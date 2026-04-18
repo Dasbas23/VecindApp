@@ -2,6 +2,7 @@
     <string name="app_name">VecindApp</string>
     <!-- ═══ Escaparate ═══ -->
     <string name="titulo_escaparate">Escaparate</string>
+    <string name="subtitulo_escaparate">Descubre servicios que ofrecen tus vecinos o publica los tuyos. Una hora tuya vale una hora suya.</string>
     <string name="escaparate_vacio">No hay servicios disponibles</string>
     <string name="desc_pictograma">Pictograma del servicio</string>
     <string name="desc_crear_servicio">Crear nuevo servicio</string>
@@ -51,6 +52,7 @@
 
     <!-- ═══ Transacciones ═══ -->
     <string name="nav_transacciones">Transacciones</string>
+    <string name="subtitulo_transacciones">Tus intercambios en curso: acepta solicitudes, complétalos o cancélalos.</string>
     <string name="transacciones_vacio">No tienes transacciones</string>
     <string name="btn_aceptar">Aceptar</string>
     <string name="btn_completar">Completar</string>
@@ -66,6 +68,7 @@
     <string name="mensaje_confirmar_cancelar_transaccion">¿Estás seguro? El servicio volverá al escaparate.</string>
 
     <!-- ═══ Perfil ═══ -->
+    <string name="subtitulo_perfil">Tu huella en VecindApp: saldo, nivel alcanzado y los servicios que has publicado.</string>
     <string name="desc_avatar">Foto de perfil</string>
     <string name="label_horas">horas</string>
     <string name="label_nivel">nivel</string>
@@ -74,6 +77,7 @@
     <string name="perfil_sin_servicios">No has publicado ningún servicio</string>
 
     <!-- ═══ Historial ═══ -->
+    <string name="subtitulo_historial">Resumen de tus intercambios ya cerrados y del tiempo intercambiado.</string>
     <string name="label_completadas">Transacciones completadas</string>
     <string name="label_canceladas">Transacciones canceladas</string>
     <string name="historial_vacio">Aún no has completado ninguna transacción</string>
@@ -128,6 +132,9 @@
     <string name="btn_cerrar">Cerrar</string>
     <string name="btn_ver_servicio">Ver servicio</string>
     <string name="btn_ver_valoracion">Ver valoración</string>
+
+    <!-- ═══ Navegación ═══ -->
+    <string name="desc_volver">Volver atrás</string>
 
     <!-- ═══ Accesibilidad TTS ═══ -->
     <string name="desc_tts">Leer en voz alta</string>

@@ -74,6 +74,7 @@ class DetalleServicioFragment : Fragment() {
     private lateinit var btnEliminar: MaterialButton
     private lateinit var btnVerValoracion: MaterialButton
     private lateinit var fabTts: FloatingActionButton
+    private lateinit var fabVolver: FloatingActionButton
     private lateinit var ttsHelper: TtsHelper
     private var servicioActual: Servicio? = null
 
@@ -121,6 +122,8 @@ class DetalleServicioFragment : Fragment() {
         btnEliminar = view.findViewById(R.id.btnEliminar)
         btnVerValoracion = view.findViewById(R.id.btnVerValoracion)
         fabTts = view.findViewById(R.id.fabTts)
+        fabVolver = view.findViewById(R.id.fabVolver)
+        fabVolver.setOnClickListener { findNavController().popBackStack() }
     }
 
     /**

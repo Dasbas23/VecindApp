@@ -19,6 +19,7 @@ import com.example.vecindapp.domain.model.CategoriaServicio
 import com.example.vecindapp.ui.common.TtsHelper
 import com.example.vecindapp.ui.common.mostrarSnackbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -54,6 +55,7 @@ class CrearServicioFragment : Fragment() {
     private lateinit var sliderCoste: Slider
     private lateinit var tvLabelCoste: android.widget.TextView
     private lateinit var btnGuardar: MaterialButton
+    private lateinit var fabVolver: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,6 +83,8 @@ class CrearServicioFragment : Fragment() {
         sliderCoste = view.findViewById(R.id.sliderCoste)
         tvLabelCoste = view.findViewById(R.id.tvLabelCoste)
         btnGuardar = view.findViewById(R.id.btnGuardar)
+        fabVolver = view.findViewById(R.id.fabVolver)
+        fabVolver.setOnClickListener { findNavController().popBackStack() }
         configurarSlider()
     }
 

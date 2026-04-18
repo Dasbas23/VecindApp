@@ -12,8 +12,8 @@
         <item name="colorOnSecondary">@color/blanco_tarjetas</item>
 
         <!-- Fondos y superficies -->
-        <item name="android:colorBackground">@color/fondo_sand</item>
-        <item name="colorSurface">@color/blanco_tarjetas</item>
+        <item name="android:colorBackground">@color/fondo_teal</item>
+        <item name="colorSurface">@color/sand_dark</item>
         <item name="colorOnSurface">@color/texto_ink</item>
     </style>
 
@@ -22,7 +22,7 @@
          en MainActivity.onCreate() antes de super.onCreate(). -->
     <style name="Theme.VecindApp.Splash" parent="Theme.VecindApp">
         <item name="android:windowBackground">@drawable/splash_background</item>
-        <item name="android:statusBarColor">@color/blanco_tarjetas</item>
+        <item name="android:statusBarColor">@color/fondo_teal</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>

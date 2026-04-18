@@ -5,7 +5,11 @@
     <color name="teal_vecindapp_oscuro">#094A55</color>
     <color name="coral_acento">#E97A4D</color>
     <color name="coral_acento_oscuro">#D0613A</color>
-    <color name="fondo_sand">#E7F1F2</color>
+    <!-- Fondo general: tintado con teal muy claro (niebla teal) -->
+    <color name="fondo_teal">#E7F1F2</color>
+    <!-- Superficie de tarjetas / diálogos / bottom sheets: sand cálido -->
+    <color name="sand_dark">#f6f4ee</color>
+    <!-- Blanco puro: texto sobre teal/coral, fondo de icono y splash -->
     <color name="blanco_tarjetas">#FFFFFF</color>
     <color name="texto_ink">#0E1A2B</color>
     <color name="texto_secundario">#4A5568</color>

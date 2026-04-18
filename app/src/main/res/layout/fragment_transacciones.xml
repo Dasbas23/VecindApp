@@ -22,8 +22,23 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingTop="16dp"
-        android:paddingBottom="8dp"
+        android:paddingBottom="4dp"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Subtítulo descriptivo -->
+    <TextView
+        android:id="@+id/tvSubtituloTransacciones"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/subtitulo_transacciones"
+        android:textSize="13sp"
+        android:textColor="@color/texto_secundario"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="12dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTituloTransacciones"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -36,7 +51,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@id/tvTituloTransacciones"
+        app:layout_constraintTop_toBottomOf="@id/tvSubtituloTransacciones"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

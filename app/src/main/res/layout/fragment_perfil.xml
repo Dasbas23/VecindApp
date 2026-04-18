@@ -55,17 +55,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="Centro" />
 
+    <!-- Subtítulo descriptivo -->
+    <TextView
+        android:id="@+id/tvSubtituloPerfil"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/subtitulo_perfil"
+        android:textSize="13sp"
+        android:textColor="@color/texto_secundario"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/tvBarrio"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <!-- ═══ Tarjetas de estadísticas ═══ -->
 
     <LinearLayout
         android:id="@+id/llEstadisticas"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/tvBarrio"
+        app:layout_constraintTop_toBottomOf="@id/tvSubtituloPerfil"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
