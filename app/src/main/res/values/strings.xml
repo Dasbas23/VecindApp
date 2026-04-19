@@ -68,10 +68,10 @@
     <string name="mensaje_confirmar_cancelar_transaccion">¿Estás seguro? El servicio volverá al escaparate.</string>
 
     <!-- ═══ Perfil ═══ -->
-    <string name="subtitulo_perfil">Tu huella en VecindApp: saldo, nivel alcanzado y los servicios que has publicado.</string>
+    <string name="subtitulo_perfil">Tu huella en VecindApp: saldo, nivel alcanzado e intercambios realizados.</string>
     <string name="desc_avatar">Foto de perfil</string>
-    <string name="label_horas">horas</string>
-    <string name="label_nivel">nivel</string>
+    <string name="label_horas">Saldo</string>
+    <string name="label_nivel">Tu nivel</string>
     <string name="label_intercambios">intercambios</string>
     <string name="label_mis_servicios">Mis servicios</string>
     <string name="perfil_sin_servicios">No has publicado ningún servicio</string>
