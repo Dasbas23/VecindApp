@@ -1,0 +1,564 @@
+[] MEMORIA ESCRITA DEL PROYECTO
+[] 
+[] CFGS Desarrollo de Aplicaciones Multiplataforma
+[] 
+[] Título del proyecto
+[] Autor: Marius Ion Dodu
+[] Tutor: Emilio Saurina
+[] Fecha de entrega: dd/mm/aaaa
+[] Convocatoria: 2S2526
+[] Documentos del proyecto: Enlace a la carpeta del Drive
+[] 
+[] Índice
+[] 1.Introducción4
+[] 1.1.Motivación4
+[] 1.2.Abstract5
+[] 1.3.Objetivos propuestos (generales y específicos)5
+[] 2.Estado del Arte6
+[] 2.1.Contexto socioeconómico: Aislamiento urbano y economía colaborativa6
+[] 2.2.Análisis competitivo del mercado7
+[] 2.3.Necesidad de la accesibilidad universal8
+[] 2.4.Nicho de mercado identificado9
+[] 3.Metodología usada10
+[] 4.Tecnologías y herramientas utilizadas en el proyecto12
+[] 4.1.Tecnologías principales12
+[] 4.2.Tecnologías de terceros13
+[] 4.3.Herramientas de desarrollo y documentación13
+[] 5.Planificación, Diagnóstico y Contexto Laboral14
+[] 6.Análisis del proyecto15
+[] 6.1.Requisitos funcionales15
+[] 6.2.Requisitos no funcionales16
+[] 6.3.Diagrama de Casos de Uso16
+[] 6.4.Diagrama Entidad-Relación17
+[] 6.5.Diagrama de clases17
+[] 7.Diseño del proyecto20
+[] 8.Despliegue y pruebas21
+[] 9.Conclusiones22
+[] 10.Vías futuras23
+[] 11.Bibliografía/Webgrafía24
+[] 12.Anexos25
+[] 12.1.Manual de Instalación25
+[] 12.2.Manual de Usuario25
+[] 
+[] 
+[] 
+[Ttulo1] Introducción 
+[] 
+[Ttulo2] Motivación
+[] Seguro que a muchos de nosotros nos ha tocado hacer algún arreglo en casa, presentar documentación ante la administración pública, hacer arreglos al coche, explicar conceptos sobre las nuevas tecnologías a familiares y/o amigos. También hemos sido partícipes en ayudar a nuestros seres queridos cuando han necesitado de nuestra ayuda. Pero ¿Qué pasa cuando no tienes el conocimiento necesario para la realización de estas tareas "simples" o no tienes el tiempo necesario para aprender estos conocimientos desde cero? 
+[] Es por eso que he pensado en una forma de conectar con las personas que te rodean, que tienen un gran conocimiento por compartir y además quieren formar vínculos con la comunidad que les rodea. Creo una comunidad tiene la oportunidad de brindarse apoyo mutuo y poder compartir lazos con esas personas nos puede acercar un poco a no estar tan cerca y a la vez tan desconectados. 
+[] Recuerdo que, de pequeño, en mi país natal era muy común conocer a muchos de mis vecinos del barrio e ir a sus casas para buscar a mis a amigos y salir a jugar a la calle. Recuerdo el barrio como “seguro” porque a pesar de no tener supervisión de nuestros padres directamente, siempre había alguna persona adulta por la calle que nos conocía a nosotros o a nuestros padres. Incluso por las mañanas y las salidas de del colegio al mediodía, íbamos juntos cada uno a nuestras casas e íbamos desviándonos cada uno hacia su casa sin que nuestros padres sintieran que estábamos desprotegidos.
+[] Creo que la desconexión entre vecinos y la precariedad económica son dos problemas crecientes en los núcleos urbanos. Según el INE (2024), más del 28% de los hogares en España se encuentran en riesgo de pobreza o exclusión social. Esta situación genera una paradoja: existen necesidades básicas sin cubrir (reparaciones o mantenimientos del hogar, acompañamiento a mayores, apoyo con trámites digitales) y simultáneamente personas con tiempo disponible y habilidades para ofrecer esos servicios. Lo que falta es un canal que conecte a esas personas. 
+[] Aquí es donde VecindApp viene a intentar cubrir esas deficiencias y ofrecer una solución a esas personas que quieran ofrecer su tiempo a la comunidad.
+[Ttulo2] Abstract
+[] VecindApp is a native Android application designed as a hyperlocal time bank where neighbours exchange services using hours as the sole unit of value instead of money. Users can register with a unique profile, publish service offers categorised by type (home repairs, elderly companionship, administrative assistance, among others), browse a neighbourhood showcase, and request services from other residents. The transaction system atomically validates the buyer's balance before transferring hours between users.
+[] The project places universal accessibility at its core. It integrates Android's native Text-to-Speech (TTS) engine to read titles, descriptions and reviews aloud, assisting users with low vision, reading difficulties or limited literacy. Additionally, the traditional star-based rating system is replaced by ARASAAC pictograms, a nationally recognised standard for cognitive accessibility, reducing cognitive barriers in the feedback process. Service categories are also visually identified through dynamically assigned pictograms.
+[] On the technical side, VecindApp is built entirely offline-first using Room/SQLite, follows the MVVM + Clean Architecture pattern recommended by Google, and leverages MPAndroidChart for grouped bar charts displaying the user's earned-versus-spent hour history. A reactive notification badge informs users of transactions requiring their attention. The competitive analysis conducted during this project found no existing platform that combines hyperlocal social networking, time banking, and advanced accessibility features within a single application.
+[Ttulo2] Objetivos propuestos (generales y específicos)
+[] Objetivo General: Desarrollar y desplegar (en un entorno local) una aplicación móvil Android que sea plenamente funcional que permita a los usuarios gestionar, publicar e intercambiar servicios vecinales a través de un sistema de saldo de horas, garantizando en todo el proceso que la interfaz sea accesible para cualquier persona que la necesite. 
+[] Se aplicará el patrón de arquitectura MVVM junto con principios de Clean Architecture para
+[] asegurar un código escalable y mantenible. La verificación del correcto funcionamiento se realizará en un dispositivo móvil conectado mediante cable USB al ordenador.
+[] Objetivos Específicos (SMART):
+[] ID
+[] Objetivo
+[] Plazo
+[] Criterio de éxito
+[] OE-01
+[] Diseñar e implementar una base de datos relacional local con SQLite/Room para la gestión de usuarios, servicios, transacciones y valoraciones.
+[] Sprint
+[]  2
+[] 4 entidades con relaciones FK verificadas y seed de datos iniciales funcional
+[] OE-02
+[] Implementar un sistema de transacciones atómico que valide el saldo disponible y actualice automáticamente las horas de comprador y vendedor.
+[] Sprint
+[]  3
+[] Transacción completa sin estado inconsistente; saldo insuficiente rechazado
+[] OE-03
+[] Implementar TTS nativo de Android para lectura en voz alta de títulos, descripciones y valoraciones.
+[] Sprint
+[]  5
+[] Lectura funcional en español con botón de activación manual en las pantallas de detalle
+[] OE-04
+[] Integrar un sistema de valoraciones con pictogramas ARASAAC que sustituya las valoraciones numéricas clásicas.
+[] Sprint
+[]  4
+[] Selección múltiple de pictogramas con comentario opcional, guardada en BD y consultable desde el perfil
+[] OE-05
+[] Generar un dashboard gráfico del historial de horas con MPAndroidChart.
+[] Sprint
+[]  3
+[] Gráfico de barras agrupadas (ganadas vs. gastadas) funcional en la pestaña Historial
+[] OE-06
+[] Implementar un sistema de autenticación local con registro de usuarios únicos e inicio de sesión por selección de perfil.
+[] Sprint 
+[] 4–5
+[] Registro con validación de nombre único; login funcional con persistencia de sesión
+[] OE-07
+[] Categorizar los servicios del escaparate mediante pictogramas dinámicos asignados por categoría.
+[] Sprint 
+[] 6
+[] Pictogramas ARASAAC visibles en escaparate, perfil y detalle, gestionados por un mapper centralizado
+[] OE-08
+[] Implementar un sistema de notificaciones reactivo que informe al usuario de transacciones pendientes de atención.
+[] Sprint
+[]  6
+[] Badge numérico en el BottomNav, reactivo al cambio de usuario y limpio al cerrar sesión
+[] 
+[] 
+[] 
+[] 
+[] 
+[Ttulo1] Estado del Arte 
+[] (4-5 páginas)
+[] El siguiente capítulo analiza el panorama actual de las plataformas de economía colaborativa vecinal, los bancos de tiempo digitales y el estado de la accesibilidad universal. El objetivo es identificar el nicho que VecindApp pretende cubrir.
+[Ttulo2] Contexto socioeconómico: Aislamiento urbano y economía colaborativa
+[] El fenómeno del aislamiento social en las sociedades modernas ha alcanzado dimensiones que los especialistas catalogan como una crisis silenciosa de salud pública. Millones de personas sufren de soledad no deseada, impactando a adultos mayores, familias en transición y jóvenes inmersos en un entorno de hiperconectividad digital, pero con una gran desconexión física.
+[] Este aislamiento no solo erosiona el tejido social, sino que tiene un impacto directo y documentado sobre sobre la salud física y mental de las personas, aumentando la ansiedad, depresión y problemas cardiovasculares. Los perfiles más vulnerables son las personas adultas mayores, quienes al vivir solos enfrentan mayores niveles de estrés y deterioro cognitivo debido a la falta de interacción y de un sentido de pertenencia comunal.
+[] En cuanto a la tecnología, que a menudo se percibe como un factor que fomenta el aislamiento, también se presenta como una herramienta clave para evitarlo. Diferentes comunidades están demostrando que el uso de plataformas digitales hiperlocales permite organizar redes vecinales de apoyo, fomentando la cooperación ciudadana y el voluntariado en los proyectos intergeneracionales. Fortalecer la identidad del barrio ayuda a reducir la sensación de anonimato en la gran ciudad, transformándola en un entorno más humano, solidario y conectado.
+[] Para hacer frente a esto, dentro de la economía solidaria, los bancos de tiempo surgen como mecanismo donde la unión de las personas y la colaboración mútua son la base para evitar ese aislamiento. En lugar de usar dinero, las personas intercambian su tiempo: una hora de ayuda vale lo mismo para todos, sin importar si se trata de arreglar algo en casa, enseñar un idioma, o acompañar a alguien en su día. La idea es secnilla: el tiempo de cada persona tiene el mismo valor y gracias a ese intercambio se pueden crear redes de apoyo entre vecinos y comunidades.
+[] 
+[Ttulo2] Análisis competitivo del mercado
+[] Al analizar las herramientas tecnológicas que intentan mitigar esta situación, podemos econtorar diferentes enfoques con carencias significativas:
+[] ¿Tienes sal?: Es el intento más potente de crear una red social de barrio en España. Fue el mayor exponente de este tipo de aplicaciones inspirada en la red alemana Nebenan.de. Llegó a activarse en más de 560 vecindarios entre Madrid, Barcelona y Valencia. Tenía un sistema de verificación que protegía el contenido de buscadores externos para evitar que grandes empresas hicieran acciones publicitarias de poco valor para la comunidad. Sin embargo, cesó sus operaciones permanentemente por falta de presupuesto evidenciando así la dificultad de monetización ética en redes hiperlocales.
+[] Nexdoor: Originada en San Francisco en 2011. En contraposición Nextdoor, ha consolidado un dominio global con presencia en 11 países y más de 265.000 barrios, gracias a su estrategia de verificación de residencia y su integración con organismos públicos y servicios de emergencia. Durante el COVID-19 demostró su gran valor sociológico a través de iniciativas contra la soledad no deseada facilitando videollamadas y apoyo logístico directo entre residentes para la distribución de recursos de primera necesidad. No obstante, opera bajo un modelo comercial respaldado por capital de riesgo, dependiendo de publicidad hipersegmentada, y no funciona como un banco de tiempo estructurado.
+[] TimeOverflow: En el nicho de los bancos de tiempo en España, TimeOverflow destaca como el software oficial adoptado por distintas asocia y recomendado por la ADBDT (Asociación para el Desarrollo de los Bancos de Tiempo). Desarrollado por la cooperativa tecnológica Coopdevs, permite publicar ofertas y demandas de servicios y gestionar cheques de tiempo digitales. Sin embargo, su concepción se asemeja más a un portal de gestión administrativa que a una aplicación móvil con experiencia de usuario moderna, dejando un vacío para una app móvil moderna que ofrece una experiencia de usuario ágil.
+[] TimeRepublik y otras plataformas intenacionales: A nivel internacional, TimeRepublik opera como una red global de intercambio de tiempo con más de 100.000 usuarios en más de 100 países. Utilizan los “TimeCoins” como bloques de 15 minutos. Es un modelo que demuestra escalabilidad, pero pierde el concepto de hiperlocal y la confianza presencial que caracteriza al apoyo vecinal genuino.
+[] 
+[] Plataforma
+[] Enfoque
+[] Modelo
+[] Accesibilidad
+[] Estado (Es)
+[] Nextdoor
+[] Red social de barrio
+[] Comercial / VC
+[] WCAG básico
+[] Operativa
+[] ¿Tienes sal?
+[] Comunidad vecinal
+[] Social / sin monetización
+[] Básico
+[] Cerrada
+[] TimeOverflow
+[] Gestión Bancos de Tiempo
+[] Open source/ subvenciones
+[] Estándar Web
+[] Activa
+[] TimeRepublik
+[] Intercambio Global
+[] Comercial 
+[] (Time coins)
+[] Estándar
+[] Operativa
+[] VecdinApp
+[] Banco de Tiempo + red vecinal
+[] Local/TFG
+[] TTS + ARASAAC
+[] En desarrollo
+[] Tabla 1. Comparativa de plataformas vecinales y de banco de tiempo. Elaboración propia.
+[Ttulo2] Necesidad de la accesibilidad universal
+[] La OMS estima que aproximadamente el 15% de la población mundial (más de 1.000 millones de personas) convive con alguna forma de discapacidad. En cuanto a al año transcurrido (2025) y el año en curso (2026), la accesibilidad digital ha pasado de la categoría de buena práctica a ser de categoría obligatoria por ley. El Acta Europea de Accesibilidad (EAA), vigente desde junio de 2025, obliga a que los servicios digitales optimicen sus plataformas para garantizar la inclusión. El estándar de referencia es la versión 2.2 de las WCAG, y el Nivel AA es la línea base exigida. VecindApp aborda este reto mediante dos vectores que ninguna plataforma vecinal integra conjuntamente:
+[] Text-to-Speech (TTS) nativo: A diferencia de la compatibilidad pasiva con TalkBack (el lector de pantalla del sistema),VecindApp integrará un botón de lectura en voz alta dentro de la propia interfaz mediante la API TextToSpeech del SDK de Android. Esto es diferencial debido a que por ejemplo un adulto mayor con baja visión o una persona con dislexia no necesariamente sabe configurar TalkBack, pero sí puede pulsar un botón de «escuchar» claramente visible. Se pasa así de accesibilidad pasiva a accesibilidad activa.
+[] Pictogramas ARASAAC para valoraciones: El Centro Aragonés de la Comunicación Aumentativa y Alternativa (ARASAAC) ha desarrollado un sistema pictográfico con más de 12.000 pictogramas bajo licencia Creative Commons (BY-NC-SA), consolidado como estándar global en Comunicación Aumentativa y Alternativa. Estudios publicados en Frontiers in Psychology demuestran que los pictogramas ARASAAC poseen un nivel de iconicidad (similitud visual con el concepto que representan) superior a sistemas comerciales como SPC o Bliss. La propuesta de VecindApp de utilizar estos pictogramas como sistema de valoración (sustituyendo las típicas estrellas numéricas por conceptos visuales como “amabilidad”, “puntualidad” o “trabajo bien hecho”) constituiría, según la investigación realizada, el primer uso documentado de pictogramas AAC en una plataforma de economía colaborativa a nivel mundial.
+[Ttulo2] Nicho de mercado identificado
+[] Tras la investigación hasta la fecha del panorama actual, se puede confirmar que la implementación de las tres funcionalidades de que venimos hablando sobre VeccindApp (red social hiperlocal, banco de tiempo con horas como moneda y accesibilidad universal avanzada) está completamente vacía en el mercado global. Incluso la combinación de solo dos de las tres funcionalidades es bastante rara. Ninguna plataforma del banco de tiempo existente incorpora pictogramas, interfaces en lectura fácil ni diseño específico para personas con discapacidad cognitiva. Del mismo modo, ninguna aplicación vecinal integra TTS nativo (solo compatibilidad pasiva con lectores de pantalla del sistema).
+[] Nota: Existe una startup colombiano llamada “Vecindapp” (https://vecindapp.com.co/), pero se trata de una app de administración de copropiedades sin banco de tiempo ni accesibilidad cognitiva. El nombre coincide, pero el concepto es completamente distinto.
+[] 
+[Ttulo1] Metodología usada 
+[] (2-4 páginas)
+[] Para la elección de la metodología he comando como referencia lo aprendido en en la asignatura de Entornos de Desarrollo, donde se estudian las metodologías que siguen la filosofía ágil. Estas metodologías se basan en la flexibilidad a lo largo del ciclo de vida del proyecto y en la capacidad de adaptarse a los cambios que vayan surgiendo durante el desarrollo. 
+[] Las metodologías ágiles son métodos de gestión que permiten adaptar el ciclo de vida del proyecto de manera iterativa e incremental: el producto se va liberando por partes, de forma periódica, y cada entrega supone un incremento de funcionalidad respecto de la anterior. Entre las más conocidas se encuentran Scrum, Kanban y Programación Extrema (XP). Scrum estructura el trabajo en sprints de duración fija (entre dos y cuatro semanas) con reuniones de revisión y retrospectiva al final de cada uno. Kanban, por su parte, se centra en la visualización del flujo de tareas mediante un tablero de columnas (pendiente, en curso, hecho) y permite una gestión más continua sin depender de periodos cerrados.
+[] Caso VecindApp
+[] Para el desarrollo de este proyecto se ha adoptado una metodología ágil basada en SCRUM adaptada a un desarrollo individual. Se ha descartado aplicar Scrum de manera ortodoxa porque ciertas tareas ligadas a este (reunión diaria, retrospectiva en equipo) carecen de sentido cuando el equipo es una sola persona. En su lugar, se tomaron los elementos que sí resultaban útiles para un trabajo de esta envergadura: sprints de duración fija con un objetivo concreto por iteración, un backlog de tareas priorizado y la posibilidad de adelantar trabajo de sprints futuros cuando las dependencias ya estaban resueltas. Para el seguimiento visual de las tareas dentro de cada sprint se utilizó un enfoque tipo Kanban, organizando las tareas en estados (pendiente, en curso, hecho) lo que permitía tener una vista clara de lo que quedaba por hacer en cada momento.
+[] El desarrollo se ha organizado en 7 sprints semanales. Los 6 primeros estuvieron dedicados al desarrollo de la aplicación y el séptimo a la fase de documentación y preparación de la presentación.  Cada iteración tiene un objetivo concreto, unas tareas definidas y un objetivo de entrega verificable. De esta manera se pueden validar las funcionalidades de forma progresiva y ajustar el rumbo del desarrollo en función del tiempo disponible. 
+[] En mi caso, como el desarrollo se ha ido alternando en dos máquinas distintas, he tenido que usar mucho git para tener en el punto en el que volvía al desarrollo y el diario para no perder el hilo entre los distintos turnos de trabajo.
+[] Las pruebas se realizaron mediante caja negra sobre los casos de uso definidos en la fase de análisis, verificando que cada requisito funcional se cumplía según lo especificado. Además, se mantuvo un diario de desarrollo continuo donde se documentan los problemas técnicos encontrados y las soluciones aplicadas, lo que garantiza la trazabilidad de las decisiones tomadas a lo largo del proyecto.
+[] Imagen realizada con IA
+[] Ciclo de vida del proyecto
+[] El ciclo de vida se estructuró en las siguientes fases:
+[] Fase 1 Diseño Funcional y Visual: Definición de casos de uso, bocetos mediante herramientas de generación de imágenes de las pantallas principales y flujo de navegación de la aplicación.
+[] Fase 2 Diseño Técnico: Modelo de datos (diagrama E-R con 4 entidades), elección de la arquitectura MVVM + Clean Architecture y definición de la estructura de carpetas del proyecto.
+[] Fase 3 Setup y Control de Versiones: Creación del repositorio Git, configuración del proyecto en Android Studio con todas las dependencias y estrategia de ramas (desarrollo + sprints + ramas secundarias).
+[] Fase 4 Desarrollo por Sprints: 6 iteraciones semanales desde la estructura base y la base de datos hasta el pulido final de la interfaz. El MVP (producto mínimo viable) priorizó el login local, el catálogo de servicios, las transacciones de horas, las valoraciones con pictogramas ARASAAC y el TTS. Las funcionalidades secundarias (notificaciones reactivas, categorización visual, formateo de horas) se incorporaron en los sprints finales una vez que el núcleo funcional estaba estable. 
+[] Fase 5 Documentación y presentación: Redacción de la memoria escrita, preparación de las diapositivas y grabación del vídeo de defensa del proyecto.
+[] 
+[Ttulo1] Tecnologías y herramientas utilizadas en el proyecto
+[] (2-3 páginas)
+[] A continuación, se detallan las tecnologías empleadas en el desarrollo de VecindApp, diferenciando entre las herramientas del ecosistema Android estándar (trabajadas durante el CFGS) y las librerías de terceros justificadas en la propuesta aprobada.
+[Ttulo2] Tecnologías principales
+[] Tecnología
+[] Versión
+[] Justificación
+[] Kotlin
+[] 2.0.21 
+[] (octubre 2024)
+[] Lenguaje oficial de Android recomendado por Google. Trabajado durante el CFGS.
+[] Android Studio
+[] Panda 3 2025.3.2 (marzo 2026)
+[] IDE oficial para desarrollo Android. Incluye emulador, depurador y herramientas de layouts.
+[] Room (SQLite)
+[] 2.8.4 
+[] (noviembre 2025)
+[] Capa de abstracción sobre SQLite recomendada por Google que permite acceder a la base de datos sin problemas y, al mismo tiempo permite verificación de consultas SQL en tiempo de compilación y anotaciones que minimizan el código repetitivo.
+[] ViewModel + LiveData 
+[] 2.10.0 (marzo 2026)
+[] Componentes de Android Jetpack para separar la lógica de negocio de la UI, respetando el ciclo de vida de los Fragments.
+[] Navigation Component
+[] 2.9.7 (marzo 2026)
+[] Navigation es un framework para navegar entre "destinos" dentro de una aplicación para Android que proporciona una API coherente, ya sea que los destinos se implementen como Fragment, Activity o algún otro tipo de componente.
+[] TextToSpeech
+[] SDK nativo
+[] API nativa de Android para síntesis de voz. No 
+[] requiere internet ni dependencias externas.
+[] Kotlin Coroutines + StateFlow
+[] 1.9.0
+[] Programación asíncrona estructurada. Se utilizan para las operaciones de base de datos en los repositorios y para los flujos reactivos en los ViewModels (flatMapLatest, stateIn).
+[] Material Design Components
+[] 1.12.0
+[] Librería oficial de Google que proporciona los componentes de interfaz utilizados en la app: BottomNavigationView, BottomSheet, Slider, Snackbar, entre otros.
+[] KSP (Kotlin Symbol Processing)
+[] 2.0.21-1.0.28
+[] Procesador de anotaciones moderno que sustituye a KAPT. Necesario para que Room genere el código de los DAOs en tiempo de compilación. Más rápido que su predecesor.
+[] Tabla 2. Tecnologías principales del proyecto. Elaboración propia.
+[] Considero necesario aclarar por qué el proyecto no utiliza ciertas librerías que forman parte del stack habitual en proyectos Android profesionales, como Hilt/Dagger para inyección de dependencias, Retrofit para comunicación con APIs REST o Glide para carga de imágenes.
+[] En primer lugar, VecindApp es una aplicación offline-first cuya totalidad de datos reside en una base de datos local SQLite gestionada con Room. No existe un servidor remoto ni una API REST con la que comunicarse, por lo que Retrofit carece de propósito en este proyecto. Del mismo modo, todas las imágenes utilizadas (pictogramas ARASAAC e iconos de categoría) están empaquetadas como assets locales en la carpeta /res/drawable, lo que hace innecesaria una librería de carga de imágenes remotas como Glide.
+[] En cuanto a la inyección de dependencias, se optó por una inyección manual a través de la clase VecindAppApplication, que actúa como contenedor Singleton proporcionando la instancia de la base de datos y los cuatro repositorios. Esta decisión responde a dos motivos: por un lado, Hilt y Dagger son frameworks de terceros que no se han trabajado durante el CFGS y cuyo uso requiere justificación en la propuesta; por otro, la envergadura del proyecto (4 repositorios, sin módulos Gradle adicionales) no justifica la complejidad añadida que introducen estas librerías. La solución manual implementada cumple el mismo objetivo (evitar instancias duplicadas de la base de datos, respetar el patrón Singleton) con una fracción del código de configuración. Para un proyecto de mayor envergadura o en un entorno de producción con múltiples módulos, la migración a Hilt sería el siguiente paso lógico y se contempla como vía futura.
+[Ttulo2] Tecnologías de terceros
+[] Las siguientes tecnologías de terceros han sido justificadas en la propuesta aprobada por el tutor:
+[] Librería
+[] Justificación de uso
+[] ARASAAC (pictogramas)
+[] Empaquetados como assets locales en formato PNG dentro de /res/drawable. Estándar nacional en accesibilidad cognitiva con licencia Creative Commons BY-NC-SA. Se utilizan tanto en el sistema de valoraciones (sustituyendo las clásicas estrellas numéricas) como para la identificación visual de las categorías de servicio en el escaparate.
+[] MPAndroidChart 
+[] El SDK nativo de Android no incluye componentes de visualización de gráficos. Esta librería (v3.1.0) permite generar el gráfico de barras agrupadas del historial de horas ganadas vs. gastadas en la pestaña Historial.
+[] Firebase Firestore
+[] Implementación opcional para recolección anónima de métricas de uso (número de usuarios, horas intercambiadas). Excluida del MVP, contemplada en Vías Futuras.
+[] Tabla 3. Tecnologías de terceros. Elaboración propia.
+[Ttulo2] Herramientas de desarrollo y documentación
+[] Git / GitHub: Control de versiones con estrategia de ramas (main, desarrollo, sprint/, bugfix/) y commits bajo el estándar Conventional Commits.
+[] diagrams.net (draw.io): Creación de los diagramas UML (Casos de Uso, Entidad-Relación, Clases) 
+[] Mermaid: Generación del diagrama de clases mediante sintaxis declarativa renderizada como gráfico.
+[] Dispositivo físico Android: Verificación y pruebas de la aplicación en un dispositivo móvil conectado al ordenador mediante cable USB.
+[] Microsoft Word (Office 365): Redacción y maquetación de la memoria escrita del proyecto. 
+[] Microsoft PowerPoint (Office 365): Elaboración de las diapositivas para la presentación y defensa del proyecto.
+[] VS Code: Edición y mantenimiento del diario de desarrollo (memorias.txt), aprovechando la corrección ortográfica y el autocompletado.
+[] NotebookLM: Organización y consulta de los historiales de conversaciones de desarrollo mantenidos a lo largo del proyecto.
+[] OBS Studio:? Para la grabación y edición del video de la defensa.
+[] **Añadir a medida que se vayan empleando
+[] 
+[Ttulo1] Planificación, Diagnóstico y Contexto Laboral 
+[] (3-4 páginas)
+[Ttulo2] Contexto laboral
+[] Este proyecto se ha desarrollado compaginando el CFGS de Desarrollo de Aplicaciones Multiplataforma con una jornada laboral completa. Esto ha hecho que la planificación se vea afectada de dos maneras: por un lado, las sesiones de desarrollo se repartían entre horas previas a la jornada laboral, pausas y tardes/noches; por otro, el entorno corporativo del puesto de trabajo (firewall Zscaler) introdujo dificultades técnicas adicionales a la hora de sincronizar dependencias con Gradle, que tuvieron que resolverse manualmente. Ambos factores se han tenido en cuenta a la hora de planificar los sprints y priorizar las funcionalidades del MVP.
+[Ttulo2] Planificación: estimación vs. realidad
+[] La planificación inicial contemplaba sprints semanales de duración uniforme. En la práctica, la duración real de cada sprint varió en función de la complejidad de las tareas y de la disponibilidad de tiempo. A continuación, se muestra la tabla de planificación con las fechas reales extraídas del historial de Git del proyecto:
+[] Sprint
+[] Contenido
+[] Estimación
+[] Fechas reales (Git)
+[] Durac real
+[] Observaciones
+[] Sprint 1
+[] Diseño funcional, diagramas UML, setup del proyecto, migración a KSP, estructura Clean Architecture
+[] 1 semana
+[] 06.03 – 16.03
+[] 
+[] 11 días
+[] Incluye la entrega de feedback al tutor (13-16 mar)
+[] 
+[] Sprint 2
+[] BBDD Room (entidades + DAOs), CRUD de servicios, Escaparate con RecyclerView
+[] 1 semana
+[] 17.03 – 19.03
+[] 3 días
+[] Se completó antes de lo previsto. La preparación en el S1 aceleró la implementación.
+[] Sprint 3
+[] Transacciones de horas, pantalla de perfil, historial con MPAndroidChart
+[] 1 semana
+[] 19.03 – 20.03
+[] 2
+[]  días
+[] 
+[] Finalizado en 2 días. Se adelantó trabajo previsto para sprints posteriores (historial y estadísticas) al tener las dependencias ya resueltas.
+[] Sprint 4
+[] Login/Registro con sesión local, sistema de valoraciones con pictogramas ARASAAC
+[] 1 semana
+[] 21.03 – 29.03
+[] 9
+[]  días
+[] Se dedicó más tiempo a las valoraciones con pictogramas y a la corrección de bugs detectados en las pruebas funcionales del Sprint 3.
+[] Sprint 5
+[] TTS (accesibilidad), usuarios únicos, Spinner de barrios, pestañas en historial
+[] 1 semana
+[] 29.03 – 06.04
+[] 9
+[]  días
+[] Implementación del TTS en todas las pantallas y pruebas funcionales extensivas
+[] Sprint 6
+[] Badge reactivo de notificaciones, pictogramas dinámicos por categoría, formateo de horas, pulido UI/UX
+[] 1 semana
+[] 07.04 – 13.04
+[] 
+[] 7
+[] días
+[] Último sprint de desarrollo. Se priorizaron las notificaciones reactivas y el pulido visual sobre el WorkManager, que se descartó por falta de tiempo
+[] Sprint 7
+[] Memoria escrita, diapositivas, vídeo de defensa
+[] 1 semana
+[] 14.04 – 24.04
+[] 11
+[] días
+[] Fase ampliada al haberse liberado tiempo de los sprints anteriores.
+[] Tabla 4. Planificación estimada vs. real del proyecto. Elaboración propia
+[] La desviación más significativa fue la aceleración de los Sprints 2 y 3, que se completaron en menos de una semana cuando estaban estimados para dos semanas entre ambos. Esto se debe a que el trabajo de diseño técnico realizado en el Sprint 1 (diagramas E-R, de clases y estructura de carpetas) redujo la incertidumbre a la hora de codificar. Como consecuencia, esto me permitió avanzar a mayor velocidad en la implementación de la base de datos y las primeras pantallas. Siguiendo la flexibilidad que permite Scrum, se adelantó trabajo del backlog (historial y estadísticas, originalmente previstos para el Sprint 5) al Sprint 3 al tener ya resueltas las dependencias necesarias. En cambio, los Sprints 4 y 5 se extendieron ligeramente debido a la cantidad de bugs funcionales detectados durante las pruebas y a la complejidad de integrar el TTS de forma coherente en todas las pantallas de la aplicación.
+[] Por otra parte, el WorkManager para notificaciones locales programadas, contemplado originalmente en el Sprint 6, se descartó del alcance final por limitaciones de tiempo y se traslada a la sección de Vías Futuras.
+[] 
+[] Diagrama de Gantt. Elaboración propia
+[] 
+[Ttulo2] Análisis DAFO
+[] El análisis DAFO (Debilidades, Amenazas, Fortalezas y Oportunidades) es una herramienta de diagnóstico estratégico que permite evaluar un proyecto o idea desde dos perspectivas: los factores internos (fortalezas y debilidades, propios del proyecto) y los factores externos (oportunidades y amenazas, procedentes del entorno). Se aplica a continuación a VecindApp para identificar sus puntos fuertes y los riesgos a tener en cuenta.
+[] 
+[] Factores positivos
+[] Factores negativos
+[] 
+[] 
+[] 
+[] 
+[] Origen interno
+[] Fortalezas: Nicho de mercado sin explotar (ninguna plataforma combina banco de tiempo + red vecinal + accesibilidad avanzada). Arquitectura MVVM + Clean Architecture que facilita el mantenimiento y la escalabilidad. Funcionamiento offline-first que elimina la dependencia de un servidor remoto y reduce costes de infraestructura. Doble vector de accesibilidad (TTS activo + pictogramas ARASAAC) que diferencia la app de toda la competencia analizada.
+[] Debilidades: Desarrollo individual, sin equipo de revisión de código ni testing dedicado. Tiempo limitado por la compaginación con una jornada laboral completa. Ausencia de backend remoto, lo que impide la sincronización de datos entre dispositivos. Sin sistema de autenticación con contraseña real (login simplificado para facilitar la demo).
+[] 
+[] 
+[] 
+[] 
+[] 
+[] Origen externo
+[] Oportunidades: El Acta Europea de Accesibilidad (EAA), vigente desde junio de 2025, obliga a que los servicios digitales cumplan estándares de inclusión, lo que posiciona a VecindApp como una solución ya alineada con la normativa. El crecimiento de la economía colaborativa y el envejecimiento de la población generan una demanda creciente de redes de apoyo vecinal. Los pictogramas ARASAAC gozan de reconocimiento institucional y licencia abierta, lo que facilita su adopción.
+[] Amenazas: Plataformas consolidadas como Nextdoor podrían incorporar funcionalidades de banco de tiempo en el futuro. La dificultad de monetización ética en redes hiperlocales (como demuestra el cierre de ¿Tienes sal?). La brecha digital en los perfiles de usuario objetivo (personas mayores) puede dificultar la adopción inicial de la aplicación.
+[] Tabla 5. Análisis DAFO de VecindApp. Elaboración propia.
+[] 
+[Ttulo1] Análisis del proyecto 
+[] (8-16 páginas)
+[] Esta sección recoge el análisis funcional completo de VecindApp: los requisitos funcionales y no funcionales, los diagramas UML obligatorios y las especificaciones de los casos de uso principales.
+[] 6.1. Requisitos
+[] Los requisitos se clasifican en funcionales (qué debe hacer el sistema) y no funcionales (cómo debe comportarse). Se ha asignado además un nivel de prioridad a cada uno: Alta para los imprescindibles del MVP, Media para funcionalidades que aportan valor pero no bloquean el núcleo, y Baja para pulido y mejoras de usabilidad. Todos los requisitos listados se encuentran implementados en la versión final entregada.
+[] 
+[] 6.1.1. Requisitos Funcionales
+[] Módulo de autenticación
+[] RF
+[] Descripción
+[] Prioridad
+[] Estado
+[] RF-01
+[] El sistema permitirá registrar un nuevo vecino con nombre (único, case-insensitive) y barrio seleccionado de un Spinner con los barrios de Zaragoza predefinidos.
+[] Alta
+[] Implementado
+[] RF-02
+[] El sistema permitirá iniciar sesión introduciendo el nombre del vecino previamente registrado, sin contraseña, para facilitar la demo multiusuario.
+[] Alta
+[] Implementado
+[] RF-03
+[] El saldo inicial de cada usuario nuevo será de 5 horas como crédito de bienvenida.
+[] Alta
+[] Implementado
+[] RF-04
+[] El sistema mantendrá la sesión del usuario entre ejecuciones mediante SharedPreferences, permitiéndole cerrarla manualmente desde el perfil.
+[] Alta
+[] Implementado
+[] 
+[] Módulo de servicios
+[] RF
+[] Descripción
+[] Prioridad
+[] Estado
+[] RF-10
+[] El usuario podrá publicar una oferta de servicio con: título, descripción, categoría (Hogar, Tecnología, Educación, Compañía, Recados u Otros) y coste en horas mediante un Slider con pasos de 0,25 h.
+[] Alta
+[] Implementado
+[] RF-11
+[] La pantalla principal mostrará un Escaparate del Barrio con todas las ofertas activas, ordenadas por fecha de publicación descendente.
+[] Alta
+[] Implementado
+[] RF-12
+[] Cada servicio mostrará un pictograma ARASAAC asignado dinámicamente en función de su categoría mediante CategoriaMapper.
+[] Media
+[] Implementado
+[] RF-13
+[] El usuario podrá editar o eliminar sus propios servicios únicamente si están en estado ACTIVO (sin interesados).
+[] Alta
+[] Implementado
+[] RF-14
+[] El usuario podrá cancelar una solicitud sobre un servicio propio que ya haya sido reservado, devolviéndolo al estado ACTIVO.
+[] Media
+[] Implementado
+[] RF-15
+[] El sistema gestionará el ciclo de vida del servicio mediante los estados ACTIVO, RESERVADO, COMPLETADO y CADUCADO.
+[] Alta
+[] Implementado
+[] 
+[] Módulo de transacciones
+[] RF
+[] Descripción
+[] Prioridad
+[] Estado
+[] RF-20
+[] Al solicitar un servicio, el sistema validará que el saldo del comprador sea ≥ al coste antes de crear la transacción, impidiendo bloquear servicios sin saldo suficiente.
+[] Alta
+[] Implementado
+[] RF-21
+[] Al completar la transacción, el sistema debitará las horas del comprador, las acreditará al vendedor e incrementará los contadores de intercambios de ambos, todo de forma atómica.
+[] Alta
+[] Implementado
+[] RF-22
+[] El sistema registrará cada transacción con: timestamp, comprador, vendedor, servicio, horas transferidas y estado (PENDIENTE, ACEPTADA, COMPLETADA, CANCELADA).
+[] Alta
+[] Implementado
+[] RF-23
+[] La pestaña de Transacciones mostrará al usuario todas sus transacciones activas con su rol (comprador/vendedor) diferenciado visualmente.
+[] Alta
+[] Implementado
+[] RF-24
+[] El sistema impedirá que un usuario solicite su propio servicio.
+[] Alta
+[] Implementado
+[] 
+[] 
+[] 
+[] 
+[] 
+[] Módulo de valoraciones (ARASAAC)
+[] RF
+[] Descripción
+[] Prioridad
+[] Estado
+[] RF-30
+[] El sistema mostrará un BottomSheet de valoración con 9 pictogramas ARASAAC seleccionables (puntual, amable, cumple lo prometido, etc.) más un campo opcional de comentario.
+[] Alta
+[] Implementado
+[] RF-31
+[] Los pictogramas estarán empaquetados en /res/drawable como assets PNG, sin dependencia de internet.
+[] Alta
+[] Implementado
+[] RF-32
+[] Solo el comprador podrá valorar al vendedor tras completarse la transacción (regla unidireccional).
+[] Alta
+[] Implementado
+[] RF-33
+[] El sistema impedirá valoraciones duplicadas sobre una misma transacción.
+[] Alta
+[] Implementado
+[] RF-34
+[] El usuario podrá consultar sus valoraciones enviadas y recibidas mostrando el título apropiado según el rol.
+[] Media
+[] Implementado
+[] 
+[] Módulo de perfil e historial
+[] RF
+[] Descripción
+[] Prioridad
+[] Estado
+[] RF-40
+[] El perfil mostrará el saldo actual de horas, el nivel del vecino (Novato, Activo, Veterano, Referente) y el número de intercambios completados.
+[] Alta
+[] Implementado
+[] RF-41
+[] El nivel se recalculará automáticamente según el número de intercambios: Novato (0-2), Activo (3-5), Veterano (6-8), Referente (9+).
+[] Media
+[] Implementado
+[] RF-42
+[] El perfil mostrará la lista de servicios publicados por el usuario con acceso directo a su detalle.
+[] Alta
+[] Implementado
+[] RF-43
+[] El Historial mostrará un gráfico de barras agrupadas (MPAndroidChart) con el balance de horas ganadas vs. gastadas.
+[] Alta
+[] Implementado
+[] RF-44
+[] El Historial contará con dos pestañas independientes para transacciones completadas y canceladas.
+[] Media
+[] Implementado
+[] 
+[] Módulo de accesibilidad (TTS)
+[] RF
+[] Descripción
+[] Prioridad
+[] Estado
+[] RF-50
+[] El sistema dispondrá de un botón visible de lectura en voz alta (TTS nativo) en las pantallas de Escaparate, Detalle del Servicio, Perfil y BottomSheet de Valoración.
+[] Alta
+[] Implementado
+[] RF-51
+[] El TTS leerá los textos en español con un formato humanizado (ej.: "dos horas y media" en lugar de "2.5 horas").
+[] Media
+[] Implementado
+[] RF-52
+[] El TTS adaptará su contenido al contexto: en valoraciones distinguirá entre "enviada" y "recibida" según el rol del usuario.
+[] Media
+[] Implementado
+[] 
+[] Módulo de notificaciones
+[] RF
+[] Descripción
+[] Prioridad
+[] Estado
+[] RF-60
+[] El BottomNav mostrará un badge numérico en la pestaña de Transacciones con el conteo de transacciones que requieren atención (pendientes + completadas sin valorar como comprador).
+[] Media
+[] Implementado
+[] RF-61
+[] El badge se actualizará de forma reactiva al cambiar de usuario (login/logout) sin necesidad de reiniciar la aplicación.
+[] Media
+[] Implementado
+[] 
+[Ttulo2] Requisitos no funcionales 
+[Ttulo2] Diagrama de Casos de Uso
+[] La aplicación cuenta con un único actor (Usuario/Vecino) y 9 casos de uso. Se identifican dos relaciones “extiende” (Explorar Escaparate → Escuchar TTS) y una relación “implementa” (Aceptar servicio → Valorar con ARASAAC).
+[] 
+[] 
+[Ttulo2] Diagrama Entidad-Relación
+[] La base de datos local SQLite se compone de 4 entidades principales (cumpliendo el mínimo normativo de 3 tablas relacionadas): USUARIO, SERVICIO, TRANSACCION y VALORACION. Las relaciones son: USUARIO (1) → (N) SERVICIO, USUARIO (1) → (N) TRANSACCION (como comprador y vendedor), TRANSACCION (1) → (N) VALORACION, y USUARIO (1) → (N) VALORACION (recibidas).
+[] 
+[Ttulo2] Diagrama de clases
+[] El diagrama muestra 13 clases organizadas en 5 capas: Entities (4 clases Room que mapean las tablas de la BD), Repository (4 interfaces con sus implementaciones para acceso a datos), UseCase (TransaccionUseCase con la lógica atómica de negocio), ViewModel (3 clases: EscaparateViewModel, DetalleViewModel y PerfilViewModel) y Worker (CaducidadWorker para notificaciones en background)
+[] 
+[] 
+[] 
+[] [Añadiré este diagrama como anexo poque parece que aquí ocupa demasiado.]
+[] 
+[] 
+[] 
+[] 
+[Ttulo1] Diseño del proyecto 
+[] (6-14 páginas)
+[] 
+[Ttulo1] Despliegue y pruebas 
+[] (4-10 páginas)
+[] 
+[] 
+[Ttulo1] Conclusiones 
+[] (1-2 páginas)
+[] 
+[Ttulo1] Vías futuras 
+[] (1-2 páginas)
+[] 
+[Ttulo1] Bibliografía/Webgrafía 
+[] (1-2 páginas) *[Nota_personal]* - El formato al pegar los vínculos se queda raro: repasar y añadir los que faltan una vez comprobada la info.
+[] Punto 2.1 ▼
+[]   [Aislamiento de las grandes ciudades]
+[]  https://www.liberaldecastilla.com/aislamiento-social-en-las-grandes-ciudades-como-lo-estan-superando-las-comunidades-locales/
+[] Punto 2.3 ▼ 
+[] [Estudio de la OMS]
+[] https://www.oas.org/es/sedi/ddse/paginas/documentos/discapacidad/DESTACADOS/ResumenInformeMundial.pdf
+[] [Acta europea de accesibilidad]
+[] https://www.europarl.europa.eu/RegData/etudes/ATAG/2019/635536/EPRS_ATA(2019)635536_ES.pdf
+[] 
+[Ttulo1] Anexos
+[Ttulo2] Manual de Instalación
+[] 
+[Ttulo2] Manual de Usuario
+[] 
+[] 
+[] 
+[] 
+[] 
+[] 

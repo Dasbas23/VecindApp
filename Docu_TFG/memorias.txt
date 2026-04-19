@@ -620,10 +620,23 @@ SE DA COMIENZO AL SPRINT 6!
 
  ↪ 17.04.2026
 	Empezar el punto 6 y engañar a copilot a que lo haga.
+※ Finalmente, tras muchas horas arreglando tablas en Word a mano.
 
+ ↪ 18.04.2026
+	Terminados todos los puntos.
+
+ ↪ 19.04.2026
+	Claude me ha hecho al powerpoint entero
+	Me han venido de maravilla esos tokens extra que nos ha regalado Anthropic a todos este mes pero a la vez tengo miedo(Me asusta la capacidad que tiene)
+
+		
  **Tareas pendientes**
 	Estudiarme como han hecho las presentaciones los demás.
 		↳ En base a esto y la Normativa y guión de Proyectos donde explica qué meter en cada apartado lo tendré muy claro.
+		↳ Tengo que hacer las caputras de pantalla
+		↳ Tengo que aprenderme el guión
+		↳ Tengo que pedirle a copilot que me meta los manuales 
+		↳ Tengo que meter el diagrama de clases ese enorme
 
 
 --- SÍMBOLOGÍA---
