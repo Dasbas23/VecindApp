@@ -727,3 +727,30 @@ Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir 
 - He detectado una gran necesidad de organización y de esctructuración de conocimientos, detalles y cosas que se han hecho. Estoy abriendo muchos chats independietes entre sí y cada uno especializado en algo(git, planificador, programador,solucion de errores, sugiriente de memorias y alguna cosa más que ahora no recuerdo). Para ello utilizaré NoteBookLM. Le volcaré archivos de texto con los historiales de cada chat.
 
 
+(para el Manual de Instalación, el Manual de Usuario, o para la defensa/prueba de humo)?
+Mientras me confirmas, por lo que ya tienes escrito en la memoria, estas son las capturas que te conviene hacer sí o sí (secciones 7 y 8):
+A) Sección 7.3 “Pantallas principales” (UI)
+
+Login [OK]
+Registro (con el Spinner de barrios visible) [OK]
+Escaparate (con tarjetas + FAB “+” + FAB altavoz TTS visibles) [OK]
+Crear servicio (formulario con el Slider de horas visible y un valor tipo “1 h 15 min”) [OK]
+Detalle de servicio (mostrando botones contextuales según rol/estado: p. ej. “Solicitar” o “Editar/Eliminar”) [OK]
+Transacciones (con chip de rol Comprador/Vendedor y el badge rojo en el BottomNav) [OK]
+Transacción cancelada (tarjeta con texto tachado y “Sin cargo”) [OK]
+BottomSheet de valoración ARASAAC (los 9 pictogramas y, si puedes, alguno seleccionado) [OK]
+Perfil (tarjetas de saldo, nivel, intercambios y lista de servicios)
+Historial (gráfico MPAndroidChart + pestañas completadas/canceladas) [OK]
+
+B) Sección 8 (Despliegue y pruebas)
+
+BUILD SUCCESSFUL tras generar el APK (la salida de Gradle/Android Studio) [OK]
+Bug “Snackbar tapando el botón” (antes) (si lo puedes recrear)
+Bug “Snackbar bien colocado” (después)
+
+C) Si incluyes “prueba de humo” con secuencia
+
+Escaparate → 15. Detalle → 16. Solicitud → 17. Aceptación → 18. Completado → 19. Valoración → 20. Historial actualizado (pueden ser 6–8 capturas representativas, no hace falta una por cada micro-paso)
+
+Dime cuál de las 3 opciones es tu objetivo (Manual de instalación / Manual de usuario / Defensa) y te lo ajusto a una lista “mínima” exacta con nombres tipo Figura 7.X y el orden recomendado.
+
