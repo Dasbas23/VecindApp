@@ -18,6 +18,7 @@ import com.example.vecindapp.data.SesionUsuario
 import com.example.vecindapp.domain.model.CategoriaServicio
 import com.example.vecindapp.ui.common.TtsHelper
 import com.example.vecindapp.ui.common.mostrarSnackbar
+import com.example.vecindapp.ui.common.mostrarSnackbarGlobal
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.slider.Slider
@@ -150,7 +151,7 @@ class CrearServicioFragment : Fragment() {
                 launch {
                     viewModel.guardado.collect { guardado ->
                         if (guardado == true) {
-                            mostrarSnackbar(R.string.servicio_guardado)
+                            mostrarSnackbarGlobal(R.string.servicio_guardado)
                             findNavController().popBackStack()
                         }
                     }

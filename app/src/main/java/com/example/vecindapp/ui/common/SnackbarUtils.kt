@@ -49,3 +49,29 @@ fun Fragment.mostrarSnackbar(
 ) {
     mostrarSnackbar(getString(mensajeResId), duracion, anchorView)
 }
+
+/**
+ * Muestra un Snackbar usando la vista raíz de la Activity como base, anclado al
+ * BottomNavigationView si está visible. Pensado para mostrarlo JUSTO ANTES de un
+ * popBackStack(): al vivir en la Activity, sobrevive a la destrucción del fragment.
+ */
+fun Fragment.mostrarSnackbarGlobal(
+    mensaje: String,
+    duracion: Int = Snackbar.LENGTH_SHORT
+) {
+    val act = activity ?: return
+    val root = act.findViewById<View>(android.R.id.content) ?: return
+    val snackbar = Snackbar.make(root, mensaje, duracion)
+    act.findViewById<BottomNavigationView>(R.id.bottomNav)?.let { bottomNav ->
+        if (bottomNav.isVisible) snackbar.anchorView = bottomNav
+    }
+    snackbar.show()
+}
+
+/** Sobrecarga con resource id. */
+fun Fragment.mostrarSnackbarGlobal(
+    mensajeResId: Int,
+    duracion: Int = Snackbar.LENGTH_SHORT
+) {
+    mostrarSnackbarGlobal(getString(mensajeResId), duracion)
+}
