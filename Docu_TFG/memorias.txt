@@ -1,4 +1,4 @@
-	↪ 06.03.2026 :
+		↪ 06.03.2026 :
 	He empezado con cierta incertidumbre ya que me han concedido el APTO. Como no sé muy bien por dónde empezar, he empezado por preguntar a Gemini y a Claude. He decidido que quiero un estilo moderno pero que sea sencillo e intuitivo. Ya veremos cómo hacerlo...
 	Se piden varios bocetos para inspirarme en Gemini con Nano banana. Estoy viendo un vídeo de "Programador X" en YT para ver cómo empezar. Hace hincapié en la escalabilidad y el diseño, es casi que lo más importante. Una de las conclusiones que he sacado es que voy a utilizar una metodología ágil "SCRUM" con "Kanban" para tener un seguimiento y control, sprints de 1 semana.
 ※ Poner botón para activar el TTS parece ser una buena idea.
@@ -628,15 +628,21 @@ SE DA COMIENZO AL SPRINT 6!
  ↪ 19.04.2026
 	Claude me ha hecho al powerpoint entero
 	Me han venido de maravilla esos tokens extra que nos ha regalado Anthropic a todos este mes pero a la vez tengo miedo(Me asusta la capacidad que tiene)
+※ He hecho las capturas de pantalla con AndroidStudio. 
+	↳ Se puede poner la forma de un teléfono.
+
+ ↪ 20.04.2026
+※ Meter las capturas en pequeño en las memorias. 
 
 		
  **Tareas pendientes**
 	Estudiarme como han hecho las presentaciones los demás.
 		↳ En base a esto y la Normativa y guión de Proyectos donde explica qué meter en cada apartado lo tendré muy claro.
-		↳ Tengo que hacer las caputras de pantalla
+		↳ Tengo que hacer las caputras de pantalla [OK]
 		↳ Tengo que aprenderme el guión
 		↳ Tengo que pedirle a copilot que me meta los manuales 
 		↳ Tengo que meter el diagrama de clases ese enorme
+		↳ Meter las fotos en grande en anexos.
 
 
 --- SÍMBOLOGÍA---
@@ -745,7 +751,7 @@ Historial (gráfico MPAndroidChart + pestañas completadas/canceladas) [OK]
 B) Sección 8 (Despliegue y pruebas)
 
 BUILD SUCCESSFUL tras generar el APK (la salida de Gradle/Android Studio) [OK]
-Bug “Snackbar tapando el botón” (antes) (si lo puedes recrear)
+Bug “Snackbar tapando el botón” (antes) (si lo puedes recrear) (Volver a este commit 54424d09)
 Bug “Snackbar bien colocado” (después)
 
 C) Si incluyes “prueba de humo” con secuencia
