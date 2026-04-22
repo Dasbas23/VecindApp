@@ -632,17 +632,30 @@ SE DA COMIENZO AL SPRINT 6!
 	↳ Se puede poner la forma de un teléfono.
 
  ↪ 20.04.2026
+	Ya no me acuerdo muy bien lo que he hecho.
 ※ Meter las capturas en pequeño en las memorias. 
+※ He hecho capturas directamente cone el recorte de pantalla del ordenador para meter trocitos que me intesar en los manuales o en el resto del word para no tener que hacer las capturas con Android Studio (era un poco tedioso)
 
+ ↪ 21.04.2026
+	Pues he avanzado bastante con la documentación. Yo creo que por ahora está bien y sólo habrá que darle un repaso para ver si no me dejo nada por el camino o me sobran cachitos.
+※ He metido los diagramas de clases separados en trocitos.
+	Primero la vista general y despues las capas data & dominio y por último la capa de presentación.
+		↳ He utilizado los códigos generados en mermaid por Claude para separar dichos diagramas. Los he metido en Draw.io ("Organizar" > "Insertar" > "Mermaid") y después los he organizado a mano un poco para que quedaran más compactos. Tras esto le he metido colores según la leyenda marcada por Claude y ya correr. Los he metido como PNG
+※ He estado viendo algún video en YT para aprender como funciona OBS Studio.
+	↳ Por lo visto va por escenas y en cada escena puedes meter diferentes fuentes. Luego puedes meter cada escena por fuente si quisieras combinar dos escenas en una, es decir, que una escena es la cámara que te puede grabar a ti y la otra escena es lo que presentas en PowerPoint. Pues puedes introducir la cámara en el ppt.	
+
+↪ 22.04.2026
+	Hoy me tocará refinar el ppt y terminar de aprender a usar el OBS. Además de eso tengo que  instalar los softwares necesarios para usar el móvil como webcam. 
 		
+
  **Tareas pendientes**
 	Estudiarme como han hecho las presentaciones los demás.
 		↳ En base a esto y la Normativa y guión de Proyectos donde explica qué meter en cada apartado lo tendré muy claro.
 		↳ Tengo que hacer las caputras de pantalla [OK]
-		↳ Tengo que aprenderme el guión
-		↳ Tengo que pedirle a copilot que me meta los manuales 
-		↳ Tengo que meter el diagrama de clases ese enorme
-		↳ Meter las fotos en grande en anexos.
+		↳ Tengo que aprenderme el guión 
+		↳ Tengo que pedirle a copilot que me meta los manuales [OK]
+		↳ Tengo que meter el diagrama de clases ese enorme [OK]
+		↳ Meter las fotos en grande en anexos. [NOK]
 
 
 --- SÍMBOLOGÍA---
@@ -660,12 +673,12 @@ Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir 
 [X] Me tengo que enredar con MarkItDown para intentar hacer que la IA me pueda completar los pptx o los docx. -> No me termina de gustar mucho y no le veo la ventaja.
 [X] Carpeta de Drive creada.
 [!] He cargado más presentaciones en la misma carpeta de OneDrive
-[ ] Actualizar los layouts con un pequeño apartado donde se diga que puede hacer el usuario en cada pantalla.
-[!] Ver si CCode me puede hacer un diagrama de clases UML. [SI] Puede hacerlo y me lo ha hecho en mermaid pero tengo que compactar eso un poco.   
+[X] Actualizar los layouts con un pequeño apartado donde se diga que puede hacer el usuario en cada pantalla.
+[X] Ver si CCode me puede hacer un diagrama de clases UML. [SI] Puede hacerlo y me lo ha hecho en mermaid pero tengo que compactar eso un poco.   
 [!!] Actualizar el CLAUDE.md -> Tengo que ver de que manera me lo ha dejado porque esta tarde CCode estaba un poco raro. (15/04)
-[ ]
-[ ]
-[ ]
+[ ] Hacerme con el funcionamiento de OBS.
+[ ] Instalar "" para usar el móvil como webcam.
+[ ] 
 [ ]
 [ ]
 
@@ -724,39 +737,4 @@ Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir 
 	↳ Las IAs no tienen visión de producto: He comprobado que por mucho que un modelo te proponga código limpio y buenas estructuras (como el DefaultLifecycleObserver para el TTS), no tiene ni idea de lo que tiene sentido para el usuario final. Sin que yo lo revisara, el TTS habría leído nombres de archivos internos como "bien_excelente" en vez de "Excelente", habría puesto un icono de silencio en un botón de altavoz, y habría dicho "dos punto cero horas". La IA escribe código que compila, pero el sentido común sigue siendo cosa mía.
 	↳ No todos los modelos valen para todo: He probado a usar un modelo local (qwen3-coder:30b) para tareas que creía mecánicas y me ha liado parda. Se ha puesto a escribir Java en vez de Kotlin y se ha saltado el plan entero. Conclusión: los modelos pequeños sin thinking van bien para cosas muy simples tipo chore, pero para integrar lógica en la UI hay que tirar de Sonnet o Opus que saben razonar antes de actuar.
 	↳ Claude Code por web cuando la CLI no va: Cuando Zscaler me ha bloqueado la consola en el trabajo, he podido tirar por claude.ai/code subiendo el contexto al repo remoto. Me ha generado una PR con todos los commits del plan. No es lo ideal pero es un plan B que funciona.
-
 	
-
-
-------------Fundamentos/Ideas para hacer el trabajo Escrito------------
-- Seprar cada Sprint explicando como he ido econtrandome con problemas y soluciones.
-- He detectado una gran necesidad de organización y de esctructuración de conocimientos, detalles y cosas que se han hecho. Estoy abriendo muchos chats independietes entre sí y cada uno especializado en algo(git, planificador, programador,solucion de errores, sugiriente de memorias y alguna cosa más que ahora no recuerdo). Para ello utilizaré NoteBookLM. Le volcaré archivos de texto con los historiales de cada chat.
-
-
-(para el Manual de Instalación, el Manual de Usuario, o para la defensa/prueba de humo)?
-Mientras me confirmas, por lo que ya tienes escrito en la memoria, estas son las capturas que te conviene hacer sí o sí (secciones 7 y 8):
-A) Sección 7.3 “Pantallas principales” (UI)
-
-Login [OK]
-Registro (con el Spinner de barrios visible) [OK]
-Escaparate (con tarjetas + FAB “+” + FAB altavoz TTS visibles) [OK]
-Crear servicio (formulario con el Slider de horas visible y un valor tipo “1 h 15 min”) [OK]
-Detalle de servicio (mostrando botones contextuales según rol/estado: p. ej. “Solicitar” o “Editar/Eliminar”) [OK]
-Transacciones (con chip de rol Comprador/Vendedor y el badge rojo en el BottomNav) [OK]
-Transacción cancelada (tarjeta con texto tachado y “Sin cargo”) [OK]
-BottomSheet de valoración ARASAAC (los 9 pictogramas y, si puedes, alguno seleccionado) [OK]
-Perfil (tarjetas de saldo, nivel, intercambios y lista de servicios)
-Historial (gráfico MPAndroidChart + pestañas completadas/canceladas) [OK]
-
-B) Sección 8 (Despliegue y pruebas)
-
-BUILD SUCCESSFUL tras generar el APK (la salida de Gradle/Android Studio) [OK]
-Bug “Snackbar tapando el botón” (antes) (si lo puedes recrear) (Volver a este commit 54424d09)
-Bug “Snackbar bien colocado” (después)
-
-C) Si incluyes “prueba de humo” con secuencia
-
-Escaparate → 15. Detalle → 16. Solicitud → 17. Aceptación → 18. Completado → 19. Valoración → 20. Historial actualizado (pueden ser 6–8 capturas representativas, no hace falta una por cada micro-paso)
-
-Dime cuál de las 3 opciones es tu objetivo (Manual de instalación / Manual de usuario / Defensa) y te lo ajusto a una lista “mínima” exacta con nombres tipo Figura 7.X y el orden recomendado.
-
