@@ -195,4 +195,17 @@
         android:contentDescription="@string/desc_tts"
         android:src="@drawable/ic_volume_up" />
 
+    <!-- Botón flotante para volver atrás (estilo iOS, top|end) -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabVolver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/desc_volver"
+        android:src="@drawable/ic_arrow_back"
+        app:backgroundTint="@color/blanco_tarjetas"
+        app:fabSize="mini"
+        app:tint="@color/teal_vecindapp" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

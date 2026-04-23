@@ -24,6 +24,7 @@ import com.example.vecindapp.domain.model.EstadoServicio
 import com.example.vecindapp.ui.common.CategoriaMapper
 import com.example.vecindapp.ui.common.TtsHelper
 import com.example.vecindapp.ui.common.mostrarSnackbar
+import com.example.vecindapp.ui.common.mostrarSnackbarGlobal
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -74,6 +75,7 @@ class DetalleServicioFragment : Fragment() {
     private lateinit var btnEliminar: MaterialButton
     private lateinit var btnVerValoracion: MaterialButton
     private lateinit var fabTts: FloatingActionButton
+    private lateinit var fabVolver: FloatingActionButton
     private lateinit var ttsHelper: TtsHelper
     private var servicioActual: Servicio? = null
 
@@ -121,6 +123,8 @@ class DetalleServicioFragment : Fragment() {
         btnEliminar = view.findViewById(R.id.btnEliminar)
         btnVerValoracion = view.findViewById(R.id.btnVerValoracion)
         fabTts = view.findViewById(R.id.fabTts)
+        fabVolver = view.findViewById(R.id.fabVolver)
+        fabVolver.setOnClickListener { findNavController().popBackStack() }
     }
 
     /**
@@ -334,7 +338,7 @@ class DetalleServicioFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.solicitado.collect { solicitado ->
                     if (solicitado) {
-                        mostrarSnackbar(R.string.servicio_solicitado)
+                        mostrarSnackbarGlobal(R.string.servicio_solicitado)
                         findNavController().popBackStack()
                     }
                 }
@@ -366,7 +370,7 @@ class DetalleServicioFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.eliminado.collect { eliminado ->
                     if (eliminado) {
-                        mostrarSnackbar(R.string.servicio_eliminado)
+                        mostrarSnackbarGlobal(R.string.servicio_eliminado)
                         findNavController().popBackStack()
                     }
                 }

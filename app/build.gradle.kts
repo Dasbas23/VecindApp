@@ -37,6 +37,12 @@ android {
     buildFeatures {
         viewBinding = true // Activamos esto para usar XML cómodamente
     }
+
+    applicationVariants.all {
+        outputs.all {
+            (this as com.android.build.gradle.internal.api.BaseVariantOutputImpl).outputFileName = "VecindApp.apk"
+        }
+    }
 }
 
 dependencies {

@@ -3,6 +3,8 @@ package com.example.vecindapp
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -45,9 +47,35 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Cerramos el splash: restablecemos el tema normal antes de super.onCreate
+        setTheme(R.style.Theme_VecindApp)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        aplicarInsetsSistema()
         configurarNavegacion(savedInstanceState)
+    }
+
+    /**
+     * Empuja el contenido de todos los fragments por debajo de la status bar
+     * y por encima de la barra de gestos, respetando los insets del sistema.
+     *
+     * Evita que los títulos de los fragments queden tapados por la barra de
+     * notificaciones en dispositivos con barras translúcidas o edge-to-edge
+     * (Android 15+ lo fuerza por defecto).
+     */
+    private fun aplicarInsetsSistema() {
+        val navHost = findViewById<View>(R.id.navHostFragment)
+        ViewCompat.setOnApplyWindowInsetsListener(navHost) { v, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(v.paddingLeft, bars.top, v.paddingRight, v.paddingBottom)
+            insets
+        }
+        val bottomNav = findViewById<View>(R.id.bottomNav)
+        ViewCompat.setOnApplyWindowInsetsListener(bottomNav) { v, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(v.paddingLeft, v.paddingTop, v.paddingRight, bars.bottom)
+            insets
+        }
     }
 
     private fun configurarNavegacion(savedInstanceState: Bundle?) {

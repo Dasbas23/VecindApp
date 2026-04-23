@@ -30,7 +30,19 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:paddingTop="16dp"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="4dp" />
+
+        <!-- Subtítulo descriptivo -->
+        <TextView
+            android:id="@+id/tvSubtituloHistorial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/subtitulo_historial"
+            android:textSize="13sp"
+            android:textColor="@color/texto_secundario"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="12dp" />
 
         <!-- Gráfico de barras -->
         <com.github.mikephil.charting.charts.BarChart

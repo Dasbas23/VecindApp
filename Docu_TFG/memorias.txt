@@ -1,4 +1,4 @@
-	↪ 06.03.2026 :
+		↪ 06.03.2026 :
 	He empezado con cierta incertidumbre ya que me han concedido el APTO. Como no sé muy bien por dónde empezar, he empezado por preguntar a Gemini y a Claude. He decidido que quiero un estilo moderno pero que sea sencillo e intuitivo. Ya veremos cómo hacerlo...
 	Se piden varios bocetos para inspirarme en Gemini con Nano banana. Estoy viendo un vídeo de "Programador X" en YT para ver cómo empezar. Hace hincapié en la escalabilidad y el diseño, es casi que lo más importante. Una de las conclusiones que he sacado es que voy a utilizar una metodología ágil "SCRUM" con "Kanban" para tener un seguimiento y control, sprints de 1 semana.
 ※ Poner botón para activar el TTS parece ser una buena idea.
@@ -567,32 +567,97 @@ SE DA COMIENZO AL SPRINT 6!
 	+ Solución : Se decide no tocar la BBDD para evitar migraciones complejas ahora mismo. Se usa la etiqueta `@Deprecated` y se documenta la deuda técnica.
 
 ↪ 13.04.2026 :
-	Hoy toca rematar el Sprint 6. Hay que implementar las notificaciones y pulir los casos límite que van saliendo.
-	
+	Hoy toca rematar el Sprint 6. Hay que implementar las notificaciones y pulir los casos límite que van saliendo.	
 ※ Sistema Reactivo de Notificaciones (Badge en el BottomNav).
 	↳ Se crea un flujo completo MVVM: Query `getConteoNotificaciones` (Room) -> `TransaccionRepository` -> `MainViewModel` -> `MainActivity`.
-	▼ Problema : [Rellena aquí: El badge no se actualizaba correctamente al cambiar de usuario o iniciar sesión con una cuenta distinta]
-	+ Solución : [Rellena aquí: Cómo hiciste que MainViewModel fuera reactivo al cambio de usuario]
-	▼ Problema : [Rellena aquí: El badge se quedaba "pegado" al cerrar sesión]
-	+ Solución : [Rellena aquí: Fix para limpiar el badge al hacer logout]
+	▼ Problema : El badge no se actualizaba bien al cambiar de usuario. El ViewModel se quedaba enganchado al estado del usuario anterior porque el usuarioId se fijaba en el constructor y no cambiaba al hacer logout/login con otra cuenta.
+	+ Solución : Refactorizar MainViewModel para que el usuarioId no esté en el constructor sino en un MutableStateFlow interno. Con flatMapLatest se resubscribe automáticamente cuando cambias de usuario. Así el badge siempre muestra los datos del usuario correcto.
+	▼ Problema  : El badge se quedaba "pegado" al cerrar sesión. Si tenías un punto rojo y hacías logout, el siguiente usuario que entrara lo veía un instante.
+	+ Solución : En PerfilFragment, al pulsar cerrar sesión, se llama a setUsuarioId(SIN_SESION) antes de navegar al login. Eso limpia el badge al instante.
 ※ Refactorización profunda de la Lógica de Valoraciones.
-	↳ Se descubre que la regla de negocio para valorar estaba mal planteada y generaba inconsistencias con el punto rojo.
-	▼ Problema : [Rellena aquí: ¿Por qué tuviste que restringir `puedeValorar` exclusivamente al comprador? ¿Qué pasaba si el vendedor también podía valorar?]
-	+ Solución : [Rellena aquí: Explicación de la regla unidireccional y el fix en el DAO]
-	▼ Problema : [Rellena aquí: El auto-popup de valoración saltaba cuando no debía al completar una transacción]
-	+ Solución : Se elimina el auto-popup al completar la transacción para dar más control al usuario.
+		Me he dado cuenta de que  la regla de negocio para valorar estaba mal planteada y me destrozaba la lógica del badge con el punto rojo.
+	▼ Problema : Si tanto comprador como vendedor podían valorar, la query del badge contaba transacciones "sin valorar" para los dos. Resultado: el vendedor veía el punto rojo diciéndole que tenía que valorar cuando en realidad no le tocaba a él.
+	+ Solución : He establecido una regla unidireccional: solo el comprador valora. El vendedor completa la transacción y su ciclo termina ahí. He restringido puedeValorar en el ViewModel y he añadido AND t.id_comprador_fk = :usuarioId en la query del DAO para que el badge solo cuente al comprador.
+	▼ Problema : El auto-popup de valoración saltaba cuando no debía. Al completar una transacción, el BottomSheet se abría automáticamente, pero quien completa es siempre el vendedor... que ahora no puede valorar. Absurdo.
+	+ Solución : Se elimina el auto-popup al completar la transacción. El comprador valora cuando quiera pulsando el botón "Valorar" en su lista de transacciones. Más control para el usuario y menos código muerto en el ViewModel.
 ※ Pulido de UI final.
-	▼ Problema : [Rellena aquí: El snackbar de error en el login se quedaba escondido o se veía mal]
-	+ Solución : Se ajusta la posición para mostrar el snackbar por encima del botón "Iniciar sesión".
+	▼ Problema : El snackbar de error en el login se escondía o se veía mal.
+	+ Solución : Se ajusta la posición para que aparezca por encima del botón "Iniciar sesión".
 ※ CIERRE DEL SPRINT 6.
-	↳ Se fusionan las ramas experimentales (`sprint6/badge`, `sprint6/formatear_horas`) a `sprint6/worker+ui&ux`.
-	↳ Se fusiona la rama del sprint a `desarrollo`. ¡Sprint 6 completado con éxito!
+	↳ Se fusionan las ramas experimentales (sprint6/badge, sprint6/formatear_horas) a sprint6/worker+ui&ux.
+	↳ Se fusiona la rama del sprint a desarrollo. ¡Sprint 6 completado!
+
+↪ 14.04.2026 :	
+	Pues estos días me quedan un poco justo para hacer la presentacón del proyecto. Realmente me queda nada y menos así que voy a tirar de trabajos de otras personas para ver como lo han hecho y guiarme con ese modelo escribiendo así mis propias vivencias... Estoy un poco agobiado porque no sé muy bien como haceerlo o por donde empezar. Estoy pensando en hacer un nuevo apartado resumen con las tareas que tengo que hacer para gestionar esto.
+※ Me estoy organizado un poco leyendo la normativa y sabiendo que tengo que poner en cada apartado. 
+	▼ Problema : Veo que los diagramas de claes y casos de usos parece que se han modificado un poco. Mi diagrama de clasesm en primera isntancia estaba muy bien detallado con todas las funciones y los parámetros pero el proyecto ha crecido mucho y creo que meter un diagramatan tocho sería perder mucho timepo y no lo valorarán tanto.
+	+ Solución :  [Pendiente] Ver si CCode , en base a la estructura de mi poyecto puede elaborar algo sencillo y no tan chulo y complicado como he hehco el primero separado por colores y demás cosas. 
+
+↪ 15.04.2026 :
+	Hoy quiero avanzar a tope porque Irene hoy he visto que le ha cundido un mogollón así que yo también quiero lo mismo que ella.	
+※ He conseguido avanzar dejadodo bien el punto 1.2 Abstract un poco mejor de lo que estaba. 
+※ También he arregaldo los objetivos espcíficos del 1.3
+※ En cuanto al punto 2, el estado del arte, creo que está muy bien así y por tanto no lo voy a toccar.
+	↳Pensaba meterls capturas o gráficos dela competencia pero he decidido que no poque no es con fines educativos de esa manera.
+※ Me he puesto con el punto 3 , metodología usada.
+	▼ Problema : Resulta que tengo distintas vesiones del mismo archivo desperdigadas en distintas carpetas porque en su día me guardé una copia en git, otra en OneDrive,, otra en GoogleDrive y otra para trabajar en local con el PC del trabajo. 
+		↳ ¿Que pasa?  Que  en el trabajo me he puesto a trabajar sobre una que tenía medio completada en local y en los demás sitios la tenía más completa y ademas a Claude le he subido una más completa y comparado con lo que tenía yo en local no me cuadraban las cosas que me decía éste y yo me volvía loco. Hasta que por fin me he dado cuenta que  tengo avance en la copia local y los tendré que meter en la copia que tengo más adelantada.
+	+ Solución : Por ahora en casa , voy a trabajar con  lo que pueda, luego unificaré los cambios de la copia en local a la que estoy trabajando actualmete. Dejaré un sólo archivo en git con copia de seguridad esporádica en git. [Hecho]
+	▼ Problema : Me he hecho un lío con el historial de versiones del propio Word. Había vuelto a una versión anterior y no sabía que he hecho con todo el progreso.
+	+ Solución : Tras trastear un poco he conseguido volver a una versión medianamente a mi gusto. No le voy a dar más vueltas.
+
+↪ 16.04.2026 :
+	Actualizar plantilla memporia escrita de Git y Onedrive(Actualmente estoy trabajando en el de drive pero el de git está mas completo porque es el que he presentado en el feedfback)
+※ He metido el punto 3 en el archivo compartido en git. Ahora el de git lo he unido con lo que tenía avanzado en el otro y por fin tengo la versión buena en la que poder seguir trabajando.
+※ He terminado el punto 4 por la noche entero dejándolo en un 80% a mi gusto. No le voy a meter más porque no me da la vida.
+※ Esta tarde he empezado con el punto 5. 
+	▼ Problema : Para hacer al maldito diagrama de Gantt me las he visto canutas, menuda condena tener que hacer eso en excel o en cualquier otra cosa que no sea papel.
+	+ Solución : Tras 4 horas intentando hacer semejante miseria, DIOS, dico ClaudeCode me ha vuelto a salvar la papeleta. 
+		↳ Le he pedido que me hiciera un diagrama y me lo ha clavado en HTML mas bien que paa que. Hasta lo puedo exportar en SVG.. 
+	↳ He modificado el diagrama para dejarlo bien a mi gusto y lo integrado en el Word tras convertirlo en png en un web externa ya que mi convertidor no andaba del todo bien.
+	↳ He metido la talba de análisis DAFO.
+	↳ TERMINADO.
+
+ ↪ 17.04.2026
+	Empezar el punto 6 y engañar a copilot a que lo haga.
+※ Finalmente, tras muchas horas arreglando tablas en Word a mano.
+
+ ↪ 18.04.2026
+	Terminados todos los puntos.
+
+ ↪ 19.04.2026
+	Claude me ha hecho al powerpoint entero
+	Me han venido de maravilla esos tokens extra que nos ha regalado Anthropic a todos este mes pero a la vez tengo miedo(Me asusta la capacidad que tiene)
+※ He hecho las capturas de pantalla con AndroidStudio. 
+	↳ Se puede poner la forma de un teléfono.
+
+ ↪ 20.04.2026
+	Ya no me acuerdo muy bien lo que he hecho.
+※ Meter las capturas en pequeño en las memorias. 
+※ He hecho capturas directamente cone el recorte de pantalla del ordenador para meter trocitos que me intesar en los manuales o en el resto del word para no tener que hacer las capturas con Android Studio (era un poco tedioso)
+
+ ↪ 21.04.2026
+	Pues he avanzado bastante con la documentación. Yo creo que por ahora está bien y sólo habrá que darle un repaso para ver si no me dejo nada por el camino o me sobran cachitos.
+※ He metido los diagramas de clases separados en trocitos.
+	Primero la vista general y despues las capas data & dominio y por último la capa de presentación.
+		↳ He utilizado los códigos generados en mermaid por Claude para separar dichos diagramas. Los he metido en Draw.io ("Organizar" > "Insertar" > "Mermaid") y después los he organizado a mano un poco para que quedaran más compactos. Tras esto le he metido colores según la leyenda marcada por Claude y ya correr. Los he metido como PNG
+※ He estado viendo algún video en YT para aprender como funciona OBS Studio.
+	↳ Por lo visto va por escenas y en cada escena puedes meter diferentes fuentes. Luego puedes meter cada escena por fuente si quisieras combinar dos escenas en una, es decir, que una escena es la cámara que te puede grabar a ti y la otra escena es lo que presentas en PowerPoint. Pues puedes introducir la cámara en el ppt.	
+
+↪ 22.04.2026
+	Hoy me tocará refinar el ppt y terminar de aprender a usar el OBS. Además de eso tengo que  instalar los softwares necesarios para usar el móvil como webcam. 
+		
+
+ **Tareas pendientes**
+	Estudiarme como han hecho las presentaciones los demás.
+		↳ En base a esto y la Normativa y guión de Proyectos donde explica qué meter en cada apartado lo tendré muy claro.
+		↳ Tengo que hacer las caputras de pantalla [OK]
+		↳ Tengo que aprenderme el guión 
+		↳ Tengo que pedirle a copilot que me meta los manuales [OK]
+		↳ Tengo que meter el diagrama de clases ese enorme [OK]
+		↳ Meter las fotos en grande en anexos. [NOK]
 
 
-		▼ Problema :
-		+ Solución :
-		▼ Problema :
-		+ Solución :
 --- SÍMBOLOGÍA---
 Día nuevo:         ↪
 Paso / Tarea:      ※
@@ -602,6 +667,20 @@ Solución:          +
 ----------------------------------
 Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir haciendo cosas en el trabajo en el documento VecindApp_Especificaciones_Tecnicas.docx guardado en mi drive secundario en punto 7. Planificación de Desarrolo para intentar seguir el calendario y rellenando con lo que realmente he ido haciendo. Así de esta manera queda más concentrado y no tengo que leerme todas las memorias.
 
+======= LIISTA DE TODOs y pensamientos =======  x=hecho; != información
+[X] Actualizar las memorias.
+[!] Me he descargado la presentación de MindTrade (entrera) -> OneDrive de la empresa
+[X] Me tengo que enredar con MarkItDown para intentar hacer que la IA me pueda completar los pptx o los docx. -> No me termina de gustar mucho y no le veo la ventaja.
+[X] Carpeta de Drive creada.
+[!] He cargado más presentaciones en la misma carpeta de OneDrive
+[X] Actualizar los layouts con un pequeño apartado donde se diga que puede hacer el usuario en cada pantalla.
+[X] Ver si CCode me puede hacer un diagrama de clases UML. [SI] Puede hacerlo y me lo ha hecho en mermaid pero tengo que compactar eso un poco.   
+[!!] Actualizar el CLAUDE.md -> Tengo que ver de que manera me lo ha dejado porque esta tarde CCode estaba un poco raro. (15/04)
+[ ] Hacerme con el funcionamiento de OBS.
+[ ] Instalar "" para usar el móvil como webcam.
+[ ] 
+[ ]
+[ ]
 
 
 ---------------------------------- Cosas que he ido aprendiendo ----------------------------------
@@ -612,17 +691,20 @@ Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir 
 	↳ MVVM: He interiorizado que el Fragment es "tonto", solo pinta. El ViewModel es el que aguanta el tipo cuando Android destruye y recrea la pantalla (rotaciones, etc.) y expone los estados mediante StateFlow. El Fragment simplemente observa y reacciona.
 	↳ Inyección de Dependencias Manual: En vez de liarme con Hilt (que para el TFG sería overkill), he aprendido a usar la propia clase Application como contenedor Singleton. Con by lazy solo se instancia la BBDD y los Repositorios una vez al arrancar. Simple y efectivo.
 	↳ Patrón Factory: Me preguntaba por qué había que crear esas clases tan "raras" para los ViewModels. La razón es que Android crea los ViewModels él solito, pero solo sabe hacerlo si tienen el constructor vacío. Como los míos necesitan Repositorios en el constructor, la Factory le explica al sistema "oye, créalo así". El @Suppress("UNCHECKED_CAST") es para callar al compilador cuando hacemos un cast genérico que nosotros sabemos que es correcto pero él no puede verificarlo.
+	↳ Mappers como object para centralizar lógica repetida: Tras crear `PictogramaMapper` en el Sprint 5, en el Sprint 6 he creado `CategoriaMapper` siguiendo el mismo patrón. Cada vez que dos o más clases necesitan el mismo mapeo (tag → descripción, categoría → icono), lo extraigo a un `object`. Ya no me lo pienso, es automático.
 
 2. Ecosistema Android Moderno
 	↳ StateFlow y Corrutinas: He pasado de pensar en llamadas normales a pensar en flujos. Con .collect la UI se actualiza sola cada vez que cambia algo en la BBDD sin que yo tenga que hacer nada. Y repeatOnLifecycle hace que esto solo pase cuando la pantalla está visible, ahorrando batería. Al principio me parecía magia, ahora tiene todo el sentido.
 	↳ ListAdapter + DiffUtil: He aprendido que repintar todo el RecyclerView cada vez que cambia algo es una burrada. DiffUtil compara las dos listas (la vieja y la nueva) con un algoritmo inteligente y solo actualiza las tarjetas que realmente han cambiado. Elegante y eficiente.
 	↳ Navigation Component: Me ha costado entender el nav_graph.xml pero ya le veo la lógica. La diferencia clave: las flechas/actions son para navegación secuencial (donde pasas argumentos de una pantalla a otra). Los destinos del BottomNavigationView no necesitan flechas porque son de nivel superior y se accede a ellos directamente.
 	↳ Strings.xml e Internacionalización: Esto me ha parecido un descubrimiento. Aislar todos los textos en strings.xml no es solo orden, es la puerta para traducir la app entera. La teoría es crear res/values-en/strings.xml con las traducciones y Android cambia solo según el idioma del dispositivo. Una pasada lo fácil que es.
+	↳ flatMapLatest para flujos que dependen de otro flujo: En el `MainViewModel` necesitaba que el badge de notificaciones se actualizara al cambiar de usuario. Con un `collect` normal habría tenido que destruir y recrear el observer manualmente. Con `flatMapLatest` el Flow se resubscribe solo cada vez que cambia el `usuarioId`. Es el siguiente nivel después del `collect` básico que aprendí en el Sprint 2.
 
 3. Base de Datos (Room / SQLite)
 	↳ Foreign Keys y Seeds: Lo aprendí a las malas. Intenté guardar un servicio para un usuario que no existía en la BBDD y petó con "Foreign Key constraint failed". La solución fue crear un RoomDatabase.Callback (SeedDatabaseCallback) que mete los datos iniciales (usuario demo, María...) al crear la base de datos por primera vez. Ahora entiendo bien la integridad referencial.
-↳ Migraciones Destructivas: Durante el desarrollo modificas las entidades constantemente. fallbackToDestructiveMigration(false) hace que Room borre y recree la BBDD en vez de crashear cuando detecta un cambio de versión. Para producción sería un desastre, pero para desarrollo es perfecto.
+	↳ Migraciones Destructivas: Durante el desarrollo modificas las entidades constantemente. fallbackToDestructiveMigration(false) hace que Room borre y recree la BBDD en vez de crashear cuando detecta un cambio de versión. Para producción sería un desastre, pero para desarrollo es perfecto.
 	↳ Operaciones Atómicas: En vez de cargar un objeto entero en memoria para modificar un solo campo (como el saldo de horas), se puede hacer directamente con @Query("UPDATE...") en el DAO. Más limpio, más eficiente y evita condiciones de carrera.
+	↳ @Deprecated antes que migrar a las bravas: Al hacer dinámicos los pictogramas por categoría, el campo `pictogramaId` de la entidad Servicio quedó huérfano. En vez de borrarlo y meterme en una migración de Room (que ya sé cómo acaban), le puse `@Deprecated` con un comentario explicando por qué no se usa. Deuda técnica controlada y documentada. Para un MVP es la decisión correcta.
 
 4. Git, Herramientas y Resolución de Problemas
 	↳ Gestión de ramas: Ya tengo un flujo de trabajo claro. Ramas de sprint para el desarrollo normal, ramas bugfix/ para aislar correcciones concretas, y merge --no-ff para que el historial quede limpio y descriptivo. Me alegra haber cogido el hábito desde el principio.
@@ -630,7 +712,11 @@ Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir 
 	↳ Migración KAPT → KSP: En vez de pelearme para arreglar KAPT (que ya estaba deprecado), investigué la documentación y migré directamente a KSP (Kotlin Symbol Processing), que es la herramienta moderna que lo sustituye. Además compila más rápido. Conclusión: si algo está obsoleto, mejor actualizarse que parchear.
 	↳ SCRUM en la vida real: He comprobado que SCRUM tiene más flexibilidad de la que pensaba. En el Sprint 3 fui más rápido de lo previsto y absorbí trabajo de los Sprints  5 ( Historial y estadísicas). Eso es perfectamente válido, se defiende como "se adelantó trabajo del backlog al tener las dependencias ya resueltas". Lo apunto para la memoria. ;)
 	↳ Simple gana a ingenioso: Me he metido dos veces en líos gordos con Git (Sprint 5 con qwen y Sprint 6 con el BottomSheet) por complicarme con ramas de backup, detached HEAD y stash parciales cuando la solución era un `git reset --hard` al hash bueno y punto. El reflog te guarda las espaldas 30 días así que no hay riesgo real. La próxima vez que un agente de IA me sugiera crear una rama nueva para "ir sobre seguro", voy a acordarme de esto.
-(Actualizado a fin del Sprint 3 - 20.03.2026)
+	↳ Rebase interactivo para cambiar autoría: Además del cherry-pick que ya conocía, he aprendido a usar git rebase -i con --exec "git commit --amend --reset-author --no-edit" para cambiar el autor de varios commits de golpe. Muy útil cuando los commits vienen de ramas de la IA y quieres que el historial quede limpio.
+	↳ Hard reset como botón de pánico: Cuando el modelo local me ha liado el código, un git reset --hard + git clean -fd me ha dejado la rama como estaba en segundos. Trabajar con agentes de IA sin saber hacer esto sería una temeridad.
+
+(Actualizado a fin del Sprint 6 - 13.04.2026)
+
 
 (Actualizado a mediados del Sprint 4 - 25.03.2026)
 
@@ -651,16 +737,4 @@ Estoy anotando cosas  y tendré que ir sincronizandolo con github para poder ir 
 	↳ Las IAs no tienen visión de producto: He comprobado que por mucho que un modelo te proponga código limpio y buenas estructuras (como el DefaultLifecycleObserver para el TTS), no tiene ni idea de lo que tiene sentido para el usuario final. Sin que yo lo revisara, el TTS habría leído nombres de archivos internos como "bien_excelente" en vez de "Excelente", habría puesto un icono de silencio en un botón de altavoz, y habría dicho "dos punto cero horas". La IA escribe código que compila, pero el sentido común sigue siendo cosa mía.
 	↳ No todos los modelos valen para todo: He probado a usar un modelo local (qwen3-coder:30b) para tareas que creía mecánicas y me ha liado parda. Se ha puesto a escribir Java en vez de Kotlin y se ha saltado el plan entero. Conclusión: los modelos pequeños sin thinking van bien para cosas muy simples tipo chore, pero para integrar lógica en la UI hay que tirar de Sonnet o Opus que saben razonar antes de actuar.
 	↳ Claude Code por web cuando la CLI no va: Cuando Zscaler me ha bloqueado la consola en el trabajo, he podido tirar por claude.ai/code subiendo el contexto al repo remoto. Me ha generado una PR con todos los commits del plan. No es lo ideal pero es un plan B que funciona.
-
-6. Git Avanzado
-	↳ Rebase interactivo para cambiar autoría: Además del cherry-pick que ya conocía, he aprendido a usar git rebase -i con --exec "git commit --amend --reset-author --no-edit" para cambiar el autor de varios commits de golpe. Muy útil cuando los commits vienen de ramas de la IA y quieres que el historial quede limpio.
-	↳ Hard reset como botón de pánico: Cuando el modelo local me ha liado el código, un git reset --hard + git clean -fd me ha dejado la rama como estaba en segundos. Trabajar con agentes de IA sin saber hacer esto sería una temeridad.
-
-(Actualizado a mediados del Sprint 5 - 31.03.2026)
-
-
-------------Fundamentos/Ideas para hacer el trabajo Escrito------------
-- Seprar cada Sprint explicando como he ido econtrandome con problemas y soluciones.
-- He detectado una gran necesidad de organización y de esctructuración de conocimientos, detalles y cosas que se han hecho. Estoy abriendo muchos chats independietes entre sí y cada uno especializado en algo(git, planificador, programador,solucion de errores, sugiriente de memorias y alguna cosa más que ahora no recuerdo). Para ello utilizaré NoteBookLM. Le volcaré archivos de texto con los historiales de cada chat.
-
-
+	

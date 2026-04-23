@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- ═══ Paleta VecindApp ═══ -->
-    <color name="verde_vecindapp_principal">#2E8B57</color>
-    <color name="verde_vecindapp_oscuro">#1B5E38</color>
-    <color name="verde_vecindapp_claro">#A8D5BA</color>
-    <color name="naranja_acento">#E76F51</color>
-    <color name="naranja_claro">#F4A261</color>
-    <color name="fondo_app">#F4F7F5</color>
+    <!-- ═══ Paleta VecindApp (Teal + Coral) ═══ -->
+    <color name="teal_vecindapp">#0F6B7A</color>
+    <color name="teal_vecindapp_oscuro">#094A55</color>
+    <color name="coral_acento">#E97A4D</color>
+    <color name="coral_acento_oscuro">#D0613A</color>
+    <!-- Fondo general: tintado con teal muy claro (niebla teal) -->
+    <color name="fondo_teal">#E7F1F2</color>
+    <!-- Superficie de tarjetas / diálogos / bottom sheets: sand cálido -->
+    <color name="sand_dark">#f6f4ee</color>
+    <!-- Blanco puro: texto sobre teal/coral, fondo de icono y splash -->
     <color name="blanco_tarjetas">#FFFFFF</color>
-    <color name="texto_principal">#2D3436</color>
-    <color name="texto_secundario">#636E72</color>
+    <color name="texto_ink">#0E1A2B</color>
+    <color name="texto_secundario">#4A5568</color>
 
     <!-- Alias para compatibilidad -->
     <color name="black">#FF000000</color>

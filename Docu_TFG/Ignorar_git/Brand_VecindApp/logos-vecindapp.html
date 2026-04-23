@@ -1,0 +1,804 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>VecindApp — Exploración de logos</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;font-family: Inter, -apple-system, "Segoe UI", sans-serif;}
+  .tag{display:inline-block;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#6b6358;background:#fff;border:1px solid rgba(0,0,0,0.08);padding:3px 8px;border-radius:2px;margin-right:6px;}
+  .swatch{display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:4px;vertical-align:-2px;border:1px solid rgba(0,0,0,0.08);}
+  .row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .mini{background:#f6f4ee;padding:16px;border-radius:4px;display:flex;gap:12px;align-items:center;}
+  .name{font-weight:600;color:#0e1a2b;font-size:13px;margin-bottom:2px;}
+  .note{font-size:12px;color:#5b6b82;line-height:1.45;}
+  .wordmark{font-weight:700;font-size:22px;letter-spacing:-0.02em;color:#0e1a2b;}
+  .wordmark .em{color:#0f6b7a;}
+  .wordmark .dot{color:#e97a4d;}
+  .iconsize-48{filter:drop-shadow(0 1px 2px rgba(0,0,0,0.18));}
+  .phone{
+    width: 240px; height: 360px; background:#0e1a2b; border-radius: 28px; position: relative;
+    box-shadow: 0 14px 40px rgba(14,26,43,0.22), 0 2px 6px rgba(14,26,43,0.18);
+    overflow: hidden;
+  }
+  .phone .status{position:absolute;top:8px;left:0;right:0;display:flex;justify-content:space-between;padding:0 20px;color:#fff;font-size:10px;opacity:0.8;}
+  .phone .grid-apps{position:absolute;top:40px;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);padding:20px;gap:18px 10px;}
+  .phone .app{display:flex;flex-direction:column;align-items:center;gap:5px;}
+  .phone .app .lbl{font-size:9px;color:#fff;opacity:0.85;}
+  .phone .app .ic{width:44px;height:44px;background:rgba(255,255,255,0.14);border-radius:10px;}
+  .phone .highlight .ic{background:transparent;border-radius:0;padding:0;}
+  .phone .home{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:80px;height:4px;background:#fff;border-radius:2px;opacity:0.6;}
+  .grid12{
+    display:grid; grid-template-columns:repeat(2,200px); gap:18px;
+  }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+
+// DesignCanvas.jsx — Figma-ish design canvas wrapper
+// Warm gray grid bg + Sections + Artboards + PostIt notes.
+// No assets, no deps.
+
+const DC = {
+  bg: '#f0eee9',
+  grid: 'rgba(0,0,0,0.06)',
+  label: 'rgba(60,50,40,0.7)',
+  title: 'rgba(40,30,20,0.85)',
+  subtitle: 'rgba(60,50,40,0.6)',
+  postitBg: '#fef4a8',
+  postitText: '#5a4a2a',
+  font: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
+};
+
+// ─────────────────────────────────────────────────────────────
+// Main canvas — transform-based pan/zoom viewport
+//
+// Input mapping (Figma-style):
+//   • trackpad pinch  → zoom   (ctrlKey wheel; Safari gesture* events)
+//   • trackpad scroll → pan    (two-finger)
+//   • mouse wheel     → zoom   (notched; distinguished from trackpad scroll)
+//   • middle-drag / primary-drag-on-bg → pan
+//
+// Transform state lives in a ref and is written straight to the DOM
+// (translate3d + will-change) so wheel ticks don't go through React —
+// keeps pans at 60fps on dense canvases.
+// ─────────────────────────────────────────────────────────────
+function DesignCanvas({ children, minScale = 0.1, maxScale = 8, style = {} }) {
+  const vpRef = React.useRef(null);
+  const worldRef = React.useRef(null);
+  const tf = React.useRef({ x: 0, y: 0, scale: 1 });
+
+  const apply = React.useCallback(() => {
+    const { x, y, scale } = tf.current;
+    const el = worldRef.current;
+    if (el) el.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
+  }, []);
+
+  React.useEffect(() => {
+    const vp = vpRef.current;
+    if (!vp) return;
+
+    const zoomAt = (cx, cy, factor) => {
+      const r = vp.getBoundingClientRect();
+      const px = cx - r.left, py = cy - r.top;
+      const t = tf.current;
+      const next = Math.min(maxScale, Math.max(minScale, t.scale * factor));
+      const k = next / t.scale;
+      // keep the world point under the cursor fixed
+      t.x = px - (px - t.x) * k;
+      t.y = py - (py - t.y) * k;
+      t.scale = next;
+      apply();
+    };
+
+    // Mouse-wheel vs trackpad-scroll heuristic. A physical wheel sends
+    // line-mode deltas (Firefox) or large integer pixel deltas with no X
+    // component (Chrome/Safari, typically multiples of 100/120). Trackpad
+    // two-finger scroll sends small/fractional pixel deltas, often with
+    // non-zero deltaX. ctrlKey is set by the browser for trackpad pinch.
+    const isMouseWheel = (e) =>
+      e.deltaMode !== 0 ||
+      (e.deltaX === 0 && Number.isInteger(e.deltaY) && Math.abs(e.deltaY) >= 40);
+
+    const onWheel = (e) => {
+      e.preventDefault();
+      if (isGesturing) return; // Safari: gesture* owns the pinch — discard concurrent wheels
+      if (e.ctrlKey) {
+        // trackpad pinch (or explicit ctrl+wheel)
+        zoomAt(e.clientX, e.clientY, Math.exp(-e.deltaY * 0.01));
+      } else if (isMouseWheel(e)) {
+        // notched mouse wheel — fixed-ratio step per click
+        zoomAt(e.clientX, e.clientY, Math.exp(-Math.sign(e.deltaY) * 0.18));
+      } else {
+        // trackpad two-finger scroll — pan
+        tf.current.x -= e.deltaX;
+        tf.current.y -= e.deltaY;
+        apply();
+      }
+    };
+
+    // Safari sends native gesture* events for trackpad pinch with a smooth
+    // e.scale; preferring these over the ctrl+wheel fallback gives a much
+    // better feel there. No-ops on other browsers. Safari also fires
+    // ctrlKey wheel events during the same pinch — isGesturing makes
+    // onWheel drop those entirely so they neither zoom nor pan.
+    let gsBase = 1;
+    let isGesturing = false;
+    const onGestureStart = (e) => { e.preventDefault(); isGesturing = true; gsBase = tf.current.scale; };
+    const onGestureChange = (e) => {
+      e.preventDefault();
+      zoomAt(e.clientX, e.clientY, (gsBase * e.scale) / tf.current.scale);
+    };
+    const onGestureEnd = (e) => { e.preventDefault(); isGesturing = false; };
+
+    // Drag-pan: middle button anywhere, or primary button starting on the
+    // canvas background (not inside an artboard).
+    let drag = null;
+    const onPointerDown = (e) => {
+      const onBg = e.target === vp || e.target === worldRef.current;
+      if (!(e.button === 1 || (e.button === 0 && onBg))) return;
+      e.preventDefault();
+      vp.setPointerCapture(e.pointerId);
+      drag = { id: e.pointerId, lx: e.clientX, ly: e.clientY };
+      vp.style.cursor = 'grabbing';
+    };
+    const onPointerMove = (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      tf.current.x += e.clientX - drag.lx;
+      tf.current.y += e.clientY - drag.ly;
+      drag.lx = e.clientX; drag.ly = e.clientY;
+      apply();
+    };
+    const onPointerUp = (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      vp.releasePointerCapture(e.pointerId);
+      drag = null;
+      vp.style.cursor = '';
+    };
+
+    vp.addEventListener('wheel', onWheel, { passive: false });
+    vp.addEventListener('gesturestart', onGestureStart, { passive: false });
+    vp.addEventListener('gesturechange', onGestureChange, { passive: false });
+    vp.addEventListener('gestureend', onGestureEnd, { passive: false });
+    vp.addEventListener('pointerdown', onPointerDown);
+    vp.addEventListener('pointermove', onPointerMove);
+    vp.addEventListener('pointerup', onPointerUp);
+    vp.addEventListener('pointercancel', onPointerUp);
+    return () => {
+      vp.removeEventListener('wheel', onWheel);
+      vp.removeEventListener('gesturestart', onGestureStart);
+      vp.removeEventListener('gesturechange', onGestureChange);
+      vp.removeEventListener('gestureend', onGestureEnd);
+      vp.removeEventListener('pointerdown', onPointerDown);
+      vp.removeEventListener('pointermove', onPointerMove);
+      vp.removeEventListener('pointerup', onPointerUp);
+      vp.removeEventListener('pointercancel', onPointerUp);
+    };
+  }, [apply, minScale, maxScale]);
+
+  const gridSvg = `url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M120 0H0v120' fill='none' stroke='${encodeURIComponent(DC.grid)}' stroke-width='1'/%3E%3C/svg%3E")`;
+  return (
+    <div
+      ref={vpRef}
+      className="design-canvas"
+      style={{
+        height: '100vh', width: '100vw',
+        background: DC.bg,
+        overflow: 'hidden',
+        overscrollBehavior: 'none',
+        touchAction: 'none',
+        position: 'relative',
+        fontFamily: DC.font,
+        boxSizing: 'border-box',
+        ...style,
+      }}
+    >
+      <div
+        ref={worldRef}
+        style={{
+          position: 'absolute', top: 0, left: 0,
+          transformOrigin: '0 0',
+          willChange: 'transform',
+          width: 'max-content', minWidth: '100%',
+          minHeight: '100%',
+          padding: '60px 0 80px',
+          backgroundImage: gridSvg,
+          backgroundSize: '120px 120px',
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Section — title + subtitle + h-stack of artboards (no wrap)
+// ─────────────────────────────────────────────────────────────
+function DCSection({ title, subtitle, children, gap = 48 }) {
+  return (
+    <div style={{ marginBottom: 80, position: 'relative' }}>
+      <div style={{ padding: '0 60px 36px' }}>
+        <div style={{
+          fontSize: 22, fontWeight: 600, color: DC.title,
+          letterSpacing: -0.3, marginBottom: 4,
+        }}>{title}</div>
+        {subtitle && (
+          <div style={{
+            fontSize: 14, fontWeight: 400, color: DC.subtitle,
+          }}>{subtitle}</div>
+        )}
+      </div>
+      {/* h-stack — clips offscreen, never wraps */}
+      <div style={{
+        display: 'flex', gap, padding: '0 60px',
+        alignItems: 'flex-start', width: 'max-content',
+      }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Artboard — labeled card
+// ─────────────────────────────────────────────────────────────
+function DCArtboard({ label, children, width, height, style = {} }) {
+  return (
+    <div style={{ position: 'relative', flexShrink: 0 }}>
+      {label && (
+        <div style={{
+          position: 'absolute', bottom: '100%', left: 0,
+          paddingBottom: 8,
+          fontSize: 12, fontWeight: 500, color: DC.label,
+          whiteSpace: 'nowrap',
+        }}>{label}</div>
+      )}
+      <div style={{
+        borderRadius: 2,
+        boxShadow: '0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06)',
+        overflow: 'hidden',
+        width, height,
+        background: '#fff',
+        ...style,
+      }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Post-it — absolute-positioned sticky note
+// ─────────────────────────────────────────────────────────────
+function DCPostIt({ children, top, left, right, bottom, rotate = -2, width = 180 }) {
+  return (
+    <div style={{
+      position: 'absolute', top, left, right, bottom, width,
+      background: DC.postitBg, padding: '14px 16px',
+      fontFamily: '"Comic Sans MS", "Marker Felt", "Segoe Print", cursive',
+      fontSize: 14, lineHeight: 1.4, color: DC.postitText,
+      boxShadow: '0 2px 8px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08)',
+      transform: `rotate(${rotate}deg)`,
+      zIndex: 5,
+    }}>{children}</div>
+  );
+}
+
+Object.assign(window, { DesignCanvas, DCSection, DCArtboard, DCPostIt });
+
+
+</script>
+<script type="text/babel">
+// All VecindApp logo marks — pure SVG components
+// Palette: teal primary + warm coral accent
+const P = {
+  teal: '#0f6b7a',
+  tealDark: '#094a55',
+  tealLight: '#3a95a3',
+  coral: '#e97a4d',
+  coralDark: '#c25d33',
+  sand: '#f6f4ee',
+  ink: '#0e1a2b',
+  paper: '#ffffff',
+};
+
+// helper: make a rounded-square tile (Android app-icon adaptive mask)
+function Tile({ bg, children, size = 200, radius = 46 }) {
+  return (
+    <svg viewBox="0 0 200 200" width={size} height={size} style={{ display: 'block' }}>
+      <rect x="0" y="0" width="200" height="200" rx={radius} fill={bg} />
+      {children}
+    </svg>
+  );
+}
+
+// ──────────────────────────────────────────────────────────
+// 01 — "HOME-PIN"  casa + pin de ubicación fusionados
+//     punto cálido = saldo de horas
+// ──────────────────────────────────────────────────────────
+function Mark01({ size = 200 }) {
+  return (
+    <Tile bg={P.teal} size={size}>
+      {/* pin silhouette */}
+      <path
+        d="M100 36c-30 0-52 22-52 50 0 30 36 68 52 84 16-16 52-54 52-84 0-28-22-50-52-50z"
+        fill="#fff"
+      />
+      {/* house cut into pin */}
+      <path
+        d="M100 60 L72 82 L72 112 L90 112 L90 96 L110 96 L110 112 L128 112 L128 82 Z"
+        fill={P.teal}
+      />
+      {/* warm dot — hour */}
+      <circle cx="100" cy="88" r="7" fill={P.coral} />
+    </Tile>
+  );
+}
+
+// ──────────────────────────────────────────────────────────
+// 02 — "CLOCK-HOUSE"  reloj con tejado (banco de tiempo + casa)
+// ──────────────────────────────────────────────────────────
+function Mark02({ size = 200 }) {
+  return (
+    <Tile bg={P.sand} size={size}>
+      {/* roof */}
+      <path d="M40 80 L100 38 L160 80 Z" fill={P.coral} />
+      {/* clock body */}
+      <circle cx="100" cy="118" r="48" fill={P.teal} />
+      <circle cx="100" cy="118" r="38" fill={P.paper} />
+      {/* hands */}
+      <line x1="100" y1="118" x2="100" y2="90" stroke={P.teal} strokeWidth="5" strokeLinecap="round" />
+      <line x1="100" y1="118" x2="120" y2="118" stroke={P.coral} strokeWidth="5" strokeLinecap="round" />
+      <circle cx="100" cy="118" r="4" fill={P.tealDark} />
+      {/* 12 marks */}
+      {[0,3,6,9].map(i=>{
+        const a = (i/12)*Math.PI*2 - Math.PI/2;
+        const x1 = 100 + Math.cos(a)*33, y1 = 118 + Math.sin(a)*33;
+        const x2 = 100 + Math.cos(a)*38, y2 = 118 + Math.sin(a)*38;
+        return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={P.teal} strokeWidth="3" strokeLinecap="round" />;
+      })}
+    </Tile>
+  );
+}
+
+// ──────────────────────────────────────────────────────────
+// 03 — "HAND-HEART-ROOF"  tejado + corazón + mano (acogida)
+// ──────────────────────────────────────────────────────────
+function Mark03({ size = 200 }) {
+  return (
+    <Tile bg={P.paper} size={size}>
+      {/* teal house block */}
+      <rect x="36" y="84" width="128" height="92" rx="8" fill={P.teal}/>
+      {/* roof */}
+      <path d="M28 92 L100 40 L172 92 Z" fill={P.tealDark}/>
+      {/* heart inside */}
+      <path
+        d="M100 160
+           C 70 138, 58 120, 68 104
+           C 76 92, 90 94, 100 108
+           C 110 94, 124 92, 132 104
+           C 142 120, 130 138, 100 160 Z"
+        fill={P.coral}
+      />
+      {/* chimney */}
+      <rect x="130" y="58" width="14" height="20" fill={P.coral}/>
+    </Tile>
+  );
+}
+
+// ──────────────────────────────────────────────────────────
+// 04 — "V-NETWORK"  letra V formada por nodos/red de personas
+// ──────────────────────────────────────────────────────────
+function Mark04({ size = 200 }) {
+  const nodes = [
+    [48, 50], [88, 50], [128, 50], [168, 50],
+    [68, 96], [108, 96], [148, 96],
+    [88, 142], [128, 142],
+    [108, 178],
+  ];
+  const lines = [
+    [0,4],[1,4],[1,5],[2,5],[2,6],[3,6],
+    [4,7],[5,7],[5,8],[6,8],
+    [7,9],[8,9],
+  ];
+  return (
+    <Tile bg={P.tealDark} size={size}>
+      {lines.map(([a,b],i)=>(
+        <line key={i}
+          x1={nodes[a][0]} y1={nodes[a][1]}
+          x2={nodes[b][0]} y2={nodes[b][1]}
+          stroke="rgba(255,255,255,0.25)" strokeWidth="2"
+        />
+      ))}
+      {nodes.map(([x,y],i)=>{
+        const isAccent = i===0 || i===3 || i===9;
+        return <circle key={i} cx={x} cy={y} r={i===9?10:8}
+          fill={isAccent ? P.coral : '#fff'} />;
+      })}
+    </Tile>
+  );
+}
+
+// ──────────────────────────────────────────────────────────
+// 05 — "SPEECH-HOUSE"  burbuja de diálogo con tejado
+// ──────────────────────────────────────────────────────────
+function Mark05({ size = 200 }) {
+  return (
+    <Tile bg={P.coral} size={size}>
+      {/* speech bubble */}
+      <path
+        d="M50 56 H150 a16 16 0 0 1 16 16 v60 a16 16 0 0 1 -16 16 H120 L96 170 L98 148 H50 a16 16 0 0 1 -16 -16 V72 a16 16 0 0 1 16 -16 z"
+        fill={P.paper}
+      />
+      {/* roof inside bubble */}
+      <path d="M58 90 L100 62 L142 90 Z" fill={P.teal}/>
+      {/* door suggesting hour "I" */}
+      <rect x="94" y="100" width="12" height="30" rx="2" fill={P.teal}/>
+    </Tile>
+  );
+}
+
+// ──────────────────────────────────────────────────────────
+// 06 — "GEO ABSTRACT"  hexágono modular (barrio + red)
+// ──────────────────────────────────────────────────────────
+function Mark06({ size = 200 }) {
+  // seven hexagon grid, centered hex cut as a house/V
+  const hex = (cx, cy, r=22) => {
+    const pts = [];
+    for (let i=0;i<6;i++){
+      const a = (i/6)*Math.PI*2 + Math.PI/6;
+      pts.push([cx + Math.cos(a)*r, cy + Math.sin(a)*r]);
+    }
+    return pts.map(p=>p.join(',')).join(' ');
+  };
+  const r = 26;
+  const dx = r * Math.sqrt(3);
+  const dy = r * 1.5;
+  const centers = [
+    [100, 100],
+    [100 - dx, 100 - dy], [100 + dx, 100 - dy],
+    [100 - dx, 100 + dy], [100 + dx, 100 + dy],
+    [100, 100 - dy*2], [100, 100 + dy*2],
+  ];
+  return (
+    <Tile bg={P.paper} size={size}>
+      {centers.map((c,i)=>(
+        <polygon key={i} points={hex(c[0],c[1],22)}
+          fill={i===0 ? P.coral : (i%2===0 ? P.teal : P.tealLight)}/>
+      ))}
+      {/* house cut in center */}
+      <path d="M88 106 L100 94 L112 106 L112 114 L104 114 L104 108 L96 108 L96 114 L88 114 Z" fill="#fff"/>
+    </Tile>
+  );
+}
+
+// ──────────────────────────────────────────────────────────
+// 07 — "V MONOGRAM"  V tipográfica con tejado incorporado
+// ──────────────────────────────────────────────────────────
+function Mark07({ size = 200 }) {
+  return (
+    <Tile bg={P.paper} size={size}>
+      {/* teal V */}
+      <path
+        d="M44 52 H78 L100 132 L122 52 H156 L118 172 H82 Z"
+        fill={P.teal}
+      />
+      {/* little roof above apex — forms tiny house */}
+      <path d="M86 42 L100 28 L114 42 Z" fill={P.coral}/>
+      {/* hour dot in V valley */}
+      <circle cx="100" cy="150" r="8" fill={P.coral}/>
+    </Tile>
+  );
+}
+
+// ──────────────────────────────────────────────────────────
+// 08 — "HANDS-ROOF"  dos manos formando tejado (apoyo mutuo)
+// ──────────────────────────────────────────────────────────
+function Mark08({ size = 200 }) {
+  return (
+    <Tile bg={P.teal} size={size}>
+      {/* left hand */}
+      <path
+        d="M40 140 L40 108 Q40 96 52 92 L86 80 Q94 78 100 86 L100 118 Z"
+        fill="#fff"
+      />
+      {/* right hand */}
+      <path
+        d="M160 140 L160 108 Q160 96 148 92 L114 80 Q106 78 100 86 L100 118 Z"
+        fill="#fff"
+      />
+      {/* heart cradled */}
+      <path
+        d="M100 146
+           C 82 130, 72 118, 80 106
+           C 86 98, 96 100, 100 110
+           C 104 100, 114 98, 120 106
+           C 128 118, 118 130, 100 146 Z"
+        fill={P.coral}
+      />
+      {/* roofline accent */}
+      <path d="M38 88 L100 44 L162 88" stroke={P.coral} strokeWidth="6" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+    </Tile>
+  );
+}
+
+// ──────────────────────────────────────────────────────────
+// 09 — "PICTO-STYLE"  ARASAAC-inspired: vecinos y casa
+// ──────────────────────────────────────────────────────────
+function Mark09({ size = 200 }) {
+  return (
+    <Tile bg="#fff9f0" size={size}>
+      {/* ground */}
+      <rect x="0" y="160" width="200" height="40" fill={P.sand}/>
+      {/* house */}
+      <rect x="62" y="72" width="76" height="88" fill={P.coral}/>
+      <path d="M52 78 L100 40 L148 78 Z" fill={P.tealDark}/>
+      <rect x="90" y="110" width="20" height="50" fill={P.tealDark}/>
+      <rect x="74" y="92" width="14" height="14" fill="#fff"/>
+      <rect x="112" y="92" width="14" height="14" fill="#fff"/>
+      {/* neighbor left */}
+      <circle cx="34" cy="124" r="10" fill={P.tealDark} stroke="#000" strokeWidth="2"/>
+      <path d="M20 160 Q20 138 34 138 Q48 138 48 160 Z" fill={P.teal} stroke="#000" strokeWidth="2"/>
+      {/* neighbor right */}
+      <circle cx="166" cy="124" r="10" fill={P.tealDark} stroke="#000" strokeWidth="2"/>
+      <path d="M152 160 Q152 138 166 138 Q180 138 180 160 Z" fill={P.teal} stroke="#000" strokeWidth="2"/>
+      {/* hard outlines on house */}
+      <path d="M52 78 L100 40 L148 78 M62 72 V160 H138 V72" fill="none" stroke="#000" strokeWidth="2.5"/>
+    </Tile>
+  );
+}
+
+// ──────────────────────────────────────────────────────────
+// 10 — "TIME-ROOF"  reloj estilizado con aguja = tejado
+// ──────────────────────────────────────────────────────────
+function Mark10({ size = 200 }) {
+  return (
+    <Tile bg={P.paper} size={size}>
+      <circle cx="100" cy="100" r="70" fill={P.teal}/>
+      <circle cx="100" cy="100" r="58" fill={P.paper}/>
+      {/* roof-shaped hand from center toward 12 */}
+      <path d="M100 100 L78 62 L100 48 L122 62 Z" fill={P.coral}/>
+      {/* short hand toward 4 */}
+      <line x1="100" y1="100" x2="130" y2="118" stroke={P.teal} strokeWidth="7" strokeLinecap="round"/>
+      <circle cx="100" cy="100" r="6" fill={P.tealDark}/>
+      {/* ticks */}
+      {Array.from({length:12}).map((_,i)=>{
+        const a = (i/12)*Math.PI*2 - Math.PI/2;
+        const x1 = 100 + Math.cos(a)*54, y1 = 100 + Math.sin(a)*54;
+        const x2 = 100 + Math.cos(a)*50, y2 = 100 + Math.sin(a)*50;
+        return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={P.teal} strokeWidth="3" strokeLinecap="round"/>;
+      })}
+    </Tile>
+  );
+}
+
+// ──────────────────────────────────────────────────────────
+// 11 — "BARRIO BLOCK"  tres casas / bloque vecinal
+// ──────────────────────────────────────────────────────────
+function Mark11({ size = 200 }) {
+  return (
+    <Tile bg={P.teal} size={size}>
+      {/* three roofs */}
+      <path d="M30 100 L60 66 L90 100 Z" fill={P.coral}/>
+      <path d="M75 100 L100 58 L125 100 Z" fill="#fff"/>
+      <path d="M110 100 L140 66 L170 100 Z" fill={P.coral}/>
+      {/* house bodies */}
+      <rect x="38" y="100" width="44" height="58" fill="#fff"/>
+      <rect x="80" y="100" width="40" height="58" fill={P.coral}/>
+      <rect x="118" y="100" width="44" height="58" fill="#fff"/>
+      {/* doors */}
+      <rect x="56" y="128" width="10" height="30" fill={P.teal}/>
+      <rect x="95" y="128" width="10" height="30" fill={P.teal}/>
+      <rect x="134" y="128" width="10" height="30" fill={P.teal}/>
+    </Tile>
+  );
+}
+
+// ──────────────────────────────────────────────────────────
+// 12 — "CIRCLE V"  círculo con V estilizada  (minimalista)
+// ──────────────────────────────────────────────────────────
+function Mark12({ size = 200 }) {
+  return (
+    <Tile bg={P.paper} size={size}>
+      <circle cx="100" cy="100" r="78" fill={P.teal}/>
+      {/* V with soft corners */}
+      <path
+        d="M56 64 Q56 58 62 58 L78 58 Q84 58 86 64 L100 118 L114 64 Q116 58 122 58 L138 58 Q144 58 144 64 L114 154 Q110 164 100 164 Q90 164 86 154 Z"
+        fill="#fff"
+      />
+      <circle cx="100" cy="150" r="8" fill={P.coral}/>
+    </Tile>
+  );
+}
+
+Object.assign(window, {
+  Mark01, Mark02, Mark03, Mark04, Mark05, Mark06,
+  Mark07, Mark08, Mark09, Mark10, Mark11, Mark12,
+  LOGO_PALETTE: P,
+});
+
+</script>
+<script type="text/babel">
+const { useState } = React;
+
+const MARKS = [
+  { C: Mark01, name: "01 · Home-Pin",      note: "Casa + pin + punto horas",         tags:["Pin","Casa","Horas"] },
+  { C: Mark02, name: "02 · Clock-House",   note: "Reloj con tejado-fachada",          tags:["Reloj","Casa"] },
+  { C: Mark03, name: "03 · Hand-Heart-Roof", note: "Casa que acoge corazón",        tags:["Casa","Corazón"] },
+  { C: Mark04, name: "04 · V-Network",     note: "V dibujada por nodos conectados",  tags:["Red","Abstracto","Monograma"] },
+  { C: Mark05, name: "05 · Speech-House",  note: "Burbuja de diálogo con casa",      tags:["Diálogo","Casa"] },
+  { C: Mark06, name: "06 · Geo Hex",       note: "Hexágonos = barrio modular",       tags:["Abstracto","Barrio"] },
+  { C: Mark07, name: "07 · V Monogram",    note: "V con tejadillo + punto",          tags:["Monograma","Casa"] },
+  { C: Mark08, name: "08 · Hands-Roof",    note: "Dos manos sosteniendo corazón",    tags:["Manos","Corazón"] },
+  { C: Mark09, name: "09 · Picto ARASAAC", note: "Estilo pictograma (outline)",      tags:["ARASAAC","Accesibilidad"] },
+  { C: Mark10, name: "10 · Time-Roof",     note: "Reloj con aguja-tejado",           tags:["Reloj","Casa"] },
+  { C: Mark11, name: "11 · Barrio Block",  note: "Tres casas = bloque vecinal",      tags:["Barrio","Casa"] },
+  { C: Mark12, name: "12 · Circle V",      note: "V centrada en círculo (minimal)",  tags:["Monograma","Minimal"] },
+];
+
+function Palette(){
+  return (
+    <div className="row" style={{padding:"16px 20px",background:"#fff",borderRadius:4,boxShadow:"0 1px 3px rgba(0,0,0,0.06)"}}>
+      <b style={{fontSize:13}}>Paleta</b>
+      <span><span className="swatch" style={{background:"#0f6b7a"}}></span>Teal #0f6b7a</span>
+      <span><span className="swatch" style={{background:"#094a55"}}></span>Teal Dark #094a55</span>
+      <span><span className="swatch" style={{background:"#e97a4d"}}></span>Coral #e97a4d</span>
+      <span><span className="swatch" style={{background:"#f6f4ee"}}></span>Sand #f6f4ee</span>
+      <span><span className="swatch" style={{background:"#0e1a2b"}}></span>Ink #0e1a2b</span>
+    </div>
+  );
+}
+
+function LogoCell({C, name, note, tags}){
+  return (
+    <DCArtboard label={name} width={436} height={520}>
+      <div style={{padding:20, display:"flex", flexDirection:"column", height:"100%", gap:14}}>
+        {/* big */}
+        <div style={{background:"#f6f4ee",borderRadius:4,padding:20,display:"flex",alignItems:"center",justifyContent:"center",flex:"0 0 auto"}}>
+          <C size={200}/>
+        </div>
+
+        <div className="note">{note}</div>
+        <div className="row" style={{gap:6}}>
+          {tags.map(t=><span key={t} className="tag">{t}</span>)}
+        </div>
+
+        {/* lockup */}
+        <div style={{background:"#fff",border:"1px solid #e4eaf2",borderRadius:4,padding:"10px 14px",display:"flex",alignItems:"center",gap:14}}>
+          <C size={52}/>
+          <div className="wordmark">Vecind<span className="em">App</span><span className="dot">.</span></div>
+        </div>
+
+        {/* sizes */}
+        <div className="mini">
+          <div style={{textAlign:"center"}}>
+            <C size={96}/>
+            <div style={{fontSize:10,color:"#6b6358",marginTop:4}}>96 px</div>
+          </div>
+          <div style={{textAlign:"center"}}>
+            <C size={48}/>
+            <div style={{fontSize:10,color:"#6b6358",marginTop:4}}>48 px · app</div>
+          </div>
+          <div style={{textAlign:"center"}}>
+            <C size={24}/>
+            <div style={{fontSize:10,color:"#6b6358",marginTop:4}}>24 px</div>
+          </div>
+          <div style={{textAlign:"center"}}>
+            <div style={{background:"#0e1a2b",padding:6,borderRadius:4,display:"inline-block"}}>
+              <C size={48}/>
+            </div>
+            <div style={{fontSize:10,color:"#6b6358",marginTop:4}}>dark bg</div>
+          </div>
+        </div>
+      </div>
+    </DCArtboard>
+  );
+}
+
+function HomeScreen({C}){
+  const fakeApps = [
+    {lbl:"Ajustes"},{lbl:"Correo"},{lbl:"Teléfono"},{lbl:"Mapas"},
+    {lbl:"Galería"},{lbl:"Cámara"},{lbl:"Reloj"},{lbl:"Calendario"},
+  ];
+  return (
+    <div className="phone">
+      <div className="status"><span>9:41</span><span>●  ●●●</span></div>
+      <div className="grid-apps">
+        <div className="app highlight">
+          <div className="ic"><C size={44}/></div>
+          <div className="lbl" style={{fontWeight:700}}>VecindApp</div>
+        </div>
+        {fakeApps.map((a,i)=>(
+          <div key={i} className="app">
+            <div className="ic"></div>
+            <div className="lbl">{a.lbl}</div>
+          </div>
+        ))}
+      </div>
+      <div className="home"/>
+    </div>
+  );
+}
+
+function App(){
+  return (
+    <DesignCanvas>
+      <div style={{padding:"0 60px 12px"}}>
+        <div style={{fontSize:32,fontWeight:700,color:"#0e1a2b",letterSpacing:-0.5}}>
+          VecindApp <span style={{color:"#0f6b7a"}}>— Exploración de marca</span>
+        </div>
+        <div style={{fontSize:14,color:"#5b6b82",marginTop:6,maxWidth:760}}>
+          12 direcciones: casa/barrio, pin, reloj, red, diálogo, corazón, monograma, manos, pictograma ARASAAC y abstractos. Bicolor teal + coral. Pensadas como isotipo para icono Android (adaptativo, funciona a 48&nbsp;px).
+        </div>
+        <div style={{marginTop:16}}><Palette/></div>
+      </div>
+
+      <DCSection title="12 direcciones" subtitle="Cada tarjeta: ampliación, lockup con wordmark y pruebas a 96 / 48 / 24 px y sobre fondo oscuro.">
+        {MARKS.slice(0,4).map((m,i)=><LogoCell key={i} {...m}/>)}
+      </DCSection>
+      <DCSection title=" " subtitle="">
+        {MARKS.slice(4,8).map((m,i)=><LogoCell key={i+4} {...m}/>)}
+      </DCSection>
+      <DCSection title=" " subtitle="">
+        {MARKS.slice(8,12).map((m,i)=><LogoCell key={i+8} {...m}/>)}
+      </DCSection>
+
+      <DCSection title="En el launcher" subtitle="Cómo se ve cada icono cuando vive entre otras apps del teléfono.">
+        {MARKS.map((m,i)=>(
+          <DCArtboard key={i} label={m.name} width={260} height={400}>
+            <div style={{padding:10,display:"flex",justifyContent:"center",alignItems:"center",height:"100%",background:"linear-gradient(160deg,#2a3a52,#0e1a2b)"}}>
+              <HomeScreen C={m.C}/>
+            </div>
+          </DCArtboard>
+        ))}
+      </DCSection>
+
+      <DCSection title="Wordmark · lockups alternativos" subtitle="Horizontal, centrado y monocromo.">
+        <DCArtboard label="Horizontal teal/coral" width={520} height={200}>
+          <div style={{height:"100%",display:"flex",alignItems:"center",justifyContent:"center",gap:20,background:"#fff"}}>
+            <Mark01 size={92}/>
+            <div style={{fontSize:44,fontWeight:700,letterSpacing:-0.02,color:"#0e1a2b"}}>
+              Vecind<span style={{color:"#0f6b7a"}}>App</span><span style={{color:"#e97a4d"}}>.</span>
+            </div>
+          </div>
+        </DCArtboard>
+        <DCArtboard label="Centrado" width={360} height={300}>
+          <div style={{height:"100%",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:14,background:"#f6f4ee"}}>
+            <Mark07 size={120}/>
+            <div style={{fontSize:32,fontWeight:700,letterSpacing:-0.02,color:"#0e1a2b"}}>
+              Vecind<span style={{color:"#0f6b7a"}}>App</span>
+            </div>
+            <div style={{fontSize:11,color:"#5b6b82",letterSpacing:"0.2em",textTransform:"uppercase"}}>
+              Banco de tiempo vecinal
+            </div>
+          </div>
+        </DCArtboard>
+        <DCArtboard label="Monocromo oscuro" width={360} height={300}>
+          <div style={{height:"100%",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:14,background:"#0e1a2b"}}>
+            <div style={{filter:"grayscale(1) brightness(2.5)"}}><Mark11 size={120}/></div>
+            <div style={{fontSize:32,fontWeight:700,letterSpacing:-0.02,color:"#fff"}}>
+              VecindApp
+            </div>
+          </div>
+        </DCArtboard>
+      </DCSection>
+
+      <div style={{padding:"0 60px 60px",color:"#5b6b82",fontSize:12,maxWidth:820}}>
+        <b style={{color:"#0e1a2b"}}>Cómo moverse:</b> scroll con dos dedos para panear, ctrl/cmd+scroll (o pinch) para zoom.
+        Cuando elijas 1–2 favoritos, te los puedo refinar (variantes, espaciado de marca, guía de uso, exportar PNG/SVG a distintos tamaños).
+      </div>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

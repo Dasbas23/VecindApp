@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.VecindApp" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Colores primarios (verde) -->
-        <item name="colorPrimary">@color/verde_vecindapp_principal</item>
-        <item name="colorPrimaryVariant">@color/verde_vecindapp_oscuro</item>
+        <!-- Colores primarios (teal) -->
+        <item name="colorPrimary">@color/teal_vecindapp</item>
+        <item name="colorPrimaryVariant">@color/teal_vecindapp_oscuro</item>
         <item name="colorOnPrimary">@color/blanco_tarjetas</item>
 
-        <!-- Colores secundarios (naranja) -->
-        <item name="colorSecondary">@color/naranja_acento</item>
-        <item name="colorSecondaryVariant">@color/naranja_claro</item>
+        <!-- Colores secundarios (coral) -->
+        <item name="colorSecondary">@color/coral_acento</item>
+        <item name="colorSecondaryVariant">@color/coral_acento_oscuro</item>
         <item name="colorOnSecondary">@color/blanco_tarjetas</item>
 
         <!-- Fondos y superficies -->
-        <item name="android:colorBackground">@color/fondo_app</item>
-        <item name="colorSurface">@color/blanco_tarjetas</item>
-        <item name="colorOnSurface">@color/texto_principal</item>
+        <item name="android:colorBackground">@color/fondo_teal</item>
+        <item name="colorSurface">@color/sand_dark</item>
+        <item name="colorOnSurface">@color/texto_ink</item>
+    </style>
+
+    <!-- Tema usado solo mientras la app arranca: muestra el logo principal
+         sobre fondo blanco como pantalla de carga. Se cambia a Theme.VecindApp
+         en MainActivity.onCreate() antes de super.onCreate(). -->
+    <style name="Theme.VecindApp.Splash" parent="Theme.VecindApp">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:statusBarColor">@color/fondo_teal</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>

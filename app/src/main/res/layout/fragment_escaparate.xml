@@ -23,8 +23,24 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingTop="16dp"
-        android:paddingBottom="8dp"
+        android:paddingBottom="4dp"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Subtítulo descriptivo (pantalla de entrada) -->
+    <TextView
+        android:id="@+id/tvSubtituloEscaparate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/subtitulo_escaparate"
+        android:textSize="13sp"
+        android:textColor="@color/texto_secundario"
+        android:lineSpacingExtra="2dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="12dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTituloEscaparate"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -37,7 +53,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingBottom="80dp"
-        app:layout_constraintTop_toBottomOf="@id/tvTituloEscaparate"
+        app:layout_constraintTop_toBottomOf="@id/tvSubtituloEscaparate"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
