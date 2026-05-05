@@ -39,6 +39,16 @@ Room/SQLite. Incluye accesibilidad mediante Text-To-Speech y una interfaz accesi
 accesibilidad cognitiva incorporando pictogramas del sistema ARASAAC
 y lectura en voz alta mediante el motor TTS nativo de Android.
 
+## Accesibilidad
+ 
+VecindApp aborda la accesibilidad como requisito de diseño, no como añadido posterior:
+ 
+- **Accesibilidad cognitiva** mediante pictogramas del sistema **ARASAAC** en el flujo de valoraciones, dirigidos a personas con dificultades de comprensión lectora, TEA o discapacidad intelectual.
+- **Accesibilidad sensorial** mediante integración del motor **TTS nativo de Android** (Text-to-Speech) en escaparate, detalle de servicio, valoraciones y perfil, facilitando el uso a personas con discapacidad visual o baja alfabetización.
+- **Diseño UX inclusivo** con áreas táctiles amplias, contrastes legibles y feedback claro mediante Snackbars accesibles.
+Pictogramas: [ARASAAC](http://www.arasaac.org) — Licencia CC BY-NC-SA.
+
+
 ## Arquitectura
 
 El proyecto sigue el patrón **MVVM + Clean Architecture** organizado en 5 capas:
@@ -79,7 +89,7 @@ app/src/main/java/com/example/vecindapp/
 | Navegación      | Navigation Component 2.9.7          |
 | Arquitectura    | ViewModel 2.10.0 + LiveData         |
 | Gráficos        | MPAndroidChart v3.1.0               |
-| Background      | WorkManager 2.9.0                   |
+| ~~Background~~  | ~~WorkManager 2.9.0~~               |
 | Accesibilidad   | Android TTS API + ARASAAC           |
 | Procesador      | KSP (Kotlin Symbol Processing)      |
 
@@ -127,7 +137,7 @@ app/src/main/java/com/example/vecindapp/
 | `desarrollo`               | Rama principal de integración                      |
 | `sprint2/bbdd+escaparate`  | BBDD Room + CRUD servicios + escaparate            |
 | `sprint3/transacciones`    | Transacciones + Perfil + Historial                 |
-| `sprint4/ usuarios+valorac`| Login sencillo de usuarius + sistema valoraciones  |
+| `sprint4/ usuarios+valoración`| Login sencillo de usuarios + sistema valoraciones  |
 | `sprint5/ accesibilidad `  | TTS en escaparate + servicio + valoración + perfil |
 | `sprint6/ worker+ui&ux `   | Mejoras diseño UX/UI + ~~Workmanager(tareas 2º plano)~~|
 
