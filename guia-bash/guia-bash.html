@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- ====== HEAD ====== -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía Bash — Búsqueda y manipulación</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen">
+
+  <!-- ====== MARKUP: HEADER ====== -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-10 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+      <h1 class="text-2xl font-bold">Guía Bash — Búsqueda y manipulación</h1>
+      <p class="text-sm text-slate-600">Iteraciones 1–2: búsqueda, manipulación, compresión, permisos, operadores y recetas.</p>
+    </div>
+  </header>
+
+  <!-- ====== MARKUP: FILTERS ====== -->
+  <section class="max-w-6xl mx-auto px-4 py-4 space-y-3">
+    <input
+      id="search-input"
+      type="search"
+      placeholder="Buscar (nombre, descripción, tags)..."
+      class="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
+    />
+    <div class="flex flex-wrap gap-3 items-center">
+      <label class="text-sm">
+        Categoría:
+        <select id="filter-categoria" class="ml-1 border border-slate-300 rounded px-2 py-1 text-sm">
+          <option value="all">Todas</option>
+          <option value="busqueda-archivos">Búsqueda de archivos</option>
+          <option value="busqueda-contenido">Búsqueda de contenido</option>
+          <option value="manipulacion-archivos">Manipulación de archivos</option>
+          <option value="compresion">Compresión</option>
+          <option value="permisos">Permisos</option>
+        </select>
+      </label>
+      <label class="text-sm">
+        Dificultad:
+        <select id="filter-dificultad" class="ml-1 border border-slate-300 rounded px-2 py-1 text-sm">
+          <option value="all">Todas</option>
+          <option value="basico">Básico</option>
+          <option value="intermedio">Intermedio</option>
+          <option value="avanzado">Avanzado</option>
+        </select>
+      </label>
+      <label class="text-sm">
+        Tipo:
+        <select id="filter-tipo" class="ml-1 border border-slate-300 rounded px-2 py-1 text-sm">
+          <option value="all">Todos</option>
+          <option value="comando">Comando</option>
+          <option value="operador">Operador</option>
+          <option value="receta">Receta</option>
+        </select>
+      </label>
+      <label class="text-sm flex items-center gap-1">
+        <input id="filter-gitbash" type="checkbox" class="rounded border-slate-300">
+        Compatible con Git Bash
+      </label>
+      <button id="filter-clear" class="ml-auto text-sm text-sky-700 underline hover:text-sky-900">
+        Limpiar filtros
+      </button>
+    </div>
+  </section>
+
+  <!-- ====== MARKUP: GRID ====== -->
+  <main id="grid" class="max-w-6xl mx-auto px-4 pb-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></main>
+
+  <!-- ====== MARKUP: EMPTY STATE ====== -->
+  <div id="empty-state" class="max-w-6xl mx-auto px-4 py-12 text-center text-slate-500 hidden">
+    <p class="text-lg mb-2">Ningún comando coincide con estos filtros.</p>
+    <button id="empty-state-clear" class="text-sky-700 underline hover:text-sky-900">Limpiar filtros</button>
+  </div>
+
+  <!-- ====== MARKUP: TEST BANNER (debug) ====== -->
+  <div id="test-banner" class="max-w-6xl mx-auto px-4 py-2 text-sm font-mono"></div>
+
+  <script>
+    // ====== JS: TEST INFRA ======
+    const __TEST_RESULTS = { passed: 0, failed: [] };
+
+    function assert(cond, msg) {
+      if (!cond) {
+        __TEST_RESULTS.failed.push(msg);
+        console.error('FAIL:', msg);
+      } else {
+        __TEST_RESULTS.passed++;
+      }
+    }
+
+    function renderTestBanner() {
+      const banner = document.getElementById('test-banner');
+      if (__TEST_RESULTS.failed.length === 0) {
+        banner.className = 'max-w-6xl mx-auto px-4 py-2 text-sm font-mono bg-emerald-50 text-emerald-800 border border-emerald-200 rounded mt-2';
+        banner.textContent = `✓ ${__TEST_RESULTS.passed} tests OK`;
+      } else {
+        banner.className = 'max-w-6xl mx-auto px-4 py-2 text-sm font-mono bg-rose-50 text-rose-800 border border-rose-300 rounded mt-2';
+        banner.innerHTML = `✗ ${__TEST_RESULTS.failed.length} test(s) FALLAN (${__TEST_RESULTS.passed} OK):<br>` +
+          __TEST_RESULTS.failed.map(f => `&nbsp;&nbsp;• ${f}`).join('<br>');
+      }
+    }
+
+    // ====== JS: DATA ======
+    const COMANDOS = [
+      {
+        id: 'find',
+        tipo: 'comando',
+        nombre: 'find',
+        categoria: 'busqueda-archivos',
+        dificultad: 'intermedio',
+        descripcion: 'Recorre un árbol de directorios buscando archivos según criterios.',
+        gitbash: 'caveats',
+        patron: 'find [ruta] [tests] [acción]',
+        tags: ['recursivo', 'filtros', 'arbol'],
+        modelo_mental: 'find recorre un árbol de directorios y aplica un test a cada entrada. Los flags como -name, -type, -mtime son tests; se combinan con AND implícito o con -o para OR. -exec, -delete y -print son acciones que se aplican a las coincidencias.',
+        ejemplos: [
+          { comando: "find . -name '*.ts'", explicacion: 'Busca todos los archivos .ts a partir del directorio actual.', compat_notes: 'Comillas alrededor del patrón obligatorias para evitar que el shell expanda el glob antes de pasarlo a find.' },
+          { comando: 'find . -type f -mtime -7', explicacion: 'Archivos (no directorios) modificados en los últimos 7 días.', compat_notes: null },
+          { comando: "find . -iname '*.LOG'", explicacion: 'Búsqueda por nombre, ignorando mayúsculas/minúsculas.', compat_notes: null },
+          { comando: 'find . -size +10M', explicacion: 'Archivos de más de 10 megabytes.', compat_notes: null }
+        ],
+        flags: [
+          { flag: '-name PATRON',          descripcion: 'Filtra por nombre (glob, case-sensitive).', compat_notes: null },
+          { flag: '-iname PATRON',         descripcion: 'Como -name pero case-insensitive.',         compat_notes: null },
+          { flag: '-type f|d|l',           descripcion: 'Filtra por tipo (file/dir/link).',           compat_notes: null },
+          { flag: '-mtime ±N',             descripcion: 'Modificados hace N días. -7 = últimos 7 días, +7 = hace más de 7.', compat_notes: null },
+          { flag: '-size ±N[ckMG]',        descripcion: 'Filtra por tamaño. +10M = más de 10MB, -1k = menos de 1KB.',       compat_notes: null },
+          { flag: '-path PATRON',          descripcion: 'Filtra por ruta completa (útil con -prune para excluir).',          compat_notes: null },
+          { flag: '-prune',                descripcion: 'No descender en el directorio actual (usado para excluir subárboles).', compat_notes: null },
+          { flag: '-exec CMD {} \\;',      descripcion: 'Ejecuta CMD por cada match. {} se sustituye por la ruta encontrada.',  compat_notes: null },
+          { flag: '-exec CMD {} +',        descripcion: 'Como -exec ; pero agrupa varios matches en una invocación (más eficiente).', compat_notes: null },
+          { flag: '-delete',               descripcion: 'Borra los matches. Equivalente a -exec rm pero más eficiente.',     compat_notes: null },
+          { flag: '-print',                descripcion: 'Imprime la ruta. Acción por defecto.',                                compat_notes: null },
+          { flag: '-printf FORMATO',       descripcion: 'Salida con formato personalizado (%p ruta, %s tamaño, %T@ epoch).',  compat_notes: 'No disponible en Git Bash. Alternativa: usar -exec stat o procesar con awk.' }
+        ],
+        combos: [
+          { comando: "find . -name '*.log' | xargs grep ERROR",                     explicacion: "Lista todos los .log y busca 'ERROR' en su contenido.", compat_notes: null },
+          { comando: "find . -name '*.tmp' -delete",                                explicacion: 'Borra todos los .tmp del árbol.',                       compat_notes: null },
+          { comando: 'find . -type f -exec wc -l {} +',                             explicacion: 'Cuenta líneas de cada archivo regular.',                compat_notes: null },
+          { comando: "find . -path './node_modules' -prune -o -type f -print",      explicacion: 'Lista todos los archivos excluyendo node_modules.',     compat_notes: null }
+        ],
+        gotchas: [
+          'Sin -type f también devuelve directorios. La mayoría de las veces quieres -type f.',
+          '-name es case-sensitive; usar -iname para ignorar mayúsculas.',
+          'Las acciones (-exec, -delete) se aplican a TODOS los matches: probar antes con -print para ver qué afectará.',
+          'Comillas en el patrón de -name son obligatorias si contiene wildcards (*, ?, [...]) — sin ellas el shell expande el glob antes de que find lo vea.',
+          'El orden de los argumentos importa: filtros antes de acciones, -prune antes de -o.'
+        ],
+        relacionados: ['grep', 'xargs', 'ls', 'locate'],
+        cuando_no_usar: 'Para búsquedas frecuentes en árboles enormes (node_modules, /usr), considera `fd` (más rápido y sintaxis moderna). Si solo necesitas localizar por nombre y la base de datos está actualizada, `locate` es instantáneo (no disponible en Git Bash).'
+      }
+      ,{
+        id: 'grep',
+        tipo: 'comando',
+        nombre: 'grep',
+        categoria: 'busqueda-contenido',
+        dificultad: 'intermedio',
+        descripcion: 'Busca patrones (cadenas o regex) dentro del contenido de archivos.',
+        gitbash: 'caveats',
+        patron: 'grep [opciones] PATRON [archivos...]',
+        tags: ['regex', 'texto', 'recursivo'],
+        modelo_mental: 'grep lee texto línea a línea (de archivos o stdin) y emite las que matchean el patrón. Por defecto usa regex básicas; -E activa regex extendidas, -F desactiva regex y trata el patrón como literal. -r recorre directorios recursivamente.',
+        ejemplos: [
+          { comando: "grep 'error' app.log",                explicacion: "Líneas con 'error' (case-sensitive) en app.log.", compat_notes: null },
+          { comando: "grep -rni 'todo' .",                  explicacion: 'Recursivo, ignorando mayúsculas, mostrando número de línea.', compat_notes: null },
+          { comando: "grep -E 'WARN|ERROR' app.log",        explicacion: 'Regex extendida: WARN o ERROR.',                  compat_notes: null },
+          { comando: "grep -v 'DEBUG' app.log",             explicacion: 'Líneas que NO contienen DEBUG (invertido).',       compat_notes: null },
+          { comando: "grep -c 'ERROR' app.log",             explicacion: 'Solo cuenta cuántas líneas matchean.',             compat_notes: null }
+        ],
+        flags: [
+          { flag: '-r / -R',          descripcion: 'Recursivo en directorios.',                                  compat_notes: null },
+          { flag: '-n',               descripcion: 'Muestra el número de línea de cada coincidencia.',          compat_notes: null },
+          { flag: '-i',               descripcion: 'Case-insensitive.',                                          compat_notes: null },
+          { flag: '-v',               descripcion: 'Invierte: muestra líneas que NO matchean.',                 compat_notes: null },
+          { flag: '-l',               descripcion: 'Solo nombres de archivos con coincidencias (no las líneas).', compat_notes: null },
+          { flag: '-c',               descripcion: 'Solo cuenta coincidencias por archivo.',                    compat_notes: null },
+          { flag: '-w',               descripcion: 'Match de palabra entera (no substring).',                   compat_notes: null },
+          { flag: '-E',               descripcion: 'Regex extendidas (alternativa a egrep).',                   compat_notes: null },
+          { flag: '-F',               descripcion: 'Patrón literal, sin regex (alternativa a fgrep, más rápido).', compat_notes: null },
+          { flag: '-P',               descripcion: 'Regex tipo Perl (PCRE).',                                    compat_notes: 'En Git Bash el binario suele estar compilado SIN soporte PCRE — `grep -P` falla. Usar -E como alternativa cuando sea posible.' },
+          { flag: '--include=GLOB',   descripcion: 'Solo busca en archivos cuyo nombre matchea GLOB.',          compat_notes: null },
+          { flag: '--exclude-dir=DIR', descripcion: 'Excluye directorios completos (ej. node_modules).',         compat_notes: null },
+          { flag: '-A N / -B N / -C N', descripcion: 'Contexto: N líneas después / antes / ambos.',              compat_notes: null }
+        ],
+        combos: [
+          { comando: "grep -rn 'TODO' . --include='*.js'",                explicacion: 'TODOs solo en archivos .js, recursivo.',         compat_notes: null },
+          { comando: "ps aux | grep nginx",                               explicacion: 'Filtra procesos que contienen nginx.',            compat_notes: null },
+          { comando: "find . -name '*.log' | xargs grep 'ERROR'",        explicacion: 'Combina con find para buscar en una lista de archivos concreta.', compat_notes: null }
+        ],
+        gotchas: [
+          "egrep y fgrep están deprecados como binarios separados; el equivalente moderno es `grep -E` y `grep -F` respectivamente. Pueden seguir existiendo como wrappers.",
+          'Sin comillas alrededor del patrón, el shell puede interpretar caracteres especiales (* ? $ etc.) antes de que llegue a grep.',
+          "`ps aux | grep nginx` también matchea el propio grep. Usar `pgrep nginx` o `ps aux | grep [n]ginx` (truco del corchete).",
+          'La salida con --include / --exclude-dir es preferible a `find ... | xargs grep` para excluir node_modules.',
+          'En Git Bash, -P (PCRE) frecuentemente no funciona — usar -E.'
+        ],
+        relacionados: ['find', 'xargs', 'head', 'tail'],
+        cuando_no_usar: 'Para búsquedas en proyectos grandes, considera `ripgrep (rg)` — respeta .gitignore por defecto, es mucho más rápido y tiene PCRE de serie. Para extracción/transformación de texto más allá de filtrar líneas, usa `sed` o `awk`.'
+      }
+      ,{
+        id: 'xargs',
+        tipo: 'comando',
+        nombre: 'xargs',
+        categoria: 'busqueda-archivos',
+        dificultad: 'intermedio',
+        descripcion: 'Construye y ejecuta un comando a partir de las líneas que recibe por stdin.',
+        gitbash: 'ok',
+        patron: '... | xargs [opciones] COMANDO [args...]',
+        tags: ['stdin', 'compose', 'pipeline'],
+        modelo_mental: 'xargs lee líneas de stdin y las inyecta como argumentos del COMANDO que le indiques. Es lo que une `find ...` (que produce nombres de archivo) con `grep` (que necesita nombres de archivo como argumentos). Por defecto agrupa todas las líneas en una sola invocación; -n y -I cambian esto.',
+        ejemplos: [
+          { comando: "find . -name '*.log' | xargs grep ERROR",  explicacion: "Pasa la lista de .log a grep para buscar 'ERROR'.", compat_notes: null },
+          { comando: "find . -name '*.tmp' | xargs rm",          explicacion: 'Borra todos los .tmp encontrados.',                  compat_notes: null },
+          { comando: "echo 'a b c' | xargs -n 1 echo",           explicacion: 'Procesa cada palabra individualmente.',              compat_notes: null }
+        ],
+        flags: [
+          { flag: '-n N',         descripcion: 'Pasa N argumentos por invocación del comando.',                              compat_notes: null },
+          { flag: '-I {}',        descripcion: 'Sustituye {} por el argumento. Útil cuando el argumento NO va al final.',     compat_notes: null },
+          { flag: '-0',           descripcion: 'Lee entradas separadas por NUL (\\0) en vez de espacios. Pareja natural de `find ... -print0`.', compat_notes: null },
+          { flag: '-p',           descripcion: 'Pide confirmación antes de cada ejecución (útil para -delete inseguros).',   compat_notes: null },
+          { flag: '-t',           descripcion: 'Verbose: imprime el comando antes de ejecutarlo.',                             compat_notes: null },
+          { flag: '--no-run-if-empty', descripcion: 'No ejecuta si stdin está vacío (evita ejecutar el comando con 0 args).', compat_notes: null }
+        ],
+        combos: [
+          { comando: "find . -name '*.log' -print0 | xargs -0 grep -l 'ERROR'", explicacion: 'Robusto frente a nombres con espacios.',     compat_notes: null },
+          { comando: "find . -name '*.bak' | xargs -I {} mv {} archivo/",       explicacion: 'Mueve cada match a una carpeta usando placeholder.', compat_notes: null }
+        ],
+        gotchas: [
+          'Por defecto, xargs trata espacios y saltos de línea como separadores — nombres con espacios rompen. Usar -0 + find -print0.',
+          'Con stdin vacío, sin --no-run-if-empty, xargs ejecuta el comando con cero argumentos (puede ser destructivo, p.ej. `xargs rm`).',
+          'find . -exec CMD {} + suele ser preferible a find ... | xargs CMD por evitar problemas de cuoting; usa xargs cuando necesites -I o -n.'
+        ],
+        relacionados: ['find', 'grep'],
+        cuando_no_usar: 'Si find ya tiene -exec ... {} +, xargs aporta poco salvo para -I (placeholders en posiciones distintas a la final) o cuando la fuente de stdin no es find.'
+      }
+      ,{
+        id: 'ls',
+        tipo: 'comando', nombre: 'ls', categoria: 'busqueda-archivos', dificultad: 'basico',
+        descripcion: 'Lista el contenido de un directorio.',
+        gitbash: 'ok',
+        patron: 'ls [opciones] [ruta]',
+        ejemplos: [
+          { comando: 'ls',           explicacion: 'Lista el directorio actual.',           compat_notes: null },
+          { comando: 'ls -la',       explicacion: 'Listado largo + ocultos (empezando por .).', compat_notes: null },
+          { comando: 'ls -lh',       explicacion: 'Listado largo con tamaños humanos (K, M, G).', compat_notes: null },
+          { comando: 'ls -lt',       explicacion: 'Ordena por fecha de modificación (más reciente primero).', compat_notes: null },
+          { comando: 'ls -lS',       explicacion: 'Ordena por tamaño descendente.',         compat_notes: null }
+        ],
+        flags: [
+          { flag: '-l', descripcion: 'Listado largo (permisos, tamaño, fecha).', compat_notes: null },
+          { flag: '-a', descripcion: 'Incluye archivos ocultos.',                 compat_notes: null },
+          { flag: '-h', descripcion: 'Tamaños en formato humano (combinado con -l).', compat_notes: null },
+          { flag: '-t', descripcion: 'Ordena por fecha de modificación.',         compat_notes: null },
+          { flag: '-S', descripcion: 'Ordena por tamaño.',                         compat_notes: null },
+          { flag: '-R', descripcion: 'Recursivo en subdirectorios.',               compat_notes: null }
+        ]
+      }
+      ,{
+        id: 'pwd',
+        tipo: 'comando', nombre: 'pwd', categoria: 'busqueda-archivos', dificultad: 'basico',
+        descripcion: 'Imprime la ruta absoluta del directorio actual ("print working directory").',
+        gitbash: 'ok',
+        ejemplos: [
+          { comando: 'pwd', explicacion: 'Ruta absoluta del directorio actual.', compat_notes: 'En Git Bash devuelve estilo /c/Users/... no C:\\Users\\...' }
+        ]
+      }
+      ,{
+        id: 'tree',
+        tipo: 'comando', nombre: 'tree', categoria: 'busqueda-archivos', dificultad: 'basico',
+        descripcion: 'Muestra la estructura del directorio como árbol ASCII.',
+        gitbash: 'caveats',
+        ejemplos: [
+          { comando: 'tree',                  explicacion: 'Árbol del directorio actual.',                          compat_notes: null },
+          { comando: 'tree -L 2',             explicacion: 'Limita la profundidad a 2 niveles.',                    compat_notes: null },
+          { comando: 'tree -I node_modules',  explicacion: 'Ignora node_modules.',                                  compat_notes: null }
+        ],
+        flags: [
+          { flag: '-L N',     descripcion: 'Profundidad máxima.',                  compat_notes: null },
+          { flag: '-I PATRON', descripcion: 'Ignora rutas que matcheen el patrón.', compat_notes: null },
+          { flag: '-d',       descripcion: 'Solo directorios.',                     compat_notes: null },
+          { flag: '-a',       descripcion: 'Incluye ocultos.',                       compat_notes: null }
+        ],
+        gotchas: [
+          'No viene de serie en Git Bash; instalable con pacman: `pacman -S tree` (en Git Bash con MSYS2 nuevo). Si no, alternativa: `find . -type d` o `ls -R`.'
+        ]
+      }
+      ,{
+        id: 'file',
+        tipo: 'comando', nombre: 'file', categoria: 'busqueda-archivos', dificultad: 'basico',
+        descripcion: 'Identifica el tipo de un archivo inspeccionando su contenido (no su extensión).',
+        gitbash: 'ok',
+        ejemplos: [
+          { comando: 'file imagen.png',     explicacion: 'Detecta que es PNG aunque le quites la extensión.', compat_notes: null },
+          { comando: 'file *',              explicacion: 'Tipos de todos los archivos del directorio.',        compat_notes: null }
+        ]
+      }
+      ,{
+        id: 'which',
+        tipo: 'comando', nombre: 'which', categoria: 'busqueda-archivos', dificultad: 'basico',
+        descripcion: 'Muestra la ruta del ejecutable que se invoca al escribir un comando (busca en $PATH).',
+        gitbash: 'ok',
+        ejemplos: [
+          { comando: 'which git',     explicacion: 'Ruta del binario de git.',         compat_notes: null },
+          { comando: 'which python',  explicacion: 'Útil para diagnosticar versiones.', compat_notes: null }
+        ]
+      }
+      ,{
+        id: 'whereis',
+        tipo: 'comando', nombre: 'whereis', categoria: 'busqueda-archivos', dificultad: 'basico',
+        descripcion: 'Muestra ubicación del binario, fuente y manual de un comando.',
+        gitbash: 'no-disponible',
+        ejemplos: [
+          { comando: 'whereis git', explicacion: 'Binario, source, man pages.', compat_notes: 'No disponible en Git Bash. En su lugar, usar `which git`.' }
+        ]
+      }
+      ,{
+        id: 'type',
+        tipo: 'comando', nombre: 'type', categoria: 'busqueda-archivos', dificultad: 'basico',
+        descripcion: 'Indica si un nombre es un alias, función, builtin o ejecutable externo.',
+        gitbash: 'ok',
+        ejemplos: [
+          { comando: 'type cd',        explicacion: 'Te dirá que es un builtin del shell.',         compat_notes: null },
+          { comando: 'type -a python', explicacion: 'Lista TODAS las definiciones (alias + binarios) en orden de prioridad.', compat_notes: null }
+        ],
+        gotchas: [
+          'Más informativo que `which` para diagnosticar por qué un comando se comporta raro: te dice si lo está secuestrando un alias.'
+        ]
+      }
+      ,{
+        id: 'locate',
+        tipo: 'comando', nombre: 'locate', categoria: 'busqueda-archivos', dificultad: 'basico',
+        descripcion: 'Búsqueda instantánea en una base de datos pre-indexada de rutas.',
+        gitbash: 'no-disponible',
+        ejemplos: [
+          { comando: 'locate config.yml', explicacion: 'Devuelve todas las rutas que contienen "config.yml".', compat_notes: null }
+        ],
+        gotchas: [
+          'Lee de una BD generada por `updatedb` — puede estar desactualizada.',
+          'No disponible en Git Bash. Alternativas en Git Bash: `find / -name PATRON 2>/dev/null` (lento) o instalar `mlocate` en WSL/Linux.'
+        ]
+      }
+      ,{
+        id: 'head',
+        tipo: 'comando', nombre: 'head', categoria: 'busqueda-contenido', dificultad: 'basico',
+        descripcion: 'Muestra las primeras líneas de un archivo o stream.',
+        gitbash: 'ok',
+        ejemplos: [
+          { comando: 'head app.log',      explicacion: 'Primeras 10 líneas (por defecto).',     compat_notes: null },
+          { comando: 'head -n 50 app.log', explicacion: 'Primeras 50 líneas.',                    compat_notes: null },
+          { comando: "ls | head -n 20",    explicacion: 'Primeros 20 elementos de un listado.',  compat_notes: null }
+        ],
+        flags: [
+          { flag: '-n N', descripcion: 'Número de líneas (por defecto 10).', compat_notes: null },
+          { flag: '-c N', descripcion: 'Número de bytes en lugar de líneas.', compat_notes: null }
+        ]
+      }
+      ,{
+        id: 'tail',
+        tipo: 'comando', nombre: 'tail', categoria: 'busqueda-contenido', dificultad: 'basico',
+        descripcion: 'Muestra las últimas líneas de un archivo o stream.',
+        gitbash: 'ok',
+        ejemplos: [
+          { comando: 'tail app.log',          explicacion: 'Últimas 10 líneas.',                                  compat_notes: null },
+          { comando: 'tail -n 100 app.log',   explicacion: 'Últimas 100 líneas.',                                 compat_notes: null },
+          { comando: 'tail -f app.log',       explicacion: 'Sigue el archivo en tiempo real (logs en vivo).',     compat_notes: null },
+          { comando: 'tail -F app.log',       explicacion: 'Como -f pero reabre el archivo si se rota (logrotate).', compat_notes: null }
+        ],
+        flags: [
+          { flag: '-n N',  descripcion: 'Número de líneas.',                                            compat_notes: null },
+          { flag: '-n +N', descripcion: 'Empieza en la línea N (no las últimas N).',                    compat_notes: null },
+          { flag: '-f',    descripcion: 'Follow: muestra nuevas líneas a medida que se escriben.',      compat_notes: null },
+          { flag: '-F',    descripcion: 'Como -f pero soporta rotación de archivos.',                   compat_notes: null }
+        ],
+        gotchas: [
+          'Ctrl+C para salir del modo -f / -F.'
+        ]
+      }
+      ,{
+        id: 'op-pipe',
+        tipo: 'operador', nombre: '|', dificultad: 'basico',
+        descripcion: 'Pipe: conecta stdout de un comando a stdin del siguiente.',
+        gitbash: 'ok',
+        modelo_mental: 'Forma una cadena: la salida del comando de la izquierda se convierte en la entrada del de la derecha. Cada etapa procesa el stream línea a línea (en general). Es el pegamento básico del shell.',
+        ejemplos: [
+          { comando: 'ls | head',            explicacion: 'Primeros 10 elementos del listado.',                       compat_notes: null },
+          { comando: "cat app.log | grep ERROR | wc -l", explicacion: 'Cuenta líneas con ERROR en app.log.',          compat_notes: null }
+        ],
+        gotchas: [
+          'El último comando del pipeline determina el código de salida (por defecto). Para detectar fallos en cualquier eslabón: `set -o pipefail`.',
+          'No usar `cat archivo | grep patron` — `grep patron archivo` es directo y más eficiente (anti-patrón "useless cat").'
+        ]
+      }
+      ,{
+        id: 'op-cmd-substitution',
+        tipo: 'operador', nombre: '$( )', dificultad: 'intermedio',
+        descripcion: 'Command substitution: ejecuta un comando y sustituye su salida en el lugar.',
+        gitbash: 'ok',
+        modelo_mental: '`$(cmd)` ejecuta cmd y reemplaza la expresión por su stdout (sin salto final). Permite construir comandos a partir del resultado de otros. Es preferible a la forma antigua con backticks (`cmd`) porque anida bien.',
+        ejemplos: [
+          { comando: 'echo "Hoy es $(date +%Y-%m-%d)"',           explicacion: 'Inyecta la salida de `date` en la cadena.',  compat_notes: null },
+          { comando: 'cd $(dirname "$0")',                         explicacion: 'Va al directorio del script.',              compat_notes: null },
+          { comando: "grep ERROR $(find . -name '*.log')",         explicacion: 'Busca en los archivos que find devuelve.',  compat_notes: null }
+        ],
+        gotchas: [
+          'Si la salida tiene espacios o saltos, puede romper el comando exterior — comillas dobles alrededor cuando lo usas como argumento individual.',
+          'Para listas de archivos producidas por find, prefiere `find ... -exec` o `find ... | xargs` para manejar nombres con espacios.'
+        ]
+      }
+      ,{
+        id: 'op-redirect-stdout',
+        tipo: 'operador', nombre: '>', dificultad: 'basico',
+        descripcion: 'Redirige stdout a un archivo (sobrescribe).',
+        gitbash: 'ok',
+        modelo_mental: 'Toma la salida estándar del comando de la izquierda y la escribe en el archivo de la derecha, **sobrescribiendo** lo que hubiera. Errores (stderr) NO se redirigen — siguen yendo al terminal.',
+        ejemplos: [
+          { comando: "find . -name '*.log' > logs.txt",  explicacion: 'Guarda el listado en logs.txt (sobrescribe).',  compat_notes: null },
+          { comando: 'date > timestamp.txt',              explicacion: 'Escribe la fecha actual en el archivo.',        compat_notes: null }
+        ],
+        gotchas: [
+          '> sobrescribe sin avisar. Para añadir, usar >>.',
+          'No redirige stderr. Para todo: `cmd > out 2>&1` o `cmd &> out` (bash).'
+        ]
+      }
+      ,{
+        id: 'op-redirect-append',
+        tipo: 'operador', nombre: '>>', dificultad: 'basico',
+        descripcion: 'Redirige stdout a un archivo, añadiendo al final (no sobrescribe).',
+        gitbash: 'ok',
+        modelo_mental: 'Como `>` pero **append**: si el archivo existe, escribe al final; si no, lo crea.',
+        ejemplos: [
+          { comando: "echo 'línea' >> notas.txt", explicacion: 'Añade una línea al final.',          compat_notes: null },
+          { comando: 'date >> log.txt',           explicacion: 'Cada ejecución suma una línea.',     compat_notes: null }
+        ]
+      }
+      ,{
+        id: 'op-stderr-stdout',
+        tipo: 'operador', nombre: '2>&1', dificultad: 'intermedio',
+        descripcion: 'Redirige stderr (descriptor 2) al mismo destino que stdout (descriptor 1).',
+        gitbash: 'ok',
+        modelo_mental: 'Cada proceso tiene 3 descriptores: 0 stdin, 1 stdout, 2 stderr. `2>&1` indica "envía stderr a donde esté yendo stdout en este momento". Importa el orden: `> out 2>&1` mezcla todo en out, pero `2>&1 > out` redirige stderr al terminal y luego stdout al archivo.',
+        ejemplos: [
+          { comando: 'cmd > out.txt 2>&1',  explicacion: 'Stdout y stderr al archivo.',           compat_notes: null },
+          { comando: 'cmd 2> errors.log',   explicacion: 'Solo stderr al archivo.',                compat_notes: null },
+          { comando: 'cmd &> out.txt',      explicacion: 'Atajo bash para `> out 2>&1`.',          compat_notes: null }
+        ],
+        gotchas: [
+          'El orden importa: `> out 2>&1` ≠ `2>&1 > out`. La regla: 2>&1 hace una copia del descriptor 1 EN ESE MOMENTO, no lo sigue.',
+          '`&> archivo` es atajo de bash; sh/dash no lo soportan.'
+        ]
+      }
+      ,{
+        id: 'op-and',
+        tipo: 'operador', nombre: '&&', dificultad: 'basico',
+        descripcion: 'AND lógico: ejecuta el segundo comando solo si el primero termina con éxito (exit code 0).',
+        gitbash: 'ok',
+        ejemplos: [
+          { comando: 'mkdir build && cd build', explicacion: 'Solo entra en build si se creó.',                          compat_notes: null },
+          { comando: 'tests && deploy.sh',       explicacion: 'Solo despliega si los tests pasan.',                       compat_notes: null }
+        ]
+      }
+      ,{
+        id: 'op-or',
+        tipo: 'operador', nombre: '||', dificultad: 'basico',
+        descripcion: 'OR lógico: ejecuta el segundo comando solo si el primero falla (exit code != 0).',
+        gitbash: 'ok',
+        ejemplos: [
+          { comando: 'cmd || echo "fallo"',          explicacion: 'Imprime "fallo" si cmd salió con error.', compat_notes: null },
+          { comando: '[ -d build ] || mkdir build',  explicacion: 'Crea build si no existe.',                  compat_notes: null }
+        ]
+      }
+      ,{
+        id: 'op-semicolon',
+        tipo: 'operador', nombre: ';', dificultad: 'basico',
+        descripcion: 'Separador secuencial: ejecuta los comandos en orden, independientemente del éxito o fallo.',
+        gitbash: 'ok',
+        ejemplos: [
+          { comando: 'cd /tmp; ls; echo "fin"', explicacion: 'Ejecuta los tres en orden, pase lo que pase.', compat_notes: null }
+        ],
+        gotchas: [
+          'Si quieres parar al primer fallo, usar && entre comandos en lugar de ;.'
+        ]
+      }
+      ,{
+        id: 'receta-grep-en-proyecto',
+        tipo: 'receta', nombre: 'Buscar texto en un proyecto', categoria: 'busqueda-contenido', dificultad: 'basico',
+        descripcion: 'Localiza una cadena/regex en todo el árbol de un proyecto.',
+        gitbash: 'ok',
+        escenario: 'Quiero saber dónde se usa una cadena (función, variable, mensaje) en mi código.',
+        ejemplos: [
+          { comando: "grep -rn 'patron' .", explicacion: 'Recursivo, mostrando número de línea.', compat_notes: null }
+        ],
+        desglose: [
+          { fragmento: 'grep',          hace: 'busca patrón en archivos.' },
+          { fragmento: '-r',            hace: 'recursivamente desde el directorio dado.' },
+          { fragmento: '-n',            hace: 'incluye número de línea de cada match.' },
+          { fragmento: "'patron'",      hace: 'la cadena/regex a buscar (comillas evitan que el shell la interprete).' },
+          { fragmento: '.',             hace: 'directorio raíz desde el que buscar.' }
+        ],
+        relacionados: ['grep']
+      }
+      ,{
+        id: 'receta-archivos-modificados',
+        tipo: 'receta', nombre: 'Archivos modificados en los últimos N días', categoria: 'busqueda-archivos', dificultad: 'basico',
+        descripcion: 'Localiza archivos cuyo contenido cambió en los últimos N días.',
+        gitbash: 'ok',
+        escenario: 'Quiero ver qué se ha tocado esta semana, sin depender del control de versiones.',
+        ejemplos: [
+          { comando: 'find . -type f -mtime -7', explicacion: 'Archivos modificados en los últimos 7 días.', compat_notes: null }
+        ],
+        desglose: [
+          { fragmento: 'find .',     hace: 'recorre desde el directorio actual.' },
+          { fragmento: '-type f',    hace: 'solo archivos regulares (excluye directorios).' },
+          { fragmento: '-mtime -7',  hace: 'modificados hace MENOS de 7 días (signo - = antigüedad menor).' }
+        ],
+        relacionados: ['find']
+      }
+      ,{
+        id: 'receta-archivos-modif-con-texto',
+        tipo: 'receta', nombre: 'Archivos modificados que contengan texto', categoria: 'busqueda-contenido', dificultad: 'intermedio',
+        descripcion: 'Combina filtro temporal (find) con búsqueda de contenido (grep).',
+        gitbash: 'ok',
+        escenario: 'Quiero ver dónde he dejado TODO esta semana (en código que he tocado).',
+        ejemplos: [
+          { comando: "find . -type f -mtime -7 | xargs grep -l 'TODO'", explicacion: 'Lista archivos recientes que contienen TODO.', compat_notes: null }
+        ],
+        desglose: [
+          { fragmento: 'find . -type f -mtime -7', hace: 'archivos modificados últimos 7 días.' },
+          { fragmento: '|',                         hace: 'pasa la lista por stdin.' },
+          { fragmento: 'xargs grep -l',             hace: "invoca grep -l (solo nombres) con esa lista." },
+          { fragmento: "'TODO'",                    hace: 'patrón a buscar.' }
+        ],
+        relacionados: ['find', 'xargs', 'grep', 'op-pipe']
+      }
+      ,{
+        id: 'receta-top-grandes',
+        tipo: 'receta', nombre: 'Top 10 archivos más grandes', categoria: 'busqueda-archivos', dificultad: 'intermedio',
+        descripcion: 'Identifica los archivos que más espacio ocupan en un árbol.',
+        gitbash: 'caveats',
+        escenario: 'El proyecto pesa mucho y quiero saber qué archivos lo inflan.',
+        ejemplos: [
+          { comando: "find . -type f -printf '%s %p\\n' | sort -rn | head -10", explicacion: 'Tamaño + ruta, ordenado descendente, primeros 10.', compat_notes: 'find -printf NO está en Git Bash. Alternativa portable: `find . -type f -exec stat -c "%s %n" {} + | sort -rn | head -10` (también Linux). En Git Bash más limitado: `find . -type f -exec wc -c {} + | sort -rn | head -10` (incluye totales falsos al final, ignorar la última línea).' }
+        ],
+        desglose: [
+          { fragmento: 'find . -type f',           hace: 'lista archivos regulares.' },
+          { fragmento: "-printf '%s %p\\n'",       hace: 'formato: tamaño en bytes + ruta + salto.' },
+          { fragmento: '| sort -rn',                hace: 'ordena numéricamente descendente.' },
+          { fragmento: '| head -10',                hace: 'se queda con los 10 primeros.' }
+        ],
+        relacionados: ['find', 'op-pipe', 'head']
+      }
+      ,{
+        id: 'receta-excluir-node-modules',
+        tipo: 'receta', nombre: 'Excluir node_modules en una búsqueda', categoria: 'busqueda-archivos', dificultad: 'intermedio',
+        descripcion: 'Recorrido del árbol que ignora node_modules (o cualquier subdirectorio).',
+        gitbash: 'ok',
+        escenario: "Quiero buscar archivos de mi código sin que find se meta en node_modules y tarde una eternidad.",
+        ejemplos: [
+          { comando: "find . -path './node_modules' -prune -o -type f -print", explicacion: 'Lista archivos excluyendo node_modules.', compat_notes: null }
+        ],
+        desglose: [
+          { fragmento: "-path './node_modules'", hace: 'condición: rutas que matcheen ./node_modules.' },
+          { fragmento: '-prune',                 hace: 'no descender ahí.' },
+          { fragmento: '-o',                     hace: 'OR.' },
+          { fragmento: '-type f -print',         hace: 'para el resto, si es archivo regular, imprimirlo.' }
+        ],
+        relacionados: ['find']
+      }
+      ,{
+        id: 'receta-contar-lineas',
+        tipo: 'receta', nombre: 'Contar líneas de código', categoria: 'busqueda-contenido', dificultad: 'basico',
+        descripcion: 'Cuenta líneas totales de archivos por extensión.',
+        gitbash: 'ok',
+        escenario: 'Quiero saber cuántas líneas .js hay en mi proyecto.',
+        ejemplos: [
+          { comando: "find . -name '*.js' | xargs wc -l", explicacion: 'Cuenta líneas de todos los .js. La última línea es el total.', compat_notes: null }
+        ],
+        desglose: [
+          { fragmento: "find . -name '*.js'", hace: 'lista archivos .js.' },
+          { fragmento: '|',                    hace: 'pipe a xargs.' },
+          { fragmento: 'xargs wc -l',          hace: 'invoca wc -l (líneas) con la lista.' }
+        ],
+        relacionados: ['find', 'xargs', 'op-pipe'],
+        gotchas: [
+          'wc -l incluye una línea "total" al final cuando recibe varios archivos.',
+          'Si hay archivos con espacios en el nombre, usar `find ... -print0 | xargs -0 wc -l`.'
+        ]
+      }
+      ,{
+        id: 'cp',
+        tipo: 'comando',
+        nombre: 'cp',
+        categoria: 'manipulacion-archivos',
+        dificultad: 'basico',
+        descripcion: 'Copia archivos y/o directorios.',
+        gitbash: 'ok',
+        patron: 'cp [opciones] ORIGEN... DESTINO',
+        tags: ['copiar', 'archivos', 'recursivo'],
+        modelo_mental: 'cp copia ORIGEN(es) a DESTINO. Si DESTINO existe y es un directorio, ORIGEN se copia DENTRO; si DESTINO es un archivo (existente o no), se crea/sobrescribe. Por defecto NO copia directorios — necesitas -r. Y por defecto SOBRESCRIBE el destino sin avisar.',
+        ejemplos: [
+          { comando: 'cp original.txt copia.txt',           explicacion: 'Copia un archivo a un nombre nuevo en el mismo directorio.', compat_notes: null },
+          { comando: 'cp archivo.txt /tmp/',                explicacion: 'Copia archivo.txt DENTRO de /tmp/ (mantiene el nombre).',     compat_notes: null },
+          { comando: 'cp -r src/ dst/',                     explicacion: 'Copia el directorio src/ y todo su contenido como dst/.',      compat_notes: null },
+          { comando: 'cp -p config.yml backup/',            explicacion: 'Preserva permisos y timestamps al copiar.',                    compat_notes: null },
+          { comando: 'cp -i a.txt b.txt',                   explicacion: 'Pide confirmación si b.txt existe.',                            compat_notes: null }
+        ],
+        flags: [
+          { flag: '-r / -R',         descripcion: 'Recursivo: necesario para copiar directorios.',                                       compat_notes: null },
+          { flag: '-a',              descripcion: 'Archive: equivale a -dR --preserve=all (recursivo + preserva todo + sigue symlinks como tales).', compat_notes: null },
+          { flag: '-p',              descripcion: 'Preserva modo, dueño y timestamps.',                                                  compat_notes: 'En Git Bash dueño/grupo se ajustan a Windows (semi-decorativo).' },
+          { flag: '-i',              descripcion: 'Interactive: pide confirmación antes de sobrescribir.',                              compat_notes: null },
+          { flag: '-n',              descripcion: 'No-clobber: nunca sobrescribe (opuesto a -i sin pregunta).',                         compat_notes: null },
+          { flag: '-u',              descripcion: 'Update: solo copia si ORIGEN es más nuevo que DESTINO o DESTINO no existe.',        compat_notes: null },
+          { flag: '-v',              descripcion: 'Verbose: imprime cada copia realizada.',                                              compat_notes: null },
+          { flag: '--backup[=TIPO]', descripcion: 'Hace copia de seguridad del DESTINO antes de sobrescribir (TIPO: numbered, simple).', compat_notes: null }
+        ],
+        combos: [
+          { comando: 'cp -r src/* dst/',          explicacion: 'Copia el CONTENIDO de src/ dentro de dst/ (no crea dst/src/).',                              compat_notes: null },
+          { comando: 'cp -av src/ dst/',          explicacion: 'Backup completo preservando metadatos, mostrando cada archivo copiado.',                     compat_notes: null },
+          { comando: 'cp --backup=numbered f g',  explicacion: 'Si g existe, se renombra a g.~1~ antes de sobrescribir; si ya existía g.~1~, será g.~2~.', compat_notes: null }
+        ],
+        gotchas: [
+          'Sobrescribe el destino SIN AVISAR. Usa -i (preguntar), -n (no sobrescribir nunca) o --backup según necesites.',
+          'Sin -r, copiar un directorio falla con "omitting directory". -r recursivo es la solución; -a recursivo + preserva metadatos.',
+          'Diferencia clave: `cp -r src/ dst/` crea dst/ como copia de src/. `cp -r src/* dst/` copia el contenido de src/ dentro de dst/. La barra final NO siempre cambia el comportamiento — depende de existir o no el destino.',
+          'cp NO copia archivos ocultos (`.algo`) cuando usas `src/*` salvo que actives shopt dotglob o uses `src/.* src/*`.',
+          'En FS distintos cp duplica datos; mv en FS distintos también copia y borra (no es atómico).'
+        ],
+        relacionados: ['mv', 'rm', 'ln'],
+        cuando_no_usar: 'Para sincronizar árboles grandes con cambios incrementales, `rsync -av` es mucho más rápido (transfiere solo diferencias) y soporta exclusiones, dry-run y borrado del destino. Para clonar discos completos, `dd`.'
+      }
+      ,{
+        id: 'mv',
+        tipo: 'comando',
+        nombre: 'mv',
+        categoria: 'manipulacion-archivos',
+        dificultad: 'basico',
+        descripcion: 'Mueve y/o renombra archivos y directorios.',
+        gitbash: 'ok',
+        patron: 'mv [opciones] ORIGEN... DESTINO',
+        tags: ['mover', 'renombrar', 'archivos'],
+        modelo_mental: 'mv hace dos cosas según el caso: si ORIGEN y DESTINO están en el mismo filesystem es un rename atómico (cambia la entrada en el directorio, no copia datos). Si están en filesystems distintos, hace cp + rm. No tiene -r porque siempre mueve directorios completos. Sobrescribe el destino sin avisar.',
+        ejemplos: [
+          { comando: 'mv viejo.txt nuevo.txt',     explicacion: 'Renombra (mismo directorio, mismo FS).',                                 compat_notes: null },
+          { comando: 'mv archivo.txt carpeta/',    explicacion: 'Mueve archivo.txt DENTRO de carpeta/.',                                  compat_notes: null },
+          { comando: 'mv carpeta1/ carpeta2/',     explicacion: 'Renombra carpeta1 a carpeta2 (si carpeta2 no existía).',                 compat_notes: null },
+          { comando: 'mv -i a.txt b.txt',           explicacion: 'Pide confirmación si b.txt existe.',                                     compat_notes: null },
+          { comando: 'mv -n source/* dest/',        explicacion: 'No sobrescribe ningún archivo en dest/ que ya exista.',                  compat_notes: null }
+        ],
+        flags: [
+          { flag: '-i',              descripcion: 'Interactive: pide confirmación antes de sobrescribir.',          compat_notes: null },
+          { flag: '-n',              descripcion: 'No-clobber: nunca sobrescribe.',                                  compat_notes: null },
+          { flag: '-u',              descripcion: 'Update: solo mueve si ORIGEN es más nuevo o DESTINO no existe.', compat_notes: null },
+          { flag: '-v',              descripcion: 'Verbose: imprime cada movimiento.',                                compat_notes: null },
+          { flag: '--backup[=TIPO]', descripcion: 'Hace copia de seguridad del DESTINO si lo va a sobrescribir.',     compat_notes: null }
+        ],
+        combos: [
+          { comando: 'mv *.log archivo/',                       explicacion: 'Mueve todos los .log al directorio archivo/.',                       compat_notes: null },
+          { comando: 'mv -- -archivo-raro.txt /tmp/',           explicacion: 'El `--` evita que mv interprete -archivo-raro.txt como flag.',         compat_notes: null }
+        ],
+        gotchas: [
+          'Sobrescribe el destino SIN AVISAR (igual que cp). Usa -i o -n.',
+          'No hay -r: mv mueve directorios sin opción extra (porque "mover" un dir es solo cambiar su entrada en el FS).',
+          'Entre filesystems distintos NO es atómico — internamente hace cp + rm. Si la copia falla a la mitad, puedes quedarte con datos a medias en destino y origen aún presente.',
+          'Para nombres que empiezan con `-`, anteponer `--` o usar `./` (`mv ./-raro destino/`).',
+          'En Git Bash mover entre unidades (C: → D:) cuenta como filesystems distintos.'
+        ],
+        relacionados: ['cp', 'rm'],
+        cuando_no_usar: 'Para renombrar muchos archivos con un patrón (cambiar extensión, prefijar...) un solo `mv` no basta — usa un bucle `for f in *.txt; do mv "$f" "${f%.txt}.md"; done` o `find ... | xargs -I {} mv {} {}.bak`. Existen también `rename` (Perl) y `mmv`.'
+      }
+      ,{
+        id: 'rm',
+        tipo: 'comando',
+        nombre: 'rm',
+        categoria: 'manipulacion-archivos',
+        dificultad: 'intermedio',
+        descripcion: 'Borra archivos. Con -r, también directorios.',
+        gitbash: 'ok',
+        patron: 'rm [opciones] ARCHIVO...',
+        tags: ['borrar', 'destructivo', 'recursivo'],
+        modelo_mental: 'rm desliga (unlink) entradas del filesystem. NO HAY PAPELERA: lo borrado se considera perdido. Sin -r no borra directorios. Sin -f, los archivos protegidos contra escritura piden confirmación. La combinación -rf es la versión "fuerza bruta" — y la fuente clásica de desastres cuando se aplica a la ruta equivocada.',
+        ejemplos: [
+          { comando: 'rm archivo.txt',           explicacion: 'Borra un archivo.',                                                       compat_notes: null },
+          { comando: 'rm -r carpeta/',           explicacion: 'Borra un directorio y todo lo que contenga (recursivo).',                 compat_notes: null },
+          { comando: 'rm -i *.tmp',              explicacion: 'Pide confirmación por cada archivo .tmp.',                                 compat_notes: null },
+          { comando: 'rm -- -archivo.txt',       explicacion: 'El `--` evita interpretar -archivo.txt como flag.',                       compat_notes: null }
+        ],
+        flags: [
+          { flag: '-r / -R',  descripcion: 'Recursivo: necesario para borrar directorios.',                                                              compat_notes: null },
+          { flag: '-f',       descripcion: 'Force: no pregunta y no falla si el archivo no existe.',                                                       compat_notes: null },
+          { flag: '-i',       descripcion: 'Interactive: confirma cada borrado.',                                                                          compat_notes: null },
+          { flag: '-I',       descripcion: 'Confirma una sola vez si vas a borrar > 3 archivos o de forma recursiva (más cómodo que -i para purgas masivas).', compat_notes: null },
+          { flag: '-v',       descripcion: 'Verbose: imprime qué borra.',                                                                                  compat_notes: null },
+          { flag: '-d',       descripcion: 'Borra directorios vacíos sin necesitar -r (alternativa a `rmdir`).',                                            compat_notes: null }
+        ],
+        combos: [
+          { comando: "find . -name '*.tmp' -exec rm {} +",     explicacion: 'Borra todos los .tmp encontrados (alternativa más segura: rm -i con find).', compat_notes: null },
+          { comando: "find . -name '*.bak' -delete",            explicacion: 'find tiene -delete propio: más eficiente y seguro que combinar con rm.',     compat_notes: null }
+        ],
+        gotchas: [
+          'NO TIENE PAPELERA. Lo borrado solo se recupera con un backup previo o con utilidades de recuperación de bajo nivel.',
+          '`rm -rf /` o variantes accidentales son catastróficas. Versiones modernas de rm (GNU coreutils ≥ 6.4) bloquean `--no-preserve-root` por defecto.',
+          'Variables vacías: `rm -rf $UNSET/*` se expande a `rm -rf /*`. Usar siempre comillas (`rm -rf "$DIR"/...`) y/o `set -u`.',
+          'Globbing inesperado: `rm *` borra solo lo que el shell expandió — no archivos ocultos salvo dotglob. Si el directorio está vacío o el glob no matchea, sin -f rm falla con "no such file".',
+          'Archivos cuyo nombre empieza por `-`: usar `--` o `./` para evitar que rm los interprete como flags.',
+          '`rm` no borra directorios sin -r (excepto vacíos con -d). Para limpiar directorios vacíos sueltos, `rmdir` es la alternativa explícita.'
+        ],
+        relacionados: ['rmdir', 'find', 'mv'],
+        cuando_no_usar: 'Si quieres papelera real para poder revertir, usa `gio trash FILE` (GNOME) o `trash-cli` (`trash-put FILE`). En entornos compartidos o productivos, prefiere `mv FILE /ruta/cuarentena/` antes de rm — solo borra cuando hayas confirmado que nadie lo necesita.'
+      }
+      ,{
+        id: 'chmod',
+        tipo: 'comando',
+        nombre: 'chmod',
+        categoria: 'permisos',
+        dificultad: 'intermedio',
+        descripcion: 'Cambia los permisos de un archivo o directorio.',
+        gitbash: 'caveats',
+        patron: 'chmod [opciones] MODO ARCHIVO...',
+        tags: ['permisos', 'octal', 'simbolico'],
+        modelo_mental: 'Los permisos POSIX son tres triadas — dueño / grupo / otros — cada una con tres bits: r (4), w (2), x (1). chmod acepta DOS notaciones: octal (sumas de 4/2/1 por triada, p.ej. 755 = rwxr-xr-x) y simbólica (`u+x`, `g-w`, `o=r`, `a+rw` donde u=user, g=group, o=others, a=all). Para directorios, x significa "permiso para entrar" (no ejecutar).',
+        ejemplos: [
+          { comando: 'chmod 755 script.sh',       explicacion: 'rwx para dueño, r-x para grupo y otros (típico de ejecutables).',          compat_notes: null },
+          { comando: 'chmod 644 archivo.txt',     explicacion: 'rw- dueño, r-- resto (típico de archivos de datos).',                       compat_notes: null },
+          { comando: 'chmod +x script.sh',        explicacion: 'Añade permiso de ejecución para todos (forma simbólica).',                  compat_notes: null },
+          { comando: 'chmod u+x,g-w archivo',     explicacion: 'Dueño gana ejecución; grupo pierde escritura.',                              compat_notes: null },
+          { comando: 'chmod -R 755 dir/',         explicacion: 'Aplica recursivamente a todo el árbol (cuidado: aplica el mismo modo a archivos Y directorios).', compat_notes: null }
+        ],
+        flags: [
+          { flag: '-R',              descripcion: 'Recursivo: aplica a todo el árbol bajo el directorio.',                          compat_notes: null },
+          { flag: '-v',              descripcion: 'Verbose: imprime cada cambio.',                                                  compat_notes: null },
+          { flag: '-c',              descripcion: 'Como -v pero solo imprime los archivos efectivamente modificados.',             compat_notes: null },
+          { flag: '--reference=REF', descripcion: 'Copia los permisos de REF al archivo destino.',                                  compat_notes: null }
+        ],
+        combos: [
+          { comando: 'chmod -R u+rwX,go+rX,go-w dir/', explicacion: 'X mayúscula: aplica x SOLO a directorios y archivos ya ejecutables. Truco clásico para chmod -R en árboles mixtos.', compat_notes: null },
+          { comando: 'chmod --reference=plantilla.txt nuevo.txt', explicacion: 'Copia permisos de un archivo modelo al nuevo.',                  compat_notes: null }
+        ],
+        gotchas: [
+          'En la triada octal: r=4, w=2, x=1. 755 = 4+2+1 / 4+0+1 / 4+0+1 = rwxr-xr-x. 644 = 6/4/4 = rw-r--r--. 700 = solo dueño.',
+          'Para directorios: x significa "puedo entrar (cd)"; r significa "puedo listar (ls)"; w significa "puedo crear/borrar archivos dentro". Un dir con r sin x permite ver nombres pero no acceder.',
+          'En Git Bash y Windows: NTFS no usa el modelo POSIX exacto. chmod parece funcionar pero el sistema operativo respeta sus propios ACLs. El bit +x sobre un .sh sí permite "./script.sh" desde Git Bash.',
+          'chmod -R 755 sobre un árbol mixto pone x en archivos de datos también (no deseable). Usar `chmod -R u+rwX,go+rX,go-w dir/` (X mayúscula) para aplicar x solo donde tiene sentido.',
+          'El bit setuid (4xxx), setgid (2xxx) y sticky (1xxx) son una cuarta triada que precede a las tres habituales (chmod 4755 → rwsr-xr-x). Útil casi solo para sysadmin.'
+        ],
+        relacionados: ['chown', 'ls'],
+        cuando_no_usar: 'Para gestión avanzada de permisos por usuario/grupo (más allá del modelo POSIX 3-triadas), usa ACLs con `setfacl`/`getfacl`. Para cambiar el dueño, no chmod sino `chown`.'
+      }
+      ,{
+        id: 'tar',
+        tipo: 'comando',
+        nombre: 'tar',
+        categoria: 'compresion',
+        dificultad: 'intermedio',
+        descripcion: 'Empaqueta y/o comprime archivos en un solo fichero (tarball).',
+        gitbash: 'ok',
+        patron: 'tar [czxtjJv]f ARCHIVO.tar[.gz] [archivos...]',
+        tags: ['comprimir', 'archivar', 'backup'],
+        modelo_mental: 'tar combina dos cosas: empaquetar un árbol de archivos en uno solo (.tar) y comprimirlo. Letras clave: c=create, x=extract, t=list, f=archivo (siempre va con su nombre justo después), v=verbose. Para compresión: z=gzip (.tar.gz), j=bzip2 (.tar.bz2), J=xz (.tar.xz). Memoriza tres atajos: `czf` crear comprimido, `xzf` extraer comprimido, `tvf` listar contenido.',
+        ejemplos: [
+          { comando: 'tar czf backup.tar.gz proyecto/',          explicacion: 'Crea backup.tar.gz comprimido con gzip a partir del directorio proyecto/.',  compat_notes: null },
+          { comando: 'tar xzf backup.tar.gz',                    explicacion: 'Extrae backup.tar.gz en el directorio actual.',                              compat_notes: null },
+          { comando: 'tar tzf backup.tar.gz',                    explicacion: 'Lista (sin extraer) el contenido del tarball.',                              compat_notes: null },
+          { comando: 'tar xzf backup.tar.gz -C /tmp/',           explicacion: 'Extrae en /tmp/ en lugar del directorio actual.',                            compat_notes: null },
+          { comando: 'tar czf out.tar.gz --exclude=node_modules proyecto/', explicacion: 'Crea el tarball excluyendo node_modules.',                       compat_notes: null }
+        ],
+        flags: [
+          { flag: 'c',           descripcion: 'Create: crea un nuevo archivo.',                                                                          compat_notes: null },
+          { flag: 'x',           descripcion: 'Extract: extrae el contenido.',                                                                            compat_notes: null },
+          { flag: 't',           descripcion: 'List: muestra el contenido sin extraer.',                                                                  compat_notes: null },
+          { flag: 'f ARCHIVO',   descripcion: 'File: usa ARCHIVO (debe ir inmediatamente antes del nombre del fichero).',                                compat_notes: null },
+          { flag: 'z',           descripcion: 'gzip: comprime/descomprime con gzip (.tar.gz).',                                                          compat_notes: null },
+          { flag: 'j',           descripcion: 'bzip2: comprime/descomprime con bzip2 (.tar.bz2). Mejor compresión, más lento.',                          compat_notes: null },
+          { flag: 'J',           descripcion: 'xz: comprime/descomprime con xz (.tar.xz). Mejor compresión que bzip2, más lento aún.',                   compat_notes: null },
+          { flag: 'v',           descripcion: 'Verbose: imprime cada archivo procesado.',                                                                compat_notes: null },
+          { flag: '-C DIR',      descripcion: 'Cambia a DIR antes de operar (útil al extraer sin contaminar el cwd).',                                   compat_notes: null },
+          { flag: '--exclude=PATRON', descripcion: 'Excluye archivos/directorios que matcheen el patrón.',                                                compat_notes: null }
+        ],
+        combos: [
+          { comando: 'tar czf - dir/ | ssh remoto "cd /backup && tar xzf -"',      explicacion: 'Pipe: comprime localmente, descomprime en remoto sin archivo intermedio.', compat_notes: null },
+          { comando: 'tar czf out.tar.gz --exclude=.git --exclude=node_modules .', explicacion: 'Múltiples exclusiones para empaquetar el proyecto actual sin basura.',     compat_notes: null }
+        ],
+        gotchas: [
+          'El orden de los flags importa: `f` debe ir inmediatamente antes del nombre del archivo. `tar czf out.tar.gz dir` ✓, `tar fcz out.tar.gz dir` ✗.',
+          'Las extensiones (.tar, .tar.gz, .tgz, .tar.bz2, .tar.xz) son convencionales — tar no las infiere. Tienes que indicarle el modo de compresión con z/j/J explícitamente (versiones modernas detectan al extraer con `tar xf`, pero por costumbre se especifica).',
+          'Sin -C, `tar xzf` extrae en el cwd. Si el tarball no tiene un directorio raíz único, te llena el cwd de archivos sueltos. Antes de extraer algo desconocido, listar con `tar tzf` y/o usar `-C /tmp/dir`.',
+          '--exclude debe ir ANTES del directorio que se empaqueta (`tar czf out --exclude=node_modules proyecto/`). Después del directorio, no surte efecto en algunas versiones.',
+          'Tarballs grandes con xz consumen mucha CPU; si necesitas velocidad usa gzip; si el tamaño manda y tienes tiempo, xz.'
+        ],
+        relacionados: ['gzip', 'gunzip', 'zip', 'unzip'],
+        cuando_no_usar: 'Para intercambio con usuarios de Windows que abrirán el archivo desde el explorador, `zip` es más portable (Windows extrae .zip nativamente). Para sincronización incremental de árboles, `rsync`. Para compresión single-file ya empaquetado por otra vía, `gzip`/`xz` directos.'
+      }
+      ,{
+        id: 'mkdir',
+        tipo: 'comando', nombre: 'mkdir', categoria: 'manipulacion-archivos', dificultad: 'basico',
+        descripcion: 'Crea uno o varios directorios.',
+        gitbash: 'ok',
+        patron: 'mkdir [opciones] DIRECTORIO...',
+        ejemplos: [
+          { comando: 'mkdir nuevo',           explicacion: 'Crea el directorio "nuevo" en el cwd.',                            compat_notes: null },
+          { comando: 'mkdir -p a/b/c',         explicacion: 'Crea toda la jerarquía a/b/c (no falla si algún tramo ya existe).', compat_notes: null },
+          { comando: 'mkdir d1 d2 d3',         explicacion: 'Crea tres directorios de un golpe.',                               compat_notes: null }
+        ],
+        flags: [
+          { flag: '-p', descripcion: 'Crea directorios padres si no existen y no falla si el directorio ya existe.', compat_notes: null },
+          { flag: '-v', descripcion: 'Verbose: imprime cada directorio creado.',                                      compat_notes: null },
+          { flag: '-m MODO', descripcion: 'Asigna el modo (permisos) al crear, sin pasar por el umask.',             compat_notes: null }
+        ]
+      }
+      ,{
+        id: 'rmdir',
+        tipo: 'comando', nombre: 'rmdir', categoria: 'manipulacion-archivos', dificultad: 'basico',
+        descripcion: 'Borra directorios SOLO si están vacíos.',
+        gitbash: 'ok',
+        patron: 'rmdir [opciones] DIRECTORIO...',
+        ejemplos: [
+          { comando: 'rmdir vacio',         explicacion: 'Borra el directorio si no contiene nada.',                  compat_notes: null },
+          { comando: 'rmdir -p a/b/c',       explicacion: 'Borra c, luego b si quedó vacío, luego a si quedó vacío.',   compat_notes: null }
+        ],
+        flags: [
+          { flag: '-p', descripcion: 'Borra también los padres si quedan vacíos tras el borrado.', compat_notes: null }
+        ],
+        gotchas: [
+          'rmdir falla con "Directory not empty" si hay algo dentro. Para borrar dir + contenido, `rm -r DIR`.'
+        ]
+      }
+      ,{
+        id: 'touch',
+        tipo: 'comando', nombre: 'touch', categoria: 'manipulacion-archivos', dificultad: 'basico',
+        descripcion: 'Crea un archivo vacío o actualiza la fecha de acceso/modificación de uno existente.',
+        gitbash: 'ok',
+        patron: 'touch [opciones] ARCHIVO...',
+        ejemplos: [
+          { comando: 'touch nuevo.txt',          explicacion: 'Si no existe, crea un archivo vacío. Si existe, actualiza su mtime/atime a ahora.', compat_notes: null },
+          { comando: 'touch -t 202404150830 f',   explicacion: 'Pone mtime/atime al timestamp dado (YYYYMMDDhhmm).',                                  compat_notes: null },
+          { comando: 'touch -r ref.txt nuevo.txt', explicacion: 'Copia los timestamps de ref.txt a nuevo.txt.',                                       compat_notes: null }
+        ],
+        flags: [
+          { flag: '-c',         descripcion: 'No crea el archivo si no existe (solo actualiza si está).',     compat_notes: null },
+          { flag: '-t TIMESTAMP', descripcion: 'Asigna timestamp explícito (formato YYYYMMDDhhmm[.ss]).',     compat_notes: null },
+          { flag: '-r REF',     descripcion: 'Usa los timestamps de REF como modelo.',                         compat_notes: null }
+        ]
+      }
+      ,{
+        id: 'ln',
+        tipo: 'comando', nombre: 'ln', categoria: 'manipulacion-archivos', dificultad: 'basico',
+        descripcion: 'Crea enlaces (links) hard o simbólicos a un archivo o directorio.',
+        gitbash: 'caveats',
+        patron: 'ln [opciones] ORIGEN [DESTINO]',
+        ejemplos: [
+          { comando: 'ln -s /ruta/larga corta',        explicacion: 'Crea un enlace simbólico "corta" que apunta a /ruta/larga.', compat_notes: null },
+          { comando: 'ln archivo.txt copia',           explicacion: 'Crea un hard link "copia" — misma inode, mismo contenido.',  compat_notes: 'Hard links a directorios prohibidos en la mayoría de FS.' },
+          { comando: 'ln -sf /nuevo destino',          explicacion: 'Reemplaza un symlink existente apuntando a /nuevo.',          compat_notes: null }
+        ],
+        flags: [
+          { flag: '-s', descripcion: 'Symbolic: crea enlace simbólico (soft link). Sin -s, ln crea hard link.', compat_notes: null },
+          { flag: '-f', descripcion: 'Force: sobrescribe DESTINO si existe.',                                    compat_notes: null },
+          { flag: '-n', descripcion: 'Si DESTINO es un symlink a un directorio, no entrar ahí — tratar el symlink como archivo (útil con -f para reemplazarlo).', compat_notes: null },
+          { flag: '-v', descripcion: 'Verbose.',                                                                  compat_notes: null }
+        ],
+        gotchas: [
+          'Hard link: dos entradas de directorio apuntan al mismo inode (mismo archivo físico). Borrar una no borra el contenido. Solo dentro del MISMO filesystem.',
+          'Symlink (-s): un archivo especial que contiene una ruta. Si borras el origen, el symlink queda "colgado" (broken).',
+          'En Git Bash sobre Windows, los symlinks requieren privilegios o modo desarrollador activado en Windows; si no, ln -s suele copiar el archivo en lugar de crear el symlink.'
+        ]
+      }
+      ,{
+        id: 'chown',
+        tipo: 'comando', nombre: 'chown', categoria: 'permisos', dificultad: 'basico',
+        descripcion: 'Cambia el dueño y/o grupo de un archivo o directorio.',
+        gitbash: 'caveats',
+        patron: 'chown [opciones] DUENO[:GRUPO] ARCHIVO...',
+        ejemplos: [
+          { comando: 'chown alice archivo.txt',       explicacion: 'Cambia el dueño a alice (grupo sin tocar).',                       compat_notes: null },
+          { comando: 'chown alice:devs archivo.txt',  explicacion: 'Cambia dueño Y grupo en una sola operación.',                      compat_notes: null },
+          { comando: 'chown :devs archivo.txt',       explicacion: 'Cambia solo el grupo (deja el dueño).',                            compat_notes: null },
+          { comando: 'sudo chown -R www-data:www-data /var/www/sitio', explicacion: 'Cambia recursivamente todo el árbol del sitio.', compat_notes: 'Cambiar a otro dueño suele requerir sudo.' }
+        ],
+        flags: [
+          { flag: '-R',              descripcion: 'Recursivo en el árbol.',                                  compat_notes: null },
+          { flag: '-v',              descripcion: 'Verbose.',                                                 compat_notes: null },
+          { flag: '--reference=REF', descripcion: 'Copia dueño/grupo de REF al destino.',                     compat_notes: null }
+        ],
+        gotchas: [
+          'Cambiar el dueño a otro usuario distinto del actual normalmente requiere root (sudo). Cambiar solo el grupo a uno al que perteneces es suficiente con permisos normales.',
+          'En Git Bash el modelo POSIX no se mapea exactamente a Windows; chown a usuarios Windows funciona pero el efecto práctico es limitado.'
+        ]
+      }
+      ,{
+        id: 'gzip',
+        tipo: 'comando', nombre: 'gzip', categoria: 'compresion', dificultad: 'basico',
+        descripcion: 'Comprime un archivo con el algoritmo gzip (lo reemplaza por archivo.gz).',
+        gitbash: 'ok',
+        patron: 'gzip [opciones] ARCHIVO...',
+        ejemplos: [
+          { comando: 'gzip log.txt',          explicacion: 'Crea log.txt.gz y BORRA log.txt original.',          compat_notes: null },
+          { comando: 'gzip -k log.txt',       explicacion: 'Mantiene también el original (-k = keep).',          compat_notes: null },
+          { comando: 'gzip -9 grande.bin',    explicacion: 'Máxima compresión (más lento). -1 es más rápida.',  compat_notes: null }
+        ],
+        flags: [
+          { flag: '-k',     descripcion: 'Keep: no borra el archivo original.',                        compat_notes: null },
+          { flag: '-d',     descripcion: 'Decompress: descomprime (equivalente a `gunzip`).',         compat_notes: null },
+          { flag: '-1..-9', descripcion: 'Nivel de compresión (1 rápido / 9 máximo). Por defecto 6.', compat_notes: null },
+          { flag: '-r',     descripcion: 'Recursivo: comprime cada archivo dentro de un árbol.',      compat_notes: null }
+        ],
+        gotchas: [
+          'gzip por defecto BORRA el original tras comprimir. Usa -k para conservarlo.',
+          'gzip comprime UN archivo por invocación; no empaqueta múltiples — para eso usa tar (`tar czf` = tar + gzip).'
+        ]
+      }
+      ,{
+        id: 'gunzip',
+        tipo: 'comando', nombre: 'gunzip', categoria: 'compresion', dificultad: 'basico',
+        descripcion: 'Descomprime un archivo .gz (alias de `gzip -d`).',
+        gitbash: 'ok',
+        patron: 'gunzip [opciones] ARCHIVO.gz...',
+        ejemplos: [
+          { comando: 'gunzip log.txt.gz',       explicacion: 'Recupera log.txt y borra log.txt.gz.',           compat_notes: null },
+          { comando: 'gunzip -k log.txt.gz',    explicacion: 'Descomprime manteniendo el .gz.',                compat_notes: null },
+          { comando: 'gunzip -c log.txt.gz | head', explicacion: '-c imprime a stdout sin tocar el archivo.', compat_notes: null }
+        ],
+        flags: [
+          { flag: '-k', descripcion: 'Keep: mantiene el .gz original.',                  compat_notes: null },
+          { flag: '-c', descripcion: 'Salida a stdout (no toca el archivo).',           compat_notes: null }
+        ]
+      }
+      ,{
+        id: 'zip',
+        tipo: 'comando', nombre: 'zip', categoria: 'compresion', dificultad: 'basico',
+        descripcion: 'Empaqueta y comprime archivos en formato ZIP (portable a Windows/Mac).',
+        gitbash: 'ok',
+        patron: 'zip [opciones] ARCHIVO.zip ARCHIVOS...',
+        ejemplos: [
+          { comando: 'zip backup.zip a.txt b.txt',         explicacion: 'Crea backup.zip con dos archivos.',                                          compat_notes: null },
+          { comando: 'zip -r proyecto.zip proyecto/',       explicacion: 'Empaqueta recursivamente todo un directorio.',                              compat_notes: null },
+          { comando: "zip -r out.zip src/ -x 'src/node_modules/*'", explicacion: 'Empaqueta src/ excluyendo node_modules.',                            compat_notes: null }
+        ],
+        flags: [
+          { flag: '-r',         descripcion: 'Recursivo en directorios.',             compat_notes: null },
+          { flag: '-x PATRON',  descripcion: 'Excluye archivos que matcheen PATRON.', compat_notes: null },
+          { flag: '-9',         descripcion: 'Máxima compresión.',                     compat_notes: null },
+          { flag: '-e',         descripcion: 'Cifra el ZIP con contraseña (preguntará).', compat_notes: null }
+        ]
+      }
+      ,{
+        id: 'unzip',
+        tipo: 'comando', nombre: 'unzip', categoria: 'compresion', dificultad: 'basico',
+        descripcion: 'Extrae el contenido de un archivo ZIP.',
+        gitbash: 'ok',
+        patron: 'unzip [opciones] ARCHIVO.zip [-d DIR]',
+        ejemplos: [
+          { comando: 'unzip backup.zip',           explicacion: 'Extrae backup.zip en el cwd.',                                            compat_notes: null },
+          { comando: 'unzip backup.zip -d /tmp/',  explicacion: 'Extrae en /tmp/ en lugar del cwd.',                                       compat_notes: null },
+          { comando: 'unzip -l backup.zip',        explicacion: 'Lista el contenido sin extraer.',                                         compat_notes: null }
+        ],
+        flags: [
+          { flag: '-d DIR', descripcion: 'Directorio destino para la extracción.',     compat_notes: null },
+          { flag: '-l',     descripcion: 'Lista el contenido sin extraer.',            compat_notes: null },
+          { flag: '-o',     descripcion: 'Sobrescribe sin preguntar.',                  compat_notes: null },
+          { flag: '-n',     descripcion: 'Nunca sobrescribe (omite si existe).',        compat_notes: null }
+        ]
+      }
+      ,{
+        id: 'op-redirect-stdin',
+        tipo: 'operador', nombre: '<', dificultad: 'basico',
+        descripcion: 'Input redirection: alimenta stdin de un comando desde un archivo.',
+        gitbash: 'ok',
+        modelo_mental: 'Pareja conceptual de `>`. Toma el contenido del archivo de la derecha y lo entrega como stdin al comando de la izquierda. Equivalente a `cat archivo | cmd`, pero más eficiente y sin "useless cat". Útil con comandos que leen de stdin pero no aceptan un archivo como argumento.',
+        ejemplos: [
+          { comando: 'tr a-z A-Z < notas.txt',         explicacion: 'Pasa el contenido del archivo a tr, que pasa todo a mayúsculas.',     compat_notes: null },
+          { comando: 'mysql -u root mydb < dump.sql',  explicacion: 'Ejecuta el script SQL en mysql leyendo desde el archivo.',           compat_notes: null },
+          { comando: "while read line; do echo \"-> $line\"; done < input.txt", explicacion: 'Bucle leyendo línea a línea desde un archivo.', compat_notes: null }
+        ],
+        gotchas: [
+          'Distinto de `>`: `<` lee, `>` escribe. La flecha indica la dirección del flujo (entra al comando vs sale del comando).',
+          'No funciona con todos los comandos: solo los que leen de stdin (no los que esperan un nombre de archivo como argumento).',
+          'Heredoc `<<` y here-string `<<<` son parientes: `cmd <<< "string"` pasa "string" como stdin sin necesidad de archivo.'
+        ]
+      }
+      ,{
+        id: 'op-tee',
+        tipo: 'operador', nombre: 'tee', dificultad: 'intermedio',
+        descripcion: 'Bifurca stdin: lo escribe a uno o más archivos Y lo pasa también a stdout.',
+        gitbash: 'ok',
+        modelo_mental: 'tee es un comando real, pero su uso primario es transversal en pipelines: `cmd | tee archivo | siguiente`. La salida de cmd se guarda en `archivo` y se sigue propagando por el pipe a `siguiente`. Letra "T" porque parte el flujo en dos. Útil para inspeccionar/loggear pasos intermedios sin romper la cadena.',
+        ejemplos: [
+          { comando: "ls | tee listado.txt",                  explicacion: 'Imprime ls por pantalla Y guarda el listado en listado.txt.', compat_notes: null },
+          { comando: "make 2>&1 | tee build.log",             explicacion: 'Compila viendo la salida en tiempo real y guardándola.',     compat_notes: null },
+          { comando: "echo 'datos' | sudo tee /etc/conf",     explicacion: 'Truco para escribir en archivo protegido (sudo no afecta a la redirección directa).', compat_notes: null },
+          { comando: "ls | tee -a log.txt | grep '\\.txt'",   explicacion: '-a (append): añade al log en lugar de sobrescribir.',          compat_notes: null }
+        ],
+        gotchas: [
+          'tee SOBRESCRIBE el archivo destino salvo que uses -a (append).',
+          'Es la solución canónica para `sudo cmd > /etc/archivo` que falla porque la redirección la hace el shell sin sudo: `cmd | sudo tee /etc/archivo`.',
+          'Diferencia con xargs: xargs TRANSFORMA stdin en argumentos del comando; tee BIFURCA el stream sin tocarlo.'
+        ]
+      }
+      ,{
+        id: 'op-redirect-all',
+        tipo: 'operador', nombre: '&>', dificultad: 'intermedio',
+        descripcion: 'Atajo de bash para `> archivo 2>&1` — redirige stdout y stderr al mismo archivo.',
+        gitbash: 'ok',
+        modelo_mental: 'Es **sintaxis de bash**, no un binario. Equivale exactamente a `> ARCHIVO 2>&1` pero más corto. Si el archivo existe, lo sobrescribe; usa `&>>` para append. Solo funciona en bash/zsh — sh y dash no lo entienden.',
+        ejemplos: [
+          { comando: 'cmd &> all.log',           explicacion: 'Stdout y stderr al archivo all.log (sobrescribe).',         compat_notes: null },
+          { comando: 'cmd &>> all.log',           explicacion: 'Append: stdout y stderr al final de all.log.',              compat_notes: null },
+          { comando: 'cmd &> /dev/null',          explicacion: 'Descarta toda la salida (silencio total).',                  compat_notes: null }
+        ],
+        gotchas: [
+          '`&>` es bashism: en sh/dash falla. Para portabilidad POSIX usar `> archivo 2>&1` (en ese orden).',
+          'Distinto de `>&`: `>&` redirige a un descriptor (`2>&1` = "stderr al destino actual de stdout"). `&>` redirige todo a un archivo.',
+          'En Windows/Git Bash funciona porque Git Bash usa bash; en `cmd.exe` o PowerShell la sintaxis es distinta.'
+        ]
+      }
+      ,{
+        id: 'receta-backup-antes-sobrescribir',
+        tipo: 'receta', nombre: 'Copiar/mover sin perder el destino existente', categoria: 'manipulacion-archivos', dificultad: 'basico',
+        descripcion: 'Hace backup automático del destino antes de sobrescribirlo.',
+        gitbash: 'ok',
+        escenario: 'Voy a sobrescribir un archivo de configuración pero quiero conservar la versión anterior por si rompo algo.',
+        ejemplos: [
+          { comando: 'cp --backup=numbered nueva.conf vieja.conf', explicacion: 'Si vieja.conf existe, se renombra a vieja.conf.~1~ antes de la sobrescritura.', compat_notes: null }
+        ],
+        desglose: [
+          { fragmento: 'cp',                  hace: 'comando de copiar.' },
+          { fragmento: '--backup=numbered',   hace: 'antes de sobrescribir, renombra el destino con sufijo .~N~ (1, 2, 3...).' },
+          { fragmento: 'nueva.conf',          hace: 'archivo origen.' },
+          { fragmento: 'vieja.conf',          hace: 'destino (será sobrescrito; su versión actual queda como vieja.conf.~1~).' }
+        ],
+        relacionados: ['cp', 'mv']
+      }
+      ,{
+        id: 'receta-comprimir-excluyendo',
+        tipo: 'receta', nombre: 'Comprimir un proyecto excluyendo basura', categoria: 'compresion', dificultad: 'intermedio',
+        descripcion: 'Crea un tarball de un proyecto saltándose node_modules, .git y otros directorios pesados.',
+        gitbash: 'ok',
+        escenario: 'Quiero enviar mi proyecto por email pero sin las dependencias ni el historial de git.',
+        ejemplos: [
+          { comando: "tar czf proyecto.tar.gz --exclude='node_modules' --exclude='.git' --exclude='dist' proyecto/", explicacion: 'Tarball comprimido del proyecto/ excluyendo 3 directorios.', compat_notes: null }
+        ],
+        desglose: [
+          { fragmento: 'tar czf proyecto.tar.gz', hace: 'crea (c) tarball comprimido (z) en el archivo (f) proyecto.tar.gz.' },
+          { fragmento: "--exclude='node_modules'", hace: 'salta cualquier directorio llamado node_modules.' },
+          { fragmento: "--exclude='.git'",         hace: 'salta el directorio .git.' },
+          { fragmento: "--exclude='dist'",         hace: 'salta el directorio dist.' },
+          { fragmento: 'proyecto/',                hace: 'directorio raíz a empaquetar (las exclusiones DEBEN ir antes de él).' }
+        ],
+        relacionados: ['tar'],
+        gotchas: [
+          'Las --exclude deben ir antes del directorio para que tar las aplique.',
+          'Si el destino debe ser portable a Windows, usa `zip -r out.zip proyecto/ -x "proyecto/node_modules/*"` en lugar de tar.'
+        ]
+      }
+      ,{
+        id: 'receta-script-ejecutable',
+        tipo: 'receta', nombre: 'Volver ejecutable un script .sh', categoria: 'permisos', dificultad: 'basico',
+        descripcion: 'Da permiso de ejecución al usuario para poder lanzar un script con ./',
+        gitbash: 'ok',
+        escenario: 'He escrito un script.sh y al hacer ./script.sh el shell dice "Permission denied".',
+        ejemplos: [
+          { comando: 'chmod u+x script.sh && ./script.sh', explicacion: 'Añade ejecución para el dueño y lanza el script.', compat_notes: null }
+        ],
+        desglose: [
+          { fragmento: 'chmod',     hace: 'cambia permisos.' },
+          { fragmento: 'u+x',        hace: 'al usuario (u) le añade (+) ejecución (x). Sin afectar grupo/otros.' },
+          { fragmento: 'script.sh',  hace: 'archivo a modificar.' },
+          { fragmento: '&&',         hace: 'solo continúa si chmod tuvo éxito.' },
+          { fragmento: './script.sh', hace: 'ejecuta el script (./ es necesario porque "." no suele estar en PATH).' }
+        ],
+        relacionados: ['chmod', 'op-and'],
+        gotchas: [
+          'Si el script empieza con un shebang correcto (`#!/usr/bin/env bash`) pero no tiene +x, también puedes lanzarlo con `bash script.sh` (no requiere permisos de ejecución).',
+          'En Git Bash sobre Windows, +x permite el ./ en Git Bash, pero no convierte el .sh en ejecutable nativo de Windows.'
+        ]
+      }
+      ,{
+        id: 'receta-renombrar-masivo',
+        tipo: 'receta', nombre: 'Renombrar archivos en masa con un patrón', categoria: 'manipulacion-archivos', dificultad: 'intermedio',
+        descripcion: 'Aplica un patrón de renombrado a todos los matches de find usando xargs y sustitución de placeholder.',
+        gitbash: 'ok',
+        escenario: 'Tengo muchos archivos con extensión .bak y quiero archivarlos cambiando la extensión a .old.',
+        ejemplos: [
+          { comando: "find . -name '*.bak' | xargs -I {} mv {} {}.old", explicacion: 'Por cada .bak encontrado, lo renombra añadiéndole .old al final.', compat_notes: null }
+        ],
+        desglose: [
+          { fragmento: "find . -name '*.bak'", hace: 'lista todos los archivos .bak desde el directorio actual.' },
+          { fragmento: '|',                    hace: 'pasa la lista por stdin a xargs.' },
+          { fragmento: 'xargs -I {}',          hace: 'por cada línea, sustituye {} por la línea recibida.' },
+          { fragmento: 'mv {} {}.old',         hace: 'mueve cada archivo a su mismo nombre con .old añadido.' }
+        ],
+        relacionados: ['find', 'xargs', 'mv', 'op-pipe'],
+        gotchas: [
+          'No funciona bien con nombres de archivo con espacios. Para robustez: `find . -name "*.bak" -print0 | xargs -0 -I {} mv {} {}.old`.',
+          'Para sustituir partes del nombre (ej. cambiar .JPG por .jpg), `mv {} {}.old` no sirve — usa un bucle: `for f in *.JPG; do mv "$f" "${f%.JPG}.jpg"; done`. O instala el comando `rename` (Perl).'
+        ]
+      }
+      ,{
+        id: 'receta-borrar-antiguos-confirmacion',
+        tipo: 'receta', nombre: 'Borrar archivos antiguos con confirmación', categoria: 'manipulacion-archivos', dificultad: 'intermedio',
+        descripcion: 'Localiza archivos modificados hace más de N días y los borra interactivamente.',
+        gitbash: 'ok',
+        escenario: 'Quiero limpiar logs antiguos pero quiero ver cada uno antes de borrarlo (por si hay algo que no debería ir).',
+        ejemplos: [
+          { comando: 'find /var/log -type f -mtime +30 -exec rm -i {} \\;', explicacion: 'Por cada archivo regular en /var/log con mtime > 30 días, ejecuta rm -i (pide confirmación).', compat_notes: null }
+        ],
+        desglose: [
+          { fragmento: 'find /var/log',        hace: 'busca desde /var/log.' },
+          { fragmento: '-type f',              hace: 'solo archivos regulares (excluye directorios).' },
+          { fragmento: '-mtime +30',           hace: 'modificados hace MÁS de 30 días (signo + = más antiguos que N).' },
+          { fragmento: '-exec rm -i {} \\;',   hace: 'por cada match, ejecuta rm -i con la ruta sustituida en {}. \\; cierra la acción exec.' }
+        ],
+        relacionados: ['find', 'rm'],
+        gotchas: [
+          '`-exec ... {} \\;` ejecuta rm UNA vez por archivo (lento si hay muchos). Para agrupar: `-exec rm -i {} +` invoca rm con varios archivos por llamada — pero pierde el aspecto interactivo si lo combinas con muchas confirmaciones.',
+          'Si te equivocaste con +30 (debería ser +N días), prueba antes con `-print` en lugar de `-exec rm` para ver qué va a borrar.',
+          'Para una alternativa moderna sin riesgo de tipos: `find /var/log -type f -mtime +30 -delete` (sin confirmación; revisar antes con -print).'
+        ]
+      }
+    ];
+
+    // ====== JS: STATE ======
+    const state = {
+      search: '',
+      categoria: 'all',
+      dificultad: 'all',
+      tipo: 'all',
+      gitbashOnly: false
+    };
+
+    // ====== JS: FILTER LOGIC ======
+
+    /**
+     * Aplica el conjunto de filtros del state al array de comandos.
+     * Reglas (spec §5.2):
+     * - categoria: las tarjetas SIN categoria (transversales, p.ej. operadores) se muestran SIEMPRE.
+     * - tipo: filtra exactamente.
+     * - dificultad: filtra exactamente.
+     * - gitbashOnly: incluye 'ok' y 'caveats', excluye solo 'no-disponible'.
+     * - search: match case-insensitive en nombre, descripcion, tags (si existen).
+     */
+    function applyFilters(comandos, s) {
+      const q = (s.search || '').trim().toLowerCase();
+      return comandos.filter(c => {
+        if (s.categoria !== 'all') {
+          // Las tarjetas SIN categoria son transversales: pasan siempre el filtro temático.
+          if (c.categoria != null && c.categoria !== s.categoria) return false;
+        }
+        if (s.tipo !== 'all' && c.tipo !== s.tipo) return false;
+        if (s.dificultad !== 'all' && c.dificultad !== s.dificultad) return false;
+        if (s.gitbashOnly && c.gitbash === 'no-disponible') return false;
+        if (q) {
+          const hay = (c.nombre || '').toLowerCase().includes(q)
+                   || (c.descripcion || '').toLowerCase().includes(q)
+                   || (c.tags || []).some(t => String(t).toLowerCase().includes(q));
+          if (!hay) return false;
+        }
+        return true;
+      });
+    }
+
+    // ====== JS: RENDER ======
+
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function renderCodeBlock(code, compatNotes) {
+      const safe = escapeHtml(code);
+      const note = compatNotes
+        ? `<p class="text-xs text-amber-700 mt-1">⚠ ${escapeHtml(compatNotes)}</p>`
+        : '';
+      return `<div class="my-1 relative group">
+        <pre class="bg-slate-900 text-slate-100 text-xs rounded px-2 py-1 overflow-x-auto"><code>${safe}</code></pre>
+        <button type="button" class="copy-btn absolute top-1 right-1 text-xs bg-slate-700 text-slate-100 px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition" data-copy="${safe}">📋</button>
+        ${note}
+      </div>`;
+    }
+
+    function renderEjemplos(ejemplos) {
+      if (!ejemplos || ejemplos.length === 0) return '';
+      return `<div class="mt-3">
+        <h4 class="text-xs font-semibold uppercase text-slate-500 mb-1">Ejemplos</h4>
+        ${ejemplos.map(e => `
+          <div class="text-sm">
+            ${renderCodeBlock(e.comando, e.compat_notes)}
+            <p class="text-slate-700">${escapeHtml(e.explicacion)}</p>
+          </div>
+        `).join('')}
+      </div>`;
+    }
+
+    function renderFlags(flags) {
+      if (!flags || flags.length === 0) return '';
+      return `<div class="mt-3">
+        <h4 class="text-xs font-semibold uppercase text-slate-500 mb-1">Flags</h4>
+        <ul class="text-sm space-y-1">
+          ${flags.map(f => `
+            <li>
+              <code class="bg-slate-100 px-1 rounded">${escapeHtml(f.flag)}</code>
+              — ${escapeHtml(f.descripcion)}
+              ${f.compat_notes ? `<span class="block text-xs text-amber-700">⚠ ${escapeHtml(f.compat_notes)}</span>` : ''}
+            </li>
+          `).join('')}
+        </ul>
+      </div>`;
+    }
+
+    function renderModeloMental(text) {
+      if (!text) return '';
+      return `<div class="mt-3 bg-sky-50 border-l-4 border-sky-300 p-2 text-sm">
+        <strong class="text-sky-900">Modelo mental:</strong>
+        <span class="text-slate-700">${escapeHtml(text)}</span>
+      </div>`;
+    }
+
+    function renderCombos(combos) {
+      if (!combos || combos.length === 0) return '';
+      return `<div class="mt-3">
+        <h4 class="text-xs font-semibold uppercase text-slate-500 mb-1">Combinaciones</h4>
+        ${combos.map(c => `
+          <div class="text-sm">
+            ${renderCodeBlock(c.comando, c.compat_notes)}
+            <p class="text-slate-700">${escapeHtml(c.explicacion)}</p>
+          </div>
+        `).join('')}
+      </div>`;
+    }
+
+    function renderGotchas(gotchas) {
+      if (!gotchas || gotchas.length === 0) return '';
+      return `<div class="mt-3">
+        <h4 class="text-xs font-semibold uppercase text-slate-500 mb-1">⚠ Gotchas</h4>
+        <ul class="text-sm list-disc list-inside text-slate-700 space-y-0.5">
+          ${gotchas.map(g => `<li>${escapeHtml(g)}</li>`).join('')}
+        </ul>
+      </div>`;
+    }
+
+    function renderCuandoNoUsar(text) {
+      if (!text) return '';
+      return `<div class="mt-3 text-sm text-slate-600">
+        <strong>Cuándo NO usarlo:</strong> ${escapeHtml(text)}
+      </div>`;
+    }
+
+    function renderTipoBadge(tipo) {
+      const map = {
+        'comando':  'bg-sky-100 text-sky-800',
+        'operador': 'bg-violet-100 text-violet-800',
+        'receta':   'bg-emerald-100 text-emerald-800',
+        'sintaxis': 'bg-amber-100 text-amber-800'
+      };
+      const cls = map[tipo] || 'bg-slate-100 text-slate-700';
+      return `<span class="text-xs px-2 py-0.5 rounded-full ${cls}">${escapeHtml(tipo)}</span>`;
+    }
+
+    function renderGitbashDot(estado) {
+      const map = {
+        'ok':            { color: 'bg-emerald-500', title: 'Git Bash: portable 100%' },
+        'caveats':       { color: 'bg-amber-500',   title: 'Git Bash: existe con caveats (ver compat_notes en flags/ejemplos)' },
+        'no-disponible': { color: 'bg-rose-500',    title: 'Git Bash: no disponible' }
+      };
+      const m = map[estado] || { color: 'bg-slate-400', title: 'Git Bash: desconocido' };
+      return `<span class="inline-block w-3 h-3 rounded-full ${m.color} mt-1.5" title="${m.title}"></span>`;
+    }
+
+    function renderEscenario(text) {
+      if (!text) return '';
+      return `<div class="mt-2 bg-emerald-50 border-l-4 border-emerald-300 p-2 text-sm">
+        <strong class="text-emerald-900">Escenario:</strong>
+        <span class="text-slate-700">${escapeHtml(text)}</span>
+      </div>`;
+    }
+
+    function renderDesglose(items) {
+      if (!items || items.length === 0) return '';
+      return `<div class="mt-3">
+        <h4 class="text-xs font-semibold uppercase text-slate-500 mb-1">Desglose</h4>
+        <ol class="text-sm space-y-1 list-decimal list-inside">
+          ${items.map(i => `
+            <li>
+              <code class="bg-slate-100 px-1 rounded">${escapeHtml(i.fragmento)}</code>
+              — ${escapeHtml(i.hace)}
+            </li>
+          `).join('')}
+        </ol>
+      </div>`;
+    }
+
+    function renderCardBody(c) {
+      const inner = [
+        renderEscenario(c.escenario),
+        renderModeloMental(c.modelo_mental),
+        renderEjemplos(c.ejemplos),
+        renderDesglose(c.desglose),
+        renderFlags(c.flags),
+        renderCombos(c.combos),
+        renderGotchas(c.gotchas),
+        renderCuandoNoUsar(c.cuando_no_usar)
+      ].join('');
+
+      // Heurística: si la tarjeta es "gorda" (tiene modelo_mental o gotchas o más de 4 flags o es receta), se colapsa.
+      const isHeavy = !!c.modelo_mental || (c.gotchas && c.gotchas.length > 0) || (c.flags && c.flags.length > 4) || c.tipo === 'receta';
+      if (!isHeavy) return inner;
+
+      return `
+        <details class="mt-2">
+          <summary class="cursor-pointer text-sm text-sky-700 hover:text-sky-900 select-none">Ver más ▾</summary>
+          <div class="mt-2">${inner}</div>
+        </details>
+      `;
+    }
+
+    function renderCard(c) {
+      return `
+        <article class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm" data-id="${escapeHtml(c.id)}">
+          <header class="flex items-start gap-2">
+            ${renderGitbashDot(c.gitbash)}
+            <h3 class="text-lg font-bold flex-1"><code>${escapeHtml(c.nombre)}</code></h3>
+            ${renderTipoBadge(c.tipo)}
+          </header>
+          ${c.patron ? `<p class="text-xs text-slate-500 font-mono mt-1">${escapeHtml(c.patron)}</p>` : ''}
+          <p class="mt-2 text-sm text-slate-700">${escapeHtml(c.descripcion)}</p>
+          ${renderCardBody(c)}
+        </article>
+      `;
+    }
+
+    function renderAll() {
+      const grid = document.getElementById('grid');
+      const empty = document.getElementById('empty-state');
+      const filtered = applyFilters(COMANDOS, state);
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+      } else {
+        empty.classList.add('hidden');
+        grid.innerHTML = filtered.map(renderCard).join('');
+      }
+    }
+
+    // ====== JS: COPY ======
+
+    /**
+     * Copia texto al portapapeles. Intenta navigator.clipboard (secure context),
+     * cae a document.execCommand('copy') con un <textarea> temporal para entornos file://
+     * donde Firefox bloquea la API moderna.
+     * Devuelve una Promise<boolean>.
+     */
+    function copyToClipboard(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text).then(() => true).catch(() => fallbackCopy(text));
+      }
+      return Promise.resolve(fallbackCopy(text));
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch (_) { ok = false; }
+      document.body.removeChild(ta);
+      return ok;
+    }
+
+    function flashCopyButton(btn, ok) {
+      const original = btn.dataset.original || btn.textContent;
+      btn.dataset.original = original;
+      btn.textContent = ok ? '✓ copiado' : '✗ no se pudo copiar';
+      btn.classList.toggle('text-emerald-700', ok);
+      btn.classList.toggle('text-rose-700',  !ok);
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.classList.remove('text-emerald-700', 'text-rose-700');
+      }, 1500);
+    }
+
+    // ====== JS: WIRE-UP ======
+
+    function wireUp() {
+      const search = document.getElementById('search-input');
+      const cat    = document.getElementById('filter-categoria');
+      const dif    = document.getElementById('filter-dificultad');
+      const tip    = document.getElementById('filter-tipo');
+      const gb     = document.getElementById('filter-gitbash');
+      const clear  = document.getElementById('filter-clear');
+
+      search.addEventListener('input', () => { state.search = search.value; renderAll(); });
+      cat.addEventListener('change',   () => { state.categoria   = cat.value; renderAll(); });
+      dif.addEventListener('change',   () => { state.dificultad  = dif.value; renderAll(); });
+      tip.addEventListener('change',   () => { state.tipo        = tip.value; renderAll(); });
+      gb.addEventListener('change',    () => { state.gitbashOnly = gb.checked; renderAll(); });
+
+      clear.addEventListener('click', () => {
+        search.value = ''; cat.value = 'all'; dif.value = 'all'; tip.value = 'all'; gb.checked = false;
+        state.search = ''; state.categoria = 'all'; state.dificultad = 'all'; state.tipo = 'all'; state.gitbashOnly = false;
+        renderAll();
+      });
+
+      document.getElementById('empty-state-clear').addEventListener('click', () => {
+        document.getElementById('filter-clear').click();
+      });
+
+      document.body.addEventListener('click', (ev) => {
+        const btn = ev.target.closest('.copy-btn');
+        if (!btn) return;
+        const text = btn.getAttribute('data-copy') || '';
+        // Decodificar entidades HTML que escapamos al render.
+        const decoded = new DOMParser().parseFromString(text, 'text/html').documentElement.textContent;
+        copyToClipboard(decoded).then(ok => flashCopyButton(btn, ok));
+      });
+    }
+
+    wireUp();
+
+    // ====== JS: TESTS ======
+    (function runTests() {
+      assert(true, 'meta — assert true pasa');
+      // --- applyFilters ---
+      const SAMPLE = [
+        { id: 'a', tipo: 'comando',  nombre: 'a', categoria: 'busqueda-archivos', dificultad: 'basico',     descripcion: 'Hola archivo', gitbash: 'ok',            tags: ['arch'] },
+        { id: 'b', tipo: 'comando',  nombre: 'b', categoria: 'busqueda-contenido', dificultad: 'intermedio', descripcion: 'busca dentro', gitbash: 'caveats',       tags: ['cont'] },
+        { id: 'c', tipo: 'receta',   nombre: 'c', categoria: 'busqueda-contenido', dificultad: 'avanzado',   descripcion: 'una receta',   gitbash: 'no-disponible', tags: [] },
+        { id: 'd', tipo: 'operador', nombre: '|', /* sin categoria */              dificultad: 'basico',     descripcion: 'pipe',         gitbash: 'ok',            tags: ['pipe'] },
+      ];
+
+      assert(applyFilters(SAMPLE, { search:'', categoria:'all', dificultad:'all', tipo:'all', gitbashOnly:false }).length === 4,
+             'applyFilters — sin filtros devuelve todo');
+      assert(applyFilters(SAMPLE, { search:'', categoria:'busqueda-archivos', dificultad:'all', tipo:'all', gitbashOnly:false }).length === 2,
+             'applyFilters — categoria busqueda-archivos incluye operador transversal');
+      assert(applyFilters(SAMPLE, { search:'', categoria:'all', dificultad:'all', tipo:'comando', gitbashOnly:false }).length === 2,
+             'applyFilters — tipo comando');
+      assert(applyFilters(SAMPLE, { search:'', categoria:'all', dificultad:'basico', tipo:'all', gitbashOnly:false }).length === 2,
+             'applyFilters — dificultad basico');
+      assert(applyFilters(SAMPLE, { search:'', categoria:'all', dificultad:'all', tipo:'all', gitbashOnly:true }).length === 3,
+             'applyFilters — gitbashOnly excluye solo no-disponible');
+      assert(applyFilters(SAMPLE, { search:'pipe', categoria:'all', dificultad:'all', tipo:'all', gitbashOnly:false }).length === 1,
+             'applyFilters — search en descripcion');
+      assert(applyFilters(SAMPLE, { search:'cont', categoria:'all', dificultad:'all', tipo:'all', gitbashOnly:false }).length === 1,
+             'applyFilters — search en tags');
+      assert(applyFilters(SAMPLE, { search:'', categoria:'busqueda-contenido', dificultad:'all', tipo:'all', gitbashOnly:false }).length === 3,
+             'applyFilters — categoria filtra Y mantiene operador transversal');
+
+      // --- renderCard ---
+      const cardHtml = renderCard(SAMPLE[0]);
+      assert(cardHtml.includes('<article'), 'renderCard — devuelve un article');
+      assert(cardHtml.includes('data-id="a"'), 'renderCard — incluye data-id');
+      assert(cardHtml.includes('Hola archivo'), 'renderCard — incluye descripcion');
+      // No debe romperse con campos opcionales ausentes
+      assert(typeof renderCard({ id:'x', tipo:'comando', nombre:'x', categoria:'busqueda-archivos', dificultad:'basico', descripcion:'min', gitbash:'ok' }) === 'string',
+             'renderCard — funciona con solo obligatorios');
+
+      // --- renderCard escaping (defensa contra XSS, regresión de escapeHtml) ---
+      const xssCard = renderCard({
+        id: 'x',
+        tipo: 'comando',
+        nombre: '<script>',
+        categoria: 'busqueda-archivos',
+        dificultad: 'basico',
+        descripcion: 'a"b<c',
+        gitbash: 'ok'
+      });
+      assert(!xssCard.includes('<script>') && xssCard.includes('&lt;script&gt;'),
+             'renderCard — escapa nombre');
+      assert(xssCard.includes('a&quot;b&lt;c'),
+             'renderCard — escapa descripcion');
+
+      // --- render initial ---
+      renderAll();
+
+      renderTestBanner();
+    })();
+  </script>
+</body>
+</html>
